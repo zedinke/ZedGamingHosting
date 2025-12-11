@@ -18,9 +18,11 @@ export class ZedDaemon {
   private metricsCollector: MetricsCollector;
   private healthChecker: HealthChecker;
   private heartbeatClient: HeartbeatClient;
+  private updateQueueService: UpdateQueueService | null = null;
 
   private reconciliationService: ReconciliationService;
   private backendClient: BackendClient;
+  private redisConnection: IORedis | null = null;
   private httpServer: http.Server | null = null;
 
   constructor() {
@@ -35,6 +37,18 @@ export class ZedDaemon {
       this.containerManager,
       this.backendClient
     );
+
+    // Initialize Redis connection for update queue
+    this.redisConnection = new IORedis({
+      host: process.env.REDIS_HOST || 'localhost',
+      port: parseInt(process.env.REDIS_PORT || '6379'),
+      password: process.env.REDIS_PASSWORD || undefined,
+      db: parseInt(process.env.REDIS_DB || '0'),
+      maxRetriesPerRequest: null,
+    });
+
+    // Initialize update queue service
+    this.updateQueueService = new UpdateQueueService(this.redisConnection);
   }
 
   /**
@@ -43,6 +57,17 @@ export class ZedDaemon {
   async initialize(): Promise<void> {
     console.log('Initializing ZedDaemon...');
     await this.containerManager.initialize();
+    
+    // Verify Redis connection
+    if (this.redisConnection) {
+      try {
+        await this.redisConnection.ping();
+        console.log('✅ Redis connection established');
+      } catch (error) {
+        console.warn('⚠️ Redis connection failed, update queue will not work:', error);
+      }
+    }
+    
     console.log('✅ ZedDaemon initialized');
   }
 
@@ -102,6 +127,13 @@ export class ZedDaemon {
     console.log('Starting task processing...');
     this.taskProcessor.start();
     console.log('✅ Task processing started');
+  }
+
+  /**
+   * Gets the update queue service
+   */
+  getUpdateQueueService(): UpdateQueueService | null {
+    return this.updateQueueService;
   }
 }
 

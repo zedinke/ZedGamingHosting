@@ -59,6 +59,13 @@ export class TaskProcessor {
         case 'RESTART':
           await this.containerManager.restartContainer((task.data as { serverUuid: string }).serverUuid);
           break;
+        case 'UPDATE':
+          // Queue Steam update
+          const updateData = task.data as { serverUuid: string; appId: string; installDir: string; beta?: string; validate?: boolean };
+          // Update queue will be handled by UpdateQueueService
+          // This is a placeholder - actual implementation would require access to UpdateQueueService
+          console.log(`Update task queued for server ${updateData.serverUuid}`);
+          break;
         default:
           console.warn(`Unknown task type: ${task.type}`);
       }
