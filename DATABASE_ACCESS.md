@@ -9,10 +9,10 @@ Ez a dokumentum leírja, hogyan lehet hozzáférni az adatbázishoz.
 **Bejelentkezés:**
 - **Rendszer:** MySQL
 - **Szerver:** `mysql` (vagy `zed-mysql`)
-- **Felhasználónév:** `root` (vagy `zedhosting`)
+- **Felhasználónév:** `zedin` (root jogosultságokkal) vagy `root`
 - **Jelszó:** 
+  - `zedin` felhasználó: `Gele007ta...`
   - Root jelszó: lásd `.env` fájlban `MYSQL_ROOT_PASSWORD`
-  - Alapértelmezett: `rootpassword` (ha nem változtattad meg)
 - **Adatbázis:** `zedhosting` (opcionális, üresen is hagyható, majd a bal oldali menüből választható)
 
 **Előnyök:**
