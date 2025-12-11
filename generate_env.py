@@ -15,10 +15,11 @@ node_id = str(uuid.uuid4())
 license_public_key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1234567890abcdef"
 
 env_content = f"""# Database
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD={db_pass}
-POSTGRES_DB=zedhosting
-DATABASE_URL=postgres://postgres:{db_pass}@postgres:5432/zedhosting?schema=public
+MYSQL_ROOT_PASSWORD={db_pass}
+MYSQL_DATABASE=zedhosting
+MYSQL_USER=zedhosting
+MYSQL_PASSWORD={db_pass}
+DATABASE_URL=mysql://zedhosting:{db_pass}@mysql:3306/zedhosting
 
 # Redis
 REDIS_HOST=redis
