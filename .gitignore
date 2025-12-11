@@ -69,3 +69,5 @@ prisma/migrations/
 *.pem
 secrets/
 
+
+*.tar.gz
