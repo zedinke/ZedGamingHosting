@@ -15,7 +15,7 @@ services:
     networks:
       - zed-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -31,10 +31,35 @@ services:
     networks:
       - zed-network
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s
       timeout: 5s
       retries: 5
+
+  # Traefik Reverse Proxy
+  traefik:
+    image: traefik:v2.10
+    container_name: zed-traefik
+    restart: always
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.myresolver.acme.email=${TRAEFIK_ACME_EMAIL:-admin@zedgaminghosting.hu}"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+      # - "8080:8080" # Dashboard (optional, disable in prod or protect)
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "letsencrypt:/letsencrypt"
+    networks:
+      - zed-network
 
   # API Backend
   api:
@@ -43,21 +68,27 @@ services:
       dockerfile: apps/api/Dockerfile
     container_name: zed-api
     restart: always
+    env_file:
+      - .env
     environment:
       NODE_ENV: production
       DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-zedhosting}?schema=public
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_PASSWORD: ${REDIS_PASSWORD:-}
-      # Copy other env vars manually or use env_file
-      LICENSE_KEY: ${LICENSE_KEY}
-      LICENSE_SERVER_URL: ${LICENSE_SERVER_URL}
-      JWT_SECRET: ${JWT_SECRET}
-      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
-      HASH_SECRET: ${HASH_SECRET}
-      API_URL: ${API_URL:-https://api.zedhosting.com}
-    ports:
-      - "3000:3000"
+    # No ports exposed directly!
+    labels:
+      - "traefik.enable=true"
+      # HTTP -> HTTPS redirect
+      - "traefik.http.routers.api-http.rule=Host(`zedgaminghosting.hu`) || Host(`api.zedgaminghosting.hu`)"
+      - "traefik.http.routers.api-http.entrypoints=web"
+      - "traefik.http.routers.api-http.middlewares=https-redirect"
+      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
+      # HTTPS Router
+      - "traefik.http.routers.api.rule=Host(`zedgaminghosting.hu`) || Host(`api.zedgaminghosting.hu`)"
+      - "traefik.http.routers.api.entrypoints=websecure"
+      - "traefik.http.routers.api.tls.certresolver=myresolver"
+      - "traefik.http.services.api.loadbalancer.server.port=3000"
     depends_on:
       postgres:
         condition: service_healthy
@@ -69,6 +100,8 @@ services:
 volumes:
   postgres_data:
   redis_data:
+  letsencrypt:
+
 
 networks:
   zed-network:

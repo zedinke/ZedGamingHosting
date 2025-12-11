@@ -34,8 +34,11 @@ Ez a dokumentum leírja a központi vezérlő (Backkend + DB + Redis) telepíté
    LICENSE_SERVER_URL=https://license.zedhosting.com
 
    # API Config
-   API_URL=https://your-api-domain.com
+   API_URL=https://zedgaminghosting.hu
    PORT=3000
+   
+   # SSL Certificate (Traefik) - IMPORTANT
+   TRAEFIK_ACME_EMAIL=admin@zedgaminghosting.hu
    ```
 
 3. **Indítás**
@@ -45,7 +48,11 @@ Ez a dokumentum leírja a központi vezérlő (Backkend + DB + Redis) telepíté
    docker compose up -d --build
    ```
 
-   Ez letölti a képeket, lefordítja az API-t és elindít mindent a háttérben.
+   Ez elindítja a Traefik-et is. A logokban láthatod majd a tanúsítvány igénylését:
+   `docker compose logs -f traefik`
+
+   Ha minden igaz, pár percen belül elérhető lesz a https://zedgaminghosting.hu
+
 
 4. **Adatbázis migráció**
    Az első indítás után futtatni kell a migrációkat az adatbázis sémájának létrehozásához:
