@@ -1,0 +1,381 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// CORE & LICENSING
+// ============================================
+
+enum LicenseStatus {
+  ACTIVE
+  SUSPENDED
+  EXPIRED
+  GRACE_PERIOD
+}
+
+model SystemLicense {
+  id                String         @id @default(uuid())
+  licenseKey        String         @unique
+  status            LicenseStatus
+  validUntil        DateTime
+  maxNodesAllowed   Int
+  whitelabelEnabled Boolean        @default(false)
+  signature         String
+  gracePeriodEnds  DateTime?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+}
+
+model Tenant {
+  id          String   @id @default(uuid())
+  name        String
+  domain      String   @unique
+  themeConfig Json?    // { logoUrl, primaryColor, fontFamily }
+  smtpConfig  Json?    // { host, user, password }
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users       User[]
+  resourceQuotas ResourceQuota[]
+}
+
+enum UserRole {
+  SUPERADMIN
+  RESELLER_ADMIN
+  USER
+  SUPPORT
+}
+
+model User {
+  id              String    @id @default(uuid())
+  email           String    @unique
+  passwordHash    String
+  role            UserRole
+  twoFactorSecret String?
+  balance         Float     @default(0)
+  tenantId        String?
+  tenant          Tenant?   @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  ownedServers    GameServer[]     @relation("ServerOwner")
+  auditLogs       AuditLog[]
+  resolvedAlerts  Alert[]
+  resourceQuotas  ResourceQuota[]
+  apiKeys         ApiKey[]
+  assignedIncidents Incident[]     @relation("IncidentAssignee")
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action     String   // e.g., "DELETE_SERVER", "CHANGE_RCON_PASS"
+  resourceId String
+  ipAddress  String
+  details    Json?    // { oldValue, newValue }
+  createdAt  DateTime @default(now())
+}
+
+// ============================================
+// INFRASTRUCTURE (NODES & NETWORK)
+// ============================================
+
+enum DiskType {
+  NVME
+  SSD
+  HDD
+}
+
+enum NodeStatus {
+  PROVISIONING
+  ONLINE
+  OFFLINE
+  MAINTENANCE
+}
+
+model Node {
+  id                   String            @id @default(uuid())
+  name                 String
+  apiKey               String            @unique
+  ipAddress            String
+  publicFqdn           String?
+  totalRam             Int               // MB
+  totalCpu             Int               // Cores
+  diskType             DiskType
+  isClusterStorage     Boolean           @default(false)
+  maintenanceMode      Boolean           @default(false)
+  maxConcurrentUpdates Int               @default(2)
+  status               NodeStatus        @default(PROVISIONING)
+  lastHeartbeat        DateTime?
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+
+  servers              GameServer[]
+  networkAllocations   NetworkAllocation[]
+  metrics              Metric[]
+  alerts               Alert[]
+  storageClusters      GameCluster[]     @relation("StorageNode")
+}
+
+enum Protocol {
+  UDP
+  TCP
+}
+
+enum PortType {
+  GAME
+  RCON
+  QUERY
+  APP
+  TV
+}
+
+model NetworkAllocation {
+  id        String   @id @default(uuid())
+  nodeId    String
+  node      Node     @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+  port      Int
+  protocol  Protocol
+  type      PortType
+  serverUuid String?
+  server    GameServer? @relation(fields: [serverUuid], references: [uuid], onDelete: SetNull)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([nodeId, port, protocol])
+  @@index([nodeId, port])
+  @@index([serverUuid])
+}
+
+model Subdomain {
+  id          String      @id @default(uuid())
+  subdomain   String
+  domain      String
+  serverUuid  String
+  server      GameServer  @relation(fields: [serverUuid], references: [uuid], onDelete: Cascade)
+  cloudflareId String
+  targetIP   String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@unique([subdomain, domain])
+  @@index([serverUuid])
+}
+
+// ============================================
+// GAME LOGIC (SERVERS & CLUSTERS)
+// ============================================
+
+enum GameType {
+  ARK
+  RUST
+  MINECRAFT
+  CS2
+  PALWORLD
+  ATLAS
+}
+
+enum ServerStatus {
+  INSTALLING
+  RUNNING
+  STOPPED
+  STARTING
+  STOPPING
+  CRASHED
+  UPDATING
+}
+
+model GameServer {
+  id              String        @id @default(uuid())
+  uuid            String        @unique
+  gameType        GameType
+  status          ServerStatus  @default(INSTALLING)
+  nodeId          String
+  node            Node          @relation(fields: [nodeId], references: [id], onDelete: Restrict)
+  ownerId         String
+  owner           User          @relation("ServerOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  startupPriority Int           @default(10)
+  resources       Json          // { cpuLimit, ramLimit, diskLimit }
+  envVars         Json          @default("{}")
+  clusterId       String?
+  cluster         GameCluster? @relation(fields: [clusterId], references: [id], onDelete: SetNull)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  networkAllocations NetworkAllocation[]
+  subdomains        Subdomain[]
+  backups           Backup[]
+  metrics           Metric[]
+  alerts            Alert[]
+}
+
+model GameCluster {
+  id           String       @id @default(uuid())
+  gameType     GameType
+  sharedSecret String       // Hashed
+  storageNodeId String
+  storageNode  Node         @relation("StorageNode", fields: [storageNodeId], references: [id], onDelete: Restrict)
+  mountPath    String
+  createdAt    DateTime     @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  servers      GameServer[]
+}
+
+enum BackupLocation {
+  LOCAL
+  S3
+  HETZNER_BOX
+}
+
+model Backup {
+  id          String         @id @default(uuid())
+  serverUuid  String
+  server      GameServer     @relation(fields: [serverUuid], references: [uuid], onDelete: Cascade)
+  snapshotId  String
+  sizeBytes   BigInt
+  location    BackupLocation
+  lastRestoredAt DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([serverUuid])
+  @@index([createdAt])
+}
+
+model Metric {
+  id               String      @id @default(uuid())
+  nodeId           String
+  node             Node        @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+  serverUuid       String?
+  server           GameServer? @relation(fields: [serverUuid], references: [uuid], onDelete: Cascade)
+  timestamp        DateTime    @default(now())
+  cpuUsage         Float       // 0-100
+  ramUsage         Float       // MB
+  ramUsagePercent  Float       // 0-100
+  diskUsage        Float       // GB
+  diskUsagePercent Float       // 0-100
+  networkIn        BigInt      // Bytes
+  networkOut       BigInt      // Bytes
+  uptime           Int?        // Seconds
+
+  @@index([nodeId, timestamp])
+  @@index([serverUuid, timestamp])
+  @@index([timestamp])
+}
+
+enum AlertSeverity {
+  CRITICAL
+  WARNING
+  INFO
+}
+
+enum ResourceType {
+  NODE
+  SERVER
+  SYSTEM
+}
+
+model Alert {
+  id           String        @id @default(uuid())
+  severity     AlertSeverity
+  type         String        // e.g., "NODE_OFFLINE", "SERVER_CRASH_LOOP"
+  message      String        // i18n key
+  resourceId   String
+  resourceType ResourceType
+  resolved     Boolean       @default(false)
+  resolvedAt   DateTime?
+  resolvedById String?
+  resolvedBy   User?         @relation(fields: [resolvedById], references: [id], onDelete: SetNull)
+  metadata     Json?         // Additional context
+  nodeId       String?
+  node         Node?         @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+  serverUuid   String?
+  server       GameServer?   @relation(fields: [serverUuid], references: [uuid], onDelete: Cascade)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([severity, resolved])
+  @@index([resourceId, resourceType])
+  @@index([createdAt])
+}
+
+model ResourceQuota {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenantId     String?
+  tenant       Tenant?  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  maxServers   Int
+  maxRam       Int      // MB
+  maxDisk      Int      // GB
+  maxCpu       Int      // Cores
+  currentUsage Json     // { servers, ram, disk, cpu }
+  enforced     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([userId])
+  @@index([tenantId])
+}
+
+model ApiKey {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  keyHash     String    @unique // SHA-256 hash
+  name        String
+  lastUsedAt  DateTime?
+  expiresAt   DateTime?
+  permissions Json?     // Array of allowed endpoints
+  rateLimit   Int       @default(100)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([keyHash])
+}
+
+enum IncidentSeverity {
+  P0
+  P1
+  P2
+  P3
+}
+
+enum IncidentStatus {
+  OPEN
+  INVESTIGATING
+  RESOLVED
+  CLOSED
+}
+
+model Incident {
+  id              String          @id @default(uuid())
+  title           String
+  description     String
+  severity        IncidentSeverity
+  status          IncidentStatus  @default(OPEN)
+  assignedToId    String?
+  assignedTo      User?           @relation("IncidentAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
+  resolvedAt      DateTime?
+  rootCause       String?
+  resolution       String?
+  affectedResources Json?         // Array of Node/Server UUIDs
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([severity, status])
+  @@index([assignedToId])
+}
+

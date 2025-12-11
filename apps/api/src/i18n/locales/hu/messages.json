@@ -1,0 +1,19 @@
+{
+  "SERVER_STARTED_SUCCESSFULLY": "Szerver sikeresen elindult",
+  "SERVER_STOPPED_SUCCESSFULLY": "Szerver sikeresen leállítva",
+  "SERVER_CREATED_SUCCESSFULLY": "Szerver sikeresen létrehozva",
+  "SERVER_DELETED_SUCCESSFULLY": "Szerver sikeresen törölve",
+  "LICENSE_VALIDATION_FAILED": "Licenc validáció sikertelen",
+  "LICENSE_EXPIRED": "A licenc lejárt",
+  "LICENSE_INVALID": "Érvénytelen licenc",
+  "NODE_LIMIT_EXCEEDED": "A maximális node számot elérted",
+  "PORT_ALLOCATION_FAILED": "Port lefoglalás sikertelen",
+  "INSUFFICIENT_RESOURCES": "Nincs elég erőforrás",
+  "VALIDATION_ERROR": "Validációs hiba",
+  "NOT_FOUND": "Nem található",
+  "UNAUTHORIZED": "Nincs jogosultság",
+  "FORBIDDEN": "Tiltott",
+  "CONFLICT": "Ütközés",
+  "INTERNAL_SERVER_ERROR": "Belső szerver hiba"
+}
+

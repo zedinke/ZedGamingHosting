@@ -1,0 +1,19 @@
+{
+  "SERVER_STARTED_SUCCESSFULLY": "Server started successfully",
+  "SERVER_STOPPED_SUCCESSFULLY": "Server stopped successfully",
+  "SERVER_CREATED_SUCCESSFULLY": "Server created successfully",
+  "SERVER_DELETED_SUCCESSFULLY": "Server deleted successfully",
+  "LICENSE_VALIDATION_FAILED": "License validation failed",
+  "LICENSE_EXPIRED": "License expired",
+  "LICENSE_INVALID": "Invalid license",
+  "NODE_LIMIT_EXCEEDED": "Maximum node limit exceeded",
+  "PORT_ALLOCATION_FAILED": "Port allocation failed",
+  "INSUFFICIENT_RESOURCES": "Insufficient resources",
+  "VALIDATION_ERROR": "Validation error",
+  "NOT_FOUND": "Not found",
+  "UNAUTHORIZED": "Unauthorized",
+  "FORBIDDEN": "Forbidden",
+  "CONFLICT": "Conflict",
+  "INTERNAL_SERVER_ERROR": "Internal server error"
+}
+

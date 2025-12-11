@@ -1,0 +1,1 @@
+﻿ssh -o StrictHostKeyChecking=no root@116.203.226.140 "mkdir -p ~/.ssh && echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIENsAAk0I57byu5LEsDbOyafq1jMA3PbX26Gd4El1cUY gelea@Zedin-PC' >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys && chmod 700 ~/.ssh"

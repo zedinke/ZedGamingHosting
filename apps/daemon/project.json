@@ -1,0 +1,39 @@
+{
+  "name": "daemon",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/daemon/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/daemon",
+        "main": "apps/daemon/src/main.ts",
+        "tsConfig": "apps/daemon/tsconfig.app.json",
+        "assets": ["apps/daemon/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/daemon/webpack.config.js"
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "options": {
+        "buildTarget": "daemon:build"
+      }
+    },
+    "type-check": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/daemon",
+        "main": "apps/daemon/src/main.ts",
+        "tsConfig": "apps/daemon/tsconfig.app.json"
+      }
+    }
+  },
+  "tags": ["scope:daemon", "type:app"]
+}
+

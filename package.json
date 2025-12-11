@@ -1,0 +1,51 @@
+{
+  "name": "zed-hosting",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ZedGamingHosting Platform - Multi-Tenant Game Server Hosting",
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "nx build",
+    "test": "nx test",
+    "lint": "nx lint",
+    "format": "nx format:write",
+    "type-check": "nx run-many --target=type-check --all",
+    "dev:api": "nx serve api",
+    "dev:web": "nx serve web",
+    "dev:daemon": "nx serve daemon"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.3.0",
+    "@nestjs/config": "^3.1.1",
+    "@nestjs/core": "^10.3.0",
+    "@nestjs/platform-fastify": "^10.3.0",
+    "@nestjs/schedule": "^4.0.0",
+    "@prisma/client": "^5.7.1",
+    "bcrypt": "^5.1.1",
+    "bullmq": "^5.1.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
+    "dockerode": "^4.0.0",
+    "ioredis": "^5.3.2",
+    "jsonwebtoken": "^9.0.2",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.1",
+    "systeminformation": "^5.21.20",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@nx/eslint": "^18.0.0",
+    "@nx/js": "^18.0.0",
+    "@nx/next": "^18.0.0",
+    "@nx/node": "^18.0.0",
+    "@nx/workspace": "^18.0.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/dockerode": "^3.3.47",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/node": "^20.11.0",
+    "@types/systeminformation": "^3.23.1",
+    "nx": "^18.0.0",
+    "prisma": "^5.7.1",
+    "typescript": "^5.3.3"
+  }
+}
