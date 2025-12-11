@@ -6,6 +6,8 @@ import { HeartbeatClient } from './heartbeat/heartbeat-client';
 import { StartupGuard } from './startup/startup-guard';
 import { ReconciliationService } from './reconciliation/reconciliation.service';
 import { BackendClient } from './backend/backend-client';
+import { UpdateQueueService } from './update/update-queue.service';
+import IORedis from 'ioredis';
 import * as http from 'http';
 
 /**
