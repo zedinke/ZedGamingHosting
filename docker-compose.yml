@@ -15,7 +15,7 @@ services:
     networks:
       - zed-network
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -31,35 +31,10 @@ services:
     networks:
       - zed-network
     healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
+      test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
-
-  # Traefik Reverse Proxy
-  traefik:
-    image: traefik:v2.10
-    container_name: zed-traefik
-    restart: always
-    command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
-      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
-      - "--certificatesresolvers.myresolver.acme.email=${TRAEFIK_ACME_EMAIL:-admin@zedgaminghosting.hu}"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-    ports:
-      - "80:80"
-      - "443:443"
-      # - "8080:8080" # Dashboard (optional, disable in prod or protect)
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "letsencrypt:/letsencrypt"
-    networks:
-      - zed-network
 
   # API Backend
   api:
@@ -76,19 +51,8 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_PASSWORD: ${REDIS_PASSWORD:-}
-    # No ports exposed directly!
-    labels:
-      - "traefik.enable=true"
-      # HTTP -> HTTPS redirect
-      - "traefik.http.routers.api-http.rule=Host(`api.zedgaminghosting.hu`)"
-      - "traefik.http.routers.api-http.entrypoints=web"
-      - "traefik.http.routers.api-http.middlewares=https-redirect"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
-      # HTTPS Router
-      - "traefik.http.routers.api.rule=Host(`api.zedgaminghosting.hu`)"
-      - "traefik.http.routers.api.entrypoints=websecure"
-      - "traefik.http.routers.api.tls.certresolver=myresolver"
-      - "traefik.http.services.api.loadbalancer.server.port=3000"
+    ports:
+      - "3000:3000"
     depends_on:
       postgres:
         condition: service_healthy
@@ -97,67 +61,9 @@ services:
     networks:
       - zed-network
 
-  # Web Frontend (Next.js)
-  web:
-    build:
-      context: .
-      dockerfile: apps/web/Dockerfile
-    container_name: zed-web
-    restart: always
-    environment:
-      NODE_ENV: production
-      # Add API_URL here if needed for server-side fetching
-      # API_URL: http://api:3000
-    labels:
-      - "traefik.enable=true"
-      # HTTP -> HTTPS redirect
-      - "traefik.http.routers.web-http.rule=Host(`zedgaminghosting.hu`) || Host(`www.zedgaminghosting.hu`)"
-      - "traefik.http.routers.web-http.entrypoints=web"
-      - "traefik.http.routers.web-http.middlewares=https-redirect"
-      # HTTPS Router
-      - "traefik.http.routers.web.rule=Host(`zedgaminghosting.hu`) || Host(`www.zedgaminghosting.hu`)"
-      - "traefik.http.routers.web.entrypoints=websecure"
-      - "traefik.http.routers.web.tls.certresolver=myresolver"
-      - "traefik.http.services.web.loadbalancer.server.port=3000"
-    networks:
-      - zed-network
-
-  # Daemon (Muscle) - Local Node
-  daemon:
-    build:
-      context: .
-      dockerfile: apps/daemon/Dockerfile
-    container_name: zed-daemon
-    restart: always
-    # Running as root to access Docker socket easily. 
-    # In prod, recommend setting up 'docker' group with correct GID.
-    user: root
-    env_file:
-      - .env
-    environment:
-      NODE_ENV: production
-      # Internal communication with API
-      MANAGER_URL: http://api:3000
-      API_KEY: ${DAEMON_API_KEY}
-      NODE_ID: ${DAEMON_NODE_ID}
-      # Paths
-      STEAMCMD_PATH: /usr/games/steamcmd # We will ensure steamcmd is in image or install it
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "steam_cache:/var/lib/zedhosting/steam_cache"
-      - "game_servers:/var/lib/zedhosting/servers"
-    networks:
-      - zed-network
-    depends_on:
-      - api
-
 volumes:
   postgres_data:
   redis_data:
-  letsencrypt:
-  steam_cache:
-  game_servers:
-
 
 networks:
   zed-network:

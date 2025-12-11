@@ -43,14 +43,13 @@ COPY --from=builder /app/package-lock.json ./
 # Nx webpack build usually bundles dependencies unless specified otherwise.
 # Let's verify package.json content to be sure. 
 # For safety, we install production deps.
-RUN npm install --omit=dev
+RUN npm install --only=production
 
 # Copy Prisma schema for migrations (optional, but good for startup check)
 COPY --from=builder /app/libs/db/prisma ./prisma
 
 # Create non-root user
 RUN addgroup -S zedhosting && adduser -S zedhosting -G zedhosting
-RUN chown -R zedhosting:zedhosting /app
 USER zedhosting
 
 EXPOSE 3000
