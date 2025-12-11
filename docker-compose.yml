@@ -68,7 +68,7 @@ services:
 
   # Traefik Reverse Proxy
   traefik:
-    image: traefik:v2.10
+    image: traefik:v3.2
     container_name: zed-traefik
     restart: always
     command:
