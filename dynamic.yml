@@ -1,17 +1,29 @@
 http:
   routers:
-    api:
-      rule: "Host(`zedgaminghosting.hu`) || Host(`www.zedgaminghosting.hu`)"
+    api-http:
+      rule: "Host(`zedgaminghosting.hu`) || Host(`www.zedgaminghosting.hu`) || Host(`116.203.226.140`)"
       entryPoints:
         - web
+      service: api
+      middlewares:
+        - redirect-to-https
+
+    api-https:
+      rule: "Host(`zedgaminghosting.hu`) || Host(`www.zedgaminghosting.hu`) || Host(`116.203.226.140`)"
+      entryPoints:
         - websecure
       service: api
       tls:
         certResolver: letsencrypt
+
+  middlewares:
+    redirect-to-https:
+      redirectScheme:
+        scheme: https
+        permanent: true
 
   services:
     api:
       loadBalancer:
         servers:
           - url: "http://zed-api:3000"
-
