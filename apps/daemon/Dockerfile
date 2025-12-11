@@ -32,6 +32,8 @@ WORKDIR /app
 
 # Install runtime dependencies and SteamCMD requirements
 # SteamCMD needs 32-bit libraries
+# Install runtime dependencies and SteamCMD requirements
+# SteamCMD needs 32-bit libraries
 RUN dpkg --add-architecture i386 && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -39,12 +41,14 @@ RUN dpkg --add-architecture i386 && \
     curl \
     lib32gcc-s1 \
     lib32stdc++6 \
-    libsdl2-2.0-0:i386 \
-    steamcmd \
     && rm -rf /var/lib/apt/lists/*
 
+# Install SteamCMD manually
+RUN mkdir -p /usr/games/steamcmd && \
+    curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf - -C /usr/games/steamcmd
+
 # Link steamcmd to path
-RUN ln -s /usr/games/steamcmd /usr/bin/steamcmd
+RUN ln -s /usr/games/steamcmd/steamcmd.sh /usr/bin/steamcmd
 
 # Set environment
 ENV NODE_ENV=production
