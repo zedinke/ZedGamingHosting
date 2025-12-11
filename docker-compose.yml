@@ -67,6 +67,27 @@ services:
       - "traefik.http.services.api.loadbalancer.server.port=3000"
       - "traefik.docker.network=zedhosting_zed-network"
 
+  # Adminer - Database Admin Tool (Web-based)
+  adminer:
+    image: adminer:latest
+    container_name: zed-adminer
+    restart: always
+    environment:
+      ADMINER_DEFAULT_SERVER: mysql
+    networks:
+      - zed-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.adminer-https.rule=Host(`admin.zedgaminghosting.hu`) || Host(`116.203.226.140`) && PathPrefix(`/adminer`)"
+      - "traefik.http.routers.adminer-https.entrypoints=websecure"
+      - "traefik.http.routers.adminer-https.service=adminer"
+      - "traefik.http.routers.adminer-https.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.adminer-http.rule=Host(`admin.zedgaminghosting.hu`) || Host(`116.203.226.140`) && PathPrefix(`/adminer`)"
+      - "traefik.http.routers.adminer-http.entrypoints=web"
+      - "traefik.http.routers.adminer-http.service=adminer"
+      - "traefik.http.routers.adminer-http.middlewares=redirect-to-https"
+      - "traefik.http.services.adminer.loadbalancer.server.port=8080"
+
   # Traefik Reverse Proxy
   traefik:
     image: traefik:v3.2
@@ -85,6 +106,7 @@ services:
       - zed-network
     depends_on:
       - api
+      - adminer
 
 volumes:
   mysql_data:

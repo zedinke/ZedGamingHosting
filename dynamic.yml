@@ -36,6 +36,24 @@ http:
         certResolver: letsencrypt
       priority: 10
 
+    # Adminer - Database Admin
+    adminer-http:
+      rule: "(Host(`zedgaminghosting.hu`) || Host(`116.203.226.140`)) && PathPrefix(`/adminer`)"
+      entryPoints:
+        - web
+      service: adminer
+      middlewares:
+        - redirect-to-https
+
+    adminer-https:
+      rule: "(Host(`zedgaminghosting.hu`) || Host(`116.203.226.140`)) && PathPrefix(`/adminer`)"
+      entryPoints:
+        - websecure
+      service: adminer
+      tls:
+        certResolver: letsencrypt
+      priority: 5
+
   middlewares:
     redirect-to-https:
       redirectScheme:
@@ -52,3 +70,8 @@ http:
       loadBalancer:
         servers:
           - url: "http://zed-api:3000"
+
+    adminer:
+      loadBalancer:
+        servers:
+          - url: "http://zed-adminer:8080"
