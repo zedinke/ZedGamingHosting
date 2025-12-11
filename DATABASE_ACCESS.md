@@ -8,10 +8,12 @@ Ez a dokumentum leírja, hogyan lehet hozzáférni az adatbázishoz.
 
 **Bejelentkezés:**
 - **Rendszer:** MySQL
-- **Szerver:** `mysql`
-- **Felhasználónév:** `zedhosting` (vagy `root`)
-- **Jelszó:** (lásd `.env` fájlban: `MYSQL_PASSWORD` vagy `MYSQL_ROOT_PASSWORD`)
-- **Adatbázis:** `zedhosting`
+- **Szerver:** `mysql` (vagy `zed-mysql`)
+- **Felhasználónév:** `root` (vagy `zedhosting`)
+- **Jelszó:** 
+  - Root jelszó: lásd `.env` fájlban `MYSQL_ROOT_PASSWORD`
+  - Alapértelmezett: `rootpassword` (ha nem változtattad meg)
+- **Adatbázis:** `zedhosting` (opcionális, üresen is hagyható, majd a bal oldali menüből választható)
 
 **Előnyök:**
 - Könnyű használat
