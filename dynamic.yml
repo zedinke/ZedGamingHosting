@@ -44,6 +44,7 @@ http:
       service: adminer
       middlewares:
         - redirect-to-https
+      priority: 20
 
     adminer-https:
       rule: "(Host(`zedgaminghosting.hu`) || Host(`116.203.226.140`)) && PathPrefix(`/adminer`)"
@@ -52,7 +53,7 @@ http:
       service: adminer
       tls:
         certResolver: letsencrypt
-      priority: 5
+      priority: 20
 
   middlewares:
     redirect-to-https:
