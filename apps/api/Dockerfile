@@ -45,8 +45,13 @@ COPY --from=builder /app/package-lock.json ./
 # For safety, we install production deps.
 RUN npm install --only=production
 
-# Copy Prisma schema for migrations (optional, but good for startup check)
+# Copy Prisma schema and generated client
 COPY --from=builder /app/libs/db/prisma ./prisma
+COPY --from=builder /app/libs/db/src/generated ./libs/db/src/generated
+
+# Copy Prisma Client from node_modules (if needed)
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
 # Create non-root user
 RUN addgroup -S zedhosting && adduser -S zedhosting -G zedhosting
