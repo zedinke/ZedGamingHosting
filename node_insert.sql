@@ -1,0 +1,1 @@
+INSERT INTO "Node" ("id", "name", "ipAddress", "publicFqdn", "totalRam", "totalCpu", "diskType", "status", "apiKey", "createdAt", "updatedAt") VALUES ('3443d759-0c04-4885-b07f-e0e77f76e86c', 'Brain-One', '116.203.226.140', '116.203.226.140', 32000, 16, 'NVMe', 'PROVISIONING', 'SAvnuDFyN6xBkVQJL+iYHbt91YGDDdaNvtUKa1XBO28=', NOW(), NOW());

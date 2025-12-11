@@ -15,10 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@zed-hosting/shared-types": ["libs/shared-types/src/index.ts"],
       "@zed-hosting/db": ["libs/db/src/index.ts"],
-      "@zed-hosting/utils": ["libs/utils/src/index.ts"],
-      "@zed-hosting/ui-kit": ["libs/ui-kit/src/index.ts"]
+      "@zed-hosting/shared-types": ["libs/shared-types/src/index.ts"],
+      "@zed-hosting/ui-kit": ["libs/ui-kit/src/index.ts"],
+      "@zed-hosting/utils": ["libs/utils/src/index.ts"]
     },
     "strict": true,
     "noImplicitAny": true,
@@ -40,4 +40,3 @@
   },
   "exclude": ["node_modules", "tmp", "dist", "build"]
 }
-

@@ -1,0 +1,85 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8rem 2rem;
+    background: radial-gradient(circle at 50% 10%, rgba(80, 70, 229, 0.15) 0%, transparent 60%);
+}
+
+.heroTitle {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: var(--space-6);
+    letter-spacing: -0.02em;
+}
+
+.heroSubtitle {
+    font-size: 1.25rem;
+    color: var(--color-text-muted);
+    max-width: 600px;
+    margin-bottom: var(--space-8);
+}
+
+.ctaButton {
+    background-color: var(--color-primary);
+    color: white;
+    font-weight: 600;
+    padding: 1rem 2rem;
+    border-radius: var(--radius-full);
+    font-size: 1.125rem;
+    transition: var(--ease-default);
+}
+
+.ctaButton:hover {
+    background-color: var(--color-primary-hover);
+    box-shadow: 0 0 20px var(--color-primary-glow);
+    transform: translateY(-2px);
+}
+
+.featuresSection {
+    padding: 6rem 2rem;
+    background-color: var(--color-bg-surface);
+}
+
+.featuresGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.featureCard {
+    background: var(--color-bg-card);
+    padding: 2.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    transition: var(--ease-default);
+}
+
+.featureCard:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-5px);
+}
+
+.featureTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--color-text-main);
+}
+
+.featureDesc {
+    color: var(--color-text-muted);
+    line-height: 1.6;
+}

@@ -80,12 +80,12 @@ services:
     labels:
       - "traefik.enable=true"
       # HTTP -> HTTPS redirect
-      - "traefik.http.routers.api-http.rule=Host(`zedgaminghosting.hu`) || Host(`api.zedgaminghosting.hu`)"
+      - "traefik.http.routers.api-http.rule=Host(`api.zedgaminghosting.hu`)"
       - "traefik.http.routers.api-http.entrypoints=web"
       - "traefik.http.routers.api-http.middlewares=https-redirect"
       - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
       # HTTPS Router
-      - "traefik.http.routers.api.rule=Host(`zedgaminghosting.hu`) || Host(`api.zedgaminghosting.hu`)"
+      - "traefik.http.routers.api.rule=Host(`api.zedgaminghosting.hu`)"
       - "traefik.http.routers.api.entrypoints=websecure"
       - "traefik.http.routers.api.tls.certresolver=myresolver"
       - "traefik.http.services.api.loadbalancer.server.port=3000"
@@ -94,6 +94,31 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    networks:
+      - zed-network
+
+  # Web Frontend (Next.js)
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: zed-web
+    restart: always
+    environment:
+      NODE_ENV: production
+      # Add API_URL here if needed for server-side fetching
+      # API_URL: http://api:3000
+    labels:
+      - "traefik.enable=true"
+      # HTTP -> HTTPS redirect
+      - "traefik.http.routers.web-http.rule=Host(`zedgaminghosting.hu`) || Host(`www.zedgaminghosting.hu`)"
+      - "traefik.http.routers.web-http.entrypoints=web"
+      - "traefik.http.routers.web-http.middlewares=https-redirect"
+      # HTTPS Router
+      - "traefik.http.routers.web.rule=Host(`zedgaminghosting.hu`) || Host(`www.zedgaminghosting.hu`)"
+      - "traefik.http.routers.web.entrypoints=websecure"
+      - "traefik.http.routers.web.tls.certresolver=myresolver"
+      - "traefik.http.services.web.loadbalancer.server.port=3000"
     networks:
       - zed-network
 

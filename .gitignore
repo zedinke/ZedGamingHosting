@@ -71,3 +71,7 @@ secrets/
 
 
 *.tar.gz
+
+# Next.js
+.next
+out
