@@ -148,7 +148,17 @@ export class LicensingService implements OnModuleInit {
       this.logger.error('License server validation failed', error);
 
       // Handle network errors - enter grace period
-      if (error instanceof Error && (error.message.includes('ECONNREFUSED') || error.message.includes('ETIMEDOUT'))) {
+      // Check for various network error types
+      const isNetworkError = error instanceof Error && (
+        error.message.includes('ECONNREFUSED') ||
+        error.message.includes('ETIMEDOUT') ||
+        error.message.includes('fetch failed') ||
+        error.message.includes('network') ||
+        error.cause instanceof Error && error.cause.message.includes('ECONNREFUSED')
+      );
+      
+      if (isNetworkError) {
+        this.logger.warn('Network error detected, entering grace period');
         return await this.handleGracePeriod(licenseKey);
       }
 
