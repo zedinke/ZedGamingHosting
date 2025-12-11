@@ -1,5 +1,7 @@
 import { Controller, Post, Body, UseGuards, HttpCode, HttpStatus, Get, Request } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
@@ -11,7 +13,11 @@ import { Public } from './decorators/public.decorator';
  */
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly jwtService: JwtService,
+    private readonly config: ConfigService,
+  ) {}
 
   /**
    * Login endpoint
@@ -21,8 +27,25 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard('local'))
-  async login(@Body() loginDto: LoginDto) {
-    return this.authService.login(loginDto.email, loginDto.password);
+  async login(@Request() req: any) {
+    // After LocalStrategy validation, req.user contains the validated user
+    const payload: any = {
+      sub: req.user.id,
+      email: req.user.email,
+      role: req.user.role,
+      tenantId: req.user.tenantId,
+    };
+
+    const accessToken = this.jwtService.sign(payload);
+    const refreshToken = this.jwtService.sign(payload, {
+      expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN', '7d'),
+    });
+
+    return {
+      accessToken,
+      refreshToken,
+      user: req.user,
+    };
   }
 
   /**
