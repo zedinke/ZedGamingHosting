@@ -1,8 +1,9 @@
 http:
   routers:
     api:
-      rule: "Host(`zedgaminghosting.hu`) || Host(`www.zedgaminghosting.hu`) || Host(`api.zedgaminghosting.hu`)"
+      rule: "Host(`zedgaminghosting.hu`) || Host(`www.zedgaminghosting.hu`)"
       entryPoints:
+        - web
         - websecure
       service: api
       tls:
