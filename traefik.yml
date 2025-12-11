@@ -27,11 +27,6 @@ certificatesResolvers:
       storage: /letsencrypt/acme.json
 
 providers:
-  docker:
-    endpoint: "unix:///var/run/docker.sock"
-    exposedByDefault: false
-    network: zedhosting_zed-network
-  
   file:
     filename: /etc/traefik/dynamic.yml
     watch: true
