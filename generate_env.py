@@ -17,9 +17,7 @@ license_public_key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1234567890abcd
 env_content = f"""# Database
 MYSQL_ROOT_PASSWORD={db_pass}
 MYSQL_DATABASE=zedhosting
-MYSQL_USER=zedhosting
-MYSQL_PASSWORD={db_pass}
-DATABASE_URL=mysql://zedhosting:{db_pass}@mysql:3306/zedhosting
+DATABASE_URL=mysql://zedin:Gele007ta...@mysql:3306/zedhosting
 
 # Redis
 REDIS_HOST=redis

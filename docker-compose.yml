@@ -9,8 +9,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-zedhosting}
-      MYSQL_USER: ${MYSQL_USER:-zedhosting}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-${MYSQL_ROOT_PASSWORD:-rootpassword}}
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
