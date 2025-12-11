@@ -1,0 +1,60 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+
+api:
+  dashboard: true
+  insecure: false
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
+
+  websecure:
+    address: ":443"
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      tlsChallenge: {}
+      email: admin@zedgaminghosting.hu
+      storage: /letsencrypt/acme.json
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+    network: zedhosting_zed-network
+  
+  file:
+    filename: /etc/traefik/dynamic.yml
+    watch: true
+
+http:
+  routers:
+    api:
+      rule: "Host(`zedgaminghosting.hu`) || Host(`www.zedgaminghosting.hu`) || Host(`api.zedgaminghosting.hu`)"
+      entryPoints:
+        - websecure
+      service: api
+      tls:
+        certResolver: letsencrypt
+
+  services:
+    api:
+      loadBalancer:
+        servers:
+          - url: "http://zed-api:3000"
+
+log:
+  level: INFO
+  filePath: ""
+
+accessLog: {}
+

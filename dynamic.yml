@@ -1,0 +1,16 @@
+http:
+  routers:
+    api:
+      rule: "Host(`zedgaminghosting.hu`) || Host(`www.zedgaminghosting.hu`) || Host(`api.zedgaminghosting.hu`)"
+      entryPoints:
+        - websecure
+      service: api
+      tls:
+        certResolver: letsencrypt
+
+  services:
+    api:
+      loadBalancer:
+        servers:
+          - url: "http://zed-api:3000"
+

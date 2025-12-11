@@ -73,24 +73,18 @@ services:
     container_name: zed-traefik
     restart: always
     command:
-      - "--api.dashboard=true"
-      - "--api.insecure=false"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--providers.docker.network=zedhosting_zed-network"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
-      - "--certificatesresolvers.letsencrypt.acme.email=${TRAEFIK_ACME_EMAIL:-admin@zedhosting.com}"
-      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+      - "--configfile=/etc/traefik/traefik.yml"
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./dynamic.yml:/etc/traefik/dynamic.yml:ro
       - traefik_acme:/letsencrypt
     networks:
       - zed-network
+    depends_on:
+      - api
 
 volumes:
   mysql_data:
