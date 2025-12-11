@@ -1,0 +1,27 @@
+{
+  "hero": {
+    "title": "Professzionális",
+    "titleHighlight": "Game Server",
+    "titleSuffix": "Hosting",
+    "subtitle": "Enterprise szintű teljesítmény a gaming közösséged számára. Telepíts szervereket másodpercek alatt automatizált cloud platformunkkal.",
+    "ctaButton": "Ingyen Kezdj El"
+  },
+  "features": {
+    "instantDeployment": {
+      "title": "Azonnali Telepítés",
+      "description": "A \"Brain\" és \"Muscle\" architektúránk biztosítja, hogy a szerver kiépítés azonnal történjen globális node hálózatunkon keresztül."
+    },
+    "highPerformance": {
+      "title": "Magas Teljesítmény",
+      "description": "NVMe SSD-k és nagy frekvenciájú CPU-k működtetik. Kifejezetten tick-rate érzékeny versenyjátékokhoz tervezve."
+    },
+    "ddosProtection": {
+      "title": "DDoS Védelem",
+      "description": "Fejlett védekezési stratégiák védik közösségedet a támadásoktól, biztosítva a 99.9% uptime-t."
+    }
+  },
+  "footer": {
+    "copyright": "© {year} ZedGamingHosting. Minden jog fenntartva."
+  }
+}
+

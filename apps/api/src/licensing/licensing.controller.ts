@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { LicensingService } from './licensing.service';
+import { Public } from '../auth/decorators/public.decorator';
 
 /**
  * Licensing Controller - provides license status endpoint
@@ -12,6 +13,7 @@ export class LicensingController {
    * Health check endpoint for license
    * GET /api/licensing/health
    */
+  @Public()
   @Get('health')
   async checkLicenseHealth() {
     const license = await this.licensingService.getCurrentLicense();

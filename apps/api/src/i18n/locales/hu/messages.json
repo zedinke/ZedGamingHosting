@@ -14,6 +14,11 @@
   "UNAUTHORIZED": "Nincs jogosultság",
   "FORBIDDEN": "Tiltott",
   "CONFLICT": "Ütközés",
-  "INTERNAL_SERVER_ERROR": "Belső szerver hiba"
+  "INTERNAL_SERVER_ERROR": "Belső szerver hiba",
+  "AUTH_INVALID_CREDENTIALS": "Érvénytelen email vagy jelszó",
+  "AUTH_USER_NOT_FOUND": "Felhasználó nem található",
+  "AUTH_INVALID_REFRESH_TOKEN": "Érvénytelen refresh token",
+  "AUTH_UNAUTHORIZED": "Nincs jogosultságod ehhez az erőforráshoz",
+  "AUTH_INSUFFICIENT_ROLE": "Nincs megfelelő szerepköröd ehhez a művelethez"
 }
 

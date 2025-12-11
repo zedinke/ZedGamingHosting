@@ -1,6 +1,10 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
 import { NodesService } from './nodes.service';
 import { CreateNodeDto } from '@zed-hosting/shared-types';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Public } from '../auth/decorators/public.decorator';
 
 /**
  * Nodes Controller - handles node management endpoints
@@ -40,6 +44,7 @@ export class NodesController {
    * Registers a node (called by daemon)
    * POST /api/nodes/register
    */
+  @Public()
   @Post('register')
   async registerNode(@Body() data: {
     agentId: string;
@@ -60,6 +65,7 @@ export class NodesController {
    * Updates node heartbeat (called by daemon)
    * POST /api/nodes/:id/heartbeat
    */
+  @Public()
   @Post(':id/heartbeat')
   async updateHeartbeat(@Param('id') id: string) {
     await this.nodesService.updateHeartbeat(id);

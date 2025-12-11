@@ -1,0 +1,27 @@
+{
+  "hero": {
+    "title": "Professional",
+    "titleHighlight": "Game Server",
+    "titleSuffix": "Hosting",
+    "subtitle": "Enterprise-grade performance for your gaming community. Deploy servers in seconds with our automated cloud platform.",
+    "ctaButton": "Get Started for Free"
+  },
+  "features": {
+    "instantDeployment": {
+      "title": "Instant Deployment",
+      "description": "Our \"Brain\" and \"Muscle\" architecture ensures your server provisioning is handled instantly across our global node network."
+    },
+    "highPerformance": {
+      "title": "High Performance",
+      "description": "Powered by NVMe SSDs and high-frequency CPUs. Designed specifically for tick-rate sensitive competitive gaming."
+    },
+    "ddosProtection": {
+      "title": "DDoS Protection",
+      "description": "Advanced mitigation strategies keep your community safe from attacks, ensuring 99.9% uptime."
+    }
+  },
+  "footer": {
+    "copyright": "© {year} ZedGamingHosting. All rights reserved."
+  }
+}
+

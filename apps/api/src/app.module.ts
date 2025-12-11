@@ -9,8 +9,12 @@ import { AuditModule } from './audit/audit.module';
 import { NetworkingModule } from './networking/networking.module';
 import { NodesModule } from './nodes/nodes.module';
 import { ProvisioningModule } from './provisioning/provisioning.module';
+import { AuthModule } from './auth/auth.module';
+import { RateLimitingModule } from './rate-limiting/rate-limiting.module';
 import { MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { TenantMiddleware } from './common/middleware/tenant.middleware';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 /**
  * Root application module
@@ -33,10 +37,17 @@ import { TenantMiddleware } from './common/middleware/tenant.middleware';
     I18nModule,
     AuditModule,
     LicensingModule, // KRITIKUS - Must be loaded first!
-    NetworkingModule,
+    AuthModule,
+    RateLimitingModule,
     NetworkingModule,
     NodesModule,
     ProvisioningModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
   ],
 })
 export class AppModule implements NestModule {
