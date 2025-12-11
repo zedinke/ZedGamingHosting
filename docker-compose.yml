@@ -97,10 +97,41 @@ services:
     networks:
       - zed-network
 
+  # Daemon (Muscle) - Local Node
+  daemon:
+    build:
+      context: .
+      dockerfile: apps/daemon/Dockerfile
+    container_name: zed-daemon
+    restart: always
+    # Running as root to access Docker socket easily. 
+    # In prod, recommend setting up 'docker' group with correct GID.
+    user: root
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      # Internal communication with API
+      MANAGER_URL: http://api:3000
+      API_KEY: ${DAEMON_API_KEY}
+      NODE_ID: ${DAEMON_NODE_ID}
+      # Paths
+      STEAMCMD_PATH: /usr/games/steamcmd # We will ensure steamcmd is in image or install it
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "steam_cache:/var/lib/zedhosting/steam_cache"
+      - "game_servers:/var/lib/zedhosting/servers"
+    networks:
+      - zed-network
+    depends_on:
+      - api
+
 volumes:
   postgres_data:
   redis_data:
   letsencrypt:
+  steam_cache:
+  game_servers:
 
 
 networks:

@@ -26,13 +26,25 @@ RUN npx prisma generate --schema=libs/db/prisma/schema.prisma
 RUN npx nx build daemon --configuration=production
 
 # Production image
-FROM node:20-alpine AS runner
+FROM node:20-slim AS runner
 
 WORKDIR /app
 
-# Install runtime dependencies
-# Daemon might need stronger tools if it does local operations, but mostly it talks to Docker Socket.
-RUN apk add --no-cache openssl curl iputils
+# Install runtime dependencies and SteamCMD requirements
+# SteamCMD needs 32-bit libraries
+RUN dpkg --add-architecture i386 && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
+    lib32gcc-s1 \
+    lib32stdc++6 \
+    libsdl2-2.0-0:i386 \
+    steamcmd \
+    && rm -rf /var/lib/apt/lists/*
+
+# Link steamcmd to path
+RUN ln -s /usr/games/steamcmd /usr/bin/steamcmd
 
 # Set environment
 ENV NODE_ENV=production
@@ -46,16 +58,8 @@ COPY --from=builder /app/package-lock.json ./
 # Install production deps
 RUN npm install --omit=dev
 
-# Create non-root user?
-# DAEMON NEEDS ROOT usually to access /var/run/docker.sock properly without complex group logic, 
-# OR we add it to the docker group.
-# For now, let's run as root to avoid "permission denied" on docker socket, 
-# or ensure the user has same GID as host docker group (tricky).
-# Safer: Run as root for accessing socket, or use specific GID.
-# Let's try running as root first for "Muscle", can harden later.
-# Or: addgroup docker, adduser zedhosting docker. (But GID must match host).
-# I'll stick to root for Daemon for now to minimize friction, adding a comment.
-# USER root (default)
+# Run as root (Daemon requirement for Docker access usually)
+# USER root
 
 EXPOSE 3001
 
