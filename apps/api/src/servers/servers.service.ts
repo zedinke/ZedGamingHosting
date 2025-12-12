@@ -1,7 +1,10 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
 import { I18nService } from '../i18n/i18n.service';
 import { TasksService } from '../tasks/tasks.service';
+import { PortManagerService } from '../networking/port-manager.service';
+import { randomUUID } from 'crypto';
+import { GameType, Protocol } from '@prisma/client';
 
 @Injectable()
 export class ServersService {
@@ -9,6 +12,7 @@ export class ServersService {
     private readonly prisma: PrismaService,
     private readonly i18n: I18nService,
     private readonly tasksService: TasksService,
+    private readonly portManager: PortManagerService,
   ) {}
 
   /**
@@ -127,10 +131,107 @@ export class ServersService {
   /**
    * Create a new server
    */
-  async create(_createServerDto: any, _userId: string) {
-    // TODO: Implement server creation logic with provisioning
-    // For now, return a placeholder
-    throw new Error('Server creation not yet implemented');
+  async create(createServerDto: any, userId: string) {
+    // 1. Verify node exists and is available
+    const node = await this.prisma.node.findUnique({
+      where: { id: createServerDto.nodeId },
+    });
+
+    if (!node) {
+      throw new NotFoundException('Node not found');
+    }
+
+    if (node.status !== 'ONLINE') {
+      throw new BadRequestException('Node is not available');
+    }
+
+    // 2. Check if user has quota/resources (TODO: implement quota checking)
+
+    // 3. Generate server UUID
+    const serverUuid = randomUUID();
+
+    // 4. Allocate ports for the server
+    const portAllocations = await this.portManager.allocatePortBlock({
+      nodeId: createServerDto.nodeId,
+      gameType: createServerDto.gameType as GameType,
+      protocol: Protocol.BOTH, // Most games need both UDP and TCP
+      serverUuid,
+    });
+
+    // 5. Create server record in database
+    const server = await this.prisma.gameServer.create({
+      data: {
+        uuid: serverUuid,
+        gameType: createServerDto.gameType as GameType,
+        status: 'INSTALLING',
+        nodeId: createServerDto.nodeId,
+        ownerId: userId,
+        startupPriority: createServerDto.startupPriority || 10,
+        resources: {
+          cpuLimit: createServerDto.resources.cpuLimit,
+          ramLimit: createServerDto.resources.ramLimit,
+          diskLimit: createServerDto.resources.diskLimit,
+        },
+        envVars: createServerDto.envVars || {},
+        clusterId: createServerDto.clusterId || null,
+      },
+      include: {
+        node: {
+          select: {
+            id: true,
+            publicFqdn: true,
+            ipAddress: true,
+          },
+        },
+        networkAllocations: {
+          select: {
+            port: true,
+            protocol: true,
+            type: true,
+          },
+        },
+      },
+    });
+
+    // 6. Create provisioning task for daemon
+    await this.tasksService.createTask(
+      createServerDto.nodeId,
+      'PROVISION',
+      {
+        serverUuid,
+        gameType: createServerDto.gameType,
+        resources: createServerDto.resources,
+        envVars: createServerDto.envVars || {},
+        ports: portAllocations.map((a: any) => ({
+          port: a.port,
+          protocol: a.protocol,
+          type: a.type,
+        })),
+        volumes: [
+          {
+            source: `/var/lib/zedhosting/servers/${serverUuid}`,
+            target: '/server',
+          },
+        ],
+      },
+    );
+
+    return {
+      id: server.id,
+      uuid: server.uuid,
+      gameType: server.gameType,
+      status: server.status,
+      nodeId: server.nodeId,
+      ownerId: server.ownerId,
+      startupPriority: server.startupPriority,
+      resources: server.resources,
+      envVars: server.envVars,
+      clusterId: server.clusterId,
+      createdAt: server.createdAt,
+      updatedAt: server.updatedAt,
+      node: server.node,
+      ports: server.networkAllocations,
+    };
   }
 
   /**

@@ -1,4 +1,5 @@
-import { IsEnum, IsString, IsOptional, IsObject, IsInt, Min } from 'class-validator';
+import { IsEnum, IsString, IsOptional, IsObject, IsInt, Min, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 
 enum GameType {
   ARK = 'ARK',
@@ -8,21 +9,30 @@ enum GameType {
   PALWORLD = 'PALWORLD',
 }
 
+class ServerResources {
+  @IsInt()
+  @Min(1)
+  cpuLimit!: number; // Cores
+
+  @IsInt()
+  @Min(512)
+  ramLimit!: number; // MB
+
+  @IsInt()
+  @Min(10)
+  diskLimit!: number; // GB
+}
+
 export class CreateServerDto {
   @IsEnum(GameType)
   gameType!: GameType;
 
   @IsString()
-  @IsOptional()
-  name?: string;
+  nodeId!: string;
 
-  @IsObject()
-  @IsOptional()
-  resources?: {
-    cpuLimit?: number;
-    ramLimit?: number; // MB
-    diskLimit?: number; // GB
-  };
+  @ValidateNested()
+  @Type(() => ServerResources)
+  resources!: ServerResources;
 
   @IsObject()
   @IsOptional()
@@ -32,5 +42,9 @@ export class CreateServerDto {
   @Min(1)
   @IsOptional()
   startupPriority?: number;
+
+  @IsString()
+  @IsOptional()
+  clusterId?: string;
 }
 
