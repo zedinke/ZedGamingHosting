@@ -38,11 +38,13 @@
     },
     "server": {
       "status": {
-        "online": "Online",
-        "offline": "Offline",
+        "running": "Online",
+        "stopped": "Offline",
         "starting": "Indítás",
         "stopping": "Leállítás",
-        "restarting": "Újraindítás"
+        "installing": "Telepítés",
+        "crashed": "Összeomlott",
+        "updating": "Frissítés"
       },
       "actions": {
         "start": "Indítás",

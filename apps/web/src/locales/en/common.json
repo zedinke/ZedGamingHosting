@@ -38,11 +38,13 @@
     },
     "server": {
       "status": {
-        "online": "Online",
-        "offline": "Offline",
+        "running": "Online",
+        "stopped": "Offline",
         "starting": "Starting",
         "stopping": "Stopping",
-        "restarting": "Restarting"
+        "installing": "Installing",
+        "crashed": "Crashed",
+        "updating": "Updating"
       },
       "actions": {
         "start": "Start",

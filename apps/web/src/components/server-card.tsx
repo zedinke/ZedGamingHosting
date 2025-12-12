@@ -13,16 +13,19 @@ export function ServerCard({ server }: ServerCardProps) {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'ONLINE':
+      case 'RUNNING':
         return 'bg-green-500';
-      case 'OFFLINE':
+      case 'STOPPED':
         return 'bg-gray-500';
       case 'STARTING':
         return 'bg-yellow-500 animate-pulse';
       case 'STOPPING':
         return 'bg-orange-500 animate-pulse';
-      case 'RESTARTING':
+      case 'INSTALLING':
+      case 'UPDATING':
         return 'bg-blue-500 animate-pulse';
+      case 'CRASHED':
+        return 'bg-red-500';
       default:
         return 'bg-gray-500';
     }
@@ -39,7 +42,7 @@ export function ServerCard({ server }: ServerCardProps) {
         {/* Header */}
         <div className="flex justify-between items-start mb-4">
           <div>
-            <h3 className="text-xl font-semibold mb-1">{server.name}</h3>
+            <h3 className="text-xl font-semibold mb-1">{server.gameType}</h3>
             <p className="text-sm text-gray-400">{server.gameType}</p>
           </div>
           <div className="flex items-center gap-2">
