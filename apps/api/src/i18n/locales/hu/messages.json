@@ -19,6 +19,15 @@
   "AUTH_USER_NOT_FOUND": "Felhasználó nem található",
   "AUTH_INVALID_REFRESH_TOKEN": "Érvénytelen refresh token",
   "AUTH_UNAUTHORIZED": "Nincs jogosultságod ehhez az erőforráshoz",
-  "AUTH_INSUFFICIENT_ROLE": "Nincs megfelelő szerepköröd ehhez a művelethez"
+  "AUTH_INSUFFICIENT_ROLE": "Nincs megfelelő szerepköröd ehhez a művelethez",
+  "errors": {
+    "subdomain_already_exists": "A(z) {{domain}} subdomain már létezik",
+    "server_not_found": "A szerver nem található",
+    "cloudflare_dns_failed": "Cloudflare DNS művelet sikertelen: {{error}}",
+    "traefik_update_failed": "Traefik konfiguráció frissítése sikertelen: {{error}}",
+    "subdomain_not_found": "A subdomain nem található",
+    "invalid_subdomain_format": "Érvénytelen subdomain formátum: {{subdomain}}",
+    "invalid_subdomain_length": "A subdomain hossza 3-63 karakter között kell legyen: {{subdomain}}"
+  }
 }
 

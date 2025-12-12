@@ -19,6 +19,15 @@
   "AUTH_USER_NOT_FOUND": "User not found",
   "AUTH_INVALID_REFRESH_TOKEN": "Invalid refresh token",
   "AUTH_UNAUTHORIZED": "You are not authorized to access this resource",
-  "AUTH_INSUFFICIENT_ROLE": "You do not have the required role for this action"
+  "AUTH_INSUFFICIENT_ROLE": "You do not have the required role for this action",
+  "errors": {
+    "subdomain_already_exists": "Subdomain {{domain}} already exists",
+    "server_not_found": "Server not found",
+    "cloudflare_dns_failed": "Cloudflare DNS operation failed: {{error}}",
+    "traefik_update_failed": "Traefik configuration update failed: {{error}}",
+    "subdomain_not_found": "Subdomain not found",
+    "invalid_subdomain_format": "Invalid subdomain format: {{subdomain}}",
+    "invalid_subdomain_length": "Subdomain length must be between 3-63 characters: {{subdomain}}"
+  }
 }
 

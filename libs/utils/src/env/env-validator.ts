@@ -100,6 +100,14 @@ export const envSchema = z.object({
   SMTP_PASSWORD: z.string().optional(),
   SMTP_FROM: z.string().email().optional(),
 
+  // Cloudflare
+  CLOUDFLARE_API_TOKEN: z.string().optional(),
+  CLOUDFLARE_ZONE_ID: z.string().optional(),
+  DEFAULT_DOMAIN: z.string().default('zedgaminghosting.hu'),
+
+  // Traefik
+  TRAEFIK_DYNAMIC_CONFIG_PATH: z.string().default('/etc/traefik/dynamic.yml'),
+
   // Discord
   DISCORD_WEBHOOK_URL: z.string().url().optional(),
 
