@@ -28,9 +28,32 @@ export class I18nService {
    */
   private loadMessages(locale: Locale): void {
     try {
-      const filePath = path.join(__dirname, 'locales', locale, 'messages.json');
-      const content = fs.readFileSync(filePath, 'utf-8');
-      this.messages.set(locale, JSON.parse(content));
+      // Try different paths for development and production
+      const possiblePaths = [
+        path.join(__dirname, 'locales', locale, 'messages.json'), // Production (compiled)
+        path.join(__dirname, '..', 'i18n', 'locales', locale, 'messages.json'), // Alternative path
+        path.join(process.cwd(), 'apps', 'api', 'src', 'i18n', 'locales', locale, 'messages.json'), // Development
+        path.join(process.cwd(), 'dist', 'apps', 'api', 'src', 'i18n', 'locales', locale, 'messages.json'), // Compiled
+      ];
+
+      let content: string | null = null;
+      for (const filePath of possiblePaths) {
+        try {
+          if (fs.existsSync(filePath)) {
+            content = fs.readFileSync(filePath, 'utf-8');
+            break;
+          }
+        } catch {
+          // Continue to next path
+        }
+      }
+
+      if (content) {
+        this.messages.set(locale, JSON.parse(content));
+      } else {
+        console.warn(`Failed to load messages for locale: ${locale} - file not found in any expected location`);
+        this.messages.set(locale, {});
+      }
     } catch (error) {
       console.warn(`Failed to load messages for locale: ${locale}`, error);
       this.messages.set(locale, {});
