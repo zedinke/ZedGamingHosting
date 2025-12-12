@@ -30,10 +30,10 @@ export class I18nService {
     try {
       // Try different paths for development and production
       const possiblePaths = [
-        path.join(__dirname, 'locales', locale, 'messages.json'), // Production (compiled)
-        path.join(__dirname, '..', 'i18n', 'locales', locale, 'messages.json'), // Alternative path
+        path.join(__dirname, 'i18n', 'locales', locale, 'messages.json'), // Production (compiled with Docker)
+        path.join(__dirname, 'locales', locale, 'messages.json'), // Alternative production path
+        path.join(process.cwd(), 'dist', 'i18n', 'locales', locale, 'messages.json'), // Docker container path
         path.join(process.cwd(), 'apps', 'api', 'src', 'i18n', 'locales', locale, 'messages.json'), // Development
-        path.join(process.cwd(), 'dist', 'apps', 'api', 'src', 'i18n', 'locales', locale, 'messages.json'), // Compiled
       ];
 
       let content: string | null = null;

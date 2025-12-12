@@ -53,6 +53,9 @@ COPY --from=builder /app/libs/db/src/generated ./libs/db/src/generated
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
+# Copy i18n locale files (needed at runtime)
+COPY --from=builder /app/apps/api/src/i18n/locales ./dist/i18n/locales
+
 # Create non-root user
 RUN addgroup -S zedhosting && adduser -S zedhosting -G zedhosting
 USER zedhosting
