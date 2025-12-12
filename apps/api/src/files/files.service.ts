@@ -2,7 +2,6 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
-  InternalServerErrorException,
 } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
 import { I18nService } from '../i18n/i18n.service';
@@ -82,7 +81,7 @@ export class FilesService {
   async saveFileContent(
     serverUuid: string,
     path: string,
-    content: string,
+    _content: string,
     userId: string,
   ) {
     await this.verifyAccess(serverUuid, userId);
@@ -139,7 +138,7 @@ export class FilesService {
     serverUuid: string,
     targetPath: string,
     filename: string,
-    content: string,
+    _content: string,
     userId: string,
   ) {
     await this.verifyAccess(serverUuid, userId);

@@ -10,8 +10,6 @@ import {
   UseGuards,
   Request,
   BadRequestException,
-  NotFoundException,
-  ForbiddenException,
 } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
