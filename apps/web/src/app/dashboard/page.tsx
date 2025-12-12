@@ -7,17 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '../../lib/api-client';
 import { ServerCard } from '../../components/server-card';
 import { Button } from '@zed-hosting/ui-kit';
-
-interface GameServer {
-  uuid: string;
-  name: string;
-  gameType: string;
-  status: 'ONLINE' | 'OFFLINE' | 'STARTING' | 'STOPPING' | 'RESTARTING';
-  nodeId: string;
-  cpuUsage?: number;
-  ramUsage?: number;
-  diskUsage?: number;
-}
+import { GameServer } from '../../types/server';
 
 export default function DashboardPage() {
   const t = useTranslations();

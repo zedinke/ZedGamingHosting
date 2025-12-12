@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { Button, Card } from '@zed-hosting/ui-kit';
-import { GameServer } from '../app/dashboard/page';
+import { GameServer } from '../types/server';
 
 interface ServerCardProps {
   server: GameServer;
