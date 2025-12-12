@@ -193,7 +193,7 @@ export class ServersService {
     // Create task for daemon to start the server
     await this.tasksService.createTask(
       server.nodeId,
-      TaskType.START,
+      'START',
       { serverUuid: server.uuid },
     );
 
