@@ -70,3 +70,4 @@ export function isValidLicenseResponse(response: unknown): response is LicenseRe
   );
 }
 
+

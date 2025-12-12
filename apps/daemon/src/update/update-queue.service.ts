@@ -1,6 +1,7 @@
 import { Queue, Worker, Job } from 'bullmq';
 import IORedis from 'ioredis';
 import { SteamService, SteamUpdateOptions, SteamUpdateProgress } from './steam.service';
+import { CacheManager } from '../cache/cache-manager.service';
 
 export interface UpdateJobData {
   serverUuid: string;
@@ -24,11 +25,13 @@ export class UpdateQueueService {
   private readonly queue: Queue<UpdateJobData, UpdateJobResult>;
   private readonly worker: Worker<UpdateJobData, UpdateJobResult>;
   private readonly steamService: SteamService;
+  private readonly cacheManager: CacheManager;
   private readonly maxConcurrent: number;
 
-  constructor(redisConnection: IORedis, maxConcurrent?: number) {
+  constructor(redisConnection: IORedis, cacheManager?: CacheManager, maxConcurrent?: number) {
     this.maxConcurrent = maxConcurrent || parseInt(process.env.MAX_CONCURRENT_UPDATES || '2');
     this.steamService = new SteamService();
+    this.cacheManager = cacheManager || new CacheManager();
 
     // Create queue
     this.queue = new Queue<UpdateJobData, UpdateJobResult>('steam-updates', {
@@ -117,21 +120,35 @@ export class UpdateQueueService {
       // Track progress
       job.updateProgress(0);
 
-      await this.steamService.updateServer(
-        { appId, installDir, beta, validate },
-        (progress: SteamUpdateProgress) => {
-          // Update job progress
-          job.updateProgress(progress.progress);
-          job.updateData({
-            ...job.data,
-            progress: progress.progress,
-            status: progress.status,
-          } as any);
-        }
-      );
+      // Check cache first
+      const cachedVersion = await this.checkAndUseCache(appId, installDir);
+      
+      if (!cachedVersion) {
+        // Not in cache or cache outdated, download from Steam
+        await this.steamService.updateServer(
+          { appId, installDir, beta, validate },
+          (progress: SteamUpdateProgress) => {
+            // Update job progress
+            job.updateProgress(progress.progress);
+            job.updateData({
+              ...job.data,
+              progress: progress.progress,
+              status: progress.status,
+            } as any);
+          }
+        );
+      } else {
+        console.log(`[UpdateQueue] Using cached version ${cachedVersion} for server ${serverUuid}`);
+        job.updateProgress(100);
+      }
 
       // Get updated version
       const version = await this.steamService.getAppVersion(appId, installDir);
+
+      if (version && !cachedVersion) {
+        // Update cache with new version
+        await this.cacheManager.updateCache(appId, installDir, version);
+      }
 
       console.log(`[UpdateQueue] Update completed for server ${serverUuid}, version: ${version}`);
 
@@ -147,6 +164,42 @@ export class UpdateQueueService {
         error: error.message || 'Unknown error',
       };
     }
+  }
+
+  /**
+   * Checks cache and uses it if available and up-to-date
+   * Returns version if cache was used, null otherwise
+   */
+  private async checkAndUseCache(appId: string, installDir: string): Promise<string | null> {
+    try {
+      // Get latest cached version
+      const stats = await this.cacheManager.getCacheStats();
+      const appCaches = stats.entries
+        .filter((e) => e.appId === appId)
+        .sort((a, b) => b.cachedAt - a.cachedAt);
+
+      if (appCaches.length > 0) {
+        const latestCache = appCaches[0];
+        
+        // Check if we have a version for this install directory
+        const currentVersion = await this.steamService.getAppVersion(appId, installDir);
+        
+        if (currentVersion && currentVersion === latestCache.version) {
+          // Already up-to-date, no need to update
+          return currentVersion;
+        }
+
+        // Use cached version if available
+        if (await this.cacheManager.isCached(appId, latestCache.version)) {
+          await this.cacheManager.linkFromCache(appId, installDir, latestCache.version);
+          return latestCache.version;
+        }
+      }
+    } catch (error) {
+      console.warn(`[UpdateQueue] Cache check failed, proceeding with Steam update:`, error);
+    }
+
+    return null;
   }
 
   /**
@@ -182,4 +235,5 @@ export class UpdateQueueService {
     await this.queue.close();
   }
 }
+
 

@@ -241,3 +241,4 @@ docker compose ps
 - Ellenőrizd a `.env` fájlban a `POSTGRES_PASSWORD` értékét
 - Várj, amíg a postgres konténer elindul: `docker compose ps`
 
+

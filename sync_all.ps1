@@ -113,3 +113,4 @@ Write-Host "✓ Szerver szinkronizálva" -ForegroundColor Green
 Write-Host "`n=== Szinkronizálás kész! ===" -ForegroundColor Green
 Write-Host "Minden három hely szinkronban van." -ForegroundColor Cyan
 
+

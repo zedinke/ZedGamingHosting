@@ -30,3 +30,4 @@ export interface LicenseValidationResult {
   gracePeriodEnds?: Date;
 }
 
+

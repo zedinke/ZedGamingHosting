@@ -408,3 +408,4 @@
 **Kritikus:** 4 azonnali javítás  
 **Prioritásos:** 9 közép távú feature
 
+

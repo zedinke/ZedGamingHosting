@@ -49,3 +49,4 @@ Ez automatikusan:
 
 Lásd: `QUICK_START.md` vagy `DEPLOYMENT_GUIDE.md`
 
+

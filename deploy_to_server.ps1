@@ -160,3 +160,4 @@ Write-Host "API URL: http://${ServerIP}:3000" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "Check logs with: ssh ${Username}@${ServerIP} 'cd /opt/zedhosting && docker compose logs -f api'" -ForegroundColor Yellow
 
+

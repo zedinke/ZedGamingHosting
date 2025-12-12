@@ -7,6 +7,9 @@ import { StartupGuard } from './startup/startup-guard';
 import { ReconciliationService } from './reconciliation/reconciliation.service';
 import { BackendClient } from './backend/backend-client';
 import { UpdateQueueService } from './update/update-queue.service';
+import { CacheManager } from './cache/cache-manager.service';
+import { NFSManager } from './nfs/nfs-manager.service';
+import { BackupService } from './backup/backup.service';
 import IORedis from 'ioredis';
 import * as http from 'http';
 
@@ -21,6 +24,9 @@ export class ZedDaemon {
   private healthChecker: HealthChecker;
   private heartbeatClient: HeartbeatClient;
   private updateQueueService: UpdateQueueService | null = null;
+  private cacheManager: CacheManager;
+  private nfsManager: NFSManager;
+  private backupService: BackupService;
 
   private reconciliationService: ReconciliationService;
   private backendClient: BackendClient;
@@ -40,6 +46,15 @@ export class ZedDaemon {
       this.backendClient
     );
 
+    // Initialize cache manager
+    this.cacheManager = new CacheManager();
+
+    // Initialize NFS manager
+    this.nfsManager = new NFSManager();
+
+    // Initialize backup service
+    this.backupService = new BackupService();
+
     // Initialize Redis connection for update queue
     this.redisConnection = new IORedis({
       host: process.env.REDIS_HOST || 'localhost',
@@ -49,8 +64,8 @@ export class ZedDaemon {
       maxRetriesPerRequest: null,
     });
 
-    // Initialize update queue service
-    this.updateQueueService = new UpdateQueueService(this.redisConnection);
+    // Initialize update queue service with cache manager
+    this.updateQueueService = new UpdateQueueService(this.redisConnection, this.cacheManager);
   }
 
   /**
@@ -59,6 +74,18 @@ export class ZedDaemon {
   async initialize(): Promise<void> {
     console.log('Initializing ZedDaemon...');
     await this.containerManager.initialize();
+    
+    // Initialize cache manager
+    await this.cacheManager.initialize();
+    console.log('✅ Cache manager initialized');
+
+    // Initialize NFS manager
+    await this.nfsManager.initialize();
+    console.log('✅ NFS manager initialized');
+
+    // Initialize backup service
+    await this.backupService.initialize();
+    console.log('✅ Backup service initialized');
     
     // Verify Redis connection
     if (this.redisConnection) {
@@ -136,6 +163,27 @@ export class ZedDaemon {
    */
   getUpdateQueueService(): UpdateQueueService | null {
     return this.updateQueueService;
+  }
+
+  /**
+   * Gets the cache manager
+   */
+  getCacheManager(): CacheManager {
+    return this.cacheManager;
+  }
+
+  /**
+   * Gets the NFS manager
+   */
+  getNfsManager(): NFSManager {
+    return this.nfsManager;
+  }
+
+  /**
+   * Gets the backup service
+   */
+  getBackupService(): BackupService {
+    return this.backupService;
   }
 }
 

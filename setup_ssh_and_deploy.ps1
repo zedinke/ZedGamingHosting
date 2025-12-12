@@ -139,3 +139,4 @@ if ($LASTEXITCODE -eq 0) {
 # Cleanup
 Remove-Item "temp_key_setup.sh" -ErrorAction SilentlyContinue
 
+

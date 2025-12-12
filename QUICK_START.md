@@ -85,3 +85,4 @@ curl http://localhost:3000/health
 
 Részletes útmutató: `DEPLOYMENT_GUIDE.md`
 
+
