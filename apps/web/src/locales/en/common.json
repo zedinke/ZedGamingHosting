@@ -61,10 +61,18 @@
   "auth": {
     "login": {
       "title": "Login",
+      "subtitle": "Sign in to your account",
       "email": "Email",
       "password": "Password",
+      "emailPlaceholder": "email@example.com",
+      "passwordPlaceholder": "••••••••",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
       "submit": "Login",
-      "error": "Invalid email or password"
+      "loggingIn": "Logging in...",
+      "error": "Invalid email or password",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up"
     },
     "logout": "Logout"
   },

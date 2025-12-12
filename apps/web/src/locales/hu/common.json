@@ -61,10 +61,18 @@
   "auth": {
     "login": {
       "title": "Bejelentkezés",
+      "subtitle": "Jelentkezz be a fiókodba",
       "email": "Email",
       "password": "Jelszó",
+      "emailPlaceholder": "email@pelda.hu",
+      "passwordPlaceholder": "••••••••",
+      "rememberMe": "Emlékezz rám",
+      "forgotPassword": "Elfelejtett jelszó?",
       "submit": "Bejelentkezés",
-      "error": "Érvénytelen email vagy jelszó"
+      "loggingIn": "Bejelentkezés...",
+      "error": "Érvénytelen email vagy jelszó",
+      "noAccount": "Nincs még fiókod?",
+      "signUp": "Regisztráció"
     },
     "logout": "Kijelentkezés"
   },

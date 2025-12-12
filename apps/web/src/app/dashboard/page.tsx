@@ -8,11 +8,11 @@ import { apiClient } from '../../../lib/api-client';
 import { ServerCard } from '../../../components/server-card';
 import { Button } from '@zed-hosting/ui-kit';
 import { GameServer } from '../../../types/server';
-import { ProtectedRoute } from '../../../components/protected-route';
 
-function DashboardContent() {
+export default function DashboardPage() {
   const t = useTranslations();
-  
+  const { isAuthenticated } = useAuthStore();
+
   // Set API client token from auth store
   const { accessToken } = useAuthStore();
   useEffect(() => {
@@ -27,12 +27,22 @@ function DashboardContent() {
       // return apiClient.get<GameServer[]>('/servers');
       return [];
     },
-    enabled: true,
+    enabled: isAuthenticated,
   });
 
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      window.location.href = '/login';
+    }
+  }, [isAuthenticated]);
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return (
-    <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
       <div className="container mx-auto px-4 py-8">
         <header className="mb-8">
           <h1 className="text-4xl font-bold mb-2">{t('dashboard.title')}</h1>
@@ -103,11 +113,6 @@ function DashboardContent() {
         </section>
       </div>
     </div>
-    </ProtectedRoute>
   );
-}
-
-export default function DashboardPage() {
-  return <DashboardContent />;
 }
 
