@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
-import { Prisma } from '@prisma/client';
 
-type TaskStatus = 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
 type TaskType = 'PROVISION' | 'START' | 'STOP' | 'RESTART' | 'UPDATE' | 'DELETE';
 
 @Injectable()
