@@ -1,11 +1,9 @@
-import { Injectable, NotFoundException, ForbiddenException, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
 import { I18nService } from '../i18n/i18n.service';
 
 @Injectable()
 export class ServersService {
-  private readonly logger = new Logger(ServersService.name);
-
   constructor(
     private readonly prisma: PrismaService,
     private readonly i18n: I18nService,
