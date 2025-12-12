@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useAuthStore } from '../../../stores/auth-store';
-import { apiClient } from '../../../lib/api-client';
 import { Button } from '@zed-hosting/ui-kit';
 
 export default function LoginPage() {
