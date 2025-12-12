@@ -40,6 +40,7 @@ function DashboardContent() {
           updatedAt: new Date(server.updatedAt),
           node: server.node,
           ports: server.ports || [],
+          metrics: server.metrics || null,
         }));
       } catch (error) {
         console.error('Failed to fetch servers:', error);
