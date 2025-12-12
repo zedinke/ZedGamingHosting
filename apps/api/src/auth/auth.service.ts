@@ -165,5 +165,50 @@ export class AuthService {
     const saltRounds = 12;
     return bcrypt.hash(password, saltRounds);
   }
+
+  /**
+   * Creates a test user (development only)
+   */
+  async createTestUser(email: string, password: string) {
+    try {
+      // Check if user exists
+      const existing = await this.prisma.user.findUnique({ where: { email } });
+      if (existing) {
+        return {
+          success: false,
+          message: `User with email ${email} already exists`,
+          user: existing,
+        };
+      }
+
+      // Hash password
+      const hashedPassword = await this.hashPassword(password);
+
+      // Create user
+      const user = await this.prisma.user.create({
+        data: {
+          email,
+          passwordHash: hashedPassword,
+          role: 'SUPERADMIN',
+        },
+      });
+
+      this.logger.log(`Test user created: ${user.email} (${user.id})`);
+
+      return {
+        success: true,
+        message: 'Test user created successfully',
+        user: {
+          id: user.id,
+          email: user.email,
+          role: user.role,
+          createdAt: user.createdAt,
+        },
+      };
+    } catch (error: any) {
+      this.logger.error('Error creating test user:', error);
+      throw error;
+    }
+  }
 }
 

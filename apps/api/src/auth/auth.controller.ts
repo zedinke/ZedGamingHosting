@@ -67,5 +67,18 @@ export class AuthController {
   async getProfile(@Request() req: any) {
     return req.user;
   }
-}
 
+  /**
+   * Create test user (development only)
+   * POST /api/auth/create-test-user
+   */
+  @Public()
+  @Post('create-test-user')
+  @HttpCode(HttpStatus.CREATED)
+  async createTestUser(@Body() body: { email?: string; password?: string }) {
+    return this.authService.createTestUser(
+      body.email || 'admin@zedgaminghosting.hu',
+      body.password || 'Admin123!',
+    );
+  }
+}
