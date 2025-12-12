@@ -60,8 +60,8 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12" style={{ backgroundColor: 'var(--color-bg-app)' }}>
-      <div className="w-full" style={{ maxWidth: '420px' }}>
-        <div className="rounded-xl p-8 shadow-2xl" style={{ backgroundColor: 'var(--color-bg-card)', border: '1px solid var(--color-border)', width: '100%' }}>
+      <div style={{ width: '100%', maxWidth: '420px', margin: '0 auto' }}>
+        <div className="rounded-xl p-8 shadow-2xl" style={{ backgroundColor: 'var(--color-bg-card)', border: '1px solid var(--color-border)' }}>
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold mb-3" style={{ color: 'var(--color-text-main)' }}>ZedGamingHosting</h1>
             <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>{t('subtitle') || 'Sign in to your account'}</p>
