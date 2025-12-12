@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { apiClient } from '@/lib/api-client';
-import { useAuthStore } from '@/stores/auth-store';
+import { apiClient } from '../../../../lib/api-client';
+import { useAuthStore } from '../../../../stores/auth-store';
 import { Button } from '@zed-hosting/ui-kit';
-import { ProtectedRoute } from '@/components/protected-route';
+import { ProtectedRoute } from '../../../../components/protected-route';
 
 interface Node {
   id: string;
