@@ -78,7 +78,7 @@ export default function CreateServerPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-app)' }}>
+      <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-app)' }} />
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
           <h1 className="text-3xl font-bold mb-8" style={{ color: 'var(--color-text-main)' }}>
@@ -235,6 +235,7 @@ export default function CreateServerPage() {
             </div>
           </form>
         </div>
+      </div>
       </div>
     </ProtectedRoute>
   );
