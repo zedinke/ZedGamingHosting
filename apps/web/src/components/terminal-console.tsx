@@ -88,7 +88,7 @@ export function TerminalConsole({ serverUuid, onClose }: TerminalConsoleProps) {
       terminal.write(event.data);
     };
 
-    ws.onerror = (error) => {
+    ws.onerror = () => {
       terminal.writeln(
         '\r\n\x1b[31mWebSocket error: ' +
           t('terminal.error.websocketError') +
