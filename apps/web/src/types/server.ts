@@ -11,13 +11,29 @@ export interface ServerPort {
 }
 
 export interface GameServer {
+  id: string;
   uuid: string;
-  name: string;
   gameType: string;
-  status: 'ONLINE' | 'OFFLINE' | 'STARTING' | 'STOPPING' | 'RESTARTING';
+  status: 'INSTALLING' | 'RUNNING' | 'STOPPED' | 'STARTING' | 'STOPPING' | 'CRASHED' | 'UPDATING';
   nodeId: string;
-  cpuUsage?: number;
-  ramUsage?: number;
-  diskUsage?: number;
+  ownerId: string;
+  startupPriority?: number;
+  resources?: {
+    cpuLimit?: number;
+    ramLimit?: number;
+    diskLimit?: number;
+  };
+  envVars?: Record<string, string>;
+  clusterId?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  node?: ServerNode;
+  ports?: ServerPort[];
+  metrics?: {
+    cpuUsage?: number;
+    ramUsage?: number;
+    ramUsagePercent?: number;
+    diskUsage?: number;
+    diskUsagePercent?: number;
+  };
 }
-

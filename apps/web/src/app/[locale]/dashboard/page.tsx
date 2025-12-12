@@ -76,7 +76,7 @@ function DashboardContent() {
               {t('dashboard.metrics.activeServers')}
             </h3>
             <p className="text-3xl font-bold text-green-400">
-              {servers?.filter((s) => s.status === 'ONLINE').length || 0}
+              {servers?.filter((s) => s.status === 'RUNNING').length || 0}
             </p>
           </div>
           <div className="bg-gray-800/60 backdrop-blur-xl rounded-lg p-6 border border-white/10">
