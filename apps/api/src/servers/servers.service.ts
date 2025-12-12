@@ -2,7 +2,6 @@ import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/commo
 import { PrismaService } from '@zed-hosting/db';
 import { I18nService } from '../i18n/i18n.service';
 import { TasksService } from '../tasks/tasks.service';
-import { TaskType } from '@prisma/client';
 
 @Injectable()
 export class ServersService {
@@ -227,7 +226,7 @@ export class ServersService {
     // Create task for daemon to stop the server
     await this.tasksService.createTask(
       server.nodeId,
-      TaskType.STOP,
+      'STOP',
       { serverUuid: server.uuid },
     );
 
@@ -260,7 +259,7 @@ export class ServersService {
     // Create task for daemon to restart the server
     await this.tasksService.createTask(
       server.nodeId,
-      TaskType.RESTART,
+      'RESTART',
       { serverUuid: server.uuid },
     );
 

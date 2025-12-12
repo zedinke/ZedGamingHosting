@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
-import { TaskStatus, TaskType } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+
+type TaskStatus = 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
+type TaskType = 'PROVISION' | 'START' | 'STOP' | 'RESTART' | 'UPDATE' | 'DELETE';
 
 @Injectable()
 export class TasksService {
@@ -17,8 +20,8 @@ export class TasksService {
     return await this.prisma.task.create({
       data: {
         nodeId,
-        type,
-        status: TaskStatus.PENDING,
+        type: type as any,
+        status: 'PENDING' as any,
         data,
       },
     });
@@ -31,7 +34,7 @@ export class TasksService {
     const tasks = await this.prisma.task.findMany({
       where: {
         nodeId,
-        status: TaskStatus.PENDING,
+        status: 'PENDING' as any,
       },
       orderBy: {
         createdAt: 'asc',
@@ -48,7 +51,7 @@ export class TasksService {
           },
         },
         data: {
-          status: TaskStatus.PROCESSING,
+          status: 'PROCESSING' as any,
         },
       });
     }
@@ -67,7 +70,7 @@ export class TasksService {
     await this.prisma.task.update({
       where: { id: taskId },
       data: {
-        status: TaskStatus.COMPLETED,
+        status: 'COMPLETED' as any,
         completedAt: new Date(),
       },
     });
@@ -80,7 +83,7 @@ export class TasksService {
     await this.prisma.task.update({
       where: { id: taskId },
       data: {
-        status: TaskStatus.FAILED,
+        status: 'FAILED' as any,
         error,
         completedAt: new Date(),
       },
