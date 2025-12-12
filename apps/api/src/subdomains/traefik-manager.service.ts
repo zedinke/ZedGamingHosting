@@ -150,7 +150,31 @@ export class TraefikManager {
     try {
       if (fs.existsSync(this.dynamicConfigPath)) {
         const content = await fs.promises.readFile(this.dynamicConfigPath, 'utf-8');
-        return yaml.load(content) || { http: {} };
+        const config = yaml.load(content) || { http: {} };
+        
+        // Ensure http structure exists
+        if (!config.http) {
+          config.http = {};
+        }
+        if (!config.http.routers) {
+          config.http.routers = {};
+        }
+        if (!config.http.services) {
+          config.http.services = {};
+        }
+        if (!config.http.middlewares) {
+          config.http.middlewares = {};
+        }
+        if (!config.http.middlewares['redirect-to-https']) {
+          config.http.middlewares['redirect-to-https'] = {
+            redirectScheme: {
+              scheme: 'https',
+              permanent: true,
+            },
+          };
+        }
+        
+        return config;
       }
     } catch (error) {
       console.error(`[TraefikManager] Failed to load dynamic config: ${error}`);
@@ -178,10 +202,26 @@ export class TraefikManager {
    */
   private async saveDynamicConfig(config: any): Promise<void> {
     try {
+      // Ensure http structure is properly initialized
+      if (!config.http) {
+        config.http = {};
+      }
+      if (!config.http.routers) {
+        config.http.routers = {};
+      }
+      if (!config.http.services) {
+        config.http.services = {};
+      }
+      if (!config.http.middlewares) {
+        config.http.middlewares = {};
+      }
+
       const yamlContent = yaml.dump(config, {
         indent: 2,
         lineWidth: 120,
         noRefs: true,
+        quotingType: '"',
+        forceQuotes: false,
       });
 
       // Ensure directory exists
@@ -190,9 +230,10 @@ export class TraefikManager {
 
       await fs.promises.writeFile(this.dynamicConfigPath, yamlContent, 'utf-8');
       console.log(`[TraefikManager] Saved dynamic config to ${this.dynamicConfigPath}`);
-    } catch (error) {
-      console.error(`[TraefikManager] Failed to save dynamic config: ${error}`);
-      throw error;
+    } catch (error: any) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error(`[TraefikManager] Failed to save dynamic config: ${errorMessage}`);
+      throw new Error(`Failed to save Traefik config: ${errorMessage}`);
     }
   }
 }

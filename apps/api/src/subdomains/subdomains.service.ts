@@ -53,8 +53,16 @@ export class SubdomainsService {
       throw new NotFoundException(this.i18n.t('errors.server_not_found'));
     }
 
-    // Get server HTTP port (default to 8080)
-    const httpPort = server.httpPort || 8080;
+    // Get server HTTP port from network allocations or use default
+    // Look for APP type port allocation, or use default 8080
+    const appPortAllocation = await this.prisma.networkAllocation.findFirst({
+      where: {
+        serverUuid,
+        type: 'APP',
+        protocol: 'TCP',
+      },
+    });
+    const httpPort = appPortAllocation?.port || 8080;
 
     // Create DNS record in Cloudflare
     let cloudflareId: string;
@@ -186,14 +194,20 @@ export class SubdomainsService {
     });
 
     // Update Traefik configuration if needed
-    if (data.subdomain) {
-      const fullDomain = `${data.subdomain}.${subdomain.domain}`;
-      await this.traefikManager.updateSubdomainRoute({
-        oldSubdomain: `${subdomain.subdomain}.${subdomain.domain}`,
-        newSubdomain: fullDomain,
-        serverUuid: subdomain.serverUuid,
-        nodeId: subdomain.server.nodeId,
-      });
+    if (data.subdomain && data.subdomain !== subdomain.subdomain) {
+      const oldFullDomain = `${subdomain.subdomain}.${subdomain.domain}`;
+      const newFullDomain = `${data.subdomain}.${subdomain.domain}`;
+      try {
+        await this.traefikManager.updateSubdomainRoute({
+          oldSubdomain: oldFullDomain,
+          newSubdomain: newFullDomain,
+          serverUuid: subdomain.serverUuid,
+          nodeId: subdomain.server.nodeId,
+        });
+      } catch (error: any) {
+        console.error(`[SubdomainsService] Failed to update Traefik route: ${error.message}`);
+        // Don't throw - subdomain is already updated in DB
+      }
     }
 
     return updated;

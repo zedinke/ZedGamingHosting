@@ -26,7 +26,8 @@ export class SubdomainsController {
 
   @Get()
   async findAll(@Request() req: any) {
-    // TODO: Filter by user's servers
+    // TODO: Filter by user's servers based on req.user.role
+    // For now, return all subdomains (admin-only endpoint)
     return await this.subdomainsService.findAll();
   }
 

@@ -40,7 +40,7 @@ export class CloudflareClient {
    */
   async createARecord(data: CloudflareARecord): Promise<CloudflareDNSRecord> {
     if (!this.apiToken || !this.zoneId) {
-      throw new Error('Cloudflare API token or zone ID not configured');
+      throw new Error('Cloudflare API token or zone ID not configured. Set CLOUDFLARE_API_TOKEN and CLOUDFLARE_ZONE_ID environment variables.');
     }
 
     const response = await fetch(
@@ -62,11 +62,21 @@ export class CloudflareClient {
     );
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(`Cloudflare API error: ${JSON.stringify(error)}`);
+      let errorMessage = `Cloudflare API error (${response.status}): ${response.statusText}`;
+      try {
+        const error = await response.json();
+        errorMessage = error.errors?.[0]?.message || JSON.stringify(error);
+      } catch {
+        // Ignore JSON parse errors
+      }
+      throw new Error(errorMessage);
     }
 
     const result = await response.json();
+    if (!result.success || !result.result) {
+      throw new Error(`Cloudflare API returned unsuccessful response: ${JSON.stringify(result)}`);
+    }
+
     return {
       id: result.result.id,
       name: result.result.name,
@@ -97,8 +107,14 @@ export class CloudflareClient {
     );
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(`Cloudflare API error: ${JSON.stringify(error)}`);
+      let errorMessage = `Cloudflare API error (${response.status}): ${response.statusText}`;
+      try {
+        const error = await response.json();
+        errorMessage = error.errors?.[0]?.message || JSON.stringify(error);
+      } catch {
+        // Ignore JSON parse errors
+      }
+      throw new Error(errorMessage);
     }
   }
 
@@ -121,8 +137,14 @@ export class CloudflareClient {
     );
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(`Cloudflare API error: ${JSON.stringify(error)}`);
+      let errorMessage = `Cloudflare API error (${response.status}): ${response.statusText}`;
+      try {
+        const error = await response.json();
+        errorMessage = error.errors?.[0]?.message || JSON.stringify(error);
+      } catch {
+        // Ignore JSON parse errors
+      }
+      throw new Error(errorMessage);
     }
   }
 
@@ -144,12 +166,18 @@ export class CloudflareClient {
     );
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(`Cloudflare API error: ${JSON.stringify(error)}`);
+      let errorMessage = `Cloudflare API error (${response.status}): ${response.statusText}`;
+      try {
+        const error = await response.json();
+        errorMessage = error.errors?.[0]?.message || JSON.stringify(error);
+      } catch {
+        // Ignore JSON parse errors
+      }
+      throw new Error(errorMessage);
     }
 
     const result = await response.json();
-    if (result.result && result.result.length > 0) {
+    if (result.success && result.result && result.result.length > 0) {
       const record = result.result[0];
       return {
         id: record.id,
