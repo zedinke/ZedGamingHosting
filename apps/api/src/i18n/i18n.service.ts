@@ -38,6 +38,13 @@ export class I18nService {
   }
 
   /**
+   * Translates a message key (alias for translate method)
+   */
+  t(key: string, params?: Record<string, string>, locale?: Locale): string {
+    return this.translate(key, locale || this.defaultLocale, params);
+  }
+
+  /**
    * Translates a message key
    * @param key - i18n key (e.g., "SERVER_STARTED_SUCCESSFULLY")
    * @param locale - Language code (default: HU)

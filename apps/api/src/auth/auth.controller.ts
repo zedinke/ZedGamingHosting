@@ -3,7 +3,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Public } from './decorators/public.decorator';
@@ -38,8 +37,8 @@ export class AuthController {
 
     const accessToken = this.jwtService.sign(payload);
     const refreshToken = this.jwtService.sign(payload, {
-      expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN', '7d'),
-    });
+      expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN') || '7d',
+    } as any);
 
     return {
       accessToken,

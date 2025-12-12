@@ -67,8 +67,8 @@ export class AuthService {
 
     const accessToken = this.jwtService.sign(payload);
     const refreshToken = this.jwtService.sign(payload, {
-      expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN', '7d'),
-    });
+      expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN') || '7d',
+    } as any);
 
     this.logger.log(`User ${user.email} logged in successfully`);
 

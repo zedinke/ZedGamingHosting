@@ -16,7 +16,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     ThrottlerModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => [
+      useFactory: (_config: ConfigService) => [
         {
           name: 'default',
           ttl: 60000, // 1 minute

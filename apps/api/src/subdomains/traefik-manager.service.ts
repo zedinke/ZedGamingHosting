@@ -136,7 +136,7 @@ export class TraefikManager {
    * Gets service URL for a container
    * In Docker network, uses container name. Otherwise, uses node IP.
    */
-  private async getServiceUrl(nodeId: string, containerName: string, httpPort: number): Promise<string> {
+  private async getServiceUrl(_nodeId: string, containerName: string, httpPort: number): Promise<string> {
     // If Traefik is in the same Docker network, use container name
     // Otherwise, we'd need to get node IP from database
     // For now, assume same network
@@ -150,7 +150,7 @@ export class TraefikManager {
     try {
       if (fs.existsSync(this.dynamicConfigPath)) {
         const content = await fs.promises.readFile(this.dynamicConfigPath, 'utf-8');
-        const config = yaml.load(content) || { http: {} };
+        const config: any = yaml.load(content) || { http: {} };
         
         // Ensure http structure exists
         if (!config.http) {

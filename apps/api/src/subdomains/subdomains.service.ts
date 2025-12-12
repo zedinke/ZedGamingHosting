@@ -22,7 +22,7 @@ export class SubdomainsService {
   /**
    * Creates a new subdomain for a game server
    */
-  async create(data: CreateSubdomainDto, userId: string): Promise<any> {
+  async create(data: CreateSubdomainDto, _userId: string): Promise<any> {
     const { subdomain, domain = this.defaultDomain, serverUuid } = data;
     const fullDomain = `${subdomain}.${domain}`;
 

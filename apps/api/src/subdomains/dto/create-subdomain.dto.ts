@@ -6,7 +6,7 @@ export class CreateSubdomainDto {
   @Matches(/^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/, {
     message: 'Subdomain must contain only lowercase letters, numbers, and hyphens, and cannot start or end with a hyphen',
   })
-  subdomain: string;
+  subdomain!: string;
 
   @IsString()
   @IsOptional()
@@ -17,6 +17,6 @@ export class CreateSubdomainDto {
 
   @IsString()
   @IsNotEmpty()
-  serverUuid: string;
+  serverUuid!: string;
 }
 
