@@ -22,6 +22,51 @@
   },
   "footer": {
     "copyright": "© {year} ZedGamingHosting. All rights reserved."
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "servers": {
+      "title": "Your Servers",
+      "empty": "You don't have any servers yet",
+      "create": "Create New Server"
+    },
+    "metrics": {
+      "totalServers": "Total Servers",
+      "activeServers": "Active Servers",
+      "totalPlayers": "Total Players",
+      "uptime": "Uptime"
+    },
+    "server": {
+      "status": {
+        "online": "Online",
+        "offline": "Offline",
+        "starting": "Starting",
+        "stopping": "Stopping",
+        "restarting": "Restarting"
+      },
+      "actions": {
+        "start": "Start",
+        "stop": "Stop",
+        "restart": "Restart",
+        "console": "Console",
+        "settings": "Settings"
+      },
+      "resources": {
+        "cpu": "CPU",
+        "ram": "RAM",
+        "disk": "Disk"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Login",
+      "error": "Invalid email or password"
+    },
+    "logout": "Logout"
   }
 }
 

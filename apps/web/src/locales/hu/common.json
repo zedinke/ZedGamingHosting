@@ -22,6 +22,51 @@
   },
   "footer": {
     "copyright": "© {year} ZedGamingHosting. Minden jog fenntartva."
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "servers": {
+      "title": "Szervereid",
+      "empty": "Nincs még szervered",
+      "create": "Új Szerver Létrehozása"
+    },
+    "metrics": {
+      "totalServers": "Összes Szerver",
+      "activeServers": "Aktív Szerverek",
+      "totalPlayers": "Összes Játékos",
+      "uptime": "Uptime"
+    },
+    "server": {
+      "status": {
+        "online": "Online",
+        "offline": "Offline",
+        "starting": "Indítás",
+        "stopping": "Leállítás",
+        "restarting": "Újraindítás"
+      },
+      "actions": {
+        "start": "Indítás",
+        "stop": "Leállítás",
+        "restart": "Újraindítás",
+        "console": "Konzol",
+        "settings": "Beállítások"
+      },
+      "resources": {
+        "cpu": "CPU",
+        "ram": "RAM",
+        "disk": "Lemez"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Bejelentkezés",
+      "email": "Email",
+      "password": "Jelszó",
+      "submit": "Bejelentkezés",
+      "error": "Érvénytelen email vagy jelszó"
+    },
+    "logout": "Kijelentkezés"
   }
 }
 
