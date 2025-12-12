@@ -1,7 +1,7 @@
 'use client';
 
 import { use } from 'react';
-import { TerminalConsole } from '../../../../components/terminal-console';
+import { TerminalConsole } from '../../../../../components/terminal-console';
 
 interface PageProps {
   params: Promise<{ uuid: string }>;
