@@ -41,14 +41,10 @@ export function FileManager({ serverUuid, initialPath = '/' }: FileManagerProps)
     setIsLoading(true);
     setError(null);
     try {
-      // TODO: Replace with actual API endpoint when implemented
-      // const response = await apiClient.get<FileNode[]>(
-      //   `/servers/${serverUuid}/files?path=${encodeURIComponent(currentPath)}`
-      // );
-      // setFiles(response);
-      
-      // Mock data for now
-      setFiles([]);
+      const response = await apiClient.get<{ files: FileNode[] }>(
+        `/servers/${serverUuid}/files?path=${encodeURIComponent(currentPath)}`
+      );
+      setFiles(response.files || []);
     } catch (err: any) {
       setError(err.message || t('fileManager.error.loadFailed'));
     } finally {
@@ -65,14 +61,10 @@ export function FileManager({ serverUuid, initialPath = '/' }: FileManagerProps)
     setIsLoading(true);
     setError(null);
     try {
-      // TODO: Replace with actual API endpoint when implemented
-      // const response = await apiClient.get<{ content: string }>(
-      //   `/servers/${serverUuid}/files/content?path=${encodeURIComponent(file.path)}`
-      // );
-      // setFileContent(response.content);
-      
-      // Mock data for now
-      setFileContent('// File content will be loaded here\n');
+      const response = await apiClient.get<{ content: string }>(
+        `/servers/${serverUuid}/files/content?path=${encodeURIComponent(file.path)}`
+      );
+      setFileContent(response.content || '');
       setSelectedFile(file);
       setIsEditing(false);
     } catch (err: any) {
@@ -88,11 +80,10 @@ export function FileManager({ serverUuid, initialPath = '/' }: FileManagerProps)
     setIsLoading(true);
     setError(null);
     try {
-      // TODO: Replace with actual API endpoint when implemented
-      // await apiClient.put(`/servers/${serverUuid}/files/content`, {
-      //   path: selectedFile.path,
-      //   content: fileContent,
-      // });
+      await apiClient.put(`/servers/${serverUuid}/files/content`, {
+        path: selectedFile.path,
+        content: fileContent,
+      });
       
       setIsEditing(false);
       // Show success message
@@ -109,10 +100,9 @@ export function FileManager({ serverUuid, initialPath = '/' }: FileManagerProps)
     setIsLoading(true);
     setError(null);
     try {
-      // TODO: Replace with actual API endpoint when implemented
-      // await apiClient.delete(
-      //   `/servers/${serverUuid}/files?path=${encodeURIComponent(file.path)}`
-      // );
+      await apiClient.delete(
+        `/servers/${serverUuid}/files?path=${encodeURIComponent(file.path)}`
+      );
       
       loadFiles();
       if (selectedFile?.path === file.path) {
