@@ -37,9 +37,27 @@ async function bootstrap(): Promise<void> {
   );
 
   // CORS
+  const allowedOrigins = [
+    process.env.FRONTEND_URL || 'http://localhost:3001',
+    'https://zedgaminghosting.hu',
+    'https://www.zedgaminghosting.hu',
+    'http://localhost:3001',
+    'http://localhost:3000',
+  ].filter(Boolean);
+
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3001',
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
   // API prefix

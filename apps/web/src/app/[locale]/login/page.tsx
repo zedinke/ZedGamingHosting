@@ -25,12 +25,17 @@ export default function LoginPage() {
       formData.append('email', email);
       formData.append('password', password);
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api'}/auth/login`, {
+      // Use relative URL for API in production, or env var for development
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || (typeof window !== 'undefined' ? '' : 'http://localhost:3000');
+      const apiBase = apiUrl || (typeof window !== 'undefined' ? window.location.origin : '');
+      
+      const response = await fetch(`${apiBase}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: formData.toString(),
+        credentials: 'include',
       });
 
       if (!response.ok) {
@@ -43,8 +48,9 @@ export default function LoginPage() {
       // Store tokens and user info
       login(data.accessToken, data.refreshToken, data.user);
       
-      // Redirect to dashboard
-      router.push('/dashboard');
+      // Redirect to dashboard (with locale)
+      const locale = window.location.pathname.split('/')[1] || 'hu';
+      router.push(`/${locale}/dashboard`);
     } catch (err: any) {
       setError(err.message || 'Login failed. Please try again.');
     } finally {
