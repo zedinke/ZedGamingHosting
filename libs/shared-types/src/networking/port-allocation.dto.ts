@@ -1,4 +1,4 @@
-import { IsString, IsInt, IsEnum, IsOptional } from 'class-validator';
+import { IsString, IsEnum, IsOptional } from 'class-validator';
 import { GameType } from '../servers/server.dto';
 
 /**

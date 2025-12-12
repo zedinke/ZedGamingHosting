@@ -4,7 +4,7 @@ import { I18nService } from '../i18n/i18n.service';
 import { TasksService } from '../tasks/tasks.service';
 import { PortManagerService } from '../networking/port-manager.service';
 import { randomUUID } from 'crypto';
-import { GameType, Protocol } from '@zed-hosting/shared-types';
+import { Protocol } from '@zed-hosting/shared-types';
 
 @Injectable()
 export class ServersService {
