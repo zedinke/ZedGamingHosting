@@ -56,54 +56,52 @@ export function ServerCard({ server }: ServerCardProps) {
         </div>
 
         {/* Resource Usage */}
-        {(server.cpuUsage !== undefined ||
-          server.ramUsage !== undefined ||
-          server.diskUsage !== undefined) && (
+        {server.metrics && (
           <div className="mb-4 space-y-2">
-            {server.cpuUsage !== undefined && (
+            {server.metrics.cpuUsage !== undefined && (
               <div>
                 <div className="flex justify-between text-sm mb-1">
                   <span className="text-gray-400">
                     {t('dashboard.server.resources.cpu')}
                   </span>
-                  <span className="text-gray-300">{server.cpuUsage}%</span>
+                  <span className="text-gray-300">{server.metrics.cpuUsage.toFixed(1)}%</span>
                 </div>
                 <div className="w-full bg-gray-700 rounded-full h-2">
                   <div
                     className="bg-blue-500 h-2 rounded-full transition-all"
-                    style={{ width: `${server.cpuUsage}%` }}
+                    style={{ width: `${server.metrics.cpuUsage}%` }}
                   />
                 </div>
               </div>
             )}
-            {server.ramUsage !== undefined && (
+            {server.metrics.ramUsagePercent !== undefined && (
               <div>
                 <div className="flex justify-between text-sm mb-1">
                   <span className="text-gray-400">
                     {t('dashboard.server.resources.ram')}
                   </span>
-                  <span className="text-gray-300">{server.ramUsage}%</span>
+                  <span className="text-gray-300">{server.metrics.ramUsagePercent.toFixed(1)}%</span>
                 </div>
                 <div className="w-full bg-gray-700 rounded-full h-2">
                   <div
                     className="bg-green-500 h-2 rounded-full transition-all"
-                    style={{ width: `${server.ramUsage}%` }}
+                    style={{ width: `${server.metrics.ramUsagePercent}%` }}
                   />
                 </div>
               </div>
             )}
-            {server.diskUsage !== undefined && (
+            {server.metrics.diskUsagePercent !== undefined && (
               <div>
                 <div className="flex justify-between text-sm mb-1">
                   <span className="text-gray-400">
                     {t('dashboard.server.resources.disk')}
                   </span>
-                  <span className="text-gray-300">{server.diskUsage}%</span>
+                  <span className="text-gray-300">{server.metrics.diskUsagePercent.toFixed(1)}%</span>
                 </div>
                 <div className="w-full bg-gray-700 rounded-full h-2">
                   <div
                     className="bg-yellow-500 h-2 rounded-full transition-all"
-                    style={{ width: `${server.diskUsage}%` }}
+                    style={{ width: `${server.metrics.diskUsagePercent}%` }}
                   />
                 </div>
               </div>
@@ -113,12 +111,12 @@ export function ServerCard({ server }: ServerCardProps) {
 
         {/* Actions */}
         <div className="flex gap-2 mt-4">
-          {server.status === 'OFFLINE' && (
+          {server.status === 'STOPPED' && (
             <Button size="sm" variant="primary" className="flex-1">
               {t('dashboard.server.actions.start')}
             </Button>
           )}
-          {server.status === 'ONLINE' && (
+          {server.status === 'RUNNING' && (
             <>
               <Button size="sm" variant="secondary" className="flex-1">
                 {t('dashboard.server.actions.stop')}
@@ -128,7 +126,11 @@ export function ServerCard({ server }: ServerCardProps) {
               </Button>
             </>
           )}
-          <Button size="sm" variant="outline">
+          <Button 
+            size="sm" 
+            variant="outline"
+            onClick={() => window.location.href = `/dashboard/server/${server.uuid}/console`}
+          >
             {t('dashboard.server.actions.console')}
           </Button>
         </div>
