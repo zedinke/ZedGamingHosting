@@ -57,13 +57,14 @@ export const envSchema = z.object({
   // Cloudflare
   CLOUDFLARE_API_TOKEN: z.string().optional(),
   CLOUDFLARE_ZONE_ID: z.string().optional(),
-  DEFAULT_DOMAIN: z.string().default('zedhosting.com'),
+  DEFAULT_DOMAIN: z.string().default('zedgaminghosting.hu'),
 
   // Traefik
   TRAEFIK_IMAGE: z.string().default('traefik:v2.10'),
   TRAEFIK_DASHBOARD_PORT: z.coerce.number().int().positive().default(8080),
   TRAEFIK_ACME_EMAIL: z.string().email(),
   TRAEFIK_ACME_STORAGE: z.string().default('/etc/traefik/acme.json'),
+  TRAEFIK_DYNAMIC_CONFIG_PATH: z.string().default('/etc/traefik/dynamic.yml'),
 
   // Steam Cache
   MAX_CONCURRENT_UPDATES: z.coerce.number().int().positive().default(2),
@@ -99,14 +100,6 @@ export const envSchema = z.object({
   SMTP_USER: z.string().optional(),
   SMTP_PASSWORD: z.string().optional(),
   SMTP_FROM: z.string().email().optional(),
-
-  // Cloudflare
-  CLOUDFLARE_API_TOKEN: z.string().optional(),
-  CLOUDFLARE_ZONE_ID: z.string().optional(),
-  DEFAULT_DOMAIN: z.string().default('zedgaminghosting.hu'),
-
-  // Traefik
-  TRAEFIK_DYNAMIC_CONFIG_PATH: z.string().default('/etc/traefik/dynamic.yml'),
 
   // Discord
   DISCORD_WEBHOOK_URL: z.string().url().optional(),
