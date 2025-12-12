@@ -1,7 +1,7 @@
 'use client';
 
 import { use } from 'react';
-import { FileManager } from '../../../../../components/file-manager';
+import { FileManager } from '../../../../../../components/file-manager';
 
 interface PageProps {
   params: Promise<{ uuid: string }>;

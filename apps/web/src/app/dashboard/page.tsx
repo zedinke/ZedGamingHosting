@@ -1,13 +1,13 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useAuthStore } from '../../stores/auth-store';
+import { useAuthStore } from '../../../stores/auth-store';
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { apiClient } from '../../lib/api-client';
-import { ServerCard } from '../../components/server-card';
+import { apiClient } from '../../../lib/api-client';
+import { ServerCard } from '../../../components/server-card';
 import { Button } from '@zed-hosting/ui-kit';
-import { GameServer } from '../../types/server';
+import { GameServer } from '../../../types/server';
 
 export default function DashboardPage() {
   const t = useTranslations();
