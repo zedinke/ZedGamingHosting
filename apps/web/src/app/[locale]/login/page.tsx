@@ -59,23 +59,23 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 px-4">
-      <div className="w-full max-w-md">
-        <div className="bg-gray-800/90 backdrop-blur-lg rounded-2xl shadow-2xl border border-gray-700/50 p-8">
+    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg-app)' }}>
+      <div className="w-full max-w-md px-4">
+        <div className="glass-panel rounded-2xl shadow-2xl p-8" style={{ backgroundColor: 'var(--color-bg-card)', borderColor: 'var(--color-border)' }}>
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-white mb-2">ZedGamingHosting</h1>
-            <p className="text-gray-400">{t('subtitle') || 'Sign in to your account'}</p>
+            <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--color-text-main)' }}>ZedGamingHosting</h1>
+            <p style={{ color: 'var(--color-text-muted)' }}>{t('subtitle') || 'Sign in to your account'}</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="bg-red-500/10 border border-red-500/50 rounded-lg p-4 text-red-400 text-sm">
+              <div className="rounded-lg p-4 text-sm" style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', color: 'var(--color-danger)' }}>
                 {error}
               </div>
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text-main)' }}>
                 {t('email')}
               </label>
               <input
@@ -84,14 +84,27 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-3 rounded-lg transition-colors focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  backgroundColor: 'var(--color-bg-surface)',
+                  border: '1px solid var(--color-border)',
+                  color: 'var(--color-text-main)',
+                }}
                 placeholder={t('emailPlaceholder') || 'email@example.com'}
                 disabled={loading}
+                onFocus={(e) => {
+                  e.target.style.borderColor = 'var(--color-primary)';
+                  e.target.style.boxShadow = '0 0 0 2px var(--color-primary-glow)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'var(--color-border)';
+                  e.target.style.boxShadow = 'none';
+                }}
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text-main)' }}>
                 {t('password')}
               </label>
               <input
@@ -100,9 +113,22 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-3 rounded-lg transition-colors focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  backgroundColor: 'var(--color-bg-surface)',
+                  border: '1px solid var(--color-border)',
+                  color: 'var(--color-text-main)',
+                }}
                 placeholder={t('passwordPlaceholder') || '••••••••'}
                 disabled={loading}
+                onFocus={(e) => {
+                  e.target.style.borderColor = 'var(--color-primary)';
+                  e.target.style.boxShadow = '0 0 0 2px var(--color-primary-glow)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'var(--color-border)';
+                  e.target.style.boxShadow = 'none';
+                }}
               />
             </div>
 
@@ -110,11 +136,16 @@ export default function LoginPage() {
               <label className="flex items-center cursor-pointer">
                 <input
                   type="checkbox"
-                  className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
+                  className="w-4 h-4 rounded focus:ring-2 focus:ring-offset-2"
+                  style={{
+                    accentColor: 'var(--color-primary)',
+                    backgroundColor: 'var(--color-bg-surface)',
+                    borderColor: 'var(--color-border)',
+                  }}
                 />
-                <span className="ml-2 text-sm text-gray-300">{t('rememberMe') || 'Remember me'}</span>
+                <span className="ml-2 text-sm" style={{ color: 'var(--color-text-muted)' }}>{t('rememberMe') || 'Remember me'}</span>
               </label>
-              <a href="/forgot-password" className="text-sm text-blue-400 hover:text-blue-300 transition-colors">
+              <a href="/forgot-password" className="text-sm transition-colors" style={{ color: 'var(--color-primary)' }}>
                 {t('forgotPassword')}
               </a>
             </div>
@@ -122,16 +153,33 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+              className="w-full py-3 font-semibold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2"
+              style={{
+                backgroundColor: loading ? 'var(--color-muted)' : 'var(--color-primary)',
+                color: 'var(--color-primary-foreground)',
+                boxShadow: loading ? 'none' : 'var(--shadow-glow)',
+              }}
+              onMouseEnter={(e) => {
+                if (!loading) {
+                  e.currentTarget.style.backgroundColor = 'var(--color-primary-hover)';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!loading) {
+                  e.currentTarget.style.backgroundColor = 'var(--color-primary)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }
+              }}
             >
               {loading ? (t('loggingIn') || 'Logging in...') : t('submit')}
             </button>
           </form>
 
-          <div className="mt-6 text-center text-sm text-gray-400">
+          <div className="mt-6 text-center text-sm" style={{ color: 'var(--color-text-muted)' }}>
             <p>
               {t('noAccount') || "Don't have an account?"}{' '}
-              <a href="/register" className="text-blue-400 hover:text-blue-300 transition-colors">
+              <a href="/register" className="transition-colors" style={{ color: 'var(--color-primary)' }}>
                 {t('signUp') || 'Sign up'}
               </a>
             </p>
