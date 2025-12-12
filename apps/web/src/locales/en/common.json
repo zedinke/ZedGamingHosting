@@ -67,6 +67,37 @@
       "error": "Invalid email or password"
     },
     "logout": "Logout"
+  },
+  "terminal": {
+    "title": "Server Console",
+    "connecting": "Connecting...",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "reconnect": "Reconnect",
+    "clear": "Clear",
+    "error": {
+      "connectionFailed": "Connection failed",
+      "websocketError": "WebSocket error"
+    }
+  },
+  "fileManager": {
+    "title": "File Manager",
+    "upload": "Upload",
+    "download": "Download",
+    "delete": "Delete",
+    "rename": "Rename",
+    "createFolder": "New Folder",
+    "createFile": "New File",
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "empty": "This folder is empty",
+    "selectFile": "Select a file to edit",
+    "error": {
+      "loadFailed": "Failed to load files",
+      "saveFailed": "Failed to save",
+      "deleteFailed": "Failed to delete"
+    }
   }
 }
 

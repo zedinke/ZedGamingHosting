@@ -15,6 +15,7 @@
     "dev:daemon": "nx serve daemon"
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
     "@nestjs/common": "^10.3.0",
     "@nestjs/config": "^3.1.1",
     "@nestjs/core": "^10.3.0",
@@ -26,6 +27,9 @@
     "@prisma/client": "^5.7.1",
     "@tanstack/react-query": "^5.90.12",
     "@tanstack/react-query-devtools": "^5.91.1",
+    "@xterm/addon-fit": "^0.10.0",
+    "@xterm/addon-web-links": "^0.11.0",
+    "@xterm/xterm": "^5.5.0",
     "autoprefixer": "^10.4.22",
     "bcrypt": "^5.1.1",
     "bullmq": "^5.1.0",
@@ -36,6 +40,7 @@
     "ioredis": "^5.3.2",
     "js-yaml": "^4.1.0",
     "jsonwebtoken": "^9.0.2",
+    "monaco-editor": "^0.55.1",
     "next": "^14.2.3",
     "next-intl": "^4.5.8",
     "passport": "^0.7.0",

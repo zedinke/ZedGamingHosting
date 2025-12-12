@@ -67,6 +67,37 @@
       "error": "Érvénytelen email vagy jelszó"
     },
     "logout": "Kijelentkezés"
+  },
+  "terminal": {
+    "title": "Szerver Konzol",
+    "connecting": "Kapcsolódás...",
+    "connected": "Csatlakozva",
+    "disconnected": "Lecsatlakozva",
+    "reconnect": "Újracsatlakozás",
+    "clear": "Törlés",
+    "error": {
+      "connectionFailed": "Kapcsolódási hiba",
+      "websocketError": "WebSocket hiba"
+    }
+  },
+  "fileManager": {
+    "title": "Fájlkezelő",
+    "upload": "Feltöltés",
+    "download": "Letöltés",
+    "delete": "Törlés",
+    "rename": "Átnevezés",
+    "createFolder": "Új mappa",
+    "createFile": "Új fájl",
+    "save": "Mentés",
+    "cancel": "Mégse",
+    "loading": "Betöltés...",
+    "empty": "Ez a mappa üres",
+    "selectFile": "Válassz ki egy fájlt a szerkesztéshez",
+    "error": {
+      "loadFailed": "Fájlok betöltése sikertelen",
+      "saveFailed": "Mentés sikertelen",
+      "deleteFailed": "Törlés sikertelen"
+    }
   }
 }
 
