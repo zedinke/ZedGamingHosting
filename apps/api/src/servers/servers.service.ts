@@ -153,7 +153,7 @@ export class ServersService {
     // 4. Allocate ports for the server
     const portAllocations = await this.portManager.allocatePortBlock({
       nodeId: createServerDto.nodeId,
-      gameType: createServerDto.gameType as GameType,
+      gameType: createServerDto.gameType as any,
       protocol: Protocol.BOTH, // Most games need both UDP and TCP
       serverUuid,
     });
@@ -162,7 +162,7 @@ export class ServersService {
     const server = await this.prisma.gameServer.create({
       data: {
         uuid: serverUuid,
-        gameType: createServerDto.gameType as GameType,
+        gameType: createServerDto.gameType as any,
         status: 'INSTALLING',
         nodeId: createServerDto.nodeId,
         ownerId: userId,

@@ -28,9 +28,6 @@ export class PortAllocationRequestDto {
   @IsString()
   nodeId!: string;
 
-  @IsInt()
-  neededPorts!: number;
-
   @IsEnum(Protocol)
   protocol!: Protocol;
 
