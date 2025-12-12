@@ -127,7 +127,7 @@ export class ServersService {
   /**
    * Create a new server
    */
-  async create(createServerDto: any, userId: string) {
+  async create(_createServerDto: any, _userId: string) {
     // TODO: Implement server creation logic with provisioning
     // For now, return a placeholder
     throw new Error('Server creation not yet implemented');
@@ -136,7 +136,7 @@ export class ServersService {
   /**
    * Update server
    */
-  async update(uuid: string, updateServerDto: any, userId: string) {
+  async update(uuid: string, _updateServerDto: any, userId: string) {
     const server = await this.prisma.gameServer.findUnique({
       where: { uuid },
     });
