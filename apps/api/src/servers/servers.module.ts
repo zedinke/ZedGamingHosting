@@ -3,9 +3,10 @@ import { ServersService } from './servers.service';
 import { ServersController } from './servers.controller';
 import { DatabaseModule } from '../database/database.module';
 import { I18nModule } from '../i18n/i18n.module';
+import { TasksModule } from '../tasks/tasks.module';
 
 @Module({
-  imports: [DatabaseModule, I18nModule],
+  imports: [DatabaseModule, I18nModule, TasksModule],
   controllers: [ServersController],
   providers: [ServersService],
   exports: [ServersService],

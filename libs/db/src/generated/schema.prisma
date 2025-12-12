@@ -2,8 +2,9 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated"
+  provider      = "prisma-client-js"
+  output        = "../src/generated"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -125,6 +126,39 @@ model Node {
   metrics            Metric[]
   alerts             Alert[]
   storageClusters    GameCluster[]       @relation("StorageNode")
+  tasks              Task[]
+}
+
+enum TaskStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum TaskType {
+  PROVISION
+  START
+  STOP
+  RESTART
+  UPDATE
+  DELETE
+}
+
+model Task {
+  id          String     @id @default(uuid())
+  nodeId      String
+  node        Node       @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+  type        TaskType
+  status      TaskStatus @default(PENDING)
+  data        Json // Task-specific data (e.g., { serverUuid: "..." })
+  error       String?
+  completedAt DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([nodeId, status])
+  @@index([status, createdAt])
 }
 
 enum Protocol {

@@ -1,12 +1,15 @@
 import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
 import { I18nService } from '../i18n/i18n.service';
+import { TasksService } from '../tasks/tasks.service';
+import { TaskType } from '@prisma/client';
 
 @Injectable()
 export class ServersService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly i18n: I18nService,
+    private readonly tasksService: TasksService,
   ) {}
 
   /**
@@ -177,6 +180,7 @@ export class ServersService {
   async start(uuid: string, userId: string) {
     const server = await this.prisma.gameServer.findUnique({
       where: { uuid },
+      include: { node: true },
     });
 
     if (!server) {
@@ -187,8 +191,20 @@ export class ServersService {
       throw new ForbiddenException(this.i18n.translate('SERVER_ACCESS_DENIED'));
     }
 
-    // TODO: Create task to start server via daemon
-    throw new Error('Server start not yet implemented');
+    // Create task for daemon to start the server
+    await this.tasksService.createTask(
+      server.nodeId,
+      TaskType.START,
+      { serverUuid: server.uuid },
+    );
+
+    // Update server status
+    await this.prisma.gameServer.update({
+      where: { uuid },
+      data: { status: 'STARTING' },
+    });
+
+    return { message: this.i18n.translate('SERVER_STARTED_SUCCESSFULLY') };
   }
 
   /**
@@ -197,6 +213,7 @@ export class ServersService {
   async stop(uuid: string, userId: string) {
     const server = await this.prisma.gameServer.findUnique({
       where: { uuid },
+      include: { node: true },
     });
 
     if (!server) {
@@ -207,8 +224,20 @@ export class ServersService {
       throw new ForbiddenException(this.i18n.translate('SERVER_ACCESS_DENIED'));
     }
 
-    // TODO: Create task to stop server via daemon
-    throw new Error('Server stop not yet implemented');
+    // Create task for daemon to stop the server
+    await this.tasksService.createTask(
+      server.nodeId,
+      TaskType.STOP,
+      { serverUuid: server.uuid },
+    );
+
+    // Update server status
+    await this.prisma.gameServer.update({
+      where: { uuid },
+      data: { status: 'STOPPING' },
+    });
+
+    return { message: this.i18n.translate('SERVER_STOPPED_SUCCESSFULLY') };
   }
 
   /**
@@ -217,6 +246,7 @@ export class ServersService {
   async restart(uuid: string, userId: string) {
     const server = await this.prisma.gameServer.findUnique({
       where: { uuid },
+      include: { node: true },
     });
 
     if (!server) {
@@ -227,8 +257,20 @@ export class ServersService {
       throw new ForbiddenException(this.i18n.translate('SERVER_ACCESS_DENIED'));
     }
 
-    // TODO: Create task to restart server via daemon
-    throw new Error('Server restart not yet implemented');
+    // Create task for daemon to restart the server
+    await this.tasksService.createTask(
+      server.nodeId,
+      TaskType.RESTART,
+      { serverUuid: server.uuid },
+    );
+
+    // Update server status to STARTING (restart = stop then start)
+    await this.prisma.gameServer.update({
+      where: { uuid },
+      data: { status: 'STARTING' },
+    });
+
+    return { message: this.i18n.translate('SERVER_STARTED_SUCCESSFULLY') };
   }
 }
 

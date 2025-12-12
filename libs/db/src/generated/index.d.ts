@@ -39,6 +39,11 @@ export type AuditLog = $Result.DefaultSelection<Prisma.$AuditLogPayload>
  */
 export type Node = $Result.DefaultSelection<Prisma.$NodePayload>
 /**
+ * Model Task
+ * 
+ */
+export type Task = $Result.DefaultSelection<Prisma.$TaskPayload>
+/**
  * Model NetworkAllocation
  * 
  */
@@ -130,6 +135,28 @@ export const NodeStatus: {
 };
 
 export type NodeStatus = (typeof NodeStatus)[keyof typeof NodeStatus]
+
+
+export const TaskType: {
+  PROVISION: 'PROVISION',
+  START: 'START',
+  STOP: 'STOP',
+  RESTART: 'RESTART',
+  UPDATE: 'UPDATE',
+  DELETE: 'DELETE'
+};
+
+export type TaskType = (typeof TaskType)[keyof typeof TaskType]
+
+
+export const TaskStatus: {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
+export type TaskStatus = (typeof TaskStatus)[keyof typeof TaskStatus]
 
 
 export const Protocol: {
@@ -239,6 +266,14 @@ export const DiskType: typeof $Enums.DiskType
 export type NodeStatus = $Enums.NodeStatus
 
 export const NodeStatus: typeof $Enums.NodeStatus
+
+export type TaskType = $Enums.TaskType
+
+export const TaskType: typeof $Enums.TaskType
+
+export type TaskStatus = $Enums.TaskStatus
+
+export const TaskStatus: typeof $Enums.TaskStatus
 
 export type Protocol = $Enums.Protocol
 
@@ -448,6 +483,16 @@ export class PrismaClient<
     * ```
     */
   get node(): Prisma.NodeDelegate<ExtArgs>;
+
+  /**
+   * `prisma.task`: Exposes CRUD operations for the **Task** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Tasks
+    * const tasks = await prisma.task.findMany()
+    * ```
+    */
+  get task(): Prisma.TaskDelegate<ExtArgs>;
 
   /**
    * `prisma.networkAllocation`: Exposes CRUD operations for the **NetworkAllocation** model.
@@ -994,6 +1039,7 @@ export namespace Prisma {
     User: 'User',
     AuditLog: 'AuditLog',
     Node: 'Node',
+    Task: 'Task',
     NetworkAllocation: 'NetworkAllocation',
     Subdomain: 'Subdomain',
     GameServer: 'GameServer',
@@ -1019,7 +1065,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "systemLicense" | "tenant" | "user" | "auditLog" | "node" | "networkAllocation" | "subdomain" | "gameServer" | "gameCluster" | "backup" | "metric" | "alert" | "resourceQuota" | "apiKey" | "incident"
+      modelProps: "systemLicense" | "tenant" | "user" | "auditLog" | "node" | "task" | "networkAllocation" | "subdomain" | "gameServer" | "gameCluster" | "backup" | "metric" | "alert" | "resourceQuota" | "apiKey" | "incident"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1350,6 +1396,72 @@ export namespace Prisma {
           count: {
             args: Prisma.NodeCountArgs<ExtArgs>
             result: $Utils.Optional<NodeCountAggregateOutputType> | number
+          }
+        }
+      }
+      Task: {
+        payload: Prisma.$TaskPayload<ExtArgs>
+        fields: Prisma.TaskFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TaskFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TaskFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
+          }
+          findFirst: {
+            args: Prisma.TaskFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TaskFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
+          }
+          findMany: {
+            args: Prisma.TaskFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>[]
+          }
+          create: {
+            args: Prisma.TaskCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
+          }
+          createMany: {
+            args: Prisma.TaskCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.TaskDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
+          }
+          update: {
+            args: Prisma.TaskUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
+          }
+          deleteMany: {
+            args: Prisma.TaskDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TaskUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.TaskUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
+          }
+          aggregate: {
+            args: Prisma.TaskAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTask>
+          }
+          groupBy: {
+            args: Prisma.TaskGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TaskGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TaskCountArgs<ExtArgs>
+            result: $Utils.Optional<TaskCountAggregateOutputType> | number
           }
         }
       }
@@ -2295,6 +2407,7 @@ export namespace Prisma {
     metrics: number
     alerts: number
     storageClusters: number
+    tasks: number
   }
 
   export type NodeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2303,6 +2416,7 @@ export namespace Prisma {
     metrics?: boolean | NodeCountOutputTypeCountMetricsArgs
     alerts?: boolean | NodeCountOutputTypeCountAlertsArgs
     storageClusters?: boolean | NodeCountOutputTypeCountStorageClustersArgs
+    tasks?: boolean | NodeCountOutputTypeCountTasksArgs
   }
 
   // Custom InputTypes
@@ -2349,6 +2463,13 @@ export namespace Prisma {
    */
   export type NodeCountOutputTypeCountStorageClustersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GameClusterWhereInput
+  }
+
+  /**
+   * NodeCountOutputType without action
+   */
+  export type NodeCountOutputTypeCountTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TaskWhereInput
   }
 
 
@@ -6635,6 +6756,7 @@ export namespace Prisma {
     metrics?: boolean | Node$metricsArgs<ExtArgs>
     alerts?: boolean | Node$alertsArgs<ExtArgs>
     storageClusters?: boolean | Node$storageClustersArgs<ExtArgs>
+    tasks?: boolean | Node$tasksArgs<ExtArgs>
     _count?: boolean | NodeCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["node"]>
 
@@ -6663,6 +6785,7 @@ export namespace Prisma {
     metrics?: boolean | Node$metricsArgs<ExtArgs>
     alerts?: boolean | Node$alertsArgs<ExtArgs>
     storageClusters?: boolean | Node$storageClustersArgs<ExtArgs>
+    tasks?: boolean | Node$tasksArgs<ExtArgs>
     _count?: boolean | NodeCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -6674,6 +6797,7 @@ export namespace Prisma {
       metrics: Prisma.$MetricPayload<ExtArgs>[]
       alerts: Prisma.$AlertPayload<ExtArgs>[]
       storageClusters: Prisma.$GameClusterPayload<ExtArgs>[]
+      tasks: Prisma.$TaskPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7036,6 +7160,7 @@ export namespace Prisma {
     metrics<T extends Node$metricsArgs<ExtArgs> = {}>(args?: Subset<T, Node$metricsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MetricPayload<ExtArgs>, T, "findMany"> | Null>
     alerts<T extends Node$alertsArgs<ExtArgs> = {}>(args?: Subset<T, Node$alertsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AlertPayload<ExtArgs>, T, "findMany"> | Null>
     storageClusters<T extends Node$storageClustersArgs<ExtArgs> = {}>(args?: Subset<T, Node$storageClustersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GameClusterPayload<ExtArgs>, T, "findMany"> | Null>
+    tasks<T extends Node$tasksArgs<ExtArgs> = {}>(args?: Subset<T, Node$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7479,6 +7604,26 @@ export namespace Prisma {
   }
 
   /**
+   * Node.tasks
+   */
+  export type Node$tasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    where?: TaskWhereInput
+    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
+    cursor?: TaskWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
+  }
+
+  /**
    * Node without action
    */
   export type NodeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7490,6 +7635,925 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: NodeInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Task
+   */
+
+  export type AggregateTask = {
+    _count: TaskCountAggregateOutputType | null
+    _min: TaskMinAggregateOutputType | null
+    _max: TaskMaxAggregateOutputType | null
+  }
+
+  export type TaskMinAggregateOutputType = {
+    id: string | null
+    nodeId: string | null
+    type: $Enums.TaskType | null
+    status: $Enums.TaskStatus | null
+    error: string | null
+    completedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TaskMaxAggregateOutputType = {
+    id: string | null
+    nodeId: string | null
+    type: $Enums.TaskType | null
+    status: $Enums.TaskStatus | null
+    error: string | null
+    completedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TaskCountAggregateOutputType = {
+    id: number
+    nodeId: number
+    type: number
+    status: number
+    data: number
+    error: number
+    completedAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TaskMinAggregateInputType = {
+    id?: true
+    nodeId?: true
+    type?: true
+    status?: true
+    error?: true
+    completedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TaskMaxAggregateInputType = {
+    id?: true
+    nodeId?: true
+    type?: true
+    status?: true
+    error?: true
+    completedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TaskCountAggregateInputType = {
+    id?: true
+    nodeId?: true
+    type?: true
+    status?: true
+    data?: true
+    error?: true
+    completedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TaskAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Task to aggregate.
+     */
+    where?: TaskWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tasks to fetch.
+     */
+    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TaskWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tasks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tasks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Tasks
+    **/
+    _count?: true | TaskCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TaskMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TaskMaxAggregateInputType
+  }
+
+  export type GetTaskAggregateType<T extends TaskAggregateArgs> = {
+        [P in keyof T & keyof AggregateTask]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTask[P]>
+      : GetScalarType<T[P], AggregateTask[P]>
+  }
+
+
+
+
+  export type TaskGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TaskWhereInput
+    orderBy?: TaskOrderByWithAggregationInput | TaskOrderByWithAggregationInput[]
+    by: TaskScalarFieldEnum[] | TaskScalarFieldEnum
+    having?: TaskScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TaskCountAggregateInputType | true
+    _min?: TaskMinAggregateInputType
+    _max?: TaskMaxAggregateInputType
+  }
+
+  export type TaskGroupByOutputType = {
+    id: string
+    nodeId: string
+    type: $Enums.TaskType
+    status: $Enums.TaskStatus
+    data: JsonValue
+    error: string | null
+    completedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: TaskCountAggregateOutputType | null
+    _min: TaskMinAggregateOutputType | null
+    _max: TaskMaxAggregateOutputType | null
+  }
+
+  type GetTaskGroupByPayload<T extends TaskGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TaskGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TaskGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TaskGroupByOutputType[P]>
+            : GetScalarType<T[P], TaskGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TaskSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nodeId?: boolean
+    type?: boolean
+    status?: boolean
+    data?: boolean
+    error?: boolean
+    completedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    node?: boolean | NodeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["task"]>
+
+
+  export type TaskSelectScalar = {
+    id?: boolean
+    nodeId?: boolean
+    type?: boolean
+    status?: boolean
+    data?: boolean
+    error?: boolean
+    completedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TaskInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    node?: boolean | NodeDefaultArgs<ExtArgs>
+  }
+
+  export type $TaskPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Task"
+    objects: {
+      node: Prisma.$NodePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      nodeId: string
+      type: $Enums.TaskType
+      status: $Enums.TaskStatus
+      data: Prisma.JsonValue
+      error: string | null
+      completedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["task"]>
+    composites: {}
+  }
+
+  type TaskGetPayload<S extends boolean | null | undefined | TaskDefaultArgs> = $Result.GetResult<Prisma.$TaskPayload, S>
+
+  type TaskCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<TaskFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: TaskCountAggregateInputType | true
+    }
+
+  export interface TaskDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Task'], meta: { name: 'Task' } }
+    /**
+     * Find zero or one Task that matches the filter.
+     * @param {TaskFindUniqueArgs} args - Arguments to find a Task
+     * @example
+     * // Get one Task
+     * const task = await prisma.task.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TaskFindUniqueArgs>(args: SelectSubset<T, TaskFindUniqueArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Task that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {TaskFindUniqueOrThrowArgs} args - Arguments to find a Task
+     * @example
+     * // Get one Task
+     * const task = await prisma.task.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TaskFindUniqueOrThrowArgs>(args: SelectSubset<T, TaskFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Task that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskFindFirstArgs} args - Arguments to find a Task
+     * @example
+     * // Get one Task
+     * const task = await prisma.task.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TaskFindFirstArgs>(args?: SelectSubset<T, TaskFindFirstArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Task that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskFindFirstOrThrowArgs} args - Arguments to find a Task
+     * @example
+     * // Get one Task
+     * const task = await prisma.task.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TaskFindFirstOrThrowArgs>(args?: SelectSubset<T, TaskFindFirstOrThrowArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Tasks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Tasks
+     * const tasks = await prisma.task.findMany()
+     * 
+     * // Get first 10 Tasks
+     * const tasks = await prisma.task.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const taskWithIdOnly = await prisma.task.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TaskFindManyArgs>(args?: SelectSubset<T, TaskFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Task.
+     * @param {TaskCreateArgs} args - Arguments to create a Task.
+     * @example
+     * // Create one Task
+     * const Task = await prisma.task.create({
+     *   data: {
+     *     // ... data to create a Task
+     *   }
+     * })
+     * 
+     */
+    create<T extends TaskCreateArgs>(args: SelectSubset<T, TaskCreateArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Tasks.
+     * @param {TaskCreateManyArgs} args - Arguments to create many Tasks.
+     * @example
+     * // Create many Tasks
+     * const task = await prisma.task.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TaskCreateManyArgs>(args?: SelectSubset<T, TaskCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Task.
+     * @param {TaskDeleteArgs} args - Arguments to delete one Task.
+     * @example
+     * // Delete one Task
+     * const Task = await prisma.task.delete({
+     *   where: {
+     *     // ... filter to delete one Task
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TaskDeleteArgs>(args: SelectSubset<T, TaskDeleteArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Task.
+     * @param {TaskUpdateArgs} args - Arguments to update one Task.
+     * @example
+     * // Update one Task
+     * const task = await prisma.task.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TaskUpdateArgs>(args: SelectSubset<T, TaskUpdateArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Tasks.
+     * @param {TaskDeleteManyArgs} args - Arguments to filter Tasks to delete.
+     * @example
+     * // Delete a few Tasks
+     * const { count } = await prisma.task.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TaskDeleteManyArgs>(args?: SelectSubset<T, TaskDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Tasks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Tasks
+     * const task = await prisma.task.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TaskUpdateManyArgs>(args: SelectSubset<T, TaskUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Task.
+     * @param {TaskUpsertArgs} args - Arguments to update or create a Task.
+     * @example
+     * // Update or create a Task
+     * const task = await prisma.task.upsert({
+     *   create: {
+     *     // ... data to create a Task
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Task we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TaskUpsertArgs>(args: SelectSubset<T, TaskUpsertArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Tasks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskCountArgs} args - Arguments to filter Tasks to count.
+     * @example
+     * // Count the number of Tasks
+     * const count = await prisma.task.count({
+     *   where: {
+     *     // ... the filter for the Tasks we want to count
+     *   }
+     * })
+    **/
+    count<T extends TaskCountArgs>(
+      args?: Subset<T, TaskCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TaskCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Task.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TaskAggregateArgs>(args: Subset<T, TaskAggregateArgs>): Prisma.PrismaPromise<GetTaskAggregateType<T>>
+
+    /**
+     * Group by Task.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TaskGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TaskGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TaskGroupByArgs['orderBy'] }
+        : { orderBy?: TaskGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TaskGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTaskGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Task model
+   */
+  readonly fields: TaskFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Task.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TaskClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    node<T extends NodeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, NodeDefaultArgs<ExtArgs>>): Prisma__NodeClient<$Result.GetResult<Prisma.$NodePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Task model
+   */ 
+  interface TaskFieldRefs {
+    readonly id: FieldRef<"Task", 'String'>
+    readonly nodeId: FieldRef<"Task", 'String'>
+    readonly type: FieldRef<"Task", 'TaskType'>
+    readonly status: FieldRef<"Task", 'TaskStatus'>
+    readonly data: FieldRef<"Task", 'Json'>
+    readonly error: FieldRef<"Task", 'String'>
+    readonly completedAt: FieldRef<"Task", 'DateTime'>
+    readonly createdAt: FieldRef<"Task", 'DateTime'>
+    readonly updatedAt: FieldRef<"Task", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Task findUnique
+   */
+  export type TaskFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * Filter, which Task to fetch.
+     */
+    where: TaskWhereUniqueInput
+  }
+
+  /**
+   * Task findUniqueOrThrow
+   */
+  export type TaskFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * Filter, which Task to fetch.
+     */
+    where: TaskWhereUniqueInput
+  }
+
+  /**
+   * Task findFirst
+   */
+  export type TaskFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * Filter, which Task to fetch.
+     */
+    where?: TaskWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tasks to fetch.
+     */
+    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Tasks.
+     */
+    cursor?: TaskWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tasks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tasks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Tasks.
+     */
+    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
+  }
+
+  /**
+   * Task findFirstOrThrow
+   */
+  export type TaskFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * Filter, which Task to fetch.
+     */
+    where?: TaskWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tasks to fetch.
+     */
+    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Tasks.
+     */
+    cursor?: TaskWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tasks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tasks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Tasks.
+     */
+    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
+  }
+
+  /**
+   * Task findMany
+   */
+  export type TaskFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * Filter, which Tasks to fetch.
+     */
+    where?: TaskWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tasks to fetch.
+     */
+    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Tasks.
+     */
+    cursor?: TaskWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tasks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tasks.
+     */
+    skip?: number
+    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
+  }
+
+  /**
+   * Task create
+   */
+  export type TaskCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Task.
+     */
+    data: XOR<TaskCreateInput, TaskUncheckedCreateInput>
+  }
+
+  /**
+   * Task createMany
+   */
+  export type TaskCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Tasks.
+     */
+    data: TaskCreateManyInput | TaskCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Task update
+   */
+  export type TaskUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Task.
+     */
+    data: XOR<TaskUpdateInput, TaskUncheckedUpdateInput>
+    /**
+     * Choose, which Task to update.
+     */
+    where: TaskWhereUniqueInput
+  }
+
+  /**
+   * Task updateMany
+   */
+  export type TaskUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Tasks.
+     */
+    data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyInput>
+    /**
+     * Filter which Tasks to update
+     */
+    where?: TaskWhereInput
+  }
+
+  /**
+   * Task upsert
+   */
+  export type TaskUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Task to update in case it exists.
+     */
+    where: TaskWhereUniqueInput
+    /**
+     * In case the Task found by the `where` argument doesn't exist, create a new Task with this data.
+     */
+    create: XOR<TaskCreateInput, TaskUncheckedCreateInput>
+    /**
+     * In case the Task was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TaskUpdateInput, TaskUncheckedUpdateInput>
+  }
+
+  /**
+   * Task delete
+   */
+  export type TaskDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
+    /**
+     * Filter which Task to delete.
+     */
+    where: TaskWhereUniqueInput
+  }
+
+  /**
+   * Task deleteMany
+   */
+  export type TaskDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Tasks to delete
+     */
+    where?: TaskWhereInput
+  }
+
+  /**
+   * Task without action
+   */
+  export type TaskDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskInclude<ExtArgs> | null
   }
 
 
@@ -17463,6 +18527,21 @@ export namespace Prisma {
   export type NodeScalarFieldEnum = (typeof NodeScalarFieldEnum)[keyof typeof NodeScalarFieldEnum]
 
 
+  export const TaskScalarFieldEnum: {
+    id: 'id',
+    nodeId: 'nodeId',
+    type: 'type',
+    status: 'status',
+    data: 'data',
+    error: 'error',
+    completedAt: 'completedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
+
+
   export const NetworkAllocationScalarFieldEnum: {
     id: 'id',
     nodeId: 'nodeId',
@@ -17737,6 +18816,20 @@ export namespace Prisma {
    * Reference to a field of type 'NodeStatus'
    */
   export type EnumNodeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NodeStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'TaskType'
+   */
+  export type EnumTaskTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskType'>
+    
+
+
+  /**
+   * Reference to a field of type 'TaskStatus'
+   */
+  export type EnumTaskStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskStatus'>
     
 
 
@@ -18144,6 +19237,7 @@ export namespace Prisma {
     metrics?: MetricListRelationFilter
     alerts?: AlertListRelationFilter
     storageClusters?: GameClusterListRelationFilter
+    tasks?: TaskListRelationFilter
   }
 
   export type NodeOrderByWithRelationInput = {
@@ -18167,6 +19261,7 @@ export namespace Prisma {
     metrics?: MetricOrderByRelationAggregateInput
     alerts?: AlertOrderByRelationAggregateInput
     storageClusters?: GameClusterOrderByRelationAggregateInput
+    tasks?: TaskOrderByRelationAggregateInput
   }
 
   export type NodeWhereUniqueInput = Prisma.AtLeast<{
@@ -18193,6 +19288,7 @@ export namespace Prisma {
     metrics?: MetricListRelationFilter
     alerts?: AlertListRelationFilter
     storageClusters?: GameClusterListRelationFilter
+    tasks?: TaskListRelationFilter
   }, "id" | "apiKey">
 
   export type NodeOrderByWithAggregationInput = {
@@ -18237,6 +19333,81 @@ export namespace Prisma {
     lastHeartbeat?: DateTimeNullableWithAggregatesFilter<"Node"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Node"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Node"> | Date | string
+  }
+
+  export type TaskWhereInput = {
+    AND?: TaskWhereInput | TaskWhereInput[]
+    OR?: TaskWhereInput[]
+    NOT?: TaskWhereInput | TaskWhereInput[]
+    id?: StringFilter<"Task"> | string
+    nodeId?: StringFilter<"Task"> | string
+    type?: EnumTaskTypeFilter<"Task"> | $Enums.TaskType
+    status?: EnumTaskStatusFilter<"Task"> | $Enums.TaskStatus
+    data?: JsonFilter<"Task">
+    error?: StringNullableFilter<"Task"> | string | null
+    completedAt?: DateTimeNullableFilter<"Task"> | Date | string | null
+    createdAt?: DateTimeFilter<"Task"> | Date | string
+    updatedAt?: DateTimeFilter<"Task"> | Date | string
+    node?: XOR<NodeRelationFilter, NodeWhereInput>
+  }
+
+  export type TaskOrderByWithRelationInput = {
+    id?: SortOrder
+    nodeId?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    data?: SortOrder
+    error?: SortOrderInput | SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    node?: NodeOrderByWithRelationInput
+  }
+
+  export type TaskWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TaskWhereInput | TaskWhereInput[]
+    OR?: TaskWhereInput[]
+    NOT?: TaskWhereInput | TaskWhereInput[]
+    nodeId?: StringFilter<"Task"> | string
+    type?: EnumTaskTypeFilter<"Task"> | $Enums.TaskType
+    status?: EnumTaskStatusFilter<"Task"> | $Enums.TaskStatus
+    data?: JsonFilter<"Task">
+    error?: StringNullableFilter<"Task"> | string | null
+    completedAt?: DateTimeNullableFilter<"Task"> | Date | string | null
+    createdAt?: DateTimeFilter<"Task"> | Date | string
+    updatedAt?: DateTimeFilter<"Task"> | Date | string
+    node?: XOR<NodeRelationFilter, NodeWhereInput>
+  }, "id">
+
+  export type TaskOrderByWithAggregationInput = {
+    id?: SortOrder
+    nodeId?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    data?: SortOrder
+    error?: SortOrderInput | SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TaskCountOrderByAggregateInput
+    _max?: TaskMaxOrderByAggregateInput
+    _min?: TaskMinOrderByAggregateInput
+  }
+
+  export type TaskScalarWhereWithAggregatesInput = {
+    AND?: TaskScalarWhereWithAggregatesInput | TaskScalarWhereWithAggregatesInput[]
+    OR?: TaskScalarWhereWithAggregatesInput[]
+    NOT?: TaskScalarWhereWithAggregatesInput | TaskScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Task"> | string
+    nodeId?: StringWithAggregatesFilter<"Task"> | string
+    type?: EnumTaskTypeWithAggregatesFilter<"Task"> | $Enums.TaskType
+    status?: EnumTaskStatusWithAggregatesFilter<"Task"> | $Enums.TaskStatus
+    data?: JsonWithAggregatesFilter<"Task">
+    error?: StringNullableWithAggregatesFilter<"Task"> | string | null
+    completedAt?: DateTimeNullableWithAggregatesFilter<"Task"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Task"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Task"> | Date | string
   }
 
   export type NetworkAllocationWhereInput = {
@@ -19468,6 +20639,7 @@ export namespace Prisma {
     metrics?: MetricCreateNestedManyWithoutNodeInput
     alerts?: AlertCreateNestedManyWithoutNodeInput
     storageClusters?: GameClusterCreateNestedManyWithoutStorageNodeInput
+    tasks?: TaskCreateNestedManyWithoutNodeInput
   }
 
   export type NodeUncheckedCreateInput = {
@@ -19491,6 +20663,7 @@ export namespace Prisma {
     metrics?: MetricUncheckedCreateNestedManyWithoutNodeInput
     alerts?: AlertUncheckedCreateNestedManyWithoutNodeInput
     storageClusters?: GameClusterUncheckedCreateNestedManyWithoutStorageNodeInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutNodeInput
   }
 
   export type NodeUpdateInput = {
@@ -19514,6 +20687,7 @@ export namespace Prisma {
     metrics?: MetricUpdateManyWithoutNodeNestedInput
     alerts?: AlertUpdateManyWithoutNodeNestedInput
     storageClusters?: GameClusterUpdateManyWithoutStorageNodeNestedInput
+    tasks?: TaskUpdateManyWithoutNodeNestedInput
   }
 
   export type NodeUncheckedUpdateInput = {
@@ -19537,6 +20711,7 @@ export namespace Prisma {
     metrics?: MetricUncheckedUpdateManyWithoutNodeNestedInput
     alerts?: AlertUncheckedUpdateManyWithoutNodeNestedInput
     storageClusters?: GameClusterUncheckedUpdateManyWithoutStorageNodeNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutNodeNestedInput
   }
 
   export type NodeCreateManyInput = {
@@ -19589,6 +20764,89 @@ export namespace Prisma {
     maxConcurrentUpdates?: IntFieldUpdateOperationsInput | number
     status?: EnumNodeStatusFieldUpdateOperationsInput | $Enums.NodeStatus
     lastHeartbeat?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TaskCreateInput = {
+    id?: string
+    type: $Enums.TaskType
+    status?: $Enums.TaskStatus
+    data: JsonNullValueInput | InputJsonValue
+    error?: string | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    node: NodeCreateNestedOneWithoutTasksInput
+  }
+
+  export type TaskUncheckedCreateInput = {
+    id?: string
+    nodeId: string
+    type: $Enums.TaskType
+    status?: $Enums.TaskStatus
+    data: JsonNullValueInput | InputJsonValue
+    error?: string | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TaskUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    data?: JsonNullValueInput | InputJsonValue
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    node?: NodeUpdateOneRequiredWithoutTasksNestedInput
+  }
+
+  export type TaskUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nodeId?: StringFieldUpdateOperationsInput | string
+    type?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    data?: JsonNullValueInput | InputJsonValue
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TaskCreateManyInput = {
+    id?: string
+    nodeId: string
+    type: $Enums.TaskType
+    status?: $Enums.TaskStatus
+    data: JsonNullValueInput | InputJsonValue
+    error?: string | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TaskUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    data?: JsonNullValueInput | InputJsonValue
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TaskUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nodeId?: StringFieldUpdateOperationsInput | string
+    type?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    data?: JsonNullValueInput | InputJsonValue
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -21046,6 +22304,12 @@ export namespace Prisma {
     none?: GameClusterWhereInput
   }
 
+  export type TaskListRelationFilter = {
+    every?: TaskWhereInput
+    some?: TaskWhereInput
+    none?: TaskWhereInput
+  }
+
   export type NetworkAllocationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -21055,6 +22319,10 @@ export namespace Prisma {
   }
 
   export type GameClusterOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TaskOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -21144,6 +22412,126 @@ export namespace Prisma {
     _max?: NestedEnumNodeStatusFilter<$PrismaModel>
   }
 
+  export type EnumTaskTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskType | EnumTaskTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskType[]
+    notIn?: $Enums.TaskType[]
+    not?: NestedEnumTaskTypeFilter<$PrismaModel> | $Enums.TaskType
+  }
+
+  export type EnumTaskStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskStatus[]
+    notIn?: $Enums.TaskStatus[]
+    not?: NestedEnumTaskStatusFilter<$PrismaModel> | $Enums.TaskStatus
+  }
+  export type JsonFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue
+    lte?: InputJsonValue
+    gt?: InputJsonValue
+    gte?: InputJsonValue
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NodeRelationFilter = {
+    is?: NodeWhereInput
+    isNot?: NodeWhereInput
+  }
+
+  export type TaskCountOrderByAggregateInput = {
+    id?: SortOrder
+    nodeId?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    data?: SortOrder
+    error?: SortOrder
+    completedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TaskMaxOrderByAggregateInput = {
+    id?: SortOrder
+    nodeId?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    error?: SortOrder
+    completedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TaskMinOrderByAggregateInput = {
+    id?: SortOrder
+    nodeId?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    error?: SortOrder
+    completedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumTaskTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskType | EnumTaskTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskType[]
+    notIn?: $Enums.TaskType[]
+    not?: NestedEnumTaskTypeWithAggregatesFilter<$PrismaModel> | $Enums.TaskType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTaskTypeFilter<$PrismaModel>
+    _max?: NestedEnumTaskTypeFilter<$PrismaModel>
+  }
+
+  export type EnumTaskStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskStatus[]
+    notIn?: $Enums.TaskStatus[]
+    not?: NestedEnumTaskStatusWithAggregatesFilter<$PrismaModel> | $Enums.TaskStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTaskStatusFilter<$PrismaModel>
+    _max?: NestedEnumTaskStatusFilter<$PrismaModel>
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue
+    lte?: InputJsonValue
+    gt?: InputJsonValue
+    gte?: InputJsonValue
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
+  }
+
   export type EnumProtocolFilter<$PrismaModel = never> = {
     equals?: $Enums.Protocol | EnumProtocolFieldRefInput<$PrismaModel>
     in?: $Enums.Protocol[]
@@ -21156,11 +22544,6 @@ export namespace Prisma {
     in?: $Enums.PortType[]
     notIn?: $Enums.PortType[]
     not?: NestedEnumPortTypeFilter<$PrismaModel> | $Enums.PortType
-  }
-
-  export type NodeRelationFilter = {
-    is?: NodeWhereInput
-    isNot?: NodeWhereInput
   }
 
   export type GameServerNullableRelationFilter = {
@@ -21291,28 +22674,6 @@ export namespace Prisma {
     notIn?: $Enums.ServerStatus[]
     not?: NestedEnumServerStatusFilter<$PrismaModel> | $Enums.ServerStatus
   }
-  export type JsonFilter<$PrismaModel = never> = 
-    | PatchUndefined<
-        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue
-    lte?: InputJsonValue
-    gt?: InputJsonValue
-    gte?: InputJsonValue
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type UserRelationFilter = {
     is?: UserWhereInput
@@ -21411,31 +22772,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumServerStatusFilter<$PrismaModel>
     _max?: NestedEnumServerStatusFilter<$PrismaModel>
-  }
-  export type JsonWithAggregatesFilter<$PrismaModel = never> = 
-    | PatchUndefined<
-        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue
-    lte?: InputJsonValue
-    gt?: InputJsonValue
-    gte?: InputJsonValue
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedJsonFilter<$PrismaModel>
-    _max?: NestedJsonFilter<$PrismaModel>
   }
 
   export type GameClusterCountOrderByAggregateInput = {
@@ -22358,6 +23694,13 @@ export namespace Prisma {
     connect?: GameClusterWhereUniqueInput | GameClusterWhereUniqueInput[]
   }
 
+  export type TaskCreateNestedManyWithoutNodeInput = {
+    create?: XOR<TaskCreateWithoutNodeInput, TaskUncheckedCreateWithoutNodeInput> | TaskCreateWithoutNodeInput[] | TaskUncheckedCreateWithoutNodeInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutNodeInput | TaskCreateOrConnectWithoutNodeInput[]
+    createMany?: TaskCreateManyNodeInputEnvelope
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+  }
+
   export type GameServerUncheckedCreateNestedManyWithoutNodeInput = {
     create?: XOR<GameServerCreateWithoutNodeInput, GameServerUncheckedCreateWithoutNodeInput> | GameServerCreateWithoutNodeInput[] | GameServerUncheckedCreateWithoutNodeInput[]
     connectOrCreate?: GameServerCreateOrConnectWithoutNodeInput | GameServerCreateOrConnectWithoutNodeInput[]
@@ -22391,6 +23734,13 @@ export namespace Prisma {
     connectOrCreate?: GameClusterCreateOrConnectWithoutStorageNodeInput | GameClusterCreateOrConnectWithoutStorageNodeInput[]
     createMany?: GameClusterCreateManyStorageNodeInputEnvelope
     connect?: GameClusterWhereUniqueInput | GameClusterWhereUniqueInput[]
+  }
+
+  export type TaskUncheckedCreateNestedManyWithoutNodeInput = {
+    create?: XOR<TaskCreateWithoutNodeInput, TaskUncheckedCreateWithoutNodeInput> | TaskCreateWithoutNodeInput[] | TaskUncheckedCreateWithoutNodeInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutNodeInput | TaskCreateOrConnectWithoutNodeInput[]
+    createMany?: TaskCreateManyNodeInputEnvelope
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
   }
 
   export type EnumDiskTypeFieldUpdateOperationsInput = {
@@ -22471,6 +23821,20 @@ export namespace Prisma {
     deleteMany?: GameClusterScalarWhereInput | GameClusterScalarWhereInput[]
   }
 
+  export type TaskUpdateManyWithoutNodeNestedInput = {
+    create?: XOR<TaskCreateWithoutNodeInput, TaskUncheckedCreateWithoutNodeInput> | TaskCreateWithoutNodeInput[] | TaskUncheckedCreateWithoutNodeInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutNodeInput | TaskCreateOrConnectWithoutNodeInput[]
+    upsert?: TaskUpsertWithWhereUniqueWithoutNodeInput | TaskUpsertWithWhereUniqueWithoutNodeInput[]
+    createMany?: TaskCreateManyNodeInputEnvelope
+    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    update?: TaskUpdateWithWhereUniqueWithoutNodeInput | TaskUpdateWithWhereUniqueWithoutNodeInput[]
+    updateMany?: TaskUpdateManyWithWhereWithoutNodeInput | TaskUpdateManyWithWhereWithoutNodeInput[]
+    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
+  }
+
   export type GameServerUncheckedUpdateManyWithoutNodeNestedInput = {
     create?: XOR<GameServerCreateWithoutNodeInput, GameServerUncheckedCreateWithoutNodeInput> | GameServerCreateWithoutNodeInput[] | GameServerUncheckedCreateWithoutNodeInput[]
     connectOrCreate?: GameServerCreateOrConnectWithoutNodeInput | GameServerCreateOrConnectWithoutNodeInput[]
@@ -22539,6 +23903,42 @@ export namespace Prisma {
     update?: GameClusterUpdateWithWhereUniqueWithoutStorageNodeInput | GameClusterUpdateWithWhereUniqueWithoutStorageNodeInput[]
     updateMany?: GameClusterUpdateManyWithWhereWithoutStorageNodeInput | GameClusterUpdateManyWithWhereWithoutStorageNodeInput[]
     deleteMany?: GameClusterScalarWhereInput | GameClusterScalarWhereInput[]
+  }
+
+  export type TaskUncheckedUpdateManyWithoutNodeNestedInput = {
+    create?: XOR<TaskCreateWithoutNodeInput, TaskUncheckedCreateWithoutNodeInput> | TaskCreateWithoutNodeInput[] | TaskUncheckedCreateWithoutNodeInput[]
+    connectOrCreate?: TaskCreateOrConnectWithoutNodeInput | TaskCreateOrConnectWithoutNodeInput[]
+    upsert?: TaskUpsertWithWhereUniqueWithoutNodeInput | TaskUpsertWithWhereUniqueWithoutNodeInput[]
+    createMany?: TaskCreateManyNodeInputEnvelope
+    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
+    update?: TaskUpdateWithWhereUniqueWithoutNodeInput | TaskUpdateWithWhereUniqueWithoutNodeInput[]
+    updateMany?: TaskUpdateManyWithWhereWithoutNodeInput | TaskUpdateManyWithWhereWithoutNodeInput[]
+    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
+  }
+
+  export type NodeCreateNestedOneWithoutTasksInput = {
+    create?: XOR<NodeCreateWithoutTasksInput, NodeUncheckedCreateWithoutTasksInput>
+    connectOrCreate?: NodeCreateOrConnectWithoutTasksInput
+    connect?: NodeWhereUniqueInput
+  }
+
+  export type EnumTaskTypeFieldUpdateOperationsInput = {
+    set?: $Enums.TaskType
+  }
+
+  export type EnumTaskStatusFieldUpdateOperationsInput = {
+    set?: $Enums.TaskStatus
+  }
+
+  export type NodeUpdateOneRequiredWithoutTasksNestedInput = {
+    create?: XOR<NodeCreateWithoutTasksInput, NodeUncheckedCreateWithoutTasksInput>
+    connectOrCreate?: NodeCreateOrConnectWithoutTasksInput
+    upsert?: NodeUpsertWithoutTasksInput
+    connect?: NodeWhereUniqueInput
+    update?: XOR<XOR<NodeUpdateToOneWithWhereWithoutTasksInput, NodeUpdateWithoutTasksInput>, NodeUncheckedUpdateWithoutTasksInput>
   }
 
   export type NodeCreateNestedOneWithoutNetworkAllocationsInput = {
@@ -23379,6 +24779,62 @@ export namespace Prisma {
     _max?: NestedEnumNodeStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumTaskTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskType | EnumTaskTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskType[]
+    notIn?: $Enums.TaskType[]
+    not?: NestedEnumTaskTypeFilter<$PrismaModel> | $Enums.TaskType
+  }
+
+  export type NestedEnumTaskStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskStatus[]
+    notIn?: $Enums.TaskStatus[]
+    not?: NestedEnumTaskStatusFilter<$PrismaModel> | $Enums.TaskStatus
+  }
+
+  export type NestedEnumTaskTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskType | EnumTaskTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskType[]
+    notIn?: $Enums.TaskType[]
+    not?: NestedEnumTaskTypeWithAggregatesFilter<$PrismaModel> | $Enums.TaskType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTaskTypeFilter<$PrismaModel>
+    _max?: NestedEnumTaskTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTaskStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TaskStatus[]
+    notIn?: $Enums.TaskStatus[]
+    not?: NestedEnumTaskStatusWithAggregatesFilter<$PrismaModel> | $Enums.TaskStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTaskStatusFilter<$PrismaModel>
+    _max?: NestedEnumTaskStatusFilter<$PrismaModel>
+  }
+  export type NestedJsonFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue
+    lte?: InputJsonValue
+    gt?: InputJsonValue
+    gte?: InputJsonValue
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
   export type NestedEnumProtocolFilter<$PrismaModel = never> = {
     equals?: $Enums.Protocol | EnumProtocolFieldRefInput<$PrismaModel>
     in?: $Enums.Protocol[]
@@ -23445,28 +24901,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumServerStatusFilter<$PrismaModel>
     _max?: NestedEnumServerStatusFilter<$PrismaModel>
-  }
-  export type NestedJsonFilter<$PrismaModel = never> = 
-    | PatchUndefined<
-        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue
-    lte?: InputJsonValue
-    gt?: InputJsonValue
-    gte?: InputJsonValue
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type NestedBigIntFilter<$PrismaModel = never> = {
@@ -24491,6 +25925,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TaskCreateWithoutNodeInput = {
+    id?: string
+    type: $Enums.TaskType
+    status?: $Enums.TaskStatus
+    data: JsonNullValueInput | InputJsonValue
+    error?: string | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TaskUncheckedCreateWithoutNodeInput = {
+    id?: string
+    type: $Enums.TaskType
+    status?: $Enums.TaskStatus
+    data: JsonNullValueInput | InputJsonValue
+    error?: string | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TaskCreateOrConnectWithoutNodeInput = {
+    where: TaskWhereUniqueInput
+    create: XOR<TaskCreateWithoutNodeInput, TaskUncheckedCreateWithoutNodeInput>
+  }
+
+  export type TaskCreateManyNodeInputEnvelope = {
+    data: TaskCreateManyNodeInput | TaskCreateManyNodeInput[]
+    skipDuplicates?: boolean
+  }
+
   export type GameServerUpsertWithWhereUniqueWithoutNodeInput = {
     where: GameServerWhereUniqueInput
     update: XOR<GameServerUpdateWithoutNodeInput, GameServerUncheckedUpdateWithoutNodeInput>
@@ -24616,6 +26082,145 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"GameCluster"> | Date | string
   }
 
+  export type TaskUpsertWithWhereUniqueWithoutNodeInput = {
+    where: TaskWhereUniqueInput
+    update: XOR<TaskUpdateWithoutNodeInput, TaskUncheckedUpdateWithoutNodeInput>
+    create: XOR<TaskCreateWithoutNodeInput, TaskUncheckedCreateWithoutNodeInput>
+  }
+
+  export type TaskUpdateWithWhereUniqueWithoutNodeInput = {
+    where: TaskWhereUniqueInput
+    data: XOR<TaskUpdateWithoutNodeInput, TaskUncheckedUpdateWithoutNodeInput>
+  }
+
+  export type TaskUpdateManyWithWhereWithoutNodeInput = {
+    where: TaskScalarWhereInput
+    data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyWithoutNodeInput>
+  }
+
+  export type TaskScalarWhereInput = {
+    AND?: TaskScalarWhereInput | TaskScalarWhereInput[]
+    OR?: TaskScalarWhereInput[]
+    NOT?: TaskScalarWhereInput | TaskScalarWhereInput[]
+    id?: StringFilter<"Task"> | string
+    nodeId?: StringFilter<"Task"> | string
+    type?: EnumTaskTypeFilter<"Task"> | $Enums.TaskType
+    status?: EnumTaskStatusFilter<"Task"> | $Enums.TaskStatus
+    data?: JsonFilter<"Task">
+    error?: StringNullableFilter<"Task"> | string | null
+    completedAt?: DateTimeNullableFilter<"Task"> | Date | string | null
+    createdAt?: DateTimeFilter<"Task"> | Date | string
+    updatedAt?: DateTimeFilter<"Task"> | Date | string
+  }
+
+  export type NodeCreateWithoutTasksInput = {
+    id?: string
+    name: string
+    apiKey: string
+    ipAddress: string
+    publicFqdn?: string | null
+    totalRam: number
+    totalCpu: number
+    diskType: $Enums.DiskType
+    isClusterStorage?: boolean
+    maintenanceMode?: boolean
+    maxConcurrentUpdates?: number
+    status?: $Enums.NodeStatus
+    lastHeartbeat?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    servers?: GameServerCreateNestedManyWithoutNodeInput
+    networkAllocations?: NetworkAllocationCreateNestedManyWithoutNodeInput
+    metrics?: MetricCreateNestedManyWithoutNodeInput
+    alerts?: AlertCreateNestedManyWithoutNodeInput
+    storageClusters?: GameClusterCreateNestedManyWithoutStorageNodeInput
+  }
+
+  export type NodeUncheckedCreateWithoutTasksInput = {
+    id?: string
+    name: string
+    apiKey: string
+    ipAddress: string
+    publicFqdn?: string | null
+    totalRam: number
+    totalCpu: number
+    diskType: $Enums.DiskType
+    isClusterStorage?: boolean
+    maintenanceMode?: boolean
+    maxConcurrentUpdates?: number
+    status?: $Enums.NodeStatus
+    lastHeartbeat?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    servers?: GameServerUncheckedCreateNestedManyWithoutNodeInput
+    networkAllocations?: NetworkAllocationUncheckedCreateNestedManyWithoutNodeInput
+    metrics?: MetricUncheckedCreateNestedManyWithoutNodeInput
+    alerts?: AlertUncheckedCreateNestedManyWithoutNodeInput
+    storageClusters?: GameClusterUncheckedCreateNestedManyWithoutStorageNodeInput
+  }
+
+  export type NodeCreateOrConnectWithoutTasksInput = {
+    where: NodeWhereUniqueInput
+    create: XOR<NodeCreateWithoutTasksInput, NodeUncheckedCreateWithoutTasksInput>
+  }
+
+  export type NodeUpsertWithoutTasksInput = {
+    update: XOR<NodeUpdateWithoutTasksInput, NodeUncheckedUpdateWithoutTasksInput>
+    create: XOR<NodeCreateWithoutTasksInput, NodeUncheckedCreateWithoutTasksInput>
+    where?: NodeWhereInput
+  }
+
+  export type NodeUpdateToOneWithWhereWithoutTasksInput = {
+    where?: NodeWhereInput
+    data: XOR<NodeUpdateWithoutTasksInput, NodeUncheckedUpdateWithoutTasksInput>
+  }
+
+  export type NodeUpdateWithoutTasksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    apiKey?: StringFieldUpdateOperationsInput | string
+    ipAddress?: StringFieldUpdateOperationsInput | string
+    publicFqdn?: NullableStringFieldUpdateOperationsInput | string | null
+    totalRam?: IntFieldUpdateOperationsInput | number
+    totalCpu?: IntFieldUpdateOperationsInput | number
+    diskType?: EnumDiskTypeFieldUpdateOperationsInput | $Enums.DiskType
+    isClusterStorage?: BoolFieldUpdateOperationsInput | boolean
+    maintenanceMode?: BoolFieldUpdateOperationsInput | boolean
+    maxConcurrentUpdates?: IntFieldUpdateOperationsInput | number
+    status?: EnumNodeStatusFieldUpdateOperationsInput | $Enums.NodeStatus
+    lastHeartbeat?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    servers?: GameServerUpdateManyWithoutNodeNestedInput
+    networkAllocations?: NetworkAllocationUpdateManyWithoutNodeNestedInput
+    metrics?: MetricUpdateManyWithoutNodeNestedInput
+    alerts?: AlertUpdateManyWithoutNodeNestedInput
+    storageClusters?: GameClusterUpdateManyWithoutStorageNodeNestedInput
+  }
+
+  export type NodeUncheckedUpdateWithoutTasksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    apiKey?: StringFieldUpdateOperationsInput | string
+    ipAddress?: StringFieldUpdateOperationsInput | string
+    publicFqdn?: NullableStringFieldUpdateOperationsInput | string | null
+    totalRam?: IntFieldUpdateOperationsInput | number
+    totalCpu?: IntFieldUpdateOperationsInput | number
+    diskType?: EnumDiskTypeFieldUpdateOperationsInput | $Enums.DiskType
+    isClusterStorage?: BoolFieldUpdateOperationsInput | boolean
+    maintenanceMode?: BoolFieldUpdateOperationsInput | boolean
+    maxConcurrentUpdates?: IntFieldUpdateOperationsInput | number
+    status?: EnumNodeStatusFieldUpdateOperationsInput | $Enums.NodeStatus
+    lastHeartbeat?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    servers?: GameServerUncheckedUpdateManyWithoutNodeNestedInput
+    networkAllocations?: NetworkAllocationUncheckedUpdateManyWithoutNodeNestedInput
+    metrics?: MetricUncheckedUpdateManyWithoutNodeNestedInput
+    alerts?: AlertUncheckedUpdateManyWithoutNodeNestedInput
+    storageClusters?: GameClusterUncheckedUpdateManyWithoutStorageNodeNestedInput
+  }
+
   export type NodeCreateWithoutNetworkAllocationsInput = {
     id?: string
     name: string
@@ -24636,6 +26241,7 @@ export namespace Prisma {
     metrics?: MetricCreateNestedManyWithoutNodeInput
     alerts?: AlertCreateNestedManyWithoutNodeInput
     storageClusters?: GameClusterCreateNestedManyWithoutStorageNodeInput
+    tasks?: TaskCreateNestedManyWithoutNodeInput
   }
 
   export type NodeUncheckedCreateWithoutNetworkAllocationsInput = {
@@ -24658,6 +26264,7 @@ export namespace Prisma {
     metrics?: MetricUncheckedCreateNestedManyWithoutNodeInput
     alerts?: AlertUncheckedCreateNestedManyWithoutNodeInput
     storageClusters?: GameClusterUncheckedCreateNestedManyWithoutStorageNodeInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutNodeInput
   }
 
   export type NodeCreateOrConnectWithoutNetworkAllocationsInput = {
@@ -24739,6 +26346,7 @@ export namespace Prisma {
     metrics?: MetricUpdateManyWithoutNodeNestedInput
     alerts?: AlertUpdateManyWithoutNodeNestedInput
     storageClusters?: GameClusterUpdateManyWithoutStorageNodeNestedInput
+    tasks?: TaskUpdateManyWithoutNodeNestedInput
   }
 
   export type NodeUncheckedUpdateWithoutNetworkAllocationsInput = {
@@ -24761,6 +26369,7 @@ export namespace Prisma {
     metrics?: MetricUncheckedUpdateManyWithoutNodeNestedInput
     alerts?: AlertUncheckedUpdateManyWithoutNodeNestedInput
     storageClusters?: GameClusterUncheckedUpdateManyWithoutStorageNodeNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutNodeNestedInput
   }
 
   export type GameServerUpsertWithoutNetworkAllocationsInput = {
@@ -24924,6 +26533,7 @@ export namespace Prisma {
     metrics?: MetricCreateNestedManyWithoutNodeInput
     alerts?: AlertCreateNestedManyWithoutNodeInput
     storageClusters?: GameClusterCreateNestedManyWithoutStorageNodeInput
+    tasks?: TaskCreateNestedManyWithoutNodeInput
   }
 
   export type NodeUncheckedCreateWithoutServersInput = {
@@ -24946,6 +26556,7 @@ export namespace Prisma {
     metrics?: MetricUncheckedCreateNestedManyWithoutNodeInput
     alerts?: AlertUncheckedCreateNestedManyWithoutNodeInput
     storageClusters?: GameClusterUncheckedCreateNestedManyWithoutStorageNodeInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutNodeInput
   }
 
   export type NodeCreateOrConnectWithoutServersInput = {
@@ -25218,6 +26829,7 @@ export namespace Prisma {
     metrics?: MetricUpdateManyWithoutNodeNestedInput
     alerts?: AlertUpdateManyWithoutNodeNestedInput
     storageClusters?: GameClusterUpdateManyWithoutStorageNodeNestedInput
+    tasks?: TaskUpdateManyWithoutNodeNestedInput
   }
 
   export type NodeUncheckedUpdateWithoutServersInput = {
@@ -25240,6 +26852,7 @@ export namespace Prisma {
     metrics?: MetricUncheckedUpdateManyWithoutNodeNestedInput
     alerts?: AlertUncheckedUpdateManyWithoutNodeNestedInput
     storageClusters?: GameClusterUncheckedUpdateManyWithoutStorageNodeNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutNodeNestedInput
   }
 
   export type UserUpsertWithoutOwnedServersInput = {
@@ -25446,6 +27059,7 @@ export namespace Prisma {
     networkAllocations?: NetworkAllocationCreateNestedManyWithoutNodeInput
     metrics?: MetricCreateNestedManyWithoutNodeInput
     alerts?: AlertCreateNestedManyWithoutNodeInput
+    tasks?: TaskCreateNestedManyWithoutNodeInput
   }
 
   export type NodeUncheckedCreateWithoutStorageClustersInput = {
@@ -25468,6 +27082,7 @@ export namespace Prisma {
     networkAllocations?: NetworkAllocationUncheckedCreateNestedManyWithoutNodeInput
     metrics?: MetricUncheckedCreateNestedManyWithoutNodeInput
     alerts?: AlertUncheckedCreateNestedManyWithoutNodeInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutNodeInput
   }
 
   export type NodeCreateOrConnectWithoutStorageClustersInput = {
@@ -25554,6 +27169,7 @@ export namespace Prisma {
     networkAllocations?: NetworkAllocationUpdateManyWithoutNodeNestedInput
     metrics?: MetricUpdateManyWithoutNodeNestedInput
     alerts?: AlertUpdateManyWithoutNodeNestedInput
+    tasks?: TaskUpdateManyWithoutNodeNestedInput
   }
 
   export type NodeUncheckedUpdateWithoutStorageClustersInput = {
@@ -25576,6 +27192,7 @@ export namespace Prisma {
     networkAllocations?: NetworkAllocationUncheckedUpdateManyWithoutNodeNestedInput
     metrics?: MetricUncheckedUpdateManyWithoutNodeNestedInput
     alerts?: AlertUncheckedUpdateManyWithoutNodeNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutNodeNestedInput
   }
 
   export type GameServerUpsertWithWhereUniqueWithoutClusterInput = {
@@ -25706,6 +27323,7 @@ export namespace Prisma {
     networkAllocations?: NetworkAllocationCreateNestedManyWithoutNodeInput
     alerts?: AlertCreateNestedManyWithoutNodeInput
     storageClusters?: GameClusterCreateNestedManyWithoutStorageNodeInput
+    tasks?: TaskCreateNestedManyWithoutNodeInput
   }
 
   export type NodeUncheckedCreateWithoutMetricsInput = {
@@ -25728,6 +27346,7 @@ export namespace Prisma {
     networkAllocations?: NetworkAllocationUncheckedCreateNestedManyWithoutNodeInput
     alerts?: AlertUncheckedCreateNestedManyWithoutNodeInput
     storageClusters?: GameClusterUncheckedCreateNestedManyWithoutStorageNodeInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutNodeInput
   }
 
   export type NodeCreateOrConnectWithoutMetricsInput = {
@@ -25809,6 +27428,7 @@ export namespace Prisma {
     networkAllocations?: NetworkAllocationUpdateManyWithoutNodeNestedInput
     alerts?: AlertUpdateManyWithoutNodeNestedInput
     storageClusters?: GameClusterUpdateManyWithoutStorageNodeNestedInput
+    tasks?: TaskUpdateManyWithoutNodeNestedInput
   }
 
   export type NodeUncheckedUpdateWithoutMetricsInput = {
@@ -25831,6 +27451,7 @@ export namespace Prisma {
     networkAllocations?: NetworkAllocationUncheckedUpdateManyWithoutNodeNestedInput
     alerts?: AlertUncheckedUpdateManyWithoutNodeNestedInput
     storageClusters?: GameClusterUncheckedUpdateManyWithoutStorageNodeNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutNodeNestedInput
   }
 
   export type GameServerUpsertWithoutMetricsInput = {
@@ -25941,6 +27562,7 @@ export namespace Prisma {
     networkAllocations?: NetworkAllocationCreateNestedManyWithoutNodeInput
     metrics?: MetricCreateNestedManyWithoutNodeInput
     storageClusters?: GameClusterCreateNestedManyWithoutStorageNodeInput
+    tasks?: TaskCreateNestedManyWithoutNodeInput
   }
 
   export type NodeUncheckedCreateWithoutAlertsInput = {
@@ -25963,6 +27585,7 @@ export namespace Prisma {
     networkAllocations?: NetworkAllocationUncheckedCreateNestedManyWithoutNodeInput
     metrics?: MetricUncheckedCreateNestedManyWithoutNodeInput
     storageClusters?: GameClusterUncheckedCreateNestedManyWithoutStorageNodeInput
+    tasks?: TaskUncheckedCreateNestedManyWithoutNodeInput
   }
 
   export type NodeCreateOrConnectWithoutAlertsInput = {
@@ -26089,6 +27712,7 @@ export namespace Prisma {
     networkAllocations?: NetworkAllocationUpdateManyWithoutNodeNestedInput
     metrics?: MetricUpdateManyWithoutNodeNestedInput
     storageClusters?: GameClusterUpdateManyWithoutStorageNodeNestedInput
+    tasks?: TaskUpdateManyWithoutNodeNestedInput
   }
 
   export type NodeUncheckedUpdateWithoutAlertsInput = {
@@ -26111,6 +27735,7 @@ export namespace Prisma {
     networkAllocations?: NetworkAllocationUncheckedUpdateManyWithoutNodeNestedInput
     metrics?: MetricUncheckedUpdateManyWithoutNodeNestedInput
     storageClusters?: GameClusterUncheckedUpdateManyWithoutStorageNodeNestedInput
+    tasks?: TaskUncheckedUpdateManyWithoutNodeNestedInput
   }
 
   export type GameServerUpsertWithoutAlertsInput = {
@@ -26967,6 +28592,17 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type TaskCreateManyNodeInput = {
+    id?: string
+    type: $Enums.TaskType
+    status?: $Enums.TaskStatus
+    data: JsonNullValueInput | InputJsonValue
+    error?: string | null
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type GameServerUpdateWithoutNodeInput = {
     id?: StringFieldUpdateOperationsInput | string
     uuid?: StringFieldUpdateOperationsInput | string
@@ -27164,6 +28800,39 @@ export namespace Prisma {
     gameType?: EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
     sharedSecret?: StringFieldUpdateOperationsInput | string
     mountPath?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TaskUpdateWithoutNodeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    data?: JsonNullValueInput | InputJsonValue
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TaskUncheckedUpdateWithoutNodeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    data?: JsonNullValueInput | InputJsonValue
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TaskUncheckedUpdateManyWithoutNodeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumTaskTypeFieldUpdateOperationsInput | $Enums.TaskType
+    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
+    data?: JsonNullValueInput | InputJsonValue
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -27519,6 +29188,10 @@ export namespace Prisma {
      * @deprecated Use NodeDefaultArgs instead
      */
     export type NodeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = NodeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use TaskDefaultArgs instead
+     */
+    export type TaskArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TaskDefaultArgs<ExtArgs>
     /**
      * @deprecated Use NetworkAllocationDefaultArgs instead
      */

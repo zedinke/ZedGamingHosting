@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { Button, Card } from '@zed-hosting/ui-kit';
 import { GameServer } from '../types/server';
+import { apiClient } from '../lib/api-client';
 
 interface ServerCardProps {
   server: GameServer;
@@ -112,16 +113,55 @@ export function ServerCard({ server }: ServerCardProps) {
         {/* Actions */}
         <div className="flex gap-2 mt-4">
           {server.status === 'STOPPED' && (
-            <Button size="sm" variant="primary" className="flex-1">
+            <Button 
+              size="sm" 
+              variant="primary" 
+              className="flex-1"
+              onClick={async () => {
+                try {
+                  await apiClient.post(`/servers/${server.uuid}/start`);
+                  window.location.reload();
+                } catch (error) {
+                  console.error('Failed to start server:', error);
+                  alert('Failed to start server');
+                }
+              }}
+            >
               {t('dashboard.server.actions.start')}
             </Button>
           )}
           {server.status === 'RUNNING' && (
             <>
-              <Button size="sm" variant="secondary" className="flex-1">
+              <Button 
+                size="sm" 
+                variant="secondary" 
+                className="flex-1"
+                onClick={async () => {
+                  try {
+                    await apiClient.post(`/servers/${server.uuid}/stop`);
+                    window.location.reload();
+                  } catch (error) {
+                    console.error('Failed to stop server:', error);
+                    alert('Failed to stop server');
+                  }
+                }}
+              >
                 {t('dashboard.server.actions.stop')}
               </Button>
-              <Button size="sm" variant="secondary" className="flex-1">
+              <Button 
+                size="sm" 
+                variant="secondary" 
+                className="flex-1"
+                onClick={async () => {
+                  try {
+                    await apiClient.post(`/servers/${server.uuid}/restart`);
+                    window.location.reload();
+                  } catch (error) {
+                    console.error('Failed to restart server:', error);
+                    alert('Failed to restart server');
+                  }
+                }}
+              >
                 {t('dashboard.server.actions.restart')}
               </Button>
             </>

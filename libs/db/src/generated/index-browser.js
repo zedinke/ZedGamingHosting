@@ -185,6 +185,18 @@ exports.Prisma.NodeScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.TaskScalarFieldEnum = {
+  id: 'id',
+  nodeId: 'nodeId',
+  type: 'type',
+  status: 'status',
+  data: 'data',
+  error: 'error',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.NetworkAllocationScalarFieldEnum = {
   id: 'id',
   nodeId: 'nodeId',
@@ -368,6 +380,22 @@ exports.NodeStatus = exports.$Enums.NodeStatus = {
   MAINTENANCE: 'MAINTENANCE'
 };
 
+exports.TaskType = exports.$Enums.TaskType = {
+  PROVISION: 'PROVISION',
+  START: 'START',
+  STOP: 'STOP',
+  RESTART: 'RESTART',
+  UPDATE: 'UPDATE',
+  DELETE: 'DELETE'
+};
+
+exports.TaskStatus = exports.$Enums.TaskStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
 exports.Protocol = exports.$Enums.Protocol = {
   UDP: 'UDP',
   TCP: 'TCP'
@@ -438,6 +466,7 @@ exports.Prisma.ModelName = {
   User: 'User',
   AuditLog: 'AuditLog',
   Node: 'Node',
+  Task: 'Task',
   NetworkAllocation: 'NetworkAllocation',
   Subdomain: 'Subdomain',
   GameServer: 'GameServer',
