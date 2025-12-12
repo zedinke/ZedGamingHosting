@@ -20,6 +20,8 @@
   "AUTH_INVALID_REFRESH_TOKEN": "Invalid refresh token",
   "AUTH_UNAUTHORIZED": "You are not authorized to access this resource",
   "AUTH_INSUFFICIENT_ROLE": "You do not have the required role for this action",
+  "SERVER_NOT_FOUND": "Server not found",
+  "SERVER_ACCESS_DENIED": "You do not have access to this server",
   "errors": {
     "subdomain_already_exists": "Subdomain {{domain}} already exists",
     "server_not_found": "Server not found",

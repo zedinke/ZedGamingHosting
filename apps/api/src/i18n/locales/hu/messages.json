@@ -20,6 +20,8 @@
   "AUTH_INVALID_REFRESH_TOKEN": "Érvénytelen refresh token",
   "AUTH_UNAUTHORIZED": "Nincs jogosultságod ehhez az erőforráshoz",
   "AUTH_INSUFFICIENT_ROLE": "Nincs megfelelő szerepköröd ehhez a művelethez",
+  "SERVER_NOT_FOUND": "A szerver nem található",
+  "SERVER_ACCESS_DENIED": "Nincs jogosultságod ehhez a szerverhez",
   "errors": {
     "subdomain_already_exists": "A(z) {{domain}} subdomain már létezik",
     "server_not_found": "A szerver nem található",

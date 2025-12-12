@@ -23,11 +23,31 @@ function DashboardContent() {
   const { data: servers, isLoading } = useQuery<GameServer[]>({
     queryKey: ['servers'],
     queryFn: async () => {
-      // TODO: Replace with actual API endpoint when implemented
-      // return apiClient.get<GameServer[]>('/servers');
-      return [];
+      try {
+        const response = await apiClient.get<any[]>('/servers');
+        return response.map((server: any) => ({
+          uuid: server.uuid,
+          id: server.id,
+          gameType: server.gameType,
+          status: server.status,
+          nodeId: server.nodeId,
+          ownerId: server.ownerId,
+          startupPriority: server.startupPriority,
+          resources: server.resources || { cpuLimit: 0, ramLimit: 0, diskLimit: 0 },
+          envVars: server.envVars || {},
+          clusterId: server.clusterId,
+          createdAt: new Date(server.createdAt),
+          updatedAt: new Date(server.updatedAt),
+          node: server.node,
+          ports: server.ports || [],
+        }));
+      } catch (error) {
+        console.error('Failed to fetch servers:', error);
+        return [];
+      }
     },
     enabled: true,
+    refetchInterval: 30000, // Refetch every 30 seconds
   });
 
   return (

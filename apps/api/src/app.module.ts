@@ -12,6 +12,7 @@ import { ProvisioningModule } from './provisioning/provisioning.module';
 import { AuthModule } from './auth/auth.module';
 import { RateLimitingModule } from './rate-limiting/rate-limiting.module';
 import { SubdomainsModule } from './subdomains/subdomains.module';
+import { ServersModule } from './servers/servers.module';
 import { MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { TenantMiddleware } from './common/middleware/tenant.middleware';
 import { APP_GUARD } from '@nestjs/core';
@@ -41,6 +42,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     AuthModule,
     RateLimitingModule,
     SubdomainsModule,
+    ServersModule,
     NetworkingModule,
     NodesModule,
     ProvisioningModule,
