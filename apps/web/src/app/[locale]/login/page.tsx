@@ -56,7 +56,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 px-4">
       <div className="w-full max-w-md">
-        <div className="bg-white/5 backdrop-blur-lg rounded-2xl shadow-2xl border border-white/10 p-8">
+        <div className="bg-gray-800/90 backdrop-blur-lg rounded-2xl shadow-2xl border border-gray-700/50 p-8">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-white mb-2">ZedGamingHosting</h1>
             <p className="text-gray-400">{t('subtitle') || 'Sign in to your account'}</p>
@@ -79,7 +79,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder={t('emailPlaceholder') || 'email@example.com'}
                 disabled={loading}
               />
@@ -95,38 +95,38 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder={t('passwordPlaceholder') || '••••••••'}
                 disabled={loading}
               />
             </div>
 
             <div className="flex items-center justify-between">
-              <label className="flex items-center">
+              <label className="flex items-center cursor-pointer">
                 <input
                   type="checkbox"
-                  className="w-4 h-4 text-blue-600 bg-white/5 border-white/10 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
                 />
-                <span className="ml-2 text-sm text-gray-400">{t('rememberMe') || 'Remember me'}</span>
+                <span className="ml-2 text-sm text-gray-300">{t('rememberMe') || 'Remember me'}</span>
               </label>
-              <a href="/forgot-password" className="text-sm text-blue-400 hover:text-blue-300">
+              <a href="/forgot-password" className="text-sm text-blue-400 hover:text-blue-300 transition-colors">
                 {t('forgotPassword')}
               </a>
             </div>
 
-            <Button
+            <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800"
             >
               {loading ? (t('loggingIn') || 'Logging in...') : t('submit')}
-            </Button>
+            </button>
           </form>
 
           <div className="mt-6 text-center text-sm text-gray-400">
             <p>
               {t('noAccount') || "Don't have an account?"}{' '}
-              <a href="/register" className="text-blue-400 hover:text-blue-300">
+              <a href="/register" className="text-blue-400 hover:text-blue-300 transition-colors">
                 {t('signUp') || 'Sign up'}
               </a>
             </p>
