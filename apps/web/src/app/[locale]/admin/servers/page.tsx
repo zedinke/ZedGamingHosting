@@ -199,9 +199,16 @@ export default function AdminServersPage() {
                       <Button 
                         variant="outline" 
                         size="sm"
+                        onClick={() => router.push(`/${locale}/admin/servers/${server.uuid}`)}
+                      >
+                        Admin nézet
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
                         onClick={() => router.push(`/${locale}/dashboard/server/${server.uuid}`)}
                       >
-                        Megtekintés
+                        Felhasználói nézet
                       </Button>
                       <Button 
                         variant="outline" 
