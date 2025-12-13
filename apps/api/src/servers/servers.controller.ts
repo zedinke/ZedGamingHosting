@@ -106,4 +106,38 @@ export class ServersController {
   ) {
     return this.serversService.updateEnvironment(uuid, body.envVars, req.user.id);
   }
+
+  @Post(':uuid/backups')
+  async createBackup(
+    @Param('uuid') uuid: string,
+    @Body() dto: { name?: string },
+    @Request() req: any,
+  ) {
+    return this.serversService.createBackup(uuid, dto.name, req.user.id);
+  }
+
+  @Get(':uuid/backups')
+  async getBackups(@Param('uuid') uuid: string, @Request() req: any) {
+    return this.serversService.getBackups(uuid, req.user.id);
+  }
+
+  @Post(':uuid/backups/:backupId/restore')
+  async restoreBackup(
+    @Param('uuid') uuid: string,
+    @Param('backupId') backupId: string,
+    @Request() req: any,
+  ) {
+    await this.serversService.restoreBackup(uuid, backupId, req.user.id);
+    return { message: 'Backup restore initiated' };
+  }
+
+  @Delete(':uuid/backups/:backupId')
+  async deleteBackup(
+    @Param('uuid') uuid: string,
+    @Param('backupId') backupId: string,
+    @Request() req: any,
+  ) {
+    await this.serversService.deleteBackup(uuid, backupId, req.user.id);
+    return { message: 'Backup deleted' };
+  }
 }
