@@ -141,6 +141,18 @@ export default function AdminPage() {
                 Licenc kezelés és validáció
               </p>
             </Card>
+
+            <Card 
+              className="glass elevation-2 p-6 cursor-pointer hover:scale-105 transition-transform"
+              onClick={() => router.push(`/${locale}/admin/stats`)}
+            >
+              <h3 className="text-lg font-semibold mb-2" style={{ color: '#f8fafc' }}>
+                Statisztikák
+              </h3>
+              <p className="text-sm" style={{ color: '#cbd5e1' }}>
+                Platform statisztikák és jelentések
+              </p>
+            </Card>
           </div>
         </div>
       </main>

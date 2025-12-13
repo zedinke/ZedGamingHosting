@@ -47,6 +47,9 @@ export default function AdminUsersPage() {
     }
   }, [isAuthenticated, isHydrated, currentUser, router, locale]);
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [roleFilter, setRoleFilter] = useState<string>('all');
+
   // Note: This endpoint doesn't exist yet, but we'll prepare for it
   const { data: users, isLoading } = useQuery<User[]>({
     queryKey: ['admin-users'],
@@ -56,6 +59,14 @@ export default function AdminUsersPage() {
       return [];
     },
     enabled: isHydrated && isAuthenticated && !!accessToken,
+  });
+
+  const filteredUsers = users?.filter((user) => {
+    const matchesSearch = !searchQuery || 
+      user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.id.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesRole = roleFilter === 'all' || user.role === roleFilter;
+    return matchesSearch && matchesRole;
   });
 
   if (!isHydrated) {
@@ -86,7 +97,7 @@ export default function AdminUsersPage() {
       }}>
         <div className="container mx-auto px-4 py-8">
           <header className="mb-8">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-4">
               <div>
                 <h1 className="text-3xl font-bold mb-2" style={{ color: '#f8fafc' }}>Felhasználók</h1>
                 <p style={{ color: '#cbd5e1' }}>
@@ -100,21 +111,52 @@ export default function AdminUsersPage() {
                 Új felhasználó
               </Button>
             </div>
+            <div className="flex gap-4">
+              <input
+                type="text"
+                placeholder="Keresés email vagy ID alapján..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="flex-1 px-4 py-2 rounded-lg border"
+                style={{
+                  backgroundColor: 'var(--color-bg-card)',
+                  borderColor: 'var(--color-border)',
+                  color: 'var(--color-text-main)',
+                }}
+              />
+              <select
+                value={roleFilter}
+                onChange={(e) => setRoleFilter(e.target.value)}
+                className="px-4 py-2 rounded-lg border"
+                style={{
+                  backgroundColor: 'var(--color-bg-card)',
+                  borderColor: 'var(--color-border)',
+                  color: 'var(--color-text-main)',
+                }}
+              >
+                <option value="all">Minden szerepkör</option>
+                <option value="USER">USER</option>
+                <option value="SUPPORT">SUPPORT</option>
+                <option value="RESELLER_ADMIN">RESELLER_ADMIN</option>
+                <option value="ADMIN">ADMIN</option>
+                <option value="SUPERADMIN">SUPERADMIN</option>
+              </select>
+            </div>
           </header>
 
           {isLoading ? (
             <div className="text-center py-12">
               <p style={{ color: '#cbd5e1' }}>Betöltés...</p>
             </div>
-          ) : !users || users.length === 0 ? (
+          ) : !filteredUsers || filteredUsers.length === 0 ? (
             <Card className="glass elevation-2 p-12 text-center">
               <p style={{ color: '#cbd5e1' }}>
-                Nincs felhasználó
+                {searchQuery || roleFilter !== 'all' ? 'Nincs találat' : 'Nincs felhasználó'}
               </p>
             </Card>
           ) : (
             <div className="space-y-4">
-              {users.map((user) => (
+              {filteredUsers.map((user) => (
                 <Card key={user.id} className="glass elevation-2 p-6">
                   <div className="flex items-center justify-between">
                     <div>
