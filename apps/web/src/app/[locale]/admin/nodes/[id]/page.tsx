@@ -31,6 +31,7 @@ export default function EditNodePage() {
   const [isHydrated, setIsHydrated] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -106,6 +107,26 @@ export default function EditNodePage() {
     } catch (err: any) {
       setError(err.message || 'Node frissítése sikertelen');
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!deleteConfirm) {
+      setDeleteConfirm(true);
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      // TODO: Implement DELETE /api/nodes/:id endpoint
+      // await apiClient.delete(`/nodes/${nodeId}`);
+      router.push(`/${locale}/admin/nodes`);
+    } catch (err: any) {
+      setError(err.message || 'Node törlése sikertelen');
+      setLoading(false);
+      setDeleteConfirm(false);
     }
   };
 
@@ -324,6 +345,18 @@ export default function EditNodePage() {
                     disabled={loading}
                   >
                     Mégse
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleDelete}
+                    disabled={loading}
+                    style={{ 
+                      backgroundColor: deleteConfirm ? '#ef4444' : undefined,
+                      color: deleteConfirm ? '#fff' : undefined
+                    }}
+                  >
+                    {deleteConfirm ? 'Biztosan törlöd?' : 'Törlés'}
                   </Button>
                 </div>
               </form>

@@ -93,7 +93,10 @@ export default function AdminUsersPage() {
                   Felhasználók kezelése és jogosultságok beállítása
                 </p>
               </div>
-              <Button variant="primary">
+              <Button 
+                variant="primary"
+                onClick={() => router.push(`/${locale}/admin/users/create`)}
+              >
                 Új felhasználó
               </Button>
             </div>

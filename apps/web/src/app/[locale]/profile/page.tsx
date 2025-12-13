@@ -104,6 +104,22 @@ export default function ProfilePage() {
                       {userData?.id || 'N/A'}
                     </p>
                   </div>
+                  {userData?.balance !== undefined && (
+                    <div>
+                      <label className="text-sm" style={{ color: '#cbd5e1' }}>Egyenleg</label>
+                      <p className="text-base font-medium" style={{ color: '#f8fafc' }}>
+                        {userData.balance.toFixed(2)} €
+                      </p>
+                    </div>
+                  )}
+                  {userData?.createdAt && (
+                    <div>
+                      <label className="text-sm" style={{ color: '#cbd5e1' }}>Regisztráció dátuma</label>
+                      <p className="text-base font-medium" style={{ color: '#f8fafc' }}>
+                        {new Date(userData.createdAt).toLocaleDateString('hu-HU')}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </Card>
 
