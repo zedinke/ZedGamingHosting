@@ -123,11 +123,12 @@ export default function AdminUsersPage() {
                       </p>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => router.push(`/${locale}/admin/users/${user.id}`)}
+                      >
                         Szerkesztés
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        Törlés
                       </Button>
                     </div>
                   </div>
