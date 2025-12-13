@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useAuthStore } from '../../../stores/auth-store';
+import { Button } from '@zed-hosting/ui-kit';
+import { Input } from '@zed-hosting/ui-kit';
 
 export default function LoginPage() {
   const t = useTranslations('auth.login');
@@ -20,12 +22,10 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      // Login endpoint expects form-data (email, password) via LocalStrategy
       const formData = new URLSearchParams();
       formData.append('email', email);
       formData.append('password', password);
 
-      // Use relative URL for API in production, or env var for development
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || (typeof window !== 'undefined' ? '' : 'http://localhost:3000');
       const apiBase = apiUrl || (typeof window !== 'undefined' ? window.location.origin : '');
       
@@ -45,10 +45,8 @@ export default function LoginPage() {
 
       const data = await response.json();
       
-      // Store tokens and user info
       login(data.accessToken, data.refreshToken, data.user);
       
-      // Redirect to dashboard (with locale)
       const locale = window.location.pathname.split('/')[1] || 'hu';
       router.push(`/${locale}/dashboard`);
     } catch (err: any) {
@@ -60,136 +58,147 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12" style={{ backgroundColor: 'var(--color-bg-app)' }}>
-      <div style={{ width: '100%', maxWidth: '420px', margin: '0 auto' }}>
-        <div className="rounded-xl p-8 shadow-2xl" style={{ backgroundColor: 'var(--color-bg-card)', border: '1px solid var(--color-border)' }}>
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold mb-3" style={{ color: 'var(--color-text-main)' }}>ZedGamingHosting</h1>
-            <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>{t('subtitle') || 'Sign in to your account'}</p>
+      <div className="w-full max-w-md">
+        {/* Logo/Brand Section */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-dark)] mb-4 shadow-lg shadow-[var(--color-primary-glow)]">
+            <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
           </div>
+          <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--color-text-main)' }}>
+            ZedGamingHosting
+          </h1>
+          <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+            {t('subtitle') || 'Sign in to your account'}
+          </p>
+        </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+        {/* Login Card */}
+        <div 
+          className="rounded-2xl p-8 border shadow-xl"
+          style={{ 
+            backgroundColor: 'var(--color-bg-card)',
+            borderColor: 'var(--color-border)'
+          }}
+        >
+          <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="rounded-lg p-4 text-sm" style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', color: 'var(--color-danger)' }}>
+              <div 
+                className="rounded-lg p-4 text-sm border"
+                style={{ 
+                  backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                  borderColor: 'rgba(239, 68, 68, 0.3)',
+                  color: 'var(--color-danger-light)'
+                }}
+              >
                 {error}
               </div>
             )}
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium mb-1.5" style={{ color: 'var(--color-text-main)' }}>
+            <div className="space-y-2">
+              <label 
+                htmlFor="email" 
+                className="block text-sm font-medium"
+                style={{ color: 'var(--color-text-main)' }}
+              >
                 {t('email')}
               </label>
-              <input
+              <Input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full px-3 py-2.5 text-sm rounded-lg transition-all focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{
-                  backgroundColor: 'var(--color-bg-surface)',
-                  border: '1px solid var(--color-border)',
-                  color: 'var(--color-text-main)',
-                  fontSize: 'var(--text-sm)',
-                }}
                 placeholder={t('emailPlaceholder') || 'email@example.com'}
+                required
                 disabled={loading}
-                onFocus={(e) => {
-                  e.target.style.borderColor = 'var(--color-primary)';
-                  e.target.style.boxShadow = '0 0 0 3px var(--color-primary-glow)';
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = 'var(--color-border)';
-                  e.target.style.boxShadow = 'none';
-                }}
+                autoComplete="email"
               />
             </div>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium mb-1.5" style={{ color: 'var(--color-text-main)' }}>
+            <div className="space-y-2">
+              <label 
+                htmlFor="password" 
+                className="block text-sm font-medium"
+                style={{ color: 'var(--color-text-main)' }}
+              >
                 {t('password')}
               </label>
-              <input
+              <Input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full px-3 py-2.5 text-sm rounded-lg transition-all focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{
-                  backgroundColor: 'var(--color-bg-surface)',
-                  border: '1px solid var(--color-border)',
-                  color: 'var(--color-text-main)',
-                  fontSize: 'var(--text-sm)',
-                }}
                 placeholder={t('passwordPlaceholder') || '••••••••'}
+                required
                 disabled={loading}
-                onFocus={(e) => {
-                  e.target.style.borderColor = 'var(--color-primary)';
-                  e.target.style.boxShadow = '0 0 0 3px var(--color-primary-glow)';
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = 'var(--color-border)';
-                  e.target.style.boxShadow = 'none';
-                }}
+                autoComplete="current-password"
               />
             </div>
 
             <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center cursor-pointer">
+              <label className="flex items-center cursor-pointer group">
                 <input
                   type="checkbox"
-                  className="w-4 h-4 rounded focus:ring-2"
+                  className="w-4 h-4 rounded border transition-colors cursor-pointer"
                   style={{
                     accentColor: 'var(--color-primary)',
                     backgroundColor: 'var(--color-bg-surface)',
                     borderColor: 'var(--color-border)',
                   }}
                 />
-                <span className="ml-2" style={{ color: 'var(--color-text-muted)' }}>{t('rememberMe') || 'Remember me'}</span>
+                <span 
+                  className="ml-2 transition-colors group-hover:text-[var(--color-text-main)]"
+                  style={{ color: 'var(--color-text-muted)' }}
+                >
+                  {t('rememberMe') || 'Remember me'}
+                </span>
               </label>
-              <a href="/forgot-password" className="transition-colors hover:underline" style={{ color: 'var(--color-primary)' }}>
+              <a 
+                href="/forgot-password" 
+                className="transition-colors hover:underline font-medium"
+                style={{ color: 'var(--color-primary)' }}
+              >
                 {t('forgotPassword')}
               </a>
             </div>
 
-            <button
+            <Button
               type="submit"
+              variant="primary"
+              size="lg"
+              className="w-full"
               disabled={loading}
-              className="w-full py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2"
-              style={{
-                backgroundColor: loading ? 'var(--color-muted)' : 'var(--color-primary)',
-                color: 'var(--color-primary-foreground)',
-                boxShadow: loading ? 'none' : '0 4px 6px -1px rgba(0, 0, 0, 0.3)',
-                marginTop: '1rem',
-              }}
-              onMouseEnter={(e) => {
-                if (!loading) {
-                  e.currentTarget.style.backgroundColor = 'var(--color-primary-hover)';
-                  e.currentTarget.style.boxShadow = '0 6px 12px -2px rgba(0, 0, 0, 0.4)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!loading) {
-                  e.currentTarget.style.backgroundColor = 'var(--color-primary)';
-                  e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.3)';
-                }
-              }}
             >
               {loading ? (t('loggingIn') || 'Logging in...') : t('submit')}
-            </button>
+            </Button>
           </form>
 
-          <div className="mt-5 text-center text-sm" style={{ color: 'var(--color-text-muted)' }}>
+          <div 
+            className="mt-6 text-center text-sm"
+            style={{ color: 'var(--color-text-muted)' }}
+          >
             <p>
               {t('noAccount') || "Don't have an account?"}{' '}
-              <a href="/register" className="transition-colors hover:underline" style={{ color: 'var(--color-primary)' }}>
+              <a 
+                href="/register" 
+                className="font-medium transition-colors hover:underline"
+                style={{ color: 'var(--color-primary)' }}
+              >
                 {t('signUp') || 'Sign up'}
               </a>
             </p>
           </div>
         </div>
+
+        {/* Footer */}
+        <p 
+          className="mt-8 text-center text-xs"
+          style={{ color: 'var(--color-text-muted)' }}
+        >
+          © {new Date().getFullYear()} ZedGamingHosting. All rights reserved.
+        </p>
       </div>
     </div>
   );
 }
-

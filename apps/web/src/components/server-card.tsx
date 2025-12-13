@@ -1,9 +1,13 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Button, Card } from '@zed-hosting/ui-kit';
+import { Card, CardContent } from '@zed-hosting/ui-kit';
+import { Button } from '@zed-hosting/ui-kit';
+import { Badge } from '@zed-hosting/ui-kit';
 import { GameServer } from '../types/server';
 import { apiClient } from '../lib/api-client';
+import { useRouter } from 'next/navigation';
+import { cn } from '../lib/utils';
 
 interface ServerCardProps {
   server: GameServer;
@@ -11,24 +15,25 @@ interface ServerCardProps {
 
 export function ServerCard({ server }: ServerCardProps) {
   const t = useTranslations();
+  const router = useRouter();
+  const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'hu' : 'hu';
 
-  const getStatusColor = (status: string) => {
+  const getStatusVariant = (status: string): 'default' | 'success' | 'danger' | 'warning' | 'info' => {
     switch (status) {
       case 'RUNNING':
-        return 'bg-green-500';
+        return 'success';
       case 'STOPPED':
-        return 'bg-gray-500';
+        return 'default';
       case 'STARTING':
-        return 'bg-yellow-500 animate-pulse';
       case 'STOPPING':
-        return 'bg-orange-500 animate-pulse';
+        return 'warning';
       case 'INSTALLING':
       case 'UPDATING':
-        return 'bg-blue-500 animate-pulse';
+        return 'info';
       case 'CRASHED':
-        return 'bg-red-500';
+        return 'danger';
       default:
-        return 'bg-gray-500';
+        return 'default';
     }
   };
 
@@ -37,72 +42,107 @@ export function ServerCard({ server }: ServerCardProps) {
     return t(key);
   };
 
+  const handleAction = async (action: 'start' | 'stop' | 'restart') => {
+    try {
+      await apiClient.post(`/servers/${server.uuid}/${action}`);
+      window.location.reload();
+    } catch (error: any) {
+      alert(error.message || `Failed to ${action} server`);
+    }
+  };
+
   return (
-    <Card className="bg-gray-800/60 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all">
-      <div className="p-6">
+    <Card
+      className={cn(
+        'group transition-all duration-200 hover:shadow-lg cursor-pointer',
+        'border-[var(--color-border)] bg-[var(--color-bg-card)] hover:border-[var(--color-border-light)]'
+      )}
+      onClick={() => router.push(`/${locale}/dashboard/server/${server.uuid}`)}
+    >
+      <CardContent className="p-6">
         {/* Header */}
-        <div className="flex justify-between items-start mb-4">
-          <div>
-            <h3 className="text-xl font-semibold mb-1">{server.gameType}</h3>
-            <p className="text-sm text-gray-400">{server.gameType}</p>
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex-1 min-w-0">
+            <h3 
+              className="text-lg font-semibold mb-1 truncate"
+              style={{ color: 'var(--color-text-main)' }}
+            >
+              {server.name || server.gameType}
+            </h3>
+            <p 
+              className="text-sm truncate"
+              style={{ color: 'var(--color-text-muted)' }}
+            >
+              {server.gameType}
+            </p>
           </div>
-          <div className="flex items-center gap-2">
-            <div
-              className={`w-3 h-3 rounded-full ${getStatusColor(server.status)}`}
-            />
-            <span className="text-sm text-gray-300">
-              {getStatusText(server.status)}
-            </span>
-          </div>
+          <Badge variant={getStatusVariant(server.status)} size="sm">
+            {getStatusText(server.status)}
+          </Badge>
         </div>
 
-        {/* Resource Usage */}
+        {/* Resource Metrics */}
         {server.metrics && (
-          <div className="mb-4 space-y-2">
+          <div className="space-y-3 mb-4">
             {server.metrics.cpuUsage !== undefined && (
               <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-400">
+                <div className="flex justify-between text-xs mb-1.5">
+                  <span style={{ color: 'var(--color-text-muted)' }}>
                     {t('dashboard.server.resources.cpu')}
                   </span>
-                  <span className="text-gray-300">{server.metrics.cpuUsage.toFixed(1)}%</span>
+                  <span style={{ color: 'var(--color-text-secondary)' }}>
+                    {server.metrics.cpuUsage.toFixed(1)}%
+                  </span>
                 </div>
-                <div className="w-full bg-gray-700 rounded-full h-2">
+                <div 
+                  className="w-full rounded-full overflow-hidden"
+                  style={{ backgroundColor: 'var(--color-bg-surface)', height: '6px' }}
+                >
                   <div
-                    className="bg-blue-500 h-2 rounded-full transition-all"
-                    style={{ width: `${server.metrics.cpuUsage}%` }}
+                    className="h-full rounded-full transition-all duration-300 bg-gradient-to-r from-blue-500 to-blue-400"
+                    style={{ width: `${Math.min(server.metrics.cpuUsage, 100)}%` }}
                   />
                 </div>
               </div>
             )}
             {server.metrics.ramUsagePercent !== undefined && (
               <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-400">
+                <div className="flex justify-between text-xs mb-1.5">
+                  <span style={{ color: 'var(--color-text-muted)' }}>
                     {t('dashboard.server.resources.ram')}
                   </span>
-                  <span className="text-gray-300">{server.metrics.ramUsagePercent.toFixed(1)}%</span>
+                  <span style={{ color: 'var(--color-text-secondary)' }}>
+                    {server.metrics.ramUsagePercent.toFixed(1)}%
+                  </span>
                 </div>
-                <div className="w-full bg-gray-700 rounded-full h-2">
+                <div 
+                  className="w-full rounded-full overflow-hidden"
+                  style={{ backgroundColor: 'var(--color-bg-surface)', height: '6px' }}
+                >
                   <div
-                    className="bg-green-500 h-2 rounded-full transition-all"
-                    style={{ width: `${server.metrics.ramUsagePercent}%` }}
+                    className="h-full rounded-full transition-all duration-300 bg-gradient-to-r from-green-500 to-green-400"
+                    style={{ width: `${Math.min(server.metrics.ramUsagePercent, 100)}%` }}
                   />
                 </div>
               </div>
             )}
             {server.metrics.diskUsagePercent !== undefined && (
               <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-400">
+                <div className="flex justify-between text-xs mb-1.5">
+                  <span style={{ color: 'var(--color-text-muted)' }}>
                     {t('dashboard.server.resources.disk')}
                   </span>
-                  <span className="text-gray-300">{server.metrics.diskUsagePercent.toFixed(1)}%</span>
+                  <span style={{ color: 'var(--color-text-secondary)' }}>
+                    {server.metrics.diskUsagePercent.toFixed(1)}%
+                  </span>
                 </div>
-                <div className="w-full bg-gray-700 rounded-full h-2">
+                <div 
+                  className="w-full rounded-full overflow-hidden"
+                  style={{ backgroundColor: 'var(--color-bg-surface)', height: '6px' }}
+                >
                   <div
-                    className="bg-yellow-500 h-2 rounded-full transition-all"
-                    style={{ width: `${server.metrics.diskUsagePercent}%` }}
+                    className="h-full rounded-full transition-all duration-300 bg-gradient-to-r from-yellow-500 to-yellow-400"
+                    style={{ width: `${Math.min(server.metrics.diskUsagePercent, 100)}%` }}
                   />
                 </div>
               </div>
@@ -111,20 +151,15 @@ export function ServerCard({ server }: ServerCardProps) {
         )}
 
         {/* Actions */}
-        <div className="flex gap-2 mt-4">
+        <div className="flex gap-2 pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
           {server.status === 'STOPPED' && (
-            <Button 
-              size="sm" 
-              variant="primary" 
+            <Button
+              variant="primary"
+              size="sm"
               className="flex-1"
-              onClick={async () => {
-                try {
-                  await apiClient.post(`/servers/${server.uuid}/start`);
-                  window.location.reload();
-                } catch (error) {
-                  console.error('Failed to start server:', error);
-                  alert('Failed to start server');
-                }
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAction('start');
               }}
             >
               {t('dashboard.server.actions.start')}
@@ -132,50 +167,42 @@ export function ServerCard({ server }: ServerCardProps) {
           )}
           {server.status === 'RUNNING' && (
             <>
-              <Button 
-                size="sm" 
-                variant="secondary" 
+              <Button
+                variant="secondary"
+                size="sm"
                 className="flex-1"
-                onClick={async () => {
-                  try {
-                    await apiClient.post(`/servers/${server.uuid}/stop`);
-                    window.location.reload();
-                  } catch (error) {
-                    console.error('Failed to stop server:', error);
-                    alert('Failed to stop server');
-                  }
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleAction('stop');
                 }}
               >
                 {t('dashboard.server.actions.stop')}
               </Button>
-              <Button 
-                size="sm" 
-                variant="secondary" 
+              <Button
+                variant="secondary"
+                size="sm"
                 className="flex-1"
-                onClick={async () => {
-                  try {
-                    await apiClient.post(`/servers/${server.uuid}/restart`);
-                    window.location.reload();
-                  } catch (error) {
-                    console.error('Failed to restart server:', error);
-                    alert('Failed to restart server');
-                  }
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleAction('restart');
                 }}
               >
                 {t('dashboard.server.actions.restart')}
               </Button>
             </>
           )}
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => window.location.href = `/dashboard/server/${server.uuid}`}
-                >
-                  {t('dashboard.server.actions.view') || 'View'}
-                </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              router.push(`/${locale}/dashboard/server/${server.uuid}`);
+            }}
+          >
+            {t('dashboard.server.actions.view')}
+          </Button>
         </div>
-      </div>
+      </CardContent>
     </Card>
   );
 }
-
