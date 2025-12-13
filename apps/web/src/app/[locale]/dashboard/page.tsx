@@ -127,18 +127,24 @@ export default function DashboardPage() {
                 {servers?.filter((s) => s.status === 'RUNNING').length || 0}
               </p>
             </Card>
-            <Card className="glass elevation-2 p-6">
-              <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>
-                {t('dashboard.metrics.totalPlayers')}
-              </h3>
-              <p className="text-3xl font-bold" style={{ color: '#f8fafc' }}>0</p>
-            </Card>
-            <Card className="glass elevation-2 p-6">
-              <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>
-                {t('dashboard.metrics.uptime')}
-              </h3>
-              <p className="text-3xl font-bold" style={{ color: '#f8fafc' }}>99.9%</p>
-            </Card>
+                <Card className="glass elevation-2 p-6">
+                  <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>
+                    {t('dashboard.metrics.totalPlayers')}
+                  </h3>
+                  <p className="text-3xl font-bold" style={{ color: '#f8fafc' }}>
+                    {servers?.reduce((sum, s) => sum + (s.metrics?.players || 0), 0) || 0}
+                  </p>
+                </Card>
+                <Card className="glass elevation-2 p-6">
+                  <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>
+                    {t('dashboard.metrics.uptime')}
+                  </h3>
+                  <p className="text-3xl font-bold" style={{ color: '#f8fafc' }}>
+                    {servers && servers.length > 0
+                      ? ((servers.filter((s) => s.status === 'RUNNING').length / servers.length) * 100).toFixed(1)
+                      : '0'}%
+                  </p>
+                </Card>
           </div>
 
           {/* Servers Section */}
