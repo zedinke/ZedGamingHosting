@@ -149,7 +149,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                       <div className="px-3 py-2 text-xs font-semibold text-text-tertiary uppercase">
                         {group}
                       </div>
-                      {groupItems.map((item, index) => {
+                      {groupItems.map((item) => {
                         const globalIndex = filteredItems.indexOf(item);
                         const isSelected = globalIndex === selectedIndex;
                         return (
