@@ -66,6 +66,11 @@ export class TaskProcessor {
           // This is a placeholder - actual implementation would require access to UpdateQueueService
           console.log(`Update task queued for server ${updateData.serverUuid}`);
           break;
+        case 'DELETE':
+          // Stop container, remove container, and clean up volumes
+          const deleteData = task.data as { serverUuid: string; volumes?: Array<{ source: string; target: string }> };
+          await this.containerManager.deleteContainer(deleteData.serverUuid, deleteData.volumes || []);
+          break;
         default:
           console.warn(`Unknown task type: ${task.type}`);
       }

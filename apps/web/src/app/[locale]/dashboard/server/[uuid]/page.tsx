@@ -74,6 +74,15 @@ export default function ServerDetailPage() {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      await apiClient.delete(`/servers/${serverUuid}`);
+      router.push('/dashboard');
+    } catch (err: any) {
+      alert(err.message || 'Failed to delete server');
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'RUNNING':
