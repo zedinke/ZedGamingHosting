@@ -68,6 +68,14 @@ export default function AdminServersPage() {
     refetchInterval: 30000,
   });
 
+  const filteredServers = servers?.filter((server) => {
+    const matchesSearch = !searchQuery || 
+      server.gameType.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      server.uuid.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || server.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
+
   if (!isHydrated) {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', color: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -117,10 +125,45 @@ export default function AdminServersPage() {
       }}>
         <div className="container mx-auto px-4 py-8">
           <header className="mb-8">
-            <h1 className="text-3xl font-bold mb-2" style={{ color: '#f8fafc' }}>Összes Szerver</h1>
-            <p style={{ color: '#cbd5e1' }}>
-              Összes szerver áttekintése és kezelése
-            </p>
+            <div className="mb-4">
+              <h1 className="text-3xl font-bold mb-2" style={{ color: '#f8fafc' }}>Összes Szerver</h1>
+              <p style={{ color: '#cbd5e1' }}>
+                Összes szerver áttekintése és kezelése
+              </p>
+            </div>
+            <div className="flex gap-4">
+              <input
+                type="text"
+                placeholder="Keresés játék típus vagy UUID alapján..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="flex-1 px-4 py-2 rounded-lg border"
+                style={{
+                  backgroundColor: 'var(--color-bg-card)',
+                  borderColor: 'var(--color-border)',
+                  color: 'var(--color-text-main)',
+                }}
+              />
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="px-4 py-2 rounded-lg border"
+                style={{
+                  backgroundColor: 'var(--color-bg-card)',
+                  borderColor: 'var(--color-border)',
+                  color: 'var(--color-text-main)',
+                }}
+              >
+                <option value="all">Minden státusz</option>
+                <option value="RUNNING">RUNNING</option>
+                <option value="STOPPED">STOPPED</option>
+                <option value="STARTING">STARTING</option>
+                <option value="STOPPING">STOPPING</option>
+                <option value="CRASHED">CRASHED</option>
+                <option value="INSTALLING">INSTALLING</option>
+                <option value="UPDATING">UPDATING</option>
+              </select>
+            </div>
           </header>
 
           {/* Statistics */}
@@ -155,15 +198,15 @@ export default function AdminServersPage() {
             <div className="text-center py-12">
               <p style={{ color: '#cbd5e1' }}>Betöltés...</p>
             </div>
-          ) : !servers || servers.length === 0 ? (
+          ) : !filteredServers || filteredServers.length === 0 ? (
             <Card className="glass elevation-2 p-12 text-center">
               <p style={{ color: '#cbd5e1' }}>
-                Nincs szerver
+                {searchQuery || statusFilter !== 'all' ? 'Nincs találat' : 'Nincs szerver'}
               </p>
             </Card>
           ) : (
             <div className="space-y-4">
-              {servers.map((server) => (
+              {filteredServers.map((server) => (
                 <Card key={server.uuid} className="glass elevation-2 p-6">
                   <div className="flex items-center justify-between">
                     <div className="flex-1">

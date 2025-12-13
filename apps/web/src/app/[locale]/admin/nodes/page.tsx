@@ -50,6 +50,9 @@ export default function AdminNodesPage() {
     }
   }, [isAuthenticated, isHydrated, currentUser, router, locale]);
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+
   const { data: nodes, isLoading, refetch } = useQuery<Node[]>({
     queryKey: ['admin-nodes'],
     queryFn: async () => {
@@ -57,6 +60,15 @@ export default function AdminNodesPage() {
     },
     enabled: isHydrated && isAuthenticated && !!accessToken,
     refetchInterval: 30000, // Refetch every 30 seconds
+  });
+
+  const filteredNodes = nodes?.filter((node) => {
+    const matchesSearch = !searchQuery || 
+      node.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      node.ipAddress.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (node.publicFqdn && node.publicFqdn.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesStatus = statusFilter === 'all' || node.status === statusFilter;
+    return matchesSearch && matchesStatus;
   });
 
   if (!isHydrated) {
@@ -100,7 +112,7 @@ export default function AdminNodesPage() {
       }}>
         <div className="container mx-auto px-4 py-8">
           <header className="mb-8">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-4">
               <div>
                 <h1 className="text-3xl font-bold mb-2" style={{ color: '#f8fafc' }}>Node-ok</h1>
                 <p style={{ color: '#cbd5e1' }}>
@@ -111,21 +123,51 @@ export default function AdminNodesPage() {
                 Új node
               </Button>
             </div>
+            <div className="flex gap-4">
+              <input
+                type="text"
+                placeholder="Keresés név, IP vagy FQDN alapján..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="flex-1 px-4 py-2 rounded-lg border"
+                style={{
+                  backgroundColor: 'var(--color-bg-card)',
+                  borderColor: 'var(--color-border)',
+                  color: 'var(--color-text-main)',
+                }}
+              />
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="px-4 py-2 rounded-lg border"
+                style={{
+                  backgroundColor: 'var(--color-bg-card)',
+                  borderColor: 'var(--color-border)',
+                  color: 'var(--color-text-main)',
+                }}
+              >
+                <option value="all">Minden státusz</option>
+                <option value="ONLINE">ONLINE</option>
+                <option value="OFFLINE">OFFLINE</option>
+                <option value="MAINTENANCE">MAINTENANCE</option>
+                <option value="PROVISIONING">PROVISIONING</option>
+              </select>
+            </div>
           </header>
 
           {isLoading ? (
             <div className="text-center py-12">
               <p style={{ color: '#cbd5e1' }}>Betöltés...</p>
             </div>
-          ) : !nodes || nodes.length === 0 ? (
+          ) : !filteredNodes || filteredNodes.length === 0 ? (
             <Card className="glass elevation-2 p-12 text-center">
               <p style={{ color: '#cbd5e1' }}>
-                Nincs node
+                {searchQuery || statusFilter !== 'all' ? 'Nincs találat' : 'Nincs node'}
               </p>
             </Card>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {nodes.map((node) => (
+              {filteredNodes.map((node) => (
                 <Card key={node.id} className="glass elevation-2 p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
