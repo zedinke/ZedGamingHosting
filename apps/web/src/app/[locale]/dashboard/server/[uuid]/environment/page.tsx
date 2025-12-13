@@ -106,8 +106,7 @@ export default function ServerEnvironmentPage() {
         return acc;
       }, {} as Record<string, string>);
 
-      // TODO: Implement PUT /api/servers/:uuid/environment endpoint
-      // await apiClient.put(`/servers/${serverUuid}/environment`, { envVars: envVarsObj });
+      await apiClient.put(`/servers/${serverUuid}/environment`, { envVars: envVarsObj });
       
       setSuccess(true);
       queryClient.invalidateQueries({ queryKey: ['server', serverUuid] });

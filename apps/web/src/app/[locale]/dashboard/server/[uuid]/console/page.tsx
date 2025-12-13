@@ -35,33 +35,29 @@ export default function ServerConsolePage() {
   }, [accessToken]);
 
   // Fetch console logs
-  const { data: consoleLogs, isLoading } = useQuery<string[]>({
+  const { data: consoleData, isLoading } = useQuery<{ logs: string[] }>({
     queryKey: ['server-console', serverUuid],
     queryFn: async () => {
-      // TODO: Implement GET /api/servers/:uuid/console endpoint
-      // return await apiClient.get<string[]>(`/servers/${serverUuid}/console`);
-      return [];
+      return await apiClient.get<{ logs: string[] }>(`/servers/${serverUuid}/console?limit=100`);
     },
     enabled: !!accessToken && !!serverUuid,
     refetchInterval: 2000, // Refetch every 2 seconds
   });
 
   useEffect(() => {
-    if (consoleLogs) {
-      setLogs(consoleLogs);
+    if (consoleData?.logs) {
+      setLogs(consoleData.logs);
       // Auto-scroll to bottom
       if (consoleRef.current) {
         consoleRef.current.scrollTop = consoleRef.current.scrollHeight;
       }
     }
-  }, [consoleLogs]);
+  }, [consoleData]);
 
   // Send command mutation
   const sendCommandMutation = useMutation({
     mutationFn: async (cmd: string) => {
-      // TODO: Implement POST /api/servers/:uuid/console/command endpoint
-      // return await apiClient.post(`/servers/${serverUuid}/console/command`, { command: cmd });
-      return { success: true };
+      return await apiClient.post(`/servers/${serverUuid}/console/command`, { command: cmd });
     },
     onSuccess: () => {
       setCommand('');

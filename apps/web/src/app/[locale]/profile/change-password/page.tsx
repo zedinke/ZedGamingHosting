@@ -58,11 +58,10 @@ export default function ChangePasswordPage() {
     }
 
     try {
-      // TODO: Implement POST /api/auth/change-password endpoint
-      // await apiClient.post('/auth/change-password', {
-      //   currentPassword: formData.currentPassword,
-      //   newPassword: formData.newPassword,
-      // });
+      await apiClient.post('/auth/change-password', {
+        currentPassword: formData.currentPassword,
+        newPassword: formData.newPassword,
+      });
       
       setSuccess(true);
       setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' });

@@ -69,8 +69,7 @@ export default function ServerSettingsPage() {
     setSuccess(false);
 
     try {
-      // TODO: Implement PUT /api/servers/:uuid/settings endpoint
-      // await apiClient.put(`/servers/${serverUuid}/settings`, settings);
+      await apiClient.put(`/servers/${serverUuid}/settings`, settings);
       setSuccess(true);
       queryClient.invalidateQueries({ queryKey: ['server', serverUuid] });
       setTimeout(() => setSuccess(false), 3000);

@@ -64,13 +64,12 @@ export default function CreateUserPage() {
     }
 
     try {
-      // TODO: Implement POST /api/admin/users endpoint
-      // await apiClient.post('/admin/users', {
-      //   email: formData.email,
-      //   password: formData.password,
-      //   role: formData.role,
-      //   balance: formData.balance,
-      // });
+      await apiClient.post('/admin/users', {
+        email: formData.email,
+        password: formData.password,
+        role: formData.role,
+        balance: formData.balance,
+      });
       router.push(`/${locale}/admin/users`);
     } catch (err: any) {
       setError(err.message || 'Felhasználó létrehozása sikertelen');
