@@ -12,6 +12,8 @@ import { SkipLink } from '../../../components/accessibility';
 import { useRouter } from 'next/navigation';
 import { Navigation } from '../../../components/navigation';
 import { useToast } from '../../../hooks/use-toast';
+import { useNotificationContext } from '../../../context/notification-context';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export default function DashboardPage() {
   const t = useTranslations();
@@ -32,6 +34,91 @@ export default function DashboardPage() {
       apiClient.setAccessToken(accessToken);
     }
   }, [accessToken]);
+
+  // Server actions mutations
+  const startServerMutation = useMutation({
+    mutationFn: async (uuid: string) => {
+      return await apiClient.post(`/servers/${uuid}/start`, {});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['servers'] });
+      notifications.addNotification({
+        type: 'success',
+        title: 'Szerver indítva',
+        message: 'A szerver sikeresen elindult.',
+      });
+    },
+    onError: (err: any) => {
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: err.message || 'A szerver indítása sikertelen volt.',
+      });
+    },
+  });
+
+  const stopServerMutation = useMutation({
+    mutationFn: async (uuid: string) => {
+      return await apiClient.post(`/servers/${uuid}/stop`, {});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['servers'] });
+      notifications.addNotification({
+        type: 'success',
+        title: 'Szerver leállítva',
+        message: 'A szerver sikeresen leállítva.',
+      });
+    },
+    onError: (err: any) => {
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: err.message || 'A szerver leállítása sikertelen volt.',
+      });
+    },
+  });
+
+  const restartServerMutation = useMutation({
+    mutationFn: async (uuid: string) => {
+      return await apiClient.post(`/servers/${uuid}/restart`, {});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['servers'] });
+      notifications.addNotification({
+        type: 'success',
+        title: 'Szerver újraindítva',
+        message: 'A szerver sikeresen újraindult.',
+      });
+    },
+    onError: (err: any) => {
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: err.message || 'A szerver újraindítása sikertelen volt.',
+      });
+    },
+  });
+
+  const deleteServerMutation = useMutation({
+    mutationFn: async (uuid: string) => {
+      return await apiClient.delete(`/servers/${uuid}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['servers'] });
+      notifications.addNotification({
+        type: 'success',
+        title: 'Szerver törölve',
+        message: 'A szerver sikeresen törölve.',
+      });
+    },
+    onError: (err: any) => {
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: err.message || 'A szerver törlése sikertelen volt.',
+      });
+    },
+  });
 
   // Fetch servers
   const { data: servers, isLoading, refetch } = useQuery<GameServer[]>({
@@ -205,9 +292,24 @@ export default function DashboardPage() {
                         </Card>
                       ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                          {filteredServers?.map((server) => (
-                            <ServerCard key={server.uuid} server={server} />
-                          ))}
+                          {filteredServers?.map((server) => {
+                            const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'hu' : 'hu';
+                            return (
+                              <ServerCard
+                                key={server.uuid}
+                                server={server}
+                                locale={locale}
+                                onStart={(uuid) => startServerMutation.mutate(uuid)}
+                                onStop={(uuid) => stopServerMutation.mutate(uuid)}
+                                onRestart={(uuid) => restartServerMutation.mutate(uuid)}
+                                onDelete={(uuid) => {
+                                  if (window.confirm('Biztosan törölni szeretnéd ezt a szervert? Ez a művelet visszavonhatatlan.')) {
+                                    deleteServerMutation.mutate(uuid);
+                                  }
+                                }}
+                              />
+                            );
+                          })}
                         </div>
                       )}
                     </>
