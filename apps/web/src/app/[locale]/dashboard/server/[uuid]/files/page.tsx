@@ -23,8 +23,14 @@ export default function ServerFilesPage() {
   const params = useParams();
   const t = useTranslations();
   const { accessToken } = useAuthStore();
-  const serverUuid = params.uuid as string;
+  const serverUuid = params?.uuid as string;
   const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'hu' : 'hu';
+  
+  useEffect(() => {
+    if (!serverUuid) {
+      router.push(`/${locale}/dashboard`);
+    }
+  }, [serverUuid, router, locale]);
   const [currentPath, setCurrentPath] = useState('/');
 
   useEffect(() => {

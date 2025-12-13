@@ -16,8 +16,14 @@ export default function ServerConsolePage() {
   const t = useTranslations();
   const { accessToken } = useAuthStore();
   const queryClient = useQueryClient();
-  const serverUuid = params.uuid as string;
+  const serverUuid = params?.uuid as string;
   const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'hu' : 'hu';
+  
+  useEffect(() => {
+    if (!serverUuid) {
+      router.push(`/${locale}/dashboard`);
+    }
+  }, [serverUuid, router, locale]);
   const [command, setCommand] = useState('');
   const [logs, setLogs] = useState<string[]>([]);
   const consoleRef = useRef<HTMLDivElement>(null);
