@@ -184,6 +184,9 @@
       "saveFailed": "Mentés sikertelen",
       "deleteFailed": "Törlés sikertelen"
     }
+  },
+  "accessibility": {
+    "skipToContent": "Ugrás a fő tartalomhoz"
   }
 }
 

@@ -2,22 +2,31 @@
 
 import { useTranslations } from 'next-intl';
 import { useAuthStore } from '../../../stores/auth-store';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '../../../lib/api-client';
 import { ServerCard } from '../../../components/server-card';
 import { Button, Card } from '@zed-hosting/ui-kit';
 import { GameServer } from '../../../types/server';
 import { SkipLink } from '../../../components/accessibility';
+import { useRouter } from 'next/navigation';
 
 export default function DashboardPage() {
   const t = useTranslations();
-  const { isAuthenticated } = useAuthStore();
+  const router = useRouter();
+  const { isAuthenticated, accessToken } = useAuthStore();
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // Wait for hydration to avoid hydration mismatch
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   // Set API client token from auth store
-  const { accessToken } = useAuthStore();
   useEffect(() => {
-    apiClient.setAccessToken(accessToken);
+    if (accessToken) {
+      apiClient.setAccessToken(accessToken);
+    }
   }, [accessToken]);
 
   // Fetch servers
@@ -28,22 +37,31 @@ export default function DashboardPage() {
       // return apiClient.get<GameServer[]>('/servers');
       return [];
     },
-    enabled: isAuthenticated,
+    enabled: isAuthenticated && isHydrated,
   });
 
-  // Redirect to login if not authenticated
+  // Redirect to login if not authenticated (after hydration)
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (isHydrated && !isAuthenticated) {
       const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'hu' : 'hu';
-      window.location.href = `/${locale}/login`;
-      return;
+      router.push(`/${locale}/login`);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, isHydrated, router]);
 
+  // Show loading state during hydration
+  if (!isHydrated) {
+    return (
+      <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', color: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p>{t('dashboard.loading', { defaultValue: 'Loading...' })}</p>
+      </div>
+    );
+  }
+
+  // Show redirect message if not authenticated
   if (!isAuthenticated) {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', color: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p>Redirecting to login...</p>
+        <p>{t('dashboard.loading', { defaultValue: 'Redirecting to login...' })}</p>
       </div>
     );
   }

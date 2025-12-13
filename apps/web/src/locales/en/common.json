@@ -184,6 +184,9 @@
       "saveFailed": "Failed to save",
       "deleteFailed": "Failed to delete"
     }
+  },
+  "accessibility": {
+    "skipToContent": "Skip to main content"
   }
 }
 

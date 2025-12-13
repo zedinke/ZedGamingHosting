@@ -11,8 +11,9 @@ COPY . .
 
 # Build
 ENV NEXT_TELEMETRY_DISABLED 1
-# Disable lint during build to avoid failure on warnings
-RUN npx next build apps/web --no-lint
+# Build Next.js app - must be in the app directory
+WORKDIR /app/apps/web
+RUN npx next build --no-lint
 
 # Runner
 FROM node:20-slim AS runner
