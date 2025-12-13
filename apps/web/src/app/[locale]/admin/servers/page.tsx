@@ -203,6 +203,24 @@ export default function AdminServersPage() {
                       >
                         Megtekintés
                       </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={async () => {
+                          if (window.confirm('Biztosan törölni szeretnéd ezt a szervert?')) {
+                            try {
+                              await apiClient.delete(`/servers/${server.uuid}`);
+                              // Refetch servers
+                              window.location.reload();
+                            } catch (err: any) {
+                              alert(err.message || 'Szerver törlése sikertelen');
+                            }
+                          }
+                        }}
+                        style={{ color: '#ef4444' }}
+                      >
+                        Törlés
+                      </Button>
                     </div>
                   </div>
                 </Card>

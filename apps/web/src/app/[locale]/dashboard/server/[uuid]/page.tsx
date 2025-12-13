@@ -270,6 +270,22 @@ export default function ServerDetailPage() {
             >
               {t('dashboard.server.tabs.metrics') || 'Metrics'}
             </Link>
+            <Link
+              href={`/${locale}/dashboard/server/${serverUuid}/environment`}
+              className="px-4 py-3 text-sm font-medium border-b-2 transition-colors"
+              style={{
+                borderColor: 'transparent',
+                color: 'var(--color-text-muted)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = 'var(--color-text-main)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = 'var(--color-text-muted)';
+              }}
+            >
+              {t('dashboard.server.tabs.environment') || 'Environment'}
+            </Link>
           </nav>
         </div>
 
