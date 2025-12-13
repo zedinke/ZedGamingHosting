@@ -17,6 +17,7 @@ export default function CreateUserPage() {
   const [isHydrated, setIsHydrated] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const [formData, setFormData] = useState({
     email: '',
@@ -130,18 +131,28 @@ export default function CreateUserPage() {
                 <label className="block text-sm font-medium mb-2" style={{ color: '#f8fafc' }}>
                   Email *
                 </label>
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
-                  className="w-full px-4 py-2 rounded-lg border"
-                  style={{
-                    backgroundColor: 'var(--color-bg-card)',
-                    borderColor: 'var(--color-border)',
-                    color: 'var(--color-text-main)',
-                  }}
-                />
+              <input
+                type="email"
+                value={formData.email}
+                onChange={(e) => {
+                  setFormData({ ...formData, email: e.target.value });
+                  if (fieldErrors.email) {
+                    setFieldErrors({ ...fieldErrors, email: '' });
+                  }
+                }}
+                required
+                className={`w-full px-4 py-2 rounded-lg border ${
+                  fieldErrors.email ? 'border-red-500' : ''
+                }`}
+                style={{
+                  backgroundColor: 'var(--color-bg-card)',
+                  borderColor: fieldErrors.email ? '#ef4444' : 'var(--color-border)',
+                  color: 'var(--color-text-main)',
+                }}
+              />
+              {fieldErrors.email && (
+                <p className="text-sm mt-1 text-red-400">{fieldErrors.email}</p>
+              )}
               </div>
 
               <div>
@@ -213,19 +224,29 @@ export default function CreateUserPage() {
                 <label className="block text-sm font-medium mb-2" style={{ color: '#f8fafc' }}>
                   Kezdeti egyenleg (€)
                 </label>
-                <input
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  value={formData.balance}
-                  onChange={(e) => setFormData({ ...formData, balance: parseFloat(e.target.value) || 0 })}
-                  className="w-full px-4 py-2 rounded-lg border"
-                  style={{
-                    backgroundColor: 'var(--color-bg-card)',
-                    borderColor: 'var(--color-border)',
-                    color: 'var(--color-text-main)',
-                  }}
-                />
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={formData.balance}
+                onChange={(e) => {
+                  setFormData({ ...formData, balance: parseFloat(e.target.value) || 0 });
+                  if (fieldErrors.balance) {
+                    setFieldErrors({ ...fieldErrors, balance: '' });
+                  }
+                }}
+                className={`w-full px-4 py-2 rounded-lg border ${
+                  fieldErrors.balance ? 'border-red-500' : ''
+                }`}
+                style={{
+                  backgroundColor: 'var(--color-bg-card)',
+                  borderColor: fieldErrors.balance ? '#ef4444' : 'var(--color-border)',
+                  color: 'var(--color-text-main)',
+                }}
+              />
+              {fieldErrors.balance && (
+                <p className="text-sm mt-1 text-red-400">{fieldErrors.balance}</p>
+              )}
               </div>
 
               {error && (
