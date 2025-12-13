@@ -31,14 +31,36 @@ export default function DashboardPage() {
   }, [accessToken]);
 
   // Fetch servers
-  const { data: servers, isLoading } = useQuery<GameServer[]>({
+  const { data: servers, isLoading, refetch } = useQuery<GameServer[]>({
     queryKey: ['servers'],
     queryFn: async () => {
-      // TODO: Replace with actual API endpoint when implemented
-      // return apiClient.get<GameServer[]>('/servers');
-      return [];
+      try {
+        const response = await apiClient.get<any[]>('/servers');
+        // Transform API response to GameServer format
+        return response.map((server: any) => ({
+          id: server.id,
+          uuid: server.uuid,
+          gameType: server.gameType,
+          status: server.status,
+          nodeId: server.nodeId,
+          ownerId: server.ownerId,
+          startupPriority: server.startupPriority,
+          resources: server.resources || {},
+          envVars: server.envVars || {},
+          clusterId: server.clusterId,
+          createdAt: new Date(server.createdAt),
+          updatedAt: new Date(server.updatedAt),
+          node: server.node,
+          ports: server.networkAllocations || [],
+          metrics: server.metrics?.[0] || {},
+        }));
+      } catch (error) {
+        console.error('Failed to fetch servers:', error);
+        return [];
+      }
     },
-    enabled: isAuthenticated && isHydrated,
+    enabled: isAuthenticated && isHydrated && !!accessToken,
+    refetchInterval: 30000, // Refetch every 30 seconds
   });
 
   // Redirect to login if not authenticated (after hydration)
@@ -125,7 +147,12 @@ export default function DashboardPage() {
               <h2 className="text-2xl font-semibold" style={{ color: '#f8fafc' }}>
                 {t('dashboard.servers.title')}
               </h2>
-              <Button>{t('dashboard.servers.create')}</Button>
+              <Button onClick={() => {
+                const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'hu' : 'hu';
+                router.push(`/${locale}/dashboard/create`);
+              }}>
+                {t('dashboard.servers.create')}
+              </Button>
             </div>
 
             {isLoading ? (
@@ -137,7 +164,12 @@ export default function DashboardPage() {
                 <p className="mb-4" style={{ color: '#cbd5e1' }}>
                   {t('dashboard.servers.empty')}
                 </p>
-                <Button>{t('dashboard.servers.create')}</Button>
+                <Button onClick={() => {
+                  const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'hu' : 'hu';
+                  router.push(`/${locale}/dashboard/create`);
+                }}>
+                  {t('dashboard.servers.create')}
+                </Button>
               </Card>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

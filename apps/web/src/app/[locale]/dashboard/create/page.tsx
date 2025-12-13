@@ -7,6 +7,7 @@ import { apiClient } from '../../../../lib/api-client';
 import { useAuthStore } from '../../../../stores/auth-store';
 import { Button } from '@zed-hosting/ui-kit';
 import { ProtectedRoute } from '../../../../components/protected-route';
+import { Navigation } from '../../../../components/navigation';
 
 interface Node {
   id: string;
@@ -67,7 +68,8 @@ export default function CreateServerPage() {
         startupPriority: 10,
       });
 
-      router.push(`/dashboard/server/${response.uuid}`);
+      const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'hu' : 'hu';
+      router.push(`/${locale}/dashboard/server/${response.uuid}`);
     } catch (err: any) {
       setError(err.message || 'Failed to create server');
       setLoading(false);
@@ -76,7 +78,13 @@ export default function CreateServerPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-app)' }}>
+      <Navigation />
+      <div className="min-h-screen" style={{ 
+        backgroundColor: '#0a0a0a', 
+        background: 'radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.05) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%), #0a0a0a',
+        color: '#f8fafc',
+        minHeight: '100vh'
+      }}>
         <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
           <h1 className="text-3xl font-bold mb-8" style={{ color: 'var(--color-text-main)' }}>

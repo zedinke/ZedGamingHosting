@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useAuthStore } from '../stores/auth-store';
 import { Button } from '@zed-hosting/ui-kit';
@@ -10,6 +10,7 @@ import { cn } from '../lib/utils';
 
 export function Navigation() {
   const pathname = usePathname();
+  const router = useRouter();
   const { user, logout } = useAuthStore();
   const t = useTranslations();
 
@@ -71,7 +72,7 @@ export function Navigation() {
           {/* User Menu */}
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <div className="text-right">
+            <div className="text-right cursor-pointer" onClick={() => router.push(`/${locale}/profile`)}>
               <p className="text-sm font-medium" style={{ color: 'var(--color-text-main)' }}>
                 {user?.email}
               </p>
