@@ -15,7 +15,10 @@ export function Navigation() {
 
   const locale = pathname.split('/')[1] || 'hu';
 
-  const isAdmin = user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN';
+  // Check admin role - handle both uppercase and lowercase, and different formats
+  // Prisma schema uses: SUPERADMIN, RESELLER_ADMIN, USER, SUPPORT
+  const userRole = user?.role?.toUpperCase();
+  const isAdmin = userRole === 'ADMIN' || userRole === 'SUPER_ADMIN' || userRole === 'SUPERADMIN' || userRole === 'RESELLER_ADMIN';
   
   const navItems = [
     { href: `/${locale}/dashboard`, label: t('dashboard.title'), icon: '📊' },

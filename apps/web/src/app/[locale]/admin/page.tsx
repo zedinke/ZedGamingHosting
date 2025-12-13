@@ -26,8 +26,10 @@ export default function AdminPage() {
       return;
     }
 
-    // Check if user is admin
-    if (isHydrated && isAuthenticated && user?.role !== 'ADMIN' && user?.role !== 'SUPER_ADMIN') {
+    // Check if user is admin - handle both uppercase and lowercase, and different formats
+    // Prisma schema uses: SUPERADMIN, RESELLER_ADMIN, USER, SUPPORT
+    const userRole = user?.role?.toUpperCase();
+    if (isHydrated && isAuthenticated && userRole !== 'ADMIN' && userRole !== 'SUPER_ADMIN' && userRole !== 'SUPERADMIN' && userRole !== 'RESELLER_ADMIN') {
       router.push(`/${locale}/dashboard`);
       return;
     }
@@ -41,7 +43,8 @@ export default function AdminPage() {
     );
   }
 
-  if (!isAuthenticated || (user?.role !== 'ADMIN' && user?.role !== 'SUPER_ADMIN')) {
+  const userRole = user?.role?.toUpperCase();
+  if (!isAuthenticated || (userRole !== 'ADMIN' && userRole !== 'SUPER_ADMIN' && userRole !== 'SUPERADMIN' && userRole !== 'RESELLER_ADMIN')) {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', color: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <p>Redirecting...</p>
