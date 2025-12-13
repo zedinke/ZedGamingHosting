@@ -1,13 +1,14 @@
 'use client';
 
 import * as React from 'react';
-import { motion } from 'framer-motion';
+import { motion, HTMLMotionProps } from 'framer-motion';
 import { cn } from '../utils/cn';
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'children'> {
   variant?: 'primary' | 'secondary' | 'destructive' | 'outline' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
+  children?: React.ReactNode;
 }
 
 const buttonVariants = {
@@ -59,7 +60,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         variants={buttonVariants}
         whileHover={!isDisabled ? 'hover' : undefined}
         whileTap={!isDisabled ? 'tap' : undefined}
-        {...props}
+        {...(props as any)}
       >
         {isLoading ? (
           <>
