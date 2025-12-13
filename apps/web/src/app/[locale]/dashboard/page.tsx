@@ -153,6 +153,17 @@ export default function DashboardPage() {
     refetchInterval: 30000, // Refetch every 30 seconds
   });
 
+  // Filter servers based on search query
+  const filteredServers = servers?.filter((server) => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      server.gameType.toLowerCase().includes(query) ||
+      server.uuid.toLowerCase().includes(query) ||
+      (server.name && server.name.toLowerCase().includes(query))
+    );
+  });
+
   // Redirect to login if not authenticated (after hydration)
   useEffect(() => {
     if (isHydrated && !isAuthenticated) {
