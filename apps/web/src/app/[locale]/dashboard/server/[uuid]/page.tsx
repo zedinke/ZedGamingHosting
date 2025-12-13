@@ -13,6 +13,9 @@ import { ProtectedRoute } from '../../../../../components/protected-route';
 import { Navigation } from '../../../../../components/navigation';
 import { GameServer } from '../../../../../types/server';
 import Link from 'next/link';
+import { ServerCloneDialog } from '../../../../../components/server-clone-dialog';
+import { Copy } from 'lucide-react';
+import { useState } from 'react';
 
 export default function ServerDetailPage() {
   const params = useParams();
@@ -21,6 +24,7 @@ export default function ServerDetailPage() {
   const { accessToken } = useAuthStore();
   const serverUuid = params.uuid as string;
   const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'hu' : 'hu';
+  const [showCloneDialog, setShowCloneDialog] = useState(false);
 
   const { data: server, isLoading, error } = useQuery<GameServer>({
     queryKey: ['server', serverUuid],
@@ -89,6 +93,34 @@ export default function ServerDetailPage() {
       alert(err.message || 'Failed to delete server');
     }
   };
+
+  const handleClone = async (data: {
+    name?: string;
+    nodeId?: string;
+    resources?: { cpuLimit?: number; ramLimit?: number; diskLimit?: number };
+    envVars?: Record<string, string>;
+  }) => {
+    try {
+      await apiClient.post('/servers', {
+        gameType: server?.gameType,
+        name: data.name,
+        nodeId: data.nodeId,
+        resources: data.resources,
+        envVars: data.envVars,
+      });
+      router.push(`/${locale}/dashboard`);
+    } catch (err: any) {
+      throw new Error(err.message || 'Szerver klónozása sikertelen');
+    }
+  };
+
+  const { data: nodes } = useQuery({
+    queryKey: ['nodes'],
+    queryFn: async () => {
+      return await apiClient.get<any[]>('/nodes');
+    },
+    enabled: showCloneDialog,
+  });
 
   const getStatusVariant = (status: string): 'default' | 'success' | 'danger' | 'warning' | 'info' => {
     switch (status) {
@@ -448,6 +480,14 @@ export default function ServerDetailPage() {
                 </Button>
               </Link>
               <Button
+                variant="outline"
+                onClick={() => setShowCloneDialog(true)}
+                className="flex items-center gap-2"
+              >
+                <Copy className="h-4 w-4" />
+                Klónozás
+              </Button>
+              <Button
                 variant="destructive"
                 onClick={handleDelete}
               >
@@ -465,6 +505,15 @@ export default function ServerDetailPage() {
       <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-app)' }}>
         <Navigation />
         {renderContent()}
+        
+        {showCloneDialog && server && (
+          <ServerCloneDialog
+            server={server}
+            onClose={() => setShowCloneDialog(false)}
+            onClone={handleClone}
+            nodes={nodes?.map((n: any) => ({ id: n.id, name: n.name }))}
+          />
+        )}
       </div>
     </ProtectedRoute>
   );
