@@ -67,7 +67,7 @@ export function ServerCard({ server }: ServerCardProps) {
               className="text-lg font-semibold mb-1 truncate"
               style={{ color: 'var(--color-text-main)' }}
             >
-              {server.name || server.gameType}
+              {(server as any).name || server.gameType}
             </h3>
             <p 
               className="text-sm truncate"
