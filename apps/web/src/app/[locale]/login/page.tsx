@@ -40,8 +40,22 @@ export default function LoginPage() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ message: 'Login failed' }));
-        throw new Error(errorData.message || 'Invalid credentials');
+        let errorMessage = 'Invalid credentials';
+        try {
+          const errorData = await response.json();
+          // NestJS error format: { message: string | string[], statusCode: number, error: string }
+          if (Array.isArray(errorData.message)) {
+            errorMessage = errorData.message[0] || 'Invalid credentials';
+          } else if (errorData.message) {
+            errorMessage = errorData.message;
+          } else if (errorData.error) {
+            errorMessage = errorData.error;
+          }
+        } catch {
+          // If response is not JSON, use status text
+          errorMessage = response.statusText || 'Invalid credentials';
+        }
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();

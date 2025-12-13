@@ -7,6 +7,7 @@ import { AuthController } from './auth.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { DatabaseModule } from '../database/database.module';
+import { I18nModule } from '../i18n/i18n.module';
 
 /**
  * Auth Module - Authentication & Authorization
@@ -15,6 +16,7 @@ import { DatabaseModule } from '../database/database.module';
 @Module({
   imports: [
     DatabaseModule,
+    I18nModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
