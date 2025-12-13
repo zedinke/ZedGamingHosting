@@ -237,9 +237,10 @@ export class ServersService {
   /**
    * Update server
    */
-  async update(uuid: string, _updateServerDto: any, userId: string) {
+  async update(uuid: string, updateServerDto: UpdateServerDto, userId: string) {
     const server = await this.prisma.gameServer.findUnique({
       where: { uuid },
+      include: { node: true },
     });
 
     if (!server) {
@@ -250,8 +251,77 @@ export class ServersService {
       throw new ForbiddenException(this.i18n.translate('SERVER_ACCESS_DENIED'));
     }
 
-    // TODO: Implement update logic
-    throw new Error('Server update not yet implemented');
+    // Build update data
+    const updateData: any = {};
+
+    if (updateServerDto.gameType !== undefined) {
+      updateData.gameType = updateServerDto.gameType;
+    }
+
+    if (updateServerDto.name !== undefined) {
+      updateData.name = updateServerDto.name;
+    }
+
+    if (updateServerDto.resources !== undefined) {
+      // Merge with existing resources
+      const existingResources = (server.resources as any) || {};
+      updateData.resources = {
+        ...existingResources,
+        ...updateServerDto.resources,
+      };
+    }
+
+    if (updateServerDto.envVars !== undefined) {
+      updateData.envVars = updateServerDto.envVars;
+    }
+
+    if (updateServerDto.startupPriority !== undefined) {
+      updateData.startupPriority = updateServerDto.startupPriority;
+    }
+
+    // Update server in database
+    const updatedServer = await this.prisma.gameServer.update({
+      where: { uuid },
+      data: updateData,
+      include: {
+        node: {
+          select: {
+            id: true,
+            name: true,
+            ipAddress: true,
+            publicFqdn: true,
+          },
+        },
+        networkAllocations: {
+          select: {
+            port: true,
+            protocol: true,
+            type: true,
+          },
+        },
+        metrics: {
+          orderBy: {
+            timestamp: 'desc',
+          },
+          take: 1,
+        },
+      },
+    });
+
+    // If resources changed, create UPDATE task for daemon to restart container with new limits
+    if (updateServerDto.resources !== undefined) {
+      await this.tasksService.createTask(
+        server.nodeId,
+        'UPDATE',
+        {
+          serverUuid: uuid,
+          resources: updateData.resources,
+          restart: true, // Restart container to apply new resource limits
+        },
+      );
+    }
+
+    return updatedServer;
   }
 
   /**
