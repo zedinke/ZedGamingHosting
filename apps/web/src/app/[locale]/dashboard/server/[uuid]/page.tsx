@@ -11,7 +11,7 @@ import { Button } from '@zed-hosting/ui-kit';
 import { GameServer } from '../../../../../types/server';
 import Link from 'next/link';
 
-function ServerDetailContent() {
+export default function ServerDetailPage() {
   const params = useParams();
   const router = useRouter();
   const t = useTranslations();
@@ -106,40 +106,32 @@ function ServerDetailContent() {
     return t(key);
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-app)' }}>
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center py-12">
-            <p className="text-gray-400">{t('loading') || 'Loading...'}</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error || !server) {
-    return (
-      <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-app)' }}>
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center py-12">
-            <p className="text-red-400">
-              {error ? (error as Error).message : t('dashboard.server.notFound') || 'Server not found'}
-            </p>
-            <Button
-              variant="outline"
-              onClick={() => router.push('/dashboard')}
-              className="mt-4"
-            >
-              {t('backToDashboard') || 'Back to Dashboard'}
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
+    <ProtectedRoute>
+      <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-app)' }}>
+        {isLoading && (
+          <div className="container mx-auto px-4 py-8">
+            <div className="text-center py-12">
+              <p className="text-gray-400">{t('loading') || 'Loading...'}</p>
+            </div>
+          </div>
+        )}
+        {error || !server ? (
+          <div className="container mx-auto px-4 py-8">
+            <div className="text-center py-12">
+              <p className="text-red-400">
+                {error ? (error as Error).message : t('dashboard.server.notFound') || 'Server not found'}
+              </p>
+              <Button
+                variant="outline"
+                onClick={() => router.push('/dashboard')}
+                className="mt-4"
+              >
+                {t('backToDashboard') || 'Back to Dashboard'}
+              </Button>
+            </div>
+          </div>
+        ) : (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-app)' }}>
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
@@ -387,15 +379,10 @@ function ServerDetailContent() {
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-export default function ServerDetailPage() {
-  return (
-    <ProtectedRoute>
-      <ServerDetailContent />
+        )}
+      </div>
     </ProtectedRoute>
   );
 }
+
 
