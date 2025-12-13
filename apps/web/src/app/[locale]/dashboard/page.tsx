@@ -10,6 +10,7 @@ import { Button, Card } from '@zed-hosting/ui-kit';
 import { GameServer } from '../../../types/server';
 import { SkipLink } from '../../../components/accessibility';
 import { useRouter } from 'next/navigation';
+import { Navigation } from '../../../components/navigation';
 
 export default function DashboardPage() {
   const t = useTranslations();
@@ -71,6 +72,7 @@ export default function DashboardPage() {
       <SkipLink href="#main-content">
         {t('accessibility.skipToContent', { defaultValue: 'Skip to main content' })}
       </SkipLink>
+      <Navigation />
       <main id="main-content" className="min-h-screen" style={{ 
         backgroundColor: '#0a0a0a', 
         background: 'radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.05) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%), #0a0a0a',

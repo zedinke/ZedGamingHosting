@@ -62,8 +62,14 @@ export default function LoginPage() {
       
       login(data.accessToken, data.refreshToken, data.user);
       
-      const locale = window.location.pathname.split('/')[1] || 'hu';
+      // Get locale from current path or default to 'hu'
+      const currentPath = window.location.pathname;
+      const pathParts = currentPath.split('/').filter(Boolean);
+      const locale = pathParts[0] && ['hu', 'en'].includes(pathParts[0]) ? pathParts[0] : 'hu';
+      
+      // Redirect to dashboard with correct locale
       router.push(`/${locale}/dashboard`);
+      router.refresh(); // Force refresh to ensure navigation
     } catch (err: any) {
       setError(err.message || 'Login failed. Please try again.');
     } finally {

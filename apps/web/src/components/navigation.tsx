@@ -15,8 +15,11 @@ export function Navigation() {
 
   const locale = pathname.split('/')[1] || 'hu';
 
+  const isAdmin = user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN';
+  
   const navItems = [
     { href: `/${locale}/dashboard`, label: t('dashboard.title'), icon: '📊' },
+    ...(isAdmin ? [{ href: `/${locale}/admin`, label: 'Admin', icon: '⚙️' }] : []),
   ];
 
   return (
