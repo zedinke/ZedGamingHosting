@@ -227,8 +227,23 @@ export default function AdminServersPage() {
               </p>
             </Card>
           ) : (
-            <div className="space-y-4">
-              {filteredServers.map((server) => (
+            <>
+              <div className="mb-4">
+                <Checkbox
+                  checked={selectedServers.size === filteredServers.length && filteredServers.length > 0}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSelectedServers(new Set(filteredServers.map(s => s.uuid)));
+                    } else {
+                      setSelectedServers(new Set());
+                    }
+                  }}
+                  label="Összes kiválasztása"
+                />
+              </div>
+              
+              <div className="space-y-4">
+                {filteredServers.map((server) => (
                 <Card key={server.uuid} className="glass elevation-2 p-6">
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
