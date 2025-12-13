@@ -381,7 +381,8 @@ export default function ServerDetailPage() {
                 variant="outline"
                 className="w-full sm:w-auto"
                 onClick={() => {
-                  if (confirm(t('dashboard.server.deleteConfirm') || 'Are you sure you want to delete this server? This action cannot be undone.'))) {
+                  const confirmMessage = t('dashboard.server.deleteConfirm') || 'Are you sure you want to delete this server? This action cannot be undone.';
+                  if (typeof window !== 'undefined' && window.confirm(confirmMessage)) {
                     handleDelete();
                   }
                 }}
