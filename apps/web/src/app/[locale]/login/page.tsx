@@ -121,7 +121,7 @@ export default function LoginPage() {
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Error Message */}
                 {error && (
                   <motion.div
@@ -143,7 +143,7 @@ export default function LoginPage() {
                     {t('email')}
                   </label>
                   <div className="relative group">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 pointer-events-none transition-colors duration-200 group-focus-within:text-primary-500" />
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 pointer-events-none transition-colors duration-200 group-focus-within:text-primary-500 z-10" />
                     <Input
                       id="email"
                       type="email"
@@ -175,7 +175,7 @@ export default function LoginPage() {
                     </a>
                   </div>
                   <div className="relative group">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 pointer-events-none transition-colors duration-200 group-focus-within:text-primary-500" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 pointer-events-none transition-colors duration-200 group-focus-within:text-primary-500 z-10" />
                     <Input
                       id="password"
                       type="password"
@@ -190,21 +190,20 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                {/* Remember Me & Submit Button Container */}
-                <div className="space-y-5">
-                  <div className="flex items-center">
-                    <label className="flex items-center cursor-pointer group">
-                      <input
-                        type="checkbox"
-                        className="w-4 h-4 rounded border-slate-700 bg-slate-950 text-primary-500 focus:ring-primary-500/20 focus:ring-2 transition-all cursor-pointer"
-                      />
-                      <span className="ml-2.5 text-sm text-slate-400 transition-colors group-hover:text-slate-300">
-                        {t('rememberMe') || 'Remember me'}
-                      </span>
-                    </label>
-                  </div>
+                {/* Remember Me */}
+                <div className="flex items-center">
+                  <label className="flex items-center cursor-pointer group">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 rounded border-slate-700 bg-slate-950 text-primary-500 focus:ring-primary-500/20 focus:ring-2 transition-all cursor-pointer"
+                    />
+                    <span className="ml-2.5 text-sm text-slate-400 transition-colors group-hover:text-slate-300">
+                      {t('rememberMe') || 'Remember me'}
+                    </span>
+                  </label>
+                </div>
 
-                  {/* Submit Button */}
+                {/* Submit Button */}
                 <button
                   type="submit"
                   disabled={loading}
@@ -225,7 +224,6 @@ export default function LoginPage() {
                     </>
                   )}
                 </button>
-                </div>
               </form>
 
               {/* Divider */}
