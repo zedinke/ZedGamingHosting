@@ -166,13 +166,13 @@ export function ServerCard({ server }: ServerCardProps) {
               </Button>
             </>
           )}
-          <Button 
-            size="sm" 
-            variant="outline"
-            onClick={() => window.location.href = `/dashboard/server/${server.uuid}/console`}
-          >
-            {t('dashboard.server.actions.console')}
-          </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => window.location.href = `/dashboard/server/${server.uuid}`}
+                >
+                  {t('dashboard.server.actions.view') || 'View'}
+                </Button>
         </div>
       </div>
     </Card>

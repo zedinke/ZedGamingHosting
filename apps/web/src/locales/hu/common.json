@@ -42,6 +42,7 @@
         "stopped": "Offline",
         "starting": "Indítás",
         "stopping": "Leállítás",
+        "restarting": "Újraindítás",
         "installing": "Telepítés",
         "crashed": "Összeomlott",
         "updating": "Frissítés"
@@ -51,14 +52,49 @@
         "stop": "Leállítás",
         "restart": "Újraindítás",
         "console": "Konzol",
-        "settings": "Beállítások"
+        "settings": "Beállítások",
+        "view": "Megtekintés",
+        "files": "Fájlkezelő"
       },
       "resources": {
         "cpu": "CPU",
         "ram": "RAM",
-        "disk": "Lemez"
-      }
-    }
+        "disk": "Lemez",
+        "title": "Erőforrások",
+        "cores": "mag"
+      },
+      "info": {
+        "title": "Szerver Információ",
+        "gameType": "Játék típus",
+        "node": "Node"
+      },
+      "ports": {
+        "title": "Hálózati Portok",
+        "none": "Nincs allokált port"
+      },
+      "tabs": {
+        "overview": "Áttekintés",
+        "console": "Konzol",
+        "files": "Fájlok"
+      },
+      "quickActions": "Gyors műveletek",
+      "notFound": "Szerver nem található"
+    },
+    "createServer": {
+      "title": "Új szerver létrehozása",
+      "selectNode": "Node kiválasztása",
+      "gameType": "Játék típus",
+      "cpuLimit": "CPU (Magok)",
+      "ramLimit": "RAM (MB)",
+      "diskLimit": "Lemez (GB)",
+      "creating": "Létrehozás...",
+      "create": "Szerver létrehozása",
+      "cancel": "Mégse",
+      "noNodesAvailable": "Nincs elérhető node"
+    },
+    "loading": "Betöltés...",
+    "back": "Vissza",
+    "backToDashboard": "Vissza a Dashboard-ra"
   },
   "auth": {
     "login": {

@@ -42,6 +42,7 @@
         "stopped": "Offline",
         "starting": "Starting",
         "stopping": "Stopping",
+        "restarting": "Restarting",
         "installing": "Installing",
         "crashed": "Crashed",
         "updating": "Updating"
@@ -51,14 +52,49 @@
         "stop": "Stop",
         "restart": "Restart",
         "console": "Console",
-        "settings": "Settings"
+        "settings": "Settings",
+        "view": "View",
+        "files": "File Manager"
       },
       "resources": {
         "cpu": "CPU",
         "ram": "RAM",
-        "disk": "Disk"
-      }
-    }
+        "disk": "Disk",
+        "title": "Resources",
+        "cores": "cores"
+      },
+      "info": {
+        "title": "Server Information",
+        "gameType": "Game Type",
+        "node": "Node"
+      },
+      "ports": {
+        "title": "Network Ports",
+        "none": "No ports allocated"
+      },
+      "tabs": {
+        "overview": "Overview",
+        "console": "Console",
+        "files": "Files"
+      },
+      "quickActions": "Quick Actions",
+      "notFound": "Server not found"
+    },
+    "createServer": {
+      "title": "Create New Server",
+      "selectNode": "Select Node",
+      "gameType": "Game Type",
+      "cpuLimit": "CPU (Cores)",
+      "ramLimit": "RAM (MB)",
+      "diskLimit": "Disk (GB)",
+      "creating": "Creating...",
+      "create": "Create Server",
+      "cancel": "Cancel",
+      "noNodesAvailable": "No nodes available"
+    },
+    "loading": "Loading...",
+    "back": "Back",
+    "backToDashboard": "Back to Dashboard"
   },
   "auth": {
     "login": {
