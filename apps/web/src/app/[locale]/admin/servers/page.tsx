@@ -39,13 +39,10 @@ export default function AdminServersPage() {
     }
   }, [isAuthenticated, isHydrated, currentUser, router, locale]);
 
-  // Note: This would need an admin endpoint that returns all servers
   const { data: servers, isLoading } = useQuery<GameServer[]>({
     queryKey: ['admin-servers'],
     queryFn: async () => {
-      // TODO: Implement GET /api/admin/servers endpoint
-      // For now, we'll use the regular endpoint (which only returns user's servers)
-      const response = await apiClient.get<any[]>('/servers');
+      const response = await apiClient.get<any[]>('/admin/servers');
       return response.map((server: any) => ({
         id: server.id,
         uuid: server.uuid,

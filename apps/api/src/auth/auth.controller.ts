@@ -81,4 +81,18 @@ export class AuthController {
       body.password || 'Admin123!',
     );
   }
+
+  /**
+   * Change password
+   * POST /api/auth/change-password
+   */
+  @Post('change-password')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  async changePassword(
+    @Request() req: any,
+    @Body() body: { currentPassword: string; newPassword: string },
+  ) {
+    return this.authService.changePassword(req.user.id, body.currentPassword, body.newPassword);
+  }
 }

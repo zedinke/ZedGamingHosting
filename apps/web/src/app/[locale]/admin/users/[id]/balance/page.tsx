@@ -62,9 +62,7 @@ export default function UserBalancePage() {
     queryKey: ['admin-user', userId],
     queryFn: async () => {
       if (!userId) return null as any;
-      // TODO: Implement GET /api/admin/users/:id endpoint
-      // return await apiClient.get<User>(`/admin/users/${userId}`);
-      return null as any;
+      return await apiClient.get<User>(`/admin/users/${userId}`);
     },
     enabled: isHydrated && isAuthenticated && !!accessToken && !!userId,
   });
@@ -82,12 +80,11 @@ export default function UserBalancePage() {
     }
 
     try {
-      // TODO: Implement POST /api/admin/users/:id/balance endpoint
-      // await apiClient.post(`/admin/users/${userId}/balance`, {
-      //   amount: formData.amount,
-      //   type: formData.type,
-      //   reason: formData.reason,
-      // });
+      await apiClient.post(`/admin/users/${userId}/balance`, {
+        amount: formData.amount,
+        type: formData.type,
+        reason: formData.reason,
+      });
       
       setSuccess(true);
       setFormData({ amount: 0, type: 'add', reason: '' });

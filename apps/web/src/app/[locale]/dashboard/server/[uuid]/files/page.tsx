@@ -43,9 +43,13 @@ export default function ServerFilesPage() {
   const { data: files, isLoading } = useQuery<FileItem[]>({
     queryKey: ['server-files', serverUuid, currentPath],
     queryFn: async () => {
-      // TODO: Implement GET /api/servers/:uuid/files endpoint
-      // return await apiClient.get<FileItem[]>(`/servers/${serverUuid}/files?path=${encodeURIComponent(currentPath)}`);
-      return [];
+      const response = await apiClient.get<any[]>(`/servers/${serverUuid}/files?path=${encodeURIComponent(currentPath)}`);
+      return response.map((item: any) => ({
+        name: item.name,
+        type: item.type,
+        size: item.size,
+        modified: item.modified,
+      }));
     },
     enabled: !!accessToken && !!serverUuid,
   });

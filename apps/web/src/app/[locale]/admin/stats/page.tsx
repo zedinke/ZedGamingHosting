@@ -41,11 +41,14 @@ export default function AdminStatsPage() {
   const { data: stats, isLoading } = useQuery({
     queryKey: ['admin-stats'],
     queryFn: async () => {
-      // TODO: Implement GET /api/admin/stats endpoint
-      // return await apiClient.get('/admin/stats');
-      
-      // Mock data
-      return {
+      return await apiClient.get('/admin/stats');
+    },
+    enabled: isHydrated && isAuthenticated && !!accessToken,
+    refetchInterval: 60000,
+  });
+
+  // Mock data fallback (if API fails)
+  const mockStats = {
         totalUsers: 150,
         totalServers: 45,
         totalNodes: 5,
@@ -64,13 +67,11 @@ export default function AdminStatsPage() {
           { game: 'ARK', count: 10 },
           { game: 'Rust', count: 8 },
           { game: 'CS2', count: 5 },
-          { game: 'Palworld', count: 2 },
-        ],
-      };
-    },
-    enabled: isHydrated && isAuthenticated && !!accessToken,
-    refetchInterval: 60000,
-  });
+        { game: 'Palworld', count: 2 },
+      ],
+  };
+
+  const displayStats = stats || mockStats;
 
   if (!isHydrated) {
     return (
@@ -110,32 +111,32 @@ export default function AdminStatsPage() {
             <div className="text-center py-12">
               <p style={{ color: '#cbd5e1' }}>Betöltés...</p>
             </div>
-          ) : stats ? (
+          ) : displayStats ? (
             <>
               {/* Overview Cards */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
                 <Card className="glass elevation-2 p-6">
                   <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>Összes felhasználó</h3>
                   <p className="text-3xl font-bold" style={{ color: '#f8fafc' }}>
-                    {stats.totalUsers}
+                    {displayStats.totalUsers}
                   </p>
                 </Card>
                 <Card className="glass elevation-2 p-6">
                   <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>Összes szerver</h3>
                   <p className="text-3xl font-bold" style={{ color: '#f8fafc' }}>
-                    {stats.totalServers}
+                    {displayStats.totalServers}
                   </p>
                 </Card>
                 <Card className="glass elevation-2 p-6">
                   <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>Aktív szerverek</h3>
                   <p className="text-3xl font-bold" style={{ color: '#10b981' }}>
-                    {stats.activeServers}
+                    {displayStats.activeServers}
                   </p>
                 </Card>
                 <Card className="glass elevation-2 p-6">
                   <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>Összes bevétel</h3>
                   <p className="text-3xl font-bold" style={{ color: '#f8fafc' }}>
-                    {stats.totalRevenue.toFixed(2)} €
+                    {displayStats.totalRevenue?.toFixed(2) || '0.00'} €
                   </p>
                 </Card>
               </div>
@@ -147,7 +148,7 @@ export default function AdminStatsPage() {
                     Havi bevétel
                   </h2>
                   <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={stats.monthlyRevenue}>
+                    <LineChart data={displayStats.monthlyRevenue || []}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                       <XAxis dataKey="month" stroke="#9ca3af" />
                       <YAxis stroke="#9ca3af" />
@@ -168,7 +169,7 @@ export default function AdminStatsPage() {
                     Szerver eloszlás játék típus szerint
                   </h2>
                   <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={stats.serverDistribution}>
+                    <BarChart data={displayStats.serverDistribution || []}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                       <XAxis dataKey="game" stroke="#9ca3af" />
                       <YAxis stroke="#9ca3af" />

@@ -1,7 +1,10 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
 import { NodesService } from './nodes.service';
 import { CreateNodeDto } from '@zed-hosting/shared-types';
 import { Public } from '../auth/decorators/public.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 /**
  * Nodes Controller - handles node management endpoints
@@ -67,6 +70,28 @@ export class NodesController {
   async updateHeartbeat(@Param('id') id: string) {
     await this.nodesService.updateHeartbeat(id);
     return { success: true };
+  }
+
+  /**
+   * Updates a node (admin only)
+   * PUT /api/nodes/:id
+   */
+  @Put(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN', 'SUPERADMIN', 'SUPER_ADMIN', 'RESELLER_ADMIN')
+  async updateNode(@Param('id') id: string, @Body() dto: Partial<CreateNodeDto>) {
+    return await this.nodesService.updateNode(id, dto);
+  }
+
+  /**
+   * Deletes a node (admin only)
+   * DELETE /api/nodes/:id
+   */
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN', 'SUPERADMIN', 'SUPER_ADMIN', 'RESELLER_ADMIN')
+  async deleteNode(@Param('id') id: string) {
+    return await this.nodesService.deleteNode(id);
   }
 }
 

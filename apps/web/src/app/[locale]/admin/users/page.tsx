@@ -50,13 +50,10 @@ export default function AdminUsersPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState<string>('all');
 
-  // Note: This endpoint doesn't exist yet, but we'll prepare for it
   const { data: users, isLoading } = useQuery<User[]>({
     queryKey: ['admin-users'],
     queryFn: async () => {
-      // TODO: Implement GET /api/admin/users endpoint
-      // return apiClient.get<User[]>('/admin/users');
-      return [];
+      return await apiClient.get<User[]>('/admin/users');
     },
     enabled: isHydrated && isAuthenticated && !!accessToken,
   });

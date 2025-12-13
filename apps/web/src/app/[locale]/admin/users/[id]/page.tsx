@@ -53,9 +53,7 @@ export default function EditUserPage() {
     queryKey: ['admin-user', userId],
     queryFn: async () => {
       if (!userId) return null as any;
-      // TODO: Implement GET /api/admin/users/:id endpoint
-      // return await apiClient.get<User>(`/admin/users/${userId}`);
-      return null as any;
+      return await apiClient.get<User>(`/admin/users/${userId}`);
     },
     enabled: isHydrated && isAuthenticated && !!accessToken && !!userId,
   });
@@ -76,8 +74,7 @@ export default function EditUserPage() {
     setError(null);
 
     try {
-      // TODO: Implement PUT /api/admin/users/:id endpoint
-      // await apiClient.put(`/admin/users/${userId}`, formData);
+      await apiClient.put(`/admin/users/${userId}`, formData);
       router.push(`/${locale}/admin/users`);
     } catch (err: any) {
       setError(err.message || 'Felhasználó frissítése sikertelen');
@@ -95,8 +92,7 @@ export default function EditUserPage() {
     setError(null);
 
     try {
-      // TODO: Implement DELETE /api/admin/users/:id endpoint
-      // await apiClient.delete(`/admin/users/${userId}`);
+      await apiClient.delete(`/admin/users/${userId}`);
       router.push(`/${locale}/admin/users`);
     } catch (err: any) {
       setError(err.message || 'Felhasználó törlése sikertelen');

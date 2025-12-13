@@ -101,8 +101,7 @@ export default function EditNodePage() {
     setError(null);
 
     try {
-      // TODO: Implement PUT /api/nodes/:id endpoint
-      // await apiClient.put(`/nodes/${nodeId}`, formData);
+      await apiClient.put(`/nodes/${nodeId}`, formData);
       router.push(`/${locale}/admin/nodes`);
     } catch (err: any) {
       setError(err.message || 'Node frissítése sikertelen');
@@ -120,8 +119,7 @@ export default function EditNodePage() {
     setError(null);
 
     try {
-      // TODO: Implement DELETE /api/nodes/:id endpoint
-      // await apiClient.delete(`/nodes/${nodeId}`);
+      await apiClient.delete(`/nodes/${nodeId}`);
       router.push(`/${locale}/admin/nodes`);
     } catch (err: any) {
       setError(err.message || 'Node törlése sikertelen');

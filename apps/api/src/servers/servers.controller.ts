@@ -80,4 +80,30 @@ export class ServersController {
   restart(@Param('uuid') uuid: string, @Request() req: any) {
     return this.serversService.restart(uuid, req.user.id);
   }
+
+  /**
+   * Update server settings
+   * PUT /api/servers/:uuid/settings
+   */
+  @Put(':uuid/settings')
+  updateSettings(
+    @Param('uuid') uuid: string,
+    @Body() settings: { cpuLimit?: number; ramLimit?: number; diskLimit?: number; startupPriority?: number },
+    @Request() req: any,
+  ) {
+    return this.serversService.updateSettings(uuid, settings, req.user.id);
+  }
+
+  /**
+   * Update server environment variables
+   * PUT /api/servers/:uuid/environment
+   */
+  @Put(':uuid/environment')
+  updateEnvironment(
+    @Param('uuid') uuid: string,
+    @Body() body: { envVars: Record<string, string> },
+    @Request() req: any,
+  ) {
+    return this.serversService.updateEnvironment(uuid, body.envVars, req.user.id);
+  }
 }

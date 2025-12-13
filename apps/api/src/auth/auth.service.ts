@@ -210,5 +210,45 @@ export class AuthService {
       throw error;
     }
   }
+
+  /**
+   * Change user password
+   */
+  async changePassword(userId: string, currentPassword: string, newPassword: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException(this.i18n.translate('AUTH_USER_NOT_FOUND'));
+    }
+
+    // Verify current password
+    const isPasswordValid = await bcrypt.compare(currentPassword, user.passwordHash);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException(this.i18n.translate('AUTH_INVALID_PASSWORD'));
+    }
+
+    // Validate new password
+    if (newPassword.length < 8) {
+      throw new UnauthorizedException('Password must be at least 8 characters long');
+    }
+
+    // Hash new password
+    const hashedPassword = await this.hashPassword(newPassword);
+
+    // Update password
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { passwordHash: hashedPassword },
+    });
+
+    this.logger.log(`User ${user.email} changed password`);
+
+    return {
+      success: true,
+      message: this.i18n.translate('PASSWORD_CHANGED_SUCCESSFULLY'),
+    };
+  }
 }
 

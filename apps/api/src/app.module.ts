@@ -15,6 +15,8 @@ import { SubdomainsModule } from './subdomains/subdomains.module';
 import { ServersModule } from './servers/servers.module';
 import { TasksModule } from './tasks/tasks.module';
 import { FilesModule } from './files/files.module';
+import { AdminModule } from './admin/admin.module';
+import { ConsoleModule } from './console/console.module';
 import { MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { TenantMiddleware } from './common/middleware/tenant.middleware';
 import { APP_GUARD } from '@nestjs/core';
@@ -50,6 +52,8 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     NetworkingModule,
     NodesModule,
     ProvisioningModule,
+    AdminModule,
+    ConsoleModule,
   ],
   providers: [
     {

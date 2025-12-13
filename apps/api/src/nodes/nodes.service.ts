@@ -136,10 +136,81 @@ export class NodesService {
     return await this.prisma.node.findUnique({
       where: { id },
       include: {
-        servers: true,
+        gameServers: {
+          select: {
+            id: true,
+            uuid: true,
+            gameType: true,
+            status: true,
+          },
+        },
         networkAllocations: true,
       },
     });
+  }
+
+  /**
+   * Updates a node
+   */
+  async updateNode(id: string, data: Partial<CreateNodeDto>) {
+    const node = await this.prisma.node.findUnique({
+      where: { id },
+    });
+
+    if (!node) {
+      throw new ForbiddenException('Node not found');
+    }
+
+    const updated = await this.prisma.node.update({
+      where: { id },
+      data: {
+        ...(data.name && { name: data.name }),
+        ...(data.ipAddress && { ipAddress: data.ipAddress }),
+        ...(data.publicFqdn !== undefined && { publicFqdn: data.publicFqdn }),
+        ...(data.totalRam && { totalRam: data.totalRam }),
+        ...(data.totalCpu && { totalCpu: data.totalCpu }),
+        ...(data.diskType && { diskType: data.diskType }),
+        ...(data.isClusterStorage !== undefined && { isClusterStorage: data.isClusterStorage }),
+        ...(data.maxConcurrentUpdates && { maxConcurrentUpdates: data.maxConcurrentUpdates }),
+      },
+    });
+
+    this.logger.log(`Updated node: ${updated.id} (${updated.name})`);
+
+    return updated;
+  }
+
+  /**
+   * Deletes a node
+   */
+  async deleteNode(id: string) {
+    const node = await this.prisma.node.findUnique({
+      where: { id },
+      include: {
+        gameServers: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    if (!node) {
+      throw new ForbiddenException('Node not found');
+    }
+
+    // Check if node has servers
+    if (node.gameServers.length > 0) {
+      throw new ForbiddenException('Cannot delete node with active servers');
+    }
+
+    await this.prisma.node.delete({
+      where: { id },
+    });
+
+    this.logger.log(`Deleted node: ${id}`);
+
+    return { success: true };
   }
 }
 
