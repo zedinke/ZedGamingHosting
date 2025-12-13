@@ -261,7 +261,7 @@ export default function ServerDetailPage() {
                   <div className="flex justify-between text-sm mb-1">
                     <span style={{ color: 'var(--color-text-muted)' }}>CPU:</span>
                     <span style={{ color: 'var(--color-text-main)' }}>
-                      {server.resources.cpuLimit} {t('dashboard.server.resources.cores') || 'cores'}
+                      {server.resources?.cpuLimit || 0} {t('dashboard.server.resources.cores') || 'cores'}
                     </span>
                   </div>
                   {server.metrics?.cpuUsage !== undefined && (
@@ -277,7 +277,7 @@ export default function ServerDetailPage() {
                   <div className="flex justify-between text-sm mb-1">
                     <span style={{ color: 'var(--color-text-muted)' }}>RAM:</span>
                     <span style={{ color: 'var(--color-text-main)' }}>
-                      {server.resources.ramLimit} MB
+                      {server.resources?.ramLimit || 0} MB
                     </span>
                   </div>
                   {server.metrics?.ramUsage !== undefined && (
@@ -293,7 +293,7 @@ export default function ServerDetailPage() {
                   <div className="flex justify-between text-sm mb-1">
                     <span style={{ color: 'var(--color-text-muted)' }}>Disk:</span>
                     <span style={{ color: 'var(--color-text-main)' }}>
-                      {server.resources.diskLimit} GB
+                      {server.resources?.diskLimit || 0} GB
                     </span>
                   </div>
                   {server.metrics?.diskUsage !== undefined && (
