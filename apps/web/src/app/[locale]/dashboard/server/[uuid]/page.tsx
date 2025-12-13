@@ -145,9 +145,8 @@ export default function ServerDetailPage() {
     );
   }
 
-  return (
-    <ProtectedRoute>
-      <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-app)' }}>
+  return React.createElement(ProtectedRoute, null,
+    React.createElement('div', { className: 'min-h-screen', style: { backgroundColor: 'var(--color-bg-app)' } },
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
           <div className="mb-8">
@@ -391,7 +390,7 @@ export default function ServerDetailPage() {
           </div>
         </div>
       </div>
-    </ProtectedRoute>
+    )
   );
 }
 
