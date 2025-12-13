@@ -16,6 +16,7 @@ import Link from 'next/link';
 import { ServerCloneDialog } from '../../../../../components/server-clone-dialog';
 import { Copy } from 'lucide-react';
 import { useState } from 'react';
+import { useNotificationContext } from '../../../../../context/notification-context';
 
 export default function ServerDetailPage() {
   const params = useParams();
@@ -25,6 +26,7 @@ export default function ServerDetailPage() {
   const serverUuid = params.uuid as string;
   const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'hu' : 'hu';
   const [showCloneDialog, setShowCloneDialog] = useState(false);
+  const notifications = useNotificationContext();
 
   const { data: server, isLoading, error } = useQuery<GameServer>({
     queryKey: ['server', serverUuid],
@@ -57,27 +59,54 @@ export default function ServerDetailPage() {
   const handleStart = async () => {
     try {
       await apiClient.post(`/servers/${serverUuid}/start`);
-      window.location.reload();
+      notifications.addNotification({
+        type: 'success',
+        title: 'Szerver indítva',
+        message: 'A szerver sikeresen elindult.',
+      });
+      setTimeout(() => window.location.reload(), 1000);
     } catch (err: any) {
-      alert(err.message || 'Failed to start server');
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: err.message || 'A szerver indítása sikertelen volt.',
+      });
     }
   };
 
   const handleStop = async () => {
     try {
       await apiClient.post(`/servers/${serverUuid}/stop`);
-      window.location.reload();
+      notifications.addNotification({
+        type: 'success',
+        title: 'Szerver leállítva',
+        message: 'A szerver sikeresen leállítva.',
+      });
+      setTimeout(() => window.location.reload(), 1000);
     } catch (err: any) {
-      alert(err.message || 'Failed to stop server');
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: err.message || 'A szerver leállítása sikertelen volt.',
+      });
     }
   };
 
   const handleRestart = async () => {
     try {
       await apiClient.post(`/servers/${serverUuid}/restart`);
-      window.location.reload();
+      notifications.addNotification({
+        type: 'success',
+        title: 'Szerver újraindítva',
+        message: 'A szerver sikeresen újraindult.',
+      });
+      setTimeout(() => window.location.reload(), 1000);
     } catch (err: any) {
-      alert(err.message || 'Failed to restart server');
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: err.message || 'A szerver újraindítása sikertelen volt.',
+      });
     }
   };
 
@@ -88,9 +117,18 @@ export default function ServerDetailPage() {
     }
     try {
       await apiClient.delete(`/servers/${serverUuid}`);
+      notifications.addNotification({
+        type: 'success',
+        title: 'Szerver törölve',
+        message: 'A szerver sikeresen törölve.',
+      });
       router.push(`/${locale}/dashboard`);
     } catch (err: any) {
-      alert(err.message || 'Failed to delete server');
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: err.message || 'A szerver törlése sikertelen volt.',
+      });
     }
   };
 
@@ -108,8 +146,18 @@ export default function ServerDetailPage() {
         resources: data.resources,
         envVars: data.envVars,
       });
+      notifications.addNotification({
+        type: 'success',
+        title: 'Szerver klónozva',
+        message: `A szerver sikeresen klónozva: ${data.name}`,
+      });
       router.push(`/${locale}/dashboard`);
     } catch (err: any) {
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: err.message || 'A szerver klónozása sikertelen volt.',
+      });
       throw new Error(err.message || 'Szerver klónozása sikertelen');
     }
   };

@@ -75,9 +75,22 @@ export default function EditUserPage() {
 
     try {
       await apiClient.put(`/admin/users/${userId}`, formData);
+      
+      notifications.addNotification({
+        type: 'success',
+        title: 'Felhasználó frissítve',
+        message: 'A felhasználó adatai sikeresen frissítve.',
+      });
+      
       router.push(`/${locale}/admin/users`);
     } catch (err: any) {
-      setError(err.message || 'Felhasználó frissítése sikertelen');
+      const errorMessage = err.message || 'Felhasználó frissítése sikertelen';
+      setError(errorMessage);
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: errorMessage,
+      });
       setLoading(false);
     }
   };
@@ -93,9 +106,22 @@ export default function EditUserPage() {
 
     try {
       await apiClient.delete(`/admin/users/${userId}`);
+      
+      notifications.addNotification({
+        type: 'success',
+        title: 'Felhasználó törölve',
+        message: 'A felhasználó sikeresen törölve.',
+      });
+      
       router.push(`/${locale}/admin/users`);
     } catch (err: any) {
-      setError(err.message || 'Felhasználó törlése sikertelen');
+      const errorMessage = err.message || 'Felhasználó törlése sikertelen';
+      setError(errorMessage);
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: errorMessage,
+      });
       setLoading(false);
       setDeleteConfirm(false);
     }
