@@ -161,29 +161,67 @@ export default function DashboardPage() {
               </Button>
             </div>
 
-            {isLoading ? (
-              <div className="text-center py-12">
-                <p style={{ color: '#cbd5e1' }}>Loading...</p>
-              </div>
-            ) : !servers || servers.length === 0 ? (
-              <Card className="glass elevation-2 p-12 text-center">
-                <p className="mb-4" style={{ color: '#cbd5e1' }}>
-                  {t('dashboard.servers.empty')}
-                </p>
-                <Button onClick={() => {
-                  const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'hu' : 'hu';
-                  router.push(`/${locale}/dashboard/create`);
-                }}>
-                  {t('dashboard.servers.create')}
-                </Button>
-              </Card>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {servers.map((server) => (
-                  <ServerCard key={server.uuid} server={server} />
-                ))}
-              </div>
-            )}
+                  {isLoading ? (
+                    <div className="text-center py-12">
+                      <p style={{ color: '#cbd5e1' }}>Loading...</p>
+                    </div>
+                  ) : !servers || servers.length === 0 ? (
+                    <Card className="glass elevation-2 p-12 text-center">
+                      <p className="mb-4" style={{ color: '#cbd5e1' }}>
+                        {t('dashboard.servers.empty')}
+                      </p>
+                      <Button onClick={() => {
+                        const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'hu' : 'hu';
+                        router.push(`/${locale}/dashboard/create`);
+                      }}>
+                        {t('dashboard.servers.create')}
+                      </Button>
+                    </Card>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {servers.map((server) => (
+                        <ServerCard key={server.uuid} server={server} />
+                      ))}
+                    </div>
+                  )}
+                  
+                  {/* Quick Actions */}
+                  {servers && servers.length > 0 && (
+                    <div className="mt-8">
+                      <h2 className="text-2xl font-semibold mb-4" style={{ color: '#f8fafc' }}>
+                        Gyors műveletek
+                      </h2>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <Card className="glass elevation-2 p-6 cursor-pointer hover:scale-105 transition-transform" onClick={() => {
+                          const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'hu' : 'hu';
+                          router.push(`/${locale}/dashboard/create`);
+                        }}>
+                          <h3 className="text-lg font-semibold mb-2" style={{ color: '#f8fafc' }}>
+                            Új szerver létrehozása
+                          </h3>
+                          <p className="text-sm" style={{ color: '#cbd5e1' }}>
+                            Hozz létre egy új játék szervert
+                          </p>
+                        </Card>
+                        <Card className="glass elevation-2 p-6">
+                          <h3 className="text-lg font-semibold mb-2" style={{ color: '#f8fafc' }}>
+                            Szerverek kezelése
+                          </h3>
+                          <p className="text-sm" style={{ color: '#cbd5e1' }}>
+                            Összes szerver áttekintése
+                          </p>
+                        </Card>
+                        <Card className="glass elevation-2 p-6">
+                          <h3 className="text-lg font-semibold mb-2" style={{ color: '#f8fafc' }}>
+                            Dokumentáció
+                          </h3>
+                          <p className="text-sm" style={{ color: '#cbd5e1' }}>
+                            Használati útmutató és segítség
+                          </p>
+                        </Card>
+                      </div>
+                    </div>
+                  )}
           </section>
         </div>
       </main>
