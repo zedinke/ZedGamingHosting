@@ -44,13 +44,12 @@ export default function ServerDetailPage() {
       };
     },
     enabled: !!accessToken && !!serverUuid,
-    refetchInterval: 30000, // Refetch every 30 seconds
+    refetchInterval: 30000,
   });
 
   const handleStart = async () => {
     try {
       await apiClient.post(`/servers/${serverUuid}/start`);
-      // Refetch server data
       window.location.reload();
     } catch (err: any) {
       alert(err.message || 'Failed to start server');
@@ -388,6 +387,11 @@ export default function ServerDetailPage() {
                   {t('dashboard.server.actions.files') || 'File Manager'}
                 </Button>
               </Link>
+              <Link href={`/dashboard/server/${serverUuid}/settings`}>
+                <Button variant="outline" className="w-full sm:w-auto">
+                  {t('dashboard.server.actions.settings') || 'Settings'}
+                </Button>
+              </Link>
               <Button
                 variant="outline"
                 className="w-full sm:w-auto"
@@ -406,4 +410,3 @@ export default function ServerDetailPage() {
     </ProtectedRoute>
   );
 }
-
