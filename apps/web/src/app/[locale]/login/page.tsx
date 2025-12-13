@@ -8,7 +8,6 @@ import { Mail, Lock, AlertCircle, Zap } from 'lucide-react';
 import { useAuthStore } from '../../../stores/auth-store';
 import { Button, Card } from '@zed-hosting/ui-kit';
 import { Input } from '@zed-hosting/ui-kit';
-import { cn } from '../../../lib/utils';
 
 export default function LoginPage() {
   const t = useTranslations('auth.login');
