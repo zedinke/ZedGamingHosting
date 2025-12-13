@@ -70,9 +70,22 @@ export default function CreateUserPage() {
         role: formData.role,
         balance: formData.balance,
       });
+      
+      notifications.addNotification({
+        type: 'success',
+        title: 'Felhasználó létrehozva',
+        message: `A felhasználó sikeresen létrehozva: ${formData.email}`,
+      });
+      
       router.push(`/${locale}/admin/users`);
     } catch (err: any) {
-      setError(err.message || 'Felhasználó létrehozása sikertelen');
+      const errorMessage = err.message || 'Felhasználó létrehozása sikertelen';
+      setError(errorMessage);
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: errorMessage,
+      });
       setLoading(false);
     }
   };

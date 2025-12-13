@@ -24,6 +24,7 @@ export default function EditUserPage() {
   const locale = (params?.locale as string) || 'hu';
   const userId = params?.id as string;
   const { user: currentUser, isAuthenticated, accessToken } = useAuthStore();
+  const notifications = useNotificationContext();
   const [isHydrated, setIsHydrated] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
