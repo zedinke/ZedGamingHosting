@@ -164,10 +164,12 @@ export default function AdminNodesPage() {
 
                   <div className="mt-4 pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm" className="flex-1">
-                        Részletek
-                      </Button>
-                      <Button variant="outline" size="sm" className="flex-1">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="flex-1"
+                        onClick={() => router.push(`/${locale}/admin/nodes/${node.id}`)}
+                      >
                         Szerkesztés
                       </Button>
                     </div>
