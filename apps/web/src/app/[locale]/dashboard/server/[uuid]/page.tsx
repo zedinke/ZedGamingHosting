@@ -145,7 +145,8 @@ export default function ServerDetailPage() {
   }
 
   return (
-    <ProtectedRoute>
+    <>
+      <ProtectedRoute>
       <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-app)' }}>
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
@@ -390,7 +391,8 @@ export default function ServerDetailPage() {
           </div>
         </div>
       </div>
-    </ProtectedRoute>
+      </ProtectedRoute>
+    </>
   );
 }
 
