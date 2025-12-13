@@ -56,7 +56,11 @@ export default function ServerSettingsPage() {
   // Update form when server data loads
   useEffect(() => {
     if (server) {
-      setResources(server.resources || { cpuLimit: 0, ramLimit: 0, diskLimit: 0 });
+      setResources({
+        cpuLimit: server.resources?.cpuLimit || 0,
+        ramLimit: server.resources?.ramLimit || 0,
+        diskLimit: server.resources?.diskLimit || 0,
+      });
       setStartupPriority(server.startupPriority || 10);
       setEnvVars(server.envVars || {});
     }
