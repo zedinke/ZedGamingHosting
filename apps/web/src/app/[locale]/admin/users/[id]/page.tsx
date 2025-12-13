@@ -21,8 +21,8 @@ interface User {
 export default function EditUserPage() {
   const router = useRouter();
   const params = useParams();
-  const locale = params.locale as string || 'hu';
-  const userId = params.id as string;
+  const locale = (params?.locale as string) || 'hu';
+  const userId = params?.id as string;
   const { user: currentUser, isAuthenticated, accessToken } = useAuthStore();
   const [isHydrated, setIsHydrated] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -42,10 +42,17 @@ export default function EditUserPage() {
     }
   }, [accessToken]);
 
+  useEffect(() => {
+    if (isHydrated && !userId) {
+      router.push(`/${locale}/admin/users`);
+    }
+  }, [isHydrated, userId, router, locale]);
+
   // Note: This endpoint doesn't exist yet
   const { data: userData, isLoading } = useQuery<User>({
     queryKey: ['admin-user', userId],
     queryFn: async () => {
+      if (!userId) return null as any;
       // TODO: Implement GET /api/admin/users/:id endpoint
       // return await apiClient.get<User>(`/admin/users/${userId}`);
       return null as any;
