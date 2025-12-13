@@ -36,7 +36,7 @@ export default function ServerDetailPage() {
         clusterId: response.clusterId,
         createdAt: new Date(response.createdAt),
         updatedAt: new Date(response.updatedAt),
-        name: response.name || response.gameType,
+        name: response.name || response.gameType || 'Server',
         metrics: response.metrics?.[0] || { cpuUsage: 0, ramUsage: 0, diskUsage: 0 },
         node: response.node,
         ports: response.networkAllocations || [],
@@ -151,7 +151,7 @@ export default function ServerDetailPage() {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--color-text-main)' }}>
-                  {server.name || server.gameType}
+                  {(server as any).name || server.gameType}
                 </h1>
                 <div className="flex items-center gap-2">
                   <div className={`w-3 h-3 rounded-full ${getStatusColor(server.status)}`} />
