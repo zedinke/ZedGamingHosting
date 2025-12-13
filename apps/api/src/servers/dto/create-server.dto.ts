@@ -24,6 +24,10 @@ class ServerResources {
 }
 
 export class CreateServerDto {
+  @IsString()
+  @IsOptional()
+  name?: string;
+
   @IsEnum(GameType)
   gameType!: GameType;
 
