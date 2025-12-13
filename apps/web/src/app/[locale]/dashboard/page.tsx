@@ -8,7 +8,7 @@ import { apiClient } from '../../../lib/api-client';
 import { ServerCard } from '../../../components/server-card';
 import { Button, Card } from '@zed-hosting/ui-kit';
 import { GameServer } from '../../../types/server';
-import { SkipLink } from '../../components/accessibility';
+import { SkipLink } from '../../../components/accessibility';
 
 export default function DashboardPage() {
   const t = useTranslations();
