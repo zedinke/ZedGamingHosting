@@ -260,6 +260,7 @@ export class ServersService {
   async remove(uuid: string, userId: string) {
     const server = await this.prisma.gameServer.findUnique({
       where: { uuid },
+      include: { node: true },
     });
 
     if (!server) {
@@ -270,8 +271,33 @@ export class ServersService {
       throw new ForbiddenException(this.i18n.translate('SERVER_ACCESS_DENIED'));
     }
 
-    // TODO: Implement deletion logic
-    throw new Error('Server deletion not yet implemented');
+    // 1. Create DELETE task for daemon to stop container and clean up volumes
+    await this.tasksService.createTask(
+      server.nodeId,
+      'DELETE',
+      {
+        serverUuid: uuid,
+        volumes: [
+          {
+            source: `/var/lib/zedhosting/servers/${uuid}`,
+            target: '/server',
+          },
+        ],
+      },
+    );
+
+    // 2. Deallocate ports (this will cascade delete network allocations)
+    await this.portManager.deallocatePorts(uuid);
+
+    // 3. Delete server record from database (cascades to subdomains, metrics, etc.)
+    await this.prisma.gameServer.delete({
+      where: { uuid },
+    });
+
+    return {
+      success: true,
+      message: this.i18n.translate('SERVER_DELETED_SUCCESSFULLY'),
+    };
   }
 
   /**

@@ -366,8 +366,16 @@ export default function ServerDetailPage() {
                   {t('dashboard.server.actions.files') || 'File Manager'}
                 </Button>
               </Link>
-              <Button variant="outline" className="w-full sm:w-auto">
-                {t('dashboard.server.actions.settings') || 'Settings'}
+              <Button
+                variant="outline"
+                className="w-full sm:w-auto"
+                onClick={() => {
+                  if (confirm(t('dashboard.server.deleteConfirm') || 'Are you sure you want to delete this server? This action cannot be undone.'))) {
+                    handleDelete();
+                  }
+                }}
+              >
+                {t('dashboard.server.actions.delete') || 'Delete'}
               </Button>
             </div>
           </div>

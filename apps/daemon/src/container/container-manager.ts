@@ -1,4 +1,6 @@
 import Docker from 'dockerode';
+import * as fs from 'fs/promises';
+import * as path from 'path';
 
 /**
  * Container Manager - handles Docker container lifecycle
@@ -91,15 +93,15 @@ export class ContainerManager {
    */
   async startContainer(serverUuid: string): Promise<void> {
     const container = this.docker.getContainer(`zedhosting-${serverUuid}`);
-    const inspect = await container.inspect();
+    const info = await container.inspect();
 
-    if (inspect.State.Running) {
-      console.log(`Container ${serverUuid} is already running`);
+    if (info.State.Running) {
+      console.log(`Container zedhosting-${serverUuid} already running`);
       return;
     }
 
     await container.start();
-    console.log(`✅ Container started: ${serverUuid}`);
+    console.log(`✅ Container started: zedhosting-${serverUuid}`);
   }
 
   /**
@@ -107,15 +109,15 @@ export class ContainerManager {
    */
   async stopContainer(serverUuid: string): Promise<void> {
     const container = this.docker.getContainer(`zedhosting-${serverUuid}`);
-    const inspect = await container.inspect();
+    const info = await container.inspect();
 
-    if (!inspect.State.Running) {
-      console.log(`Container ${serverUuid} is already stopped`);
+    if (!info.State.Running) {
+      console.log(`Container zedhosting-${serverUuid} already stopped`);
       return;
     }
 
-    await container.stop({ t: 30 }); // 30 second timeout
-    console.log(`✅ Container stopped: ${serverUuid}`);
+    await container.stop({ t: 30 }); // 30 second grace period
+    console.log(`✅ Container stopped: zedhosting-${serverUuid}`);
   }
 
   /**
@@ -124,7 +126,66 @@ export class ContainerManager {
   async restartContainer(serverUuid: string): Promise<void> {
     const container = this.docker.getContainer(`zedhosting-${serverUuid}`);
     await container.restart({ t: 30 });
-    console.log(`✅ Container restarted: ${serverUuid}`);
+    console.log(`✅ Container restarted: zedhosting-${serverUuid}`);
+  }
+
+  /**
+   * Deletes a container and optionally cleans up volumes
+   */
+  async deleteContainer(serverUuid: string, volumes: Array<{ source: string; target: string }> = []): Promise<void> {
+    const containerName = `zedhosting-${serverUuid}`;
+    const container = this.docker.getContainer(containerName);
+
+    try {
+      // 1. Stop container if running
+      const info = await container.inspect();
+      if (info.State.Running) {
+        console.log(`Stopping container ${containerName} before deletion...`);
+        await container.stop({ t: 10 });
+      }
+    } catch (error: any) {
+      // Container might not exist, continue
+      if (error.statusCode !== 404) {
+        console.error(`Error stopping container ${containerName}:`, error);
+      }
+    }
+
+    try {
+      // 2. Remove container
+      await container.remove({ v: false }); // Don't remove volumes yet
+      console.log(`✅ Container removed: ${containerName}`);
+    } catch (error: any) {
+      if (error.statusCode === 404) {
+        console.log(`Container ${containerName} does not exist, skipping removal`);
+      } else {
+        throw error;
+      }
+    }
+
+    // 3. Clean up volumes (host directories)
+    for (const volume of volumes) {
+      try {
+        const volumePath = volume.source;
+        console.log(`Cleaning up volume: ${volumePath}`);
+        
+        // Check if directory exists
+        try {
+          await fs.access(volumePath);
+          // Remove directory recursively
+          await fs.rm(volumePath, { recursive: true, force: true });
+          console.log(`✅ Volume removed: ${volumePath}`);
+        } catch (error: any) {
+          if (error.code === 'ENOENT') {
+            console.log(`Volume ${volumePath} does not exist, skipping cleanup`);
+          } else {
+            console.error(`Error removing volume ${volumePath}:`, error);
+          }
+        }
+      } catch (error) {
+        console.error(`Error cleaning up volume ${volume.source}:`, error);
+        // Continue with other volumes
+      }
+    }
   }
 
   /**
@@ -132,22 +193,20 @@ export class ContainerManager {
    */
   async getManagedContainers(): Promise<Docker.ContainerInfo[]> {
     const containers = await this.docker.listContainers({ all: true });
-    return containers.filter((c) => c.Labels?.['com.zedhosting.managed'] === 'true');
+    return containers.filter((c) => c.Labels['com.zedhosting.managed'] === 'true');
   }
 
   /**
    * Creates port bindings for Docker
    */
-  private createPortBindings(ports: Array<{ port: number; protocol: string }>): Record<string, unknown> {
-    const bindings: Record<string, unknown> = {};
+  private createPortBindings(ports: Array<{ port: number; protocol: string }>): Record<string, any[]> {
+    const bindings: Record<string, any[]> = {};
 
-    for (const port of ports) {
-      const key = `${port.port}/${port.protocol.toLowerCase()}`;
-      bindings[key] = [{ HostPort: port.port.toString() }];
+    for (const portConfig of ports) {
+      const key = `${portConfig.port}/${portConfig.protocol.toLowerCase()}`;
+      bindings[key] = [{ HostPort: portConfig.port.toString() }];
     }
 
     return bindings;
   }
 }
-
-

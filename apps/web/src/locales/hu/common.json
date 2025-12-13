@@ -54,8 +54,10 @@
         "console": "Konzol",
         "settings": "Beállítások",
         "view": "Megtekintés",
-        "files": "Fájlkezelő"
+        "files": "Fájlkezelő",
+        "delete": "Törlés"
       },
+      "deleteConfirm": "Biztosan törölni szeretnéd ezt a szervert? Ez a művelet nem visszavonható.",
       "resources": {
         "cpu": "CPU",
         "ram": "RAM",

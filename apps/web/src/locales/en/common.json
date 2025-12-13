@@ -54,8 +54,10 @@
         "console": "Console",
         "settings": "Settings",
         "view": "View",
-        "files": "File Manager"
+        "files": "File Manager",
+        "delete": "Delete"
       },
+      "deleteConfirm": "Are you sure you want to delete this server? This action cannot be undone.",
       "resources": {
         "cpu": "CPU",
         "ram": "RAM",
