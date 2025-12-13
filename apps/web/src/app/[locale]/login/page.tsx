@@ -6,7 +6,6 @@ import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { Mail, Lock, AlertCircle, ArrowRight, Sparkles } from 'lucide-react';
 import { useAuthStore } from '../../../stores/auth-store';
-import { Button } from '@zed-hosting/ui-kit';
 import { Input } from '@zed-hosting/ui-kit';
 
 export default function LoginPage() {
