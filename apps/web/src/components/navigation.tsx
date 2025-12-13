@@ -7,12 +7,15 @@ import { useAuthStore } from '../stores/auth-store';
 import { Button } from '@zed-hosting/ui-kit';
 import { ThemeToggle } from '../lib/theme';
 import { cn } from '../lib/utils';
+import { NotificationCenter } from './notification-center';
+import { useNotificationContext } from '../context/notification-context';
 
 export function Navigation() {
   const pathname = usePathname();
   const router = useRouter();
   const { user, logout } = useAuthStore();
   const t = useTranslations();
+  const notifications = useNotificationContext();
 
   const locale = pathname.split('/')[1] || 'hu';
 
@@ -71,6 +74,13 @@ export function Navigation() {
 
           {/* User Menu */}
           <div className="flex items-center gap-3">
+            <NotificationCenter
+              notifications={notifications.notifications}
+              onMarkAsRead={notifications.markAsRead}
+              onMarkAllAsRead={notifications.markAllAsRead}
+              onDismiss={notifications.dismissNotification}
+              onDismissAll={notifications.dismissAll}
+            />
             <ThemeToggle />
             <div className="text-right cursor-pointer" onClick={() => router.push(`/${locale}/profile`)}>
               <p className="text-sm font-medium" style={{ color: 'var(--color-text-main)' }}>
