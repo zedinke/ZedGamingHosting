@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { motion } from 'framer-motion';
+import { motion, HTMLMotionProps } from 'framer-motion';
 import { cn } from '../utils/cn';
 
 const cardVariants = {
@@ -12,32 +12,44 @@ const cardVariants = {
   },
 };
 
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+interface CardProps extends Omit<HTMLMotionProps<'div'>, 'children'> {
   hoverable?: boolean;
+  children?: React.ReactNode;
 }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, hoverable = false, ...props }, ref) => {
-    const Component = hoverable ? motion.div : 'div';
-    const componentProps = hoverable
-      ? {
-          variants: cardVariants,
-          whileHover: 'hover',
-        }
-      : {};
+  ({ className, hoverable = false, children, ...props }, ref) => {
+    if (hoverable) {
+      return (
+        <motion.div
+          ref={ref}
+          className={cn(
+            'rounded-xl border transition-all duration-200',
+            'bg-background-tertiary border-border elevation-2',
+            'cursor-pointer',
+            className
+          )}
+          variants={cardVariants}
+          whileHover="hover"
+          {...(props as any)}
+        >
+          {children}
+        </motion.div>
+      );
+    }
 
     return (
-      <Component
+      <div
         ref={ref}
         className={cn(
           'rounded-xl border transition-all duration-200',
           'bg-background-tertiary border-border elevation-2',
-          hoverable && 'cursor-pointer',
           className
         )}
-        {...componentProps}
-        {...props}
-      />
+        {...(props as React.HTMLAttributes<HTMLDivElement>)}
+      >
+        {children}
+      </div>
     );
   }
 );
