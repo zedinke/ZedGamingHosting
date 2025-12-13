@@ -11,12 +11,15 @@ import { GameServer } from '../../../types/server';
 import { SkipLink } from '../../../components/accessibility';
 import { useRouter } from 'next/navigation';
 import { Navigation } from '../../../components/navigation';
+import { useToast } from '../../../hooks/use-toast';
 
 export default function DashboardPage() {
   const t = useTranslations();
   const router = useRouter();
   const { isAuthenticated, accessToken } = useAuthStore();
   const [isHydrated, setIsHydrated] = useState(false);
+  const { showToast, ToastContainer } = useToast();
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Wait for hydration to avoid hydration mismatch
   useEffect(() => {
@@ -95,6 +98,7 @@ export default function DashboardPage() {
         {t('accessibility.skipToContent', { defaultValue: 'Skip to main content' })}
       </SkipLink>
       <Navigation />
+      <ToastContainer />
       <main id="main-content" className="min-h-screen" style={{ 
         backgroundColor: '#0a0a0a', 
         background: 'radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.05) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%), #0a0a0a',
@@ -149,10 +153,24 @@ export default function DashboardPage() {
 
           {/* Servers Section */}
           <section>
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-semibold" style={{ color: '#f8fafc' }}>
-                {t('dashboard.servers.title')}
-              </h2>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+              <div className="flex-1">
+                <h2 className="text-2xl font-semibold mb-4" style={{ color: '#f8fafc' }}>
+                  {t('dashboard.servers.title')}
+                </h2>
+                <input
+                  type="text"
+                  placeholder="Szerverek keresése..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full md:w-64 px-4 py-2 rounded-lg border"
+                  style={{
+                    backgroundColor: 'var(--color-bg-card)',
+                    borderColor: 'var(--color-border)',
+                    color: 'var(--color-text-main)',
+                  }}
+                />
+              </div>
               <Button onClick={() => {
                 const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'hu' : 'hu';
                 router.push(`/${locale}/dashboard/create`);
@@ -178,11 +196,21 @@ export default function DashboardPage() {
                       </Button>
                     </Card>
                   ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {servers.map((server) => (
-                        <ServerCard key={server.uuid} server={server} />
-                      ))}
-                    </div>
+                    <>
+                      {filteredServers && filteredServers.length === 0 ? (
+                        <Card className="glass elevation-2 p-12 text-center">
+                          <p style={{ color: '#cbd5e1' }}>
+                            {searchQuery ? 'Nincs találat a keresésre' : 'Nincs szerver'}
+                          </p>
+                        </Card>
+                      ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                          {filteredServers?.map((server) => (
+                            <ServerCard key={server.uuid} server={server} />
+                          ))}
+                        </div>
+                      )}
+                    </>
                   )}
                   
                   {/* Quick Actions */}

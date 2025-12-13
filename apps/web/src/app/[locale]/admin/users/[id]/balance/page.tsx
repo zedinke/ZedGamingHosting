@@ -3,22 +3,19 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useAuthStore } from '../../../../../stores/auth-store';
-import { Navigation } from '../../../../../components/navigation';
+import { useAuthStore } from '../../../../../../stores/auth-store';
+import { Navigation } from '../../../../../../components/navigation';
 import { Card, Button } from '@zed-hosting/ui-kit';
-import { apiClient } from '../../../../../lib/api-client';
+import { apiClient } from '../../../../../../lib/api-client';
 import { useQuery } from '@tanstack/react-query';
 
 interface User {
   id: string;
   email: string;
-  role: string;
   balance: number;
-  createdAt: string;
-  tenantId?: string;
 }
 
-export default function EditUserPage() {
+export default function UserBalancePage() {
   const router = useRouter();
   const params = useParams();
   const locale = (params?.locale as string) || 'hu';
@@ -27,12 +24,12 @@ export default function EditUserPage() {
   const [isHydrated, setIsHydrated] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [deleteConfirm, setDeleteConfirm] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const [formData, setFormData] = useState({
-    email: '',
-    role: 'USER',
-    balance: 0,
+    amount: 0,
+    type: 'add' as 'add' | 'subtract' | 'set',
+    reason: '',
   });
 
   useEffect(() => {
@@ -48,7 +45,19 @@ export default function EditUserPage() {
     }
   }, [isHydrated, userId, router, locale]);
 
-  // Note: This endpoint doesn't exist yet
+  useEffect(() => {
+    if (isHydrated && !isAuthenticated) {
+      router.push(`/${locale}/login`);
+      return;
+    }
+
+    const userRole = currentUser?.role?.toUpperCase();
+    if (isHydrated && isAuthenticated && userRole !== 'ADMIN' && userRole !== 'SUPER_ADMIN' && userRole !== 'SUPERADMIN' && userRole !== 'RESELLER_ADMIN') {
+      router.push(`/${locale}/dashboard`);
+      return;
+    }
+  }, [isAuthenticated, isHydrated, currentUser, router, locale]);
+
   const { data: userData, isLoading } = useQuery<User>({
     queryKey: ['admin-user', userId],
     queryFn: async () => {
@@ -60,48 +69,34 @@ export default function EditUserPage() {
     enabled: isHydrated && isAuthenticated && !!accessToken && !!userId,
   });
 
-  useEffect(() => {
-    if (userData) {
-      setFormData({
-        email: userData.email,
-        role: userData.role,
-        balance: userData.balance,
-      });
-    }
-  }, [userData]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setSuccess(false);
 
-    try {
-      // TODO: Implement PUT /api/admin/users/:id endpoint
-      // await apiClient.put(`/admin/users/${userId}`, formData);
-      router.push(`/${locale}/admin/users`);
-    } catch (err: any) {
-      setError(err.message || 'Felhasználó frissítése sikertelen');
+    if (formData.amount <= 0) {
+      setError('Az összegnek nagyobbnak kell lennie, mint 0');
       setLoading(false);
-    }
-  };
-
-  const handleDelete = async () => {
-    if (!deleteConfirm) {
-      setDeleteConfirm(true);
       return;
     }
 
-    setLoading(true);
-    setError(null);
-
     try {
-      // TODO: Implement DELETE /api/admin/users/:id endpoint
-      // await apiClient.delete(`/admin/users/${userId}`);
-      router.push(`/${locale}/admin/users`);
+      // TODO: Implement POST /api/admin/users/:id/balance endpoint
+      // await apiClient.post(`/admin/users/${userId}/balance`, {
+      //   amount: formData.amount,
+      //   type: formData.type,
+      //   reason: formData.reason,
+      // });
+      
+      setSuccess(true);
+      setFormData({ amount: 0, type: 'add', reason: '' });
+      setTimeout(() => {
+        router.push(`/${locale}/admin/users/${userId}`);
+      }, 2000);
     } catch (err: any) {
-      setError(err.message || 'Felhasználó törlése sikertelen');
+      setError(err.message || 'Egyenleg módosítása sikertelen');
       setLoading(false);
-      setDeleteConfirm(false);
     }
   };
 
@@ -133,9 +128,9 @@ export default function EditUserPage() {
       }}>
         <div className="container mx-auto px-4 py-8">
           <header className="mb-8">
-            <h1 className="text-3xl font-bold mb-2" style={{ color: '#f8fafc' }}>Felhasználó Szerkesztése</h1>
+            <h1 className="text-3xl font-bold mb-2" style={{ color: '#f8fafc' }}>Egyenleg Módosítása</h1>
             <p style={{ color: '#cbd5e1' }}>
-              Felhasználói adatok módosítása
+              {userData?.email || 'Felhasználó'} egyenlegének módosítása
             </p>
           </header>
 
@@ -145,15 +140,47 @@ export default function EditUserPage() {
             </div>
           ) : (
             <Card className="glass elevation-2 p-6 max-w-2xl mx-auto">
+              {userData && (
+                <div className="mb-6 p-4 rounded-lg" style={{ backgroundColor: 'var(--color-bg-surface)' }}>
+                  <p className="text-sm" style={{ color: '#cbd5e1' }}>Jelenlegi egyenleg:</p>
+                  <p className="text-2xl font-bold" style={{ color: '#f8fafc' }}>
+                    {userData.balance.toFixed(2)} €
+                  </p>
+                </div>
+              )}
+
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium mb-2" style={{ color: '#f8fafc' }}>
-                    Email *
+                    Művelet típusa *
+                  </label>
+                  <select
+                    value={formData.type}
+                    onChange={(e) => setFormData({ ...formData, type: e.target.value as 'add' | 'subtract' | 'set' })}
+                    required
+                    className="w-full px-4 py-2 rounded-lg border"
+                    style={{
+                      backgroundColor: 'var(--color-bg-card)',
+                      borderColor: 'var(--color-border)',
+                      color: 'var(--color-text-main)',
+                    }}
+                  >
+                    <option value="add">Hozzáadás</option>
+                    <option value="subtract">Levonás</option>
+                    <option value="set">Beállítás</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2" style={{ color: '#f8fafc' }}>
+                    Összeg (€) *
                   </label>
                   <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={formData.amount}
+                    onChange={(e) => setFormData({ ...formData, amount: parseFloat(e.target.value) || 0 })}
                     required
                     className="w-full px-4 py-2 rounded-lg border"
                     style={{
@@ -166,36 +193,12 @@ export default function EditUserPage() {
 
                 <div>
                   <label className="block text-sm font-medium mb-2" style={{ color: '#f8fafc' }}>
-                    Szerepkör *
+                    Indoklás
                   </label>
-                  <select
-                    value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                    required
-                    className="w-full px-4 py-2 rounded-lg border"
-                    style={{
-                      backgroundColor: 'var(--color-bg-card)',
-                      borderColor: 'var(--color-border)',
-                      color: 'var(--color-text-main)',
-                    }}
-                  >
-                    <option value="USER">USER</option>
-                    <option value="SUPPORT">SUPPORT</option>
-                    <option value="RESELLER_ADMIN">RESELLER_ADMIN</option>
-                    <option value="SUPERADMIN">SUPERADMIN</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: '#f8fafc' }}>
-                    Egyenleg (€)
-                  </label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    value={formData.balance}
-                    onChange={(e) => setFormData({ ...formData, balance: parseFloat(e.target.value) || 0 })}
+                  <textarea
+                    value={formData.reason}
+                    onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
+                    rows={3}
                     className="w-full px-4 py-2 rounded-lg border"
                     style={{
                       backgroundColor: 'var(--color-bg-card)',
@@ -211,52 +214,29 @@ export default function EditUserPage() {
                   </div>
                 )}
 
-                <div className="space-y-4">
-                  <div className="flex gap-4">
-                    <Button
-                      type="submit"
-                      variant="primary"
-                      disabled={loading}
-                      className="flex-1"
-                    >
-                      {loading ? 'Mentés...' : 'Mentés'}
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => router.push(`/${locale}/admin/users`)}
-                      disabled={loading}
-                    >
-                      Mégse
-                    </Button>
+                {success && (
+                  <div className="p-4 rounded-lg bg-green-500/20 border border-green-500/50 text-green-400">
+                    Egyenleg sikeresen módosítva! Átirányítás...
                   </div>
-                  
-                  <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
-                    <div className="flex gap-4">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => router.push(`/${locale}/admin/users/${userId}/balance`)}
-                        disabled={loading}
-                        className="flex-1"
-                      >
-                        Egyenleg módosítása
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={handleDelete}
-                        disabled={loading}
-                        style={{ 
-                          backgroundColor: deleteConfirm ? '#ef4444' : undefined,
-                          color: deleteConfirm ? '#fff' : undefined
-                        }}
-                        className="flex-1"
-                      >
-                        {deleteConfirm ? 'Biztosan törlöd?' : 'Törlés'}
-                      </Button>
-                    </div>
-                  </div>
+                )}
+
+                <div className="flex gap-4">
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    disabled={loading}
+                    className="flex-1"
+                  >
+                    {loading ? 'Mentés...' : 'Mentés'}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => router.push(`/${locale}/admin/users/${userId}`)}
+                    disabled={loading}
+                  >
+                    Mégse
+                  </Button>
                 </div>
               </form>
             </Card>
