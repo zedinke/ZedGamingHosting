@@ -78,16 +78,18 @@ export default function LoginPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-center mb-16"
+          style={{ marginBottom: '4rem' }}
         >
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-blue-500 mb-8 shadow-[0_0_40px_rgba(59,130,246,0.5)] relative overflow-hidden group"
+            style={{ marginBottom: '2rem' }}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <Sparkles className="w-10 h-10 text-white relative z-10" fill="currentColor" />
           </motion.div>
-          <h1 className="text-4xl font-bold mb-3 text-white tracking-tight">
+          <h1 className="text-4xl font-bold mb-3 text-white tracking-tight" style={{ marginBottom: '0.75rem' }}>
             ZedGamingHosting
           </h1>
           <p className="text-base text-slate-300">
@@ -107,10 +109,10 @@ export default function LoginPage() {
             {/* Inner Glow */}
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-transparent pointer-events-none" />
 
-            <div className="relative p-12">
+            <div className="relative p-12" style={{ padding: '3rem' }}>
               {/* Form Header */}
-              <div className="mb-10">
-                <h2 className="text-3xl font-bold text-white mb-3">
+              <div className="mb-10" style={{ marginBottom: '2.5rem' }}>
+                <h2 className="text-3xl font-bold text-white mb-3" style={{ marginBottom: '0.75rem' }}>
                   {t('title') || 'Bejelentkezés'}
                 </h2>
                 <p className="text-base text-slate-300">
@@ -118,7 +120,7 @@ export default function LoginPage() {
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+              <form onSubmit={handleSubmit} className="flex flex-col gap-8" style={{ gap: '2rem' }}>
                 {/* Error Message */}
                 {error && (
                   <motion.div
@@ -132,7 +134,7 @@ export default function LoginPage() {
                 )}
 
                 {/* Email Field */}
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-3" style={{ gap: '0.75rem' }}>
                   <label
                     htmlFor="email"
                     className="block text-base font-medium text-white"
@@ -155,7 +157,7 @@ export default function LoginPage() {
                 </div>
 
                 {/* Password Field */}
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-3" style={{ gap: '0.75rem' }}>
                   <div className="flex items-center justify-between">
                     <label
                       htmlFor="password"
@@ -223,8 +225,8 @@ export default function LoginPage() {
               </form>
 
               {/* Registration Section */}
-              <div className="mt-12 pt-10 border-t border-slate-700/50">
-                <p className="text-center text-xs uppercase tracking-wider text-slate-400 mb-5">
+              <div className="mt-12 pt-10 border-t border-slate-700/50" style={{ marginTop: '3rem', paddingTop: '2.5rem' }}>
+                <p className="text-center text-xs uppercase tracking-wider text-slate-400 mb-5" style={{ marginBottom: '1.25rem' }}>
                   {t('noAccount') || "NINCS MÉG FIÓKOD?"}
                 </p>
                 <div className="text-center">
@@ -247,6 +249,7 @@ export default function LoginPage() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
           className="mt-16 text-center text-xs text-slate-400"
+          style={{ marginTop: '4rem' }}
         >
           © {new Date().getFullYear()} ZedGamingHosting. All rights reserved.
         </motion.p>
