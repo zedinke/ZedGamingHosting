@@ -519,5 +519,86 @@ export class ServersService {
 
     return { message: this.i18n.translate('SERVER_STARTED_SUCCESSFULLY') };
   }
+
+  async createBackup(serverUuid: string, name: string | undefined, userId: string): Promise<{ id: string; name: string; createdAt: Date }> {
+    const server = await this.prisma.gameServer.findUnique({
+      where: { uuid: serverUuid },
+    });
+
+    if (!server) {
+      throw new NotFoundException(this.i18n.translate('SERVER_NOT_FOUND'));
+    }
+
+    if (server.ownerId !== userId) {
+      throw new ForbiddenException(this.i18n.translate('FORBIDDEN'));
+    }
+
+    // TODO: Trigger backup via daemon API
+    // For now, return a mock backup response
+    // In production, this should create a backup record and trigger the daemon
+    return {
+      id: `backup-${Date.now()}`,
+      name: name || `Backup ${new Date().toISOString()}`,
+      createdAt: new Date(),
+    };
+  }
+
+  async getBackups(serverUuid: string, userId: string): Promise<any[]> {
+    const server = await this.prisma.gameServer.findUnique({
+      where: { uuid: serverUuid },
+    });
+
+    if (!server) {
+      throw new NotFoundException(this.i18n.translate('SERVER_NOT_FOUND'));
+    }
+
+    if (server.ownerId !== userId) {
+      throw new ForbiddenException(this.i18n.translate('FORBIDDEN'));
+    }
+
+    // TODO: Fetch backups from database or daemon API
+    // For now, return empty array
+    return [];
+  }
+
+  async restoreBackup(serverUuid: string, backupId: string, userId: string): Promise<void> {
+    const server = await this.prisma.gameServer.findUnique({
+      where: { uuid: serverUuid },
+    });
+
+    if (!server) {
+      throw new NotFoundException(this.i18n.translate('SERVER_NOT_FOUND'));
+    }
+
+    if (server.ownerId !== userId) {
+      throw new ForbiddenException(this.i18n.translate('FORBIDDEN'));
+    }
+
+    // TODO: Trigger restore via daemon API
+    // For now, just validate the backup exists
+    if (!backupId) {
+      throw new NotFoundException('Backup not found');
+    }
+  }
+
+  async deleteBackup(serverUuid: string, backupId: string, userId: string): Promise<void> {
+    const server = await this.prisma.gameServer.findUnique({
+      where: { uuid: serverUuid },
+    });
+
+    if (!server) {
+      throw new NotFoundException(this.i18n.translate('SERVER_NOT_FOUND'));
+    }
+
+    if (server.ownerId !== userId) {
+      throw new ForbiddenException(this.i18n.translate('FORBIDDEN'));
+    }
+
+    // TODO: Delete backup files via daemon API
+    // For now, just validate
+    if (!backupId) {
+      throw new NotFoundException('Backup not found');
+    }
+  }
 }
 
