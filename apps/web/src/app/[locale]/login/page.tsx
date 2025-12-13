@@ -121,7 +121,7 @@ export default function LoginPage() {
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                 {/* Error Message */}
                 {error && (
                   <motion.div
@@ -135,7 +135,7 @@ export default function LoginPage() {
                 )}
 
                 {/* Email Field */}
-                <div className="space-y-2">
+                <div className="flex flex-col gap-2">
                   <label
                     htmlFor="email"
                     className="block text-sm font-medium text-slate-300"
@@ -159,7 +159,7 @@ export default function LoginPage() {
                 </div>
 
                 {/* Password Field */}
-                <div className="space-y-2">
+                <div className="flex flex-col gap-2">
                   <div className="flex items-center justify-between">
                     <label
                       htmlFor="password"
