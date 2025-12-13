@@ -8,6 +8,7 @@ import { useAuthStore } from '../../../../../stores/auth-store';
 import { Navigation } from '../../../../../components/navigation';
 import { Card, Button } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../../lib/api-client';
+import { useNotificationContext } from '../../../../../context/notification-context';
 
 export default function CreateNodePage() {
   const router = useRouter();
@@ -57,9 +58,22 @@ export default function CreateNodePage() {
 
     try {
       await apiClient.post('/nodes', formData);
+      
+      notifications.addNotification({
+        type: 'success',
+        title: 'Node létrehozva',
+        message: `A node sikeresen létrehozva: ${formData.name}`,
+      });
+      
       router.push(`/${locale}/admin/nodes`);
     } catch (err: any) {
-      setError(err.message || 'Failed to create node');
+      const errorMessage = err.message || 'Node létrehozása sikertelen';
+      setError(errorMessage);
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: errorMessage,
+      });
       setLoading(false);
     }
   };
