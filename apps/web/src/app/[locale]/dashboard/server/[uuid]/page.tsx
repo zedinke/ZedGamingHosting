@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useParams, useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
@@ -18,7 +18,6 @@ function ServerDetailContent() {
   const { accessToken } = useAuthStore();
   const serverUuid = params.uuid as string;
 
-  // Fetch server details
   const { data: server, isLoading, error } = useQuery<GameServer>({
     queryKey: ['server', serverUuid],
     queryFn: async () => {
@@ -143,7 +142,6 @@ function ServerDetailContent() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-app)' }}>
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
         <div className="mb-8">
           <Button
             variant="outline"
@@ -182,7 +180,6 @@ function ServerDetailContent() {
           </div>
         </div>
 
-        {/* Navigation Tabs */}
         <div className="border-b border-gray-700 mb-6">
           <nav className="flex gap-4">
             <Link
@@ -218,9 +215,7 @@ function ServerDetailContent() {
           </nav>
         </div>
 
-        {/* Overview Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Server Info Card */}
           <div
             className="rounded-lg p-6 border"
             style={{
@@ -252,16 +247,9 @@ function ServerDetailContent() {
                   {(server.node as any)?.name || server.nodeId}
                 </span>
               </div>
-              {server.node?.publicFqdn && (
-                <div className="flex justify-between">
-                  <span style={{ color: 'var(--color-text-muted)' }}>IP:</span>
-                  <span style={{ color: 'var(--color-text-main)' }}>{server.node.publicFqdn}</span>
-                </div>
-              )}
             </div>
           </div>
 
-          {/* Resources Card */}
           <div
             className="rounded-lg p-6 border"
             style={{
@@ -324,7 +312,6 @@ function ServerDetailContent() {
             </div>
           </div>
 
-          {/* Ports Card */}
           <div
             className="rounded-lg p-6 border"
             style={{
@@ -366,7 +353,6 @@ function ServerDetailContent() {
           </div>
         </div>
 
-        {/* Quick Actions */}
         <div className="mt-8">
           <h2 className="text-xl font-semibold mb-4" style={{ color: 'var(--color-text-main)' }}>
             {t('dashboard.server.quickActions') || 'Quick Actions'}
@@ -412,3 +398,4 @@ export default function ServerDetailPage() {
     </ProtectedRoute>
   );
 }
+
