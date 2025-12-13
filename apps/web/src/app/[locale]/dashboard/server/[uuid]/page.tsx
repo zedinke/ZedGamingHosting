@@ -79,7 +79,8 @@ export default function ServerDetailPage() {
   };
 
   const handleDelete = async () => {
-    if (!confirm(t('dashboard.server.deleteConfirm') || 'Are you sure you want to delete this server? This action cannot be undone.'))) {
+    const confirmMessage = t('dashboard.server.deleteConfirm') || 'Are you sure you want to delete this server? This action cannot be undone.';
+    if (!window.confirm(confirmMessage)) {
       return;
     }
     try {
