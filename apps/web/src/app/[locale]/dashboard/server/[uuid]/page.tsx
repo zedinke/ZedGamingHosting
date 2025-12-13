@@ -108,9 +108,9 @@ export default function ServerDetailPage() {
     return t(key);
   };
 
-  return (
-    <ProtectedRoute>
-      {isLoading ? (
+  if (isLoading) {
+    return (
+      <ProtectedRoute>
         <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-app)' }}>
           <div className="container mx-auto px-4 py-8">
             <div className="text-center py-12">
@@ -118,7 +118,13 @@ export default function ServerDetailPage() {
             </div>
           </div>
         </div>
-      ) : error || !server ? (
+      </ProtectedRoute>
+    );
+  }
+
+  if (error || !server) {
+    return (
+      <ProtectedRoute>
         <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-app)' }}>
           <div className="container mx-auto px-4 py-8">
             <div className="text-center py-12">
@@ -135,8 +141,13 @@ export default function ServerDetailPage() {
             </div>
           </div>
         </div>
-      ) : (
-        <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-app)' }}>
+      </ProtectedRoute>
+    );
+  }
+
+  return (
+    <ProtectedRoute>
+      <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-app)' }}>
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
           <div className="mb-8">
@@ -386,7 +397,6 @@ export default function ServerDetailPage() {
           </div>
         </div>
       </div>
-      )}
     </ProtectedRoute>
   );
 }
