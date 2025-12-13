@@ -233,7 +233,7 @@ export default function ServerDetailPage() {
                     {t('dashboard.server.info.node') || 'Node'}:
                   </span>
                   <span style={{ color: 'var(--color-text-main)' }}>
-                    {server.node?.name || server.nodeId}
+                    {(server.node as any)?.name || server.nodeId}
                   </span>
                 </div>
                 {server.node?.publicFqdn && (

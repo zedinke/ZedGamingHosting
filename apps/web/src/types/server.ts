@@ -1,5 +1,6 @@
 export interface ServerNode {
   id: string;
+  name?: string;
   publicFqdn?: string;
   ipAddress?: string;
 }
