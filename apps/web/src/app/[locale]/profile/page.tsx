@@ -112,7 +112,11 @@ export default function ProfilePage() {
                   Fiók beállítások
                 </h2>
                 <div className="space-y-4">
-                  <Button variant="outline" className="w-full">
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    onClick={() => router.push(`/${locale}/profile/change-password`)}
+                  >
                     Jelszó változtatása
                   </Button>
                   <Button variant="outline" className="w-full">

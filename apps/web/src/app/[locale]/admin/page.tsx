@@ -115,7 +115,10 @@ export default function AdminPage() {
               </p>
             </Card>
 
-            <Card className="glass elevation-2 p-6">
+            <Card 
+              className="glass elevation-2 p-6 cursor-pointer hover:scale-105 transition-transform"
+              onClick={() => router.push(`/${locale}/admin/logs`)}
+            >
               <h3 className="text-lg font-semibold mb-2" style={{ color: '#f8fafc' }}>
                 Naplók
               </h3>
@@ -124,7 +127,10 @@ export default function AdminPage() {
               </p>
             </Card>
 
-            <Card className="glass elevation-2 p-6">
+            <Card 
+              className="glass elevation-2 p-6 cursor-pointer hover:scale-105 transition-transform"
+              onClick={() => router.push(`/${locale}/admin/licensing`)}
+            >
               <h3 className="text-lg font-semibold mb-2" style={{ color: '#f8fafc' }}>
                 Licencelés
               </h3>

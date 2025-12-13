@@ -107,7 +107,7 @@ export default function AdminNodesPage() {
                   Szerver node-ok kezelése és monitorozása
                 </p>
               </div>
-              <Button variant="primary">
+              <Button variant="primary" onClick={() => router.push(`/${locale}/admin/nodes/create`)}>
                 Új node
               </Button>
             </div>
