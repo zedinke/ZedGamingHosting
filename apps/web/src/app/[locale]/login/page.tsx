@@ -58,39 +58,39 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950">
       {/* Animated Grid Background */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(59,130,246,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(59,130,246,0.1)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
       
       {/* Gradient Orbs */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-500/20 rounded-full blur-[120px] animate-pulse" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary-600/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] animate-pulse" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-[420px] relative z-10"
+        className="w-full max-w-[440px] relative z-10"
       >
         {/* Brand Header */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-center mb-12"
+          className="text-center mb-10"
         >
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 mb-6 shadow-[0_0_40px_rgba(14,165,233,0.4)] relative overflow-hidden group"
+            className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-blue-500 mb-6 shadow-[0_0_40px_rgba(59,130,246,0.5)] relative overflow-hidden group"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <Sparkles className="w-8 h-8 text-white relative z-10" fill="currentColor" />
+            <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <Sparkles className="w-10 h-10 text-white relative z-10" fill="currentColor" />
           </motion.div>
-          <h1 className="text-3xl font-bold mb-2 text-white tracking-tight">
+          <h1 className="text-4xl font-bold mb-2 text-white tracking-tight">
             ZedGamingHosting
           </h1>
-          <p className="text-sm text-slate-400">
+          <p className="text-base text-slate-300">
             {t('subtitle') || 'Sign in to your account'}
           </p>
         </motion.div>
@@ -103,21 +103,18 @@ export default function LoginPage() {
           className="relative"
         >
           {/* Glass Card */}
-          <div className="relative backdrop-blur-xl bg-slate-900/80 border border-slate-800/50 rounded-2xl shadow-2xl overflow-hidden">
-            {/* Gradient Border Effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-primary-500/0 via-primary-500/5 to-primary-500/0 opacity-0 hover:opacity-100 transition-opacity duration-500" />
-            
+          <div className="relative backdrop-blur-xl bg-slate-900/70 border border-slate-700/50 rounded-2xl shadow-2xl overflow-hidden">
             {/* Inner Glow */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-transparent pointer-events-none" />
 
-            <div className="relative p-8">
+            <div className="relative p-10">
               {/* Form Header */}
               <div className="mb-8">
-                <h2 className="text-2xl font-semibold text-white mb-1.5">
-                  {t('title') || 'Welcome back'}
+                <h2 className="text-3xl font-bold text-white mb-2">
+                  {t('title') || 'Bejelentkezés'}
                 </h2>
-                <p className="text-sm text-slate-400">
-                  {t('subtitle') || 'Enter your credentials to continue'}
+                <p className="text-base text-slate-300">
+                  {t('subtitle') || 'Jelentkezz be a fiókodba'}
                 </p>
               </div>
 
@@ -135,15 +132,14 @@ export default function LoginPage() {
                 )}
 
                 {/* Email Field */}
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2.5">
                   <label
                     htmlFor="email"
-                    className="block text-sm font-medium text-slate-300"
+                    className="block text-base font-medium text-white"
                   >
                     {t('email')}
                   </label>
                   <div className="relative group">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 pointer-events-none transition-colors duration-200 group-focus-within:text-primary-500 z-10" />
                     <Input
                       id="email"
                       type="email"
@@ -153,29 +149,29 @@ export default function LoginPage() {
                       required
                       disabled={loading}
                       autoComplete="email"
-                      className="pl-12 pr-4 h-12 w-full rounded-xl bg-slate-950/50 border border-slate-800 text-white placeholder:text-slate-500 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200"
+                      className="pl-4 pr-4 h-14 w-full rounded-xl bg-white/95 border-0 text-slate-900 placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500/50 transition-all duration-200 text-base"
                     />
                   </div>
                 </div>
 
                 {/* Password Field */}
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2.5">
                   <div className="flex items-center justify-between">
                     <label
                       htmlFor="password"
-                      className="block text-sm font-medium text-slate-300"
+                      className="block text-base font-medium text-white"
                     >
                       {t('password')}
                     </label>
                     <a
                       href="/forgot-password"
-                      className="text-xs text-primary-400 hover:text-primary-300 transition-colors font-medium"
+                      className="text-sm text-white hover:text-blue-400 transition-colors font-medium"
                     >
                       {t('forgotPassword')}
                     </a>
                   </div>
                   <div className="relative group">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 pointer-events-none transition-colors duration-200 group-focus-within:text-primary-500 z-10" />
+                    <Lock className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 pointer-events-none transition-colors duration-200 z-10" />
                     <Input
                       id="password"
                       type="password"
@@ -185,19 +181,19 @@ export default function LoginPage() {
                       required
                       disabled={loading}
                       autoComplete="current-password"
-                      className="pl-12 pr-4 h-12 w-full rounded-xl bg-slate-950/50 border border-slate-800 text-white placeholder:text-slate-500 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200"
+                      className="pl-4 pr-12 h-14 w-full rounded-xl bg-white/95 border-0 text-slate-900 placeholder:text-slate-500 focus:ring-2 focus:ring-blue-500/50 transition-all duration-200 text-base"
                     />
                   </div>
                 </div>
 
                 {/* Remember Me */}
-                <div className="flex items-center">
+                <div className="flex items-center pt-1">
                   <label className="flex items-center cursor-pointer group">
                     <input
                       type="checkbox"
-                      className="w-4 h-4 rounded border-slate-700 bg-slate-950 text-primary-500 focus:ring-primary-500/20 focus:ring-2 transition-all cursor-pointer"
+                      className="w-5 h-5 rounded border-2 border-white/30 bg-transparent text-blue-500 focus:ring-blue-500/20 focus:ring-2 transition-all cursor-pointer"
                     />
-                    <span className="ml-2.5 text-sm text-slate-400 transition-colors group-hover:text-slate-300">
+                    <span className="ml-3 text-base text-white transition-colors group-hover:text-blue-300">
                       {t('rememberMe') || 'Remember me'}
                     </span>
                   </label>
@@ -207,7 +203,7 @@ export default function LoginPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full h-12 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 transition-all duration-200 group font-semibold text-base flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full h-14 rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 transition-all duration-200 group font-semibold text-base flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? (
                     <>
@@ -219,34 +215,27 @@ export default function LoginPage() {
                     </>
                   ) : (
                     <>
-                      <span>{t('submit') || 'Sign in'}</span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      <span>{t('submit') || 'Bejelentkezés'}</span>
+                      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </>
                   )}
                 </button>
               </form>
 
-              {/* Divider */}
-              <div className="relative my-8">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-slate-800" />
+              {/* Registration Section */}
+              <div className="mt-8 pt-8 border-t border-slate-700/50">
+                <p className="text-center text-xs uppercase tracking-wider text-slate-400 mb-4">
+                  {t('noAccount') || "NINCS MÉG FIÓKOD?"}
+                </p>
+                <div className="text-center">
+                  <a
+                    href="/register"
+                    className="inline-flex items-center text-base text-white hover:text-blue-400 transition-colors font-medium group"
+                  >
+                    {t('signUp') || 'Regisztráció'}
+                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </a>
                 </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-slate-900/80 px-2 text-slate-500">
-                    {t('noAccount') || "Don't have an account?"}
-                  </span>
-                </div>
-              </div>
-
-              {/* Sign Up Link */}
-              <div className="text-center">
-                <a
-                  href="/register"
-                  className="inline-flex items-center text-sm text-slate-400 hover:text-primary-400 transition-colors font-medium group"
-                >
-                  {t('signUp') || 'Create an account'}
-                  <ArrowRight className="ml-1.5 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </a>
               </div>
             </div>
           </div>
@@ -257,7 +246,7 @@ export default function LoginPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-12 text-center text-xs text-slate-500"
+          className="mt-10 text-center text-xs text-slate-400"
         >
           © {new Date().getFullYear()} ZedGamingHosting. All rights reserved.
         </motion.p>
