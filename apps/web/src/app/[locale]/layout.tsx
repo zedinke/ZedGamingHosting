@@ -5,6 +5,7 @@ import { routing } from '../../i18n/routing';
 import { QueryProvider } from '../../providers/query-provider';
 import { ThemeProvider } from '../../lib/theme';
 import { geistSans, jetbrainsMono } from '../../lib/fonts';
+import { ErrorBoundary } from '../../components/error-boundary';
 
 export const metadata = {
   title: 'ZedGamingHosting',
@@ -33,13 +34,15 @@ export default async function LocaleLayout({
           minHeight: '100vh'
         }}
       >
-        <ThemeProvider>
-          <QueryProvider>
-            <NextIntlClientProvider messages={messages}>
-              {children}
-            </NextIntlClientProvider>
-          </QueryProvider>
-        </ThemeProvider>
+        <ErrorBoundary>
+          <ThemeProvider>
+            <QueryProvider>
+              <NextIntlClientProvider messages={messages}>
+                {children}
+              </NextIntlClientProvider>
+            </QueryProvider>
+          </ThemeProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );
