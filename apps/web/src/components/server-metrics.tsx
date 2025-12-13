@@ -78,6 +78,7 @@ export function ServerMetrics({ serverUuid, refreshInterval = 30000 }: ServerMet
       }, refreshInterval);
       return () => clearInterval(interval);
     }
+    return;
   }, [serverUuid, accessToken, timeRange, refreshInterval]);
 
   const getTimeRangeMs = (range: string): number => {
