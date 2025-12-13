@@ -1,15 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../../../../../../lib/api-client';
 import { useAuthStore } from '../../../../../../stores/auth-store';
 import { Card, Button } from '@zed-hosting/ui-kit';
 import { Navigation } from '../../../../../../components/navigation';
 import { ProtectedRoute } from '../../../../../../components/protected-route';
 import { Folder, File, Upload, Download, Trash2 } from 'lucide-react';
+import { useNotifications } from '../../../../../../hooks/use-notifications';
 
 interface FileItem {
   name: string;
@@ -23,6 +24,9 @@ export default function ServerFilesPage() {
   const params = useParams();
   const t = useTranslations();
   const { accessToken } = useAuthStore();
+  const notifications = useNotifications();
+  const queryClient = useQueryClient();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const serverUuid = params?.uuid as string;
   const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'hu' : 'hu';
   
@@ -32,6 +36,7 @@ export default function ServerFilesPage() {
     }
   }, [serverUuid, router, locale]);
   const [currentPath, setCurrentPath] = useState('/');
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (accessToken) {
@@ -66,6 +71,159 @@ export default function ServerFilesPage() {
     setCurrentPath(newPath);
   };
 
+  // File upload handler
+  const handleFileUpload = async (file: File) => {
+    if (!file || !serverUuid) return;
+
+    setUploading(true);
+    try {
+      // Read file as base64
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const base64Content = (e.target?.result as string).split(',')[1] || (e.target?.result as string);
+          
+          await apiClient.post(`/servers/${serverUuid}/files/upload`, {
+            path: currentPath,
+            filename: file.name,
+            content: base64Content,
+          });
+
+          notifications.addNotification({
+            type: 'success',
+            title: 'Fájl feltöltve',
+            message: `A ${file.name} fájl sikeresen feltöltve`,
+          });
+
+          queryClient.invalidateQueries({ queryKey: ['server-files', serverUuid, currentPath] });
+        } catch (err: any) {
+          notifications.addNotification({
+            type: 'error',
+            title: 'Hiba',
+            message: err.message || 'Fájl feltöltés sikertelen',
+          });
+        } finally {
+          setUploading(false);
+        }
+      };
+      reader.onerror = () => {
+        notifications.addNotification({
+          type: 'error',
+          title: 'Hiba',
+          message: 'Fájl olvasás sikertelen',
+        });
+        setUploading(false);
+      };
+      reader.readAsDataURL(file);
+    } catch (err: any) {
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: err.message || 'Fájl feltöltés sikertelen',
+      });
+      setUploading(false);
+    }
+  };
+
+  // Download file
+  const downloadMutation = useMutation({
+    mutationFn: async (file: FileItem) => {
+      if (!file || file.type !== 'file' || !serverUuid) return;
+      
+      const filePath = currentPath === '/' ? `/${file.name}` : `${currentPath}/${file.name}`;
+      const response = await apiClient.get(`/servers/${serverUuid}/files/content?path=${encodeURIComponent(filePath)}`);
+      
+      // If response is base64, decode it
+      let blob: Blob;
+      if (typeof response.content === 'string') {
+        const binaryString = atob(response.content);
+        const bytes = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+        }
+        blob = new Blob([bytes]);
+      } else {
+        blob = new Blob([response.content]);
+      }
+      
+      // Create download link
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = file.name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    },
+    onSuccess: () => {
+      notifications.addNotification({
+        type: 'success',
+        title: 'Fájl letöltve',
+        message: 'A fájl sikeresen letöltve',
+      });
+    },
+    onError: (err: any) => {
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: err.message || 'Fájl letöltés sikertelen',
+      });
+    },
+  });
+
+  // Delete file
+  const deleteMutation = useMutation({
+    mutationFn: async (file: FileItem) => {
+      if (!file || !serverUuid) return;
+      
+      const filePath = currentPath === '/' ? `/${file.name}` : `${currentPath}/${file.name}`;
+      await apiClient.delete(`/servers/${serverUuid}/files?path=${encodeURIComponent(filePath)}`);
+    },
+    onSuccess: () => {
+      notifications.addNotification({
+        type: 'success',
+        title: 'Fájl törölve',
+        message: 'A fájl sikeresen törölve',
+      });
+      queryClient.invalidateQueries({ queryKey: ['server-files', serverUuid, currentPath] });
+    },
+    onError: (err: any) => {
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: err.message || 'Fájl törlés sikertelen',
+      });
+    },
+  });
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleFileUpload(file);
+      // Reset input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const handleDownload = (file: FileItem, e: React.MouseEvent) => {
+    e.stopPropagation();
+    downloadMutation.mutate(file);
+  };
+
+  const handleDelete = (file: FileItem, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (confirm(`Biztosan törölni szeretnéd a(z) ${file.name} ${file.type === 'file' ? 'fájlt' : 'könyvtárat'}?`)) {
+      deleteMutation.mutate(file);
+    }
+  };
+
   const pathParts = currentPath.split('/').filter(Boolean);
 
   return (
@@ -89,9 +247,19 @@ export default function ServerFilesPage() {
                 </p>
               </div>
               <div className="flex gap-2">
-                <Button variant="outline">
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileInputChange}
+                  style={{ display: 'none' }}
+                />
+                <Button 
+                  variant="outline" 
+                  onClick={handleUploadClick}
+                  disabled={uploading}
+                >
                   <Upload className="h-4 w-4 mr-2" />
-                  Feltöltés
+                  {uploading ? 'Feltöltés...' : 'Feltöltés'}
                 </Button>
                 <Button
                   variant="outline"
@@ -164,11 +332,21 @@ export default function ServerFilesPage() {
                     </div>
                     <div className="flex gap-2">
                       {file.type === 'file' && (
-                        <Button variant="outline" size="sm">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={(e) => handleDownload(file, e)}
+                          disabled={downloadMutation.isPending}
+                        >
                           <Download className="h-4 w-4" />
                         </Button>
                       )}
-                      <Button variant="outline" size="sm">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={(e) => handleDelete(file, e)}
+                        disabled={deleteMutation.isPending}
+                      >
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
