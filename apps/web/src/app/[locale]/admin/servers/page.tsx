@@ -1,23 +1,48 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '../../../../stores/auth-store';
 import { Navigation } from '../../../../components/navigation';
 import { Card, Button } from '@zed-hosting/ui-kit';
+import { useNotificationContext } from '../../../../context/notification-context';
 import { apiClient } from '../../../../lib/api-client';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { GameServer } from '../../../../types/server';
+import { Search, Filter, Download, Trash2, ExternalLink, Eye } from 'lucide-react';
+import { exportToCSV } from '../../../../utils/export';
+import { BulkActions } from '../../../../components/bulk-actions';
+import { Checkbox } from '../../../../components/checkbox';
+
+interface Server {
+  uuid: string;
+  name: string;
+  status: 'ONLINE' | 'OFFLINE' | 'CRASHED' | 'STARTING' | 'STOPPING';
+  node: {
+    name: string;
+  };
+  resources: {
+    cpuLimit: number;
+    ramLimit: number;
+    diskLimit: number;
+  };
+  gameType: string;
+  owner?: {
+    email: string;
+  };
+}
 
 export default function AdminServersPage() {
   const router = useRouter();
   const params = useParams();
-  const t = useTranslations();
+  const locale = (params?.locale as string) || 'hu';
   const { user: currentUser, isAuthenticated, accessToken } = useAuthStore();
-  const locale = (params.locale as string) || 'hu';
+  const notifications = useNotificationContext();
   const [isHydrated, setIsHydrated] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [selectedServers, setSelectedServers] = useState<Set<string>>(new Set());
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     setIsHydrated(true);
@@ -26,296 +51,324 @@ export default function AdminServersPage() {
     }
   }, [accessToken]);
 
-  useEffect(() => {
-    if (isHydrated && !isAuthenticated) {
-      router.push(`/${locale}/login`);
-      return;
-    }
-
-    const userRole = currentUser?.role?.toUpperCase();
-    if (isHydrated && isAuthenticated && userRole !== 'ADMIN' && userRole !== 'SUPER_ADMIN' && userRole !== 'SUPERADMIN' && userRole !== 'RESELLER_ADMIN') {
-      router.push(`/${locale}/dashboard`);
-      return;
-    }
-  }, [isAuthenticated, isHydrated, currentUser, router, locale]);
-
-  const { data: servers, isLoading } = useQuery<GameServer[]>({
+  const { data: servers = [], isLoading } = useQuery<Server[]>({
     queryKey: ['admin-servers'],
     queryFn: async () => {
-      const response = await apiClient.get<any[]>('/admin/servers');
-      return response.map((server: any) => ({
-        id: server.id,
-        uuid: server.uuid,
-        gameType: server.gameType,
-        status: server.status,
-        nodeId: server.nodeId,
-        ownerId: server.ownerId,
-        startupPriority: server.startupPriority,
-        resources: server.resources || {},
-        envVars: server.envVars || {},
-        clusterId: server.clusterId,
-        createdAt: new Date(server.createdAt),
-        updatedAt: new Date(server.updatedAt),
-        node: server.node,
-        ports: server.networkAllocations || [],
-        metrics: server.metrics?.[0] || {},
-      }));
+      const response = await apiClient.get<Server[]>('/admin/servers');
+      return response;
     },
-    enabled: isHydrated && isAuthenticated && !!accessToken,
+    enabled: !!accessToken && isAuthenticated,
     refetchInterval: 30000,
   });
 
-  const filteredServers = servers?.filter((server) => {
-    const matchesSearch = !searchQuery || 
-      server.gameType.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      server.uuid.toLowerCase().includes(searchQuery.toLowerCase());
+  const deleteServerMutation = useMutation({
+    mutationFn: async (uuid: string) => {
+      await apiClient.delete(`/servers/${uuid}`);
+    },
+    onSuccess: (_, uuid) => {
+      queryClient.invalidateQueries({ queryKey: ['admin-servers'] });
+      notifications.addNotification({
+        type: 'success',
+        title: 'Szerver törölve',
+        message: 'A szerver sikeresen törölve.',
+      });
+      setSelectedServers((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(uuid);
+        return newSet;
+      });
+    },
+    onError: (err: any) => {
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: err.message || 'A szerver törlése sikertelen volt.',
+      });
+    },
+  });
+
+  const handleDeleteServer = async (uuid: string) => {
+    if (!window.confirm('Biztosan törölni szeretnéd ezt a szervert? Ez a művelet visszavonhatatlan.')) {
+      return;
+    }
+    deleteServerMutation.mutate(uuid);
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedServers.size === 0) return;
+    if (!window.confirm(`Biztosan törölni szeretnéd a kiválasztott ${selectedServers.size} szervert? Ez a művelet visszavonhatatlan.`)) {
+      return;
+    }
+    await Promise.all(Array.from(selectedServers).map(uuid => deleteServerMutation.mutateAsync(uuid)));
+    setSelectedServers(new Set());
+  };
+
+  const filteredServers = servers.filter(server => {
+    const matchesSearch = server.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      server.gameType.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      server.node.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      server.owner?.email.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || server.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
-  if (!isHydrated) {
-    return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', color: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p>Loading...</p>
-      </div>
-    );
-  }
+  const stats = {
+    total: servers.length,
+    running: servers.filter(s => s.status === 'ONLINE').length,
+    stopped: servers.filter(s => s.status === 'OFFLINE').length,
+    crashed: servers.filter(s => s.status === 'CRASHED').length,
+  };
 
-  const userRole = currentUser?.role?.toUpperCase();
-  if (!isAuthenticated || (userRole !== 'ADMIN' && userRole !== 'SUPER_ADMIN' && userRole !== 'SUPERADMIN' && userRole !== 'RESELLER_ADMIN')) {
-    return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', color: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p>Redirecting...</p>
-      </div>
-    );
-  }
+  const handleExport = () => {
+    const data = filteredServers.map(server => ({
+      Név: server.name,
+      Állapot: server.status,
+      Játék: server.gameType,
+      Node: server.node.name,
+      CPU: server.resources.cpuLimit,
+      RAM: `${server.resources.ramLimit} MB`,
+      Disk: `${server.resources.diskLimit} GB`,
+      Tulajdonos: server.owner?.email || 'N/A',
+    }));
+    exportToCSV(data, `admin-servers-${new Date().toISOString().split('T')[0]}.csv`);
+  };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'RUNNING':
-        return '#10b981';
-      case 'STOPPED':
-        return '#6b7280';
-      case 'STARTING':
-      case 'STOPPING':
-        return '#f59e0b';
-      case 'CRASHED':
-        return '#ef4444';
-      default:
-        return '#6b7280';
+  const toggleServerSelection = (uuid: string) => {
+    setSelectedServers((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(uuid)) {
+        newSet.delete(uuid);
+      } else {
+        newSet.add(uuid);
+      }
+      return newSet;
+    });
+  };
+
+  const toggleAllServers = () => {
+    if (selectedServers.size === filteredServers.length) {
+      setSelectedServers(new Set());
+    } else {
+      setSelectedServers(new Set(filteredServers.map(s => s.uuid)));
     }
   };
 
-  const statusCounts = servers?.reduce((acc, server) => {
-    acc[server.status] = (acc[server.status] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>) || {};
+  if (!isHydrated) {
+    return null;
+  }
+
+  if (!isAuthenticated) {
+    router.push(`/${locale}/login`);
+    return null;
+  }
+
+  const userRole = currentUser?.role?.toUpperCase();
+  const isAdmin = userRole === 'ADMIN' || userRole === 'SUPER_ADMIN' || userRole === 'SUPERADMIN' || userRole === 'RESELLER_ADMIN';
+
+  if (!isAdmin) {
+    router.push(`/${locale}/dashboard`);
+    return null;
+  }
 
   return (
-    <>
+    <div className="min-h-screen" style={{ 
+      backgroundColor: '#0a0a0a', 
+      background: 'radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.05) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%), #0a0a0a',
+      color: '#f8fafc',
+      minHeight: '100vh'
+    }}>
       <Navigation />
-      <main className="min-h-screen" style={{ 
-        backgroundColor: '#0a0a0a', 
-        background: 'radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.05) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%), #0a0a0a',
-        color: '#f8fafc',
-        minHeight: '100vh'
-      }}>
-        <div className="container mx-auto px-4 py-8">
-          <header className="mb-8">
-            <div className="mb-4 flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold mb-2" style={{ color: '#f8fafc' }}>Összes Szerver</h1>
-                <p style={{ color: '#cbd5e1' }}>
-                  Összes szerver áttekintése és kezelése
-                </p>
-              </div>
-              {filteredServers && filteredServers.length > 0 && (
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    exportToCSV(
-                      filteredServers.map(s => ({
-                        UUID: s.uuid,
-                        'Játék típus': s.gameType,
-                        Státusz: s.status,
-                        Node: s.node?.name || s.nodeId,
-                        'CPU Limit': s.resources?.cpuLimit || 0,
-                        'RAM Limit (GB)': s.resources?.ramLimit ? (s.resources.ramLimit / 1024).toFixed(2) : 0,
-                        'Disk Limit (GB)': s.resources?.diskLimit || 0,
-                      })),
-                      `szerverek_${formatDateForFilename()}.csv`
-                    );
-                  }}
-                  className="flex items-center gap-2"
-                >
-                  <Download className="h-4 w-4" />
-                  CSV export
-                </Button>
-              )}
-            </div>
-            <div className="flex gap-4">
-              <input
-                type="text"
-                placeholder="Keresés játék típus vagy UUID alapján..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 px-4 py-2 rounded-lg border"
-                style={{
-                  backgroundColor: 'var(--color-bg-card)',
-                  borderColor: 'var(--color-border)',
-                  color: 'var(--color-text-main)',
-                }}
-              />
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-4 py-2 rounded-lg border"
-                style={{
-                  backgroundColor: 'var(--color-bg-card)',
-                  borderColor: 'var(--color-border)',
-                  color: 'var(--color-text-main)',
-                }}
-              >
-                <option value="all">Minden státusz</option>
-                <option value="RUNNING">RUNNING</option>
-                <option value="STOPPED">STOPPED</option>
-                <option value="STARTING">STARTING</option>
-                <option value="STOPPING">STOPPING</option>
-                <option value="CRASHED">CRASHED</option>
-                <option value="INSTALLING">INSTALLING</option>
-                <option value="UPDATING">UPDATING</option>
-              </select>
-            </div>
-          </header>
+      <main className="container mx-auto px-4 py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2" style={{ color: '#f8fafc' }}>
+            Admin - Szerverek
+          </h1>
+          <p style={{ color: '#cbd5e1' }}>
+            Összes szerver kezelése és monitorozása
+          </p>
+        </div>
 
-          {/* Statistics */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <Card className="glass elevation-2 p-6">
-              <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>Összes</h3>
-              <p className="text-3xl font-bold" style={{ color: '#f8fafc' }}>
-                {servers?.length || 0}
-              </p>
-            </Card>
-            <Card className="glass elevation-2 p-6">
-              <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>Futó</h3>
-              <p className="text-3xl font-bold" style={{ color: '#10b981' }}>
-                {statusCounts.RUNNING || 0}
-              </p>
-            </Card>
-            <Card className="glass elevation-2 p-6">
-              <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>Leállítva</h3>
-              <p className="text-3xl font-bold" style={{ color: '#6b7280' }}>
-                {statusCounts.STOPPED || 0}
-              </p>
-            </Card>
-            <Card className="glass elevation-2 p-6">
-              <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>Hibás</h3>
-              <p className="text-3xl font-bold" style={{ color: '#ef4444' }}>
-                {statusCounts.CRASHED || 0}
-              </p>
-            </Card>
+        {/* Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <Card className="glass elevation-1 p-4">
+            <div className="text-sm" style={{ color: '#cbd5e1' }}>Összes szerver</div>
+            <div className="text-2xl font-bold" style={{ color: '#f8fafc' }}>{stats.total}</div>
+          </Card>
+          <Card className="glass elevation-1 p-4">
+            <div className="text-sm" style={{ color: '#cbd5e1' }}>Futó</div>
+            <div className="text-2xl font-bold" style={{ color: '#22c55e' }}>{stats.running}</div>
+          </Card>
+          <Card className="glass elevation-1 p-4">
+            <div className="text-sm" style={{ color: '#cbd5e1' }}>Leállított</div>
+            <div className="text-2xl font-bold" style={{ color: '#cbd5e1' }}>{stats.stopped}</div>
+          </Card>
+          <Card className="glass elevation-1 p-4">
+            <div className="text-sm" style={{ color: '#cbd5e1' }}>Összeomlott</div>
+            <div className="text-2xl font-bold" style={{ color: '#ef4444' }}>{stats.crashed}</div>
+          </Card>
+        </div>
+
+        {/* Filters and Actions */}
+        <div className="flex flex-col md:flex-row gap-4 mb-6">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" style={{ color: '#9ca3af' }} />
+            <input
+              type="text"
+              placeholder="Keresés szerver neve, játék típusa, node vagy tulajdonos szerint..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 rounded-lg border"
+              style={{
+                backgroundColor: 'var(--color-bg-card)',
+                borderColor: 'var(--color-border)',
+                color: 'var(--color-text-main)',
+              }}
+            />
           </div>
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="px-4 py-2 rounded-lg border"
+            style={{
+              backgroundColor: 'var(--color-bg-card)',
+              borderColor: 'var(--color-border)',
+              color: 'var(--color-text-main)',
+            }}
+          >
+            <option value="all">Összes állapot</option>
+            <option value="ONLINE">Online</option>
+            <option value="OFFLINE">Offline</option>
+            <option value="CRASHED">Összeomlott</option>
+            <option value="STARTING">Indítás</option>
+            <option value="STOPPING">Leállítás</option>
+          </select>
+          <Button onClick={handleExport} variant="outline">
+            <Download className="h-4 w-4 mr-2" />
+            Export CSV
+          </Button>
+        </div>
 
+        {/* Bulk Actions */}
+        {selectedServers.size > 0 && (
+          <BulkActions
+            selectedCount={selectedServers.size}
+            onDelete={handleBulkDelete}
+            onClearSelection={() => setSelectedServers(new Set())}
+          />
+        )}
+
+        {/* Servers Table */}
+        <Card className="glass elevation-2 overflow-hidden">
           {isLoading ? (
-            <div className="text-center py-12">
-              <p style={{ color: '#cbd5e1' }}>Betöltés...</p>
+            <div className="p-8 text-center" style={{ color: '#cbd5e1' }}>
+              Betöltés...
             </div>
-          ) : !filteredServers || filteredServers.length === 0 ? (
-            <Card className="glass elevation-2 p-12 text-center">
-              <p style={{ color: '#cbd5e1' }}>
-                {searchQuery || statusFilter !== 'all' ? 'Nincs találat' : 'Nincs szerver'}
-              </p>
-            </Card>
+          ) : filteredServers.length === 0 ? (
+            <div className="p-8 text-center" style={{ color: '#cbd5e1' }}>
+              Nincs szerver
+            </div>
           ) : (
-            <>
-              <div className="mb-4">
-                <Checkbox
-                  checked={selectedServers.size === filteredServers.length && filteredServers.length > 0}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setSelectedServers(new Set(filteredServers.map(s => s.uuid)));
-                    } else {
-                      setSelectedServers(new Set());
-                    }
-                  }}
-                  label="Összes kiválasztása"
-                />
-              </div>
-              
-              <div className="space-y-4">
-                {filteredServers.map((server) => (
-                <Card key={server.uuid} className="glass elevation-2 p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <div 
-                          className="w-3 h-3 rounded-full"
-                          style={{ backgroundColor: getStatusColor(server.status) }}
-                        />
-                        <h3 className="text-lg font-semibold" style={{ color: '#f8fafc' }}>
-                          {server.gameType} - {server.uuid.substring(0, 8)}
-                        </h3>
-                      </div>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                        <div>
-                          <span style={{ color: '#cbd5e1' }}>Státusz: </span>
-                          <span style={{ color: getStatusColor(server.status) }}>{server.status}</span>
-                        </div>
-                        <div>
-                          <span style={{ color: '#cbd5e1' }}>Node: </span>
-                          <span style={{ color: '#f8fafc' }}>{server.node?.name || server.nodeId}</span>
-                        </div>
-                        <div>
-                          <span style={{ color: '#cbd5e1' }}>CPU: </span>
-                          <span style={{ color: '#f8fafc' }}>{server.resources?.cpuLimit || 0} mag</span>
-                        </div>
-                        <div>
-                          <span style={{ color: '#cbd5e1' }}>RAM: </span>
-                          <span style={{ color: '#f8fafc' }}>{server.resources?.ramLimit || 0} MB</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex gap-2 ml-4">
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => router.push(`/${locale}/admin/servers/${server.uuid}`)}
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b" style={{ borderColor: 'var(--color-border)' }}>
+                    <th className="px-4 py-3 text-left">
+                      <Checkbox
+                        checked={selectedServers.size === filteredServers.length && filteredServers.length > 0}
+                        onChange={toggleAllServers}
+                      />
+                    </th>
+                    <th className="px-4 py-3 text-left text-sm font-medium" style={{ color: '#cbd5e1' }}>Név</th>
+                    <th className="px-4 py-3 text-left text-sm font-medium" style={{ color: '#cbd5e1' }}>Állapot</th>
+                    <th className="px-4 py-3 text-left text-sm font-medium" style={{ color: '#cbd5e1' }}>Játék</th>
+                    <th className="px-4 py-3 text-left text-sm font-medium" style={{ color: '#cbd5e1' }}>Node</th>
+                    <th className="px-4 py-3 text-left text-sm font-medium" style={{ color: '#cbd5e1' }}>Erőforrások</th>
+                    <th className="px-4 py-3 text-left text-sm font-medium" style={{ color: '#cbd5e1' }}>Tulajdonos</th>
+                    <th className="px-4 py-3 text-left text-sm font-medium" style={{ color: '#cbd5e1' }}>Műveletek</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredServers.map((server) => {
+                    const statusColors: Record<string, string> = {
+                      ONLINE: '#22c55e',
+                      OFFLINE: '#6b7280',
+                      CRASHED: '#ef4444',
+                      STARTING: '#f59e0b',
+                      STOPPING: '#f59e0b',
+                    };
+
+                    return (
+                      <tr
+                        key={server.uuid}
+                        className="border-b hover:bg-opacity-10 transition-colors"
+                        style={{ borderColor: 'var(--color-border)' }}
                       >
-                        Admin nézet
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => router.push(`/${locale}/dashboard/server/${server.uuid}`)}
-                      >
-                        Felhasználói nézet
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={async () => {
-                          if (window.confirm('Biztosan törölni szeretnéd ezt a szervert?')) {
-                            try {
-                              await apiClient.delete(`/servers/${server.uuid}`);
-                              queryClient.invalidateQueries({ queryKey: ['admin-servers'] });
-                            } catch (err: any) {
-                              alert(err.message || 'Szerver törlése sikertelen');
-                            }
-                          }
-                        }}
-                        style={{ color: '#ef4444' }}
-                      >
-                        Törlés
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
-              ))}
+                        <td className="px-4 py-3">
+                          <Checkbox
+                            checked={selectedServers.has(server.uuid)}
+                            onChange={() => toggleServerSelection(server.uuid)}
+                          />
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="font-medium" style={{ color: '#f8fafc' }}>{server.name}</div>
+                        </td>
+                        <td className="px-4 py-3">
+                          <span
+                            className="px-2 py-1 rounded text-xs font-medium"
+                            style={{
+                              backgroundColor: `${statusColors[server.status]}20`,
+                              color: statusColors[server.status],
+                            }}
+                          >
+                            {server.status}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3" style={{ color: '#cbd5e1' }}>{server.gameType}</td>
+                        <td className="px-4 py-3" style={{ color: '#cbd5e1' }}>{server.node.name}</td>
+                        <td className="px-4 py-3" style={{ color: '#cbd5e1' }}>
+                          <div className="text-xs">
+                            <div>CPU: {server.resources.cpuLimit}</div>
+                            <div>RAM: {server.resources.ramLimit} MB</div>
+                            <div>Disk: {server.resources.diskLimit} GB</div>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3" style={{ color: '#cbd5e1' }}>
+                          {server.owner?.email || 'N/A'}
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="flex gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => router.push(`/${locale}/dashboard/server/${server.uuid}`)}
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => router.push(`/${locale}/dashboard/server/${server.uuid}?view=admin`)}
+                            >
+                              <ExternalLink className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleDeleteServer(server.uuid)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           )}
-        </div>
+        </Card>
       </main>
-    </>
+    </div>
   );
 }
-

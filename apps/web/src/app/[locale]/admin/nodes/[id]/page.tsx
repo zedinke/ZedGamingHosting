@@ -28,6 +28,7 @@ export default function EditNodePage() {
   const locale = (params?.locale as string) || 'hu';
   const nodeId = params?.id as string;
   const { user: currentUser, isAuthenticated, accessToken } = useAuthStore();
+  const notifications = useNotificationContext();
   const [isHydrated, setIsHydrated] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -120,9 +121,22 @@ export default function EditNodePage() {
 
     try {
       await apiClient.delete(`/nodes/${nodeId}`);
+      
+      notifications.addNotification({
+        type: 'success',
+        title: 'Node törölve',
+        message: 'A node sikeresen törölve.',
+      });
+      
       router.push(`/${locale}/admin/nodes`);
     } catch (err: any) {
-      setError(err.message || 'Node törlése sikertelen');
+      const errorMessage = err.message || 'Node törlése sikertelen';
+      setError(errorMessage);
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: errorMessage,
+      });
       setLoading(false);
       setDeleteConfirm(false);
     }
