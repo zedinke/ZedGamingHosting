@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
+  BadGatewayException,
 } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
 import { I18nService } from '../i18n/i18n.service';
@@ -33,31 +34,67 @@ export class FilesService {
   }
 
   /**
+   * Gets daemon URL for a server
+   */
+  private async getDaemonUrl(serverUuid: string): Promise<string> {
+    const server = await this.prisma.gameServer.findUnique({
+      where: { uuid: serverUuid },
+      include: { node: true },
+    });
+
+    if (!server || !server.node) {
+      throw new NotFoundException('Server or node not found');
+    }
+
+    // Use node IP or public FQDN if available
+    const daemonHost = server.node.publicFqdn || server.node.ipAddress;
+    const daemonPort = process.env.DAEMON_PORT || '3001';
+    
+    // Use HTTP for now (can be upgraded to HTTPS later)
+    return `http://${daemonHost}:${daemonPort}`;
+  }
+
+  /**
+   * Makes a request to the daemon
+   */
+  private async callDaemon<T>(
+    serverUuid: string,
+    endpoint: string,
+    method: string = 'GET',
+    body?: unknown,
+  ): Promise<T> {
+    const daemonUrl = await this.getDaemonUrl(serverUuid);
+    const url = `${daemonUrl}/api/files/server/${serverUuid}${endpoint}`;
+
+    try {
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: body ? JSON.stringify(body) : undefined,
+      });
+
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({ error: 'Request failed' }));
+        throw new BadGatewayException(error.error || `Daemon returned ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error: any) {
+      if (error instanceof BadGatewayException) {
+        throw error;
+      }
+      throw new BadGatewayException(`Failed to connect to daemon: ${error.message}`);
+    }
+  }
+
+  /**
    * Lists files in a directory
    */
   async listFiles(serverUuid: string, path: string, userId: string) {
     await this.verifyAccess(serverUuid, userId);
-
-    // TODO: Connect to daemon and execute `ls -la` command via Docker exec
-    // For now, return mock data
-    return {
-      path,
-      files: [
-        {
-          name: 'server.cfg',
-          path: `${path}server.cfg`,
-          type: 'file',
-          size: 1024,
-          modified: new Date().toISOString(),
-        },
-        {
-          name: 'logs',
-          path: `${path}logs`,
-          type: 'directory',
-          modified: new Date().toISOString(),
-        },
-      ],
-    };
+    return await this.callDaemon(serverUuid, `/list?path=${encodeURIComponent(path)}`);
   }
 
   /**
@@ -65,14 +102,7 @@ export class FilesService {
    */
   async getFileContent(serverUuid: string, path: string, userId: string) {
     await this.verifyAccess(serverUuid, userId);
-
-    // TODO: Connect to daemon and execute `cat` command via Docker exec
-    // For now, return mock data
-    return {
-      path,
-      content: `# Mock file content for ${path}\n# This will be replaced with actual file reading from daemon`,
-      encoding: 'utf-8',
-    };
+    return await this.callDaemon(serverUuid, `/content?path=${encodeURIComponent(path)}`);
   }
 
   /**
@@ -81,18 +111,11 @@ export class FilesService {
   async saveFileContent(
     serverUuid: string,
     path: string,
-    _content: string,
+    content: string,
     userId: string,
   ) {
     await this.verifyAccess(serverUuid, userId);
-
-    // TODO: Connect to daemon and write file via Docker exec
-    // For now, return success
-    return {
-      success: true,
-      path,
-      message: 'File saved successfully',
-    };
+    return await this.callDaemon(serverUuid, '/write', 'POST', { path, content });
   }
 
   /**
@@ -105,15 +128,7 @@ export class FilesService {
     userId: string,
   ) {
     await this.verifyAccess(serverUuid, userId);
-
-    // TODO: Connect to daemon and execute `touch` or `mkdir` via Docker exec
-    // For now, return success
-    return {
-      success: true,
-      path,
-      type,
-      message: `${type === 'file' ? 'File' : 'Directory'} created successfully`,
-    };
+    return await this.callDaemon(serverUuid, '/create', 'POST', { path, type });
   }
 
   /**
@@ -121,14 +136,7 @@ export class FilesService {
    */
   async deleteFile(serverUuid: string, path: string, userId: string) {
     await this.verifyAccess(serverUuid, userId);
-
-    // TODO: Connect to daemon and execute `rm` or `rm -rf` via Docker exec
-    // For now, return success
-    return {
-      success: true,
-      path,
-      message: 'File deleted successfully',
-    };
+    return await this.callDaemon(serverUuid, `/delete?path=${encodeURIComponent(path)}`, 'DELETE');
   }
 
   /**
@@ -138,20 +146,13 @@ export class FilesService {
     serverUuid: string,
     targetPath: string,
     filename: string,
-    _content: string,
+    content: string,
     userId: string,
   ) {
     await this.verifyAccess(serverUuid, userId);
 
     const fullPath = `${targetPath}/${filename}`.replace(/\/+/g, '/');
-
-    // TODO: Connect to daemon and write file via Docker exec
-    // For now, return success
-    return {
-      success: true,
-      path: fullPath,
-      message: 'File uploaded successfully',
-    };
+    return await this.callDaemon(serverUuid, '/write', 'POST', { path: fullPath, content });
   }
 }
 

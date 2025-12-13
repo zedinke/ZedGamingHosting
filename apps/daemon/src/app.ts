@@ -10,8 +10,10 @@ import { UpdateQueueService } from './update/update-queue.service';
 import { CacheManager } from './cache/cache-manager.service';
 import { NFSManager } from './nfs/nfs-manager.service';
 import { BackupService } from './backup/backup.service';
+import { FileService } from './files/file-service';
 import IORedis from 'ioredis';
 import * as http from 'http';
+import * as url from 'url';
 
 /**
  * ZedDaemon - The Brain
@@ -32,6 +34,7 @@ export class ZedDaemon {
   private backendClient: BackendClient;
   private redisConnection: IORedis | null = null;
   private httpServer: http.Server | null = null;
+  private fileService: FileService;
 
   constructor() {
     this.backendClient = new BackendClient();
@@ -54,6 +57,9 @@ export class ZedDaemon {
 
     // Initialize backup service
     this.backupService = new BackupService();
+
+    // Initialize file service
+    this.fileService = new FileService();
 
     // Initialize Redis connection for update queue
     this.redisConnection = new IORedis({
@@ -130,22 +136,150 @@ export class ZedDaemon {
   }
 
   /**
-   * Starts HTTP server for health checks
+   * Starts HTTP server for health checks and file operations
    */
   startHttpServer(): void {
     const port = parseInt(process.env.DAEMON_PORT || '3001');
-    this.httpServer = http.createServer((req, res) => {
-      if (req.url === '/health') {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ status: 'healthy', timestamp: new Date().toISOString() }));
-      } else {
-        res.writeHead(404);
-        res.end('Not found');
+    this.httpServer = http.createServer(async (req, res) => {
+      const parsedUrl = url.parse(req.url || '', true);
+      const pathname = parsedUrl.pathname;
+      
+      // Set CORS headers
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+      if (req.method === 'OPTIONS') {
+        res.writeHead(200);
+        res.end();
+        return;
+      }
+
+      try {
+        // Health check
+        if (pathname === '/health') {
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ status: 'healthy', timestamp: new Date().toISOString() }));
+          return;
+        }
+
+        // File operations
+        if (pathname?.startsWith('/api/files/')) {
+          await this.handleFileRequest(req, res, pathname);
+          return;
+        }
+
+        // Not found
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Not found' }));
+      } catch (error: any) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: error.message || 'Internal server error' }));
       }
     });
 
     this.httpServer.listen(port, '0.0.0.0', () => {
       console.log(`✅ HTTP server listening on port ${port}`);
+    });
+  }
+
+  /**
+   * Handles file operation requests
+   */
+  private async handleFileRequest(
+    req: http.IncomingMessage,
+    res: http.ServerResponse,
+    pathname: string,
+  ): Promise<void> {
+    const parts = pathname.split('/').filter((p) => p);
+    // parts: ['api', 'files', 'server', serverUuid, ...]
+
+    if (parts.length < 4 || parts[2] !== 'server') {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Invalid request path' }));
+      return;
+    }
+
+    const serverUuid = parts[3];
+    const operation = parts[4] || 'list';
+
+    let body = '';
+    req.on('data', (chunk) => {
+      body += chunk.toString();
+    });
+
+    req.on('end', async () => {
+      try {
+        let result: any;
+
+        switch (operation) {
+          case 'list': {
+            const query = new URL(req.url || '', 'http://localhost').searchParams;
+            const path = query.get('path') || '/';
+            const files = await this.fileService.listFiles(serverUuid, path);
+            result = { path, files };
+            break;
+          }
+
+          case 'content': {
+            const query = new URL(req.url || '', 'http://localhost').searchParams;
+            const path = query.get('path');
+            if (!path) {
+              throw new Error('Path parameter required');
+            }
+            const content = await this.fileService.getFileContent(serverUuid, path);
+            result = { path, content, encoding: 'utf-8' };
+            break;
+          }
+
+          case 'write': {
+            const data = JSON.parse(body || '{}');
+            if (!data.path || data.content === undefined) {
+              throw new Error('Path and content required');
+            }
+            await this.fileService.writeFileContent(serverUuid, data.path, data.content);
+            result = { success: true, path: data.path, message: 'File saved successfully' };
+            break;
+          }
+
+          case 'create': {
+            const data = JSON.parse(body || '{}');
+            if (!data.path || !data.type) {
+              throw new Error('Path and type required');
+            }
+            await this.fileService.createFile(serverUuid, data.path, data.type);
+            result = {
+              success: true,
+              path: data.path,
+              type: data.type,
+              message: `${data.type === 'file' ? 'File' : 'Directory'} created successfully`,
+            };
+            break;
+          }
+
+          case 'delete': {
+            const query = new URL(req.url || '', 'http://localhost').searchParams;
+            const path = query.get('path');
+            if (!path) {
+              throw new Error('Path parameter required');
+            }
+            await this.fileService.deleteFile(serverUuid, path);
+            result = { success: true, path, message: 'File deleted successfully' };
+            break;
+          }
+
+          default:
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Unknown operation' }));
+            return;
+        }
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (error: any) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: error.message || 'Internal server error' }));
+      }
     });
   }
 
