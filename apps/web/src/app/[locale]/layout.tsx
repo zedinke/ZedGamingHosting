@@ -23,7 +23,16 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale || routing.defaultLocale} className="dark" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${jetbrainsMono.variable} font-sans`}>
+      <body 
+        className={`${geistSans.variable} ${jetbrainsMono.variable} font-sans`}
+        style={{ 
+          backgroundColor: '#0a0a0a',
+          color: '#f8fafc',
+          margin: 0,
+          padding: 0,
+          minHeight: '100vh'
+        }}
+      >
         <ThemeProvider>
           <QueryProvider>
             <NextIntlClientProvider messages={messages}>
