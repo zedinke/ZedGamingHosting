@@ -12,7 +12,6 @@ import { GameServer } from '../../../types/server';
 import { ProtectedRoute } from '../../../components/protected-route';
 import { Navigation } from '../../../components/navigation';
 import { useRouter } from 'next/navigation';
-import { cn } from '../../../lib/utils';
 
 function DashboardContent() {
   const t = useTranslations();
