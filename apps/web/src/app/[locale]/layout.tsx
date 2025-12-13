@@ -6,6 +6,7 @@ import { QueryProvider } from '../../providers/query-provider';
 import { ThemeProvider } from '../../lib/theme';
 import { geistSans, jetbrainsMono } from '../../lib/fonts';
 import { ErrorBoundary } from '../../components/error-boundary';
+import { NotificationProvider } from '../../context/notification-context';
 
 export const metadata = {
   title: 'ZedGamingHosting',
@@ -38,7 +39,9 @@ export default async function LocaleLayout({
           <ThemeProvider>
             <QueryProvider>
               <NextIntlClientProvider messages={messages}>
-                {children}
+                <NotificationProvider>
+                  {children}
+                </NotificationProvider>
               </NextIntlClientProvider>
             </QueryProvider>
           </ThemeProvider>
