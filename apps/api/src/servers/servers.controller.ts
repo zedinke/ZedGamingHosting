@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Request,
+  Query,
 } from '@nestjs/common';
 import { ServersService } from './servers.service';
 import { CreateServerDto } from './dto/create-server.dto';
@@ -32,6 +33,23 @@ export class ServersController {
   @Get(':uuid')
   findOne(@Param('uuid') uuid: string, @Request() req: any) {
     return this.serversService.findOne(uuid, req.user.id);
+  }
+
+  @Get(':uuid/metrics')
+  getMetrics(
+    @Param('uuid') uuid: string,
+    @Query('from') from: string,
+    @Query('to') to: string,
+    @Query('limit') limit: string,
+    @Request() req: any,
+  ) {
+    return this.serversService.getMetrics(
+      uuid,
+      req.user.id,
+      from ? new Date(from) : undefined,
+      to ? new Date(to) : undefined,
+      limit ? parseInt(limit) : 100,
+    );
   }
 
   @Patch(':uuid')
@@ -63,4 +81,3 @@ export class ServersController {
     return this.serversService.restart(uuid, req.user.id);
   }
 }
-

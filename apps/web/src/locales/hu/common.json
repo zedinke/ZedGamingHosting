@@ -78,7 +78,19 @@
         "overview": "Áttekintés",
         "console": "Konzol",
         "files": "Fájlok",
-        "settings": "Beállítások"
+        "settings": "Beállítások",
+        "metrics": "Metrikák"
+      },
+      "metrics": {
+        "title": "Szerver Metrikák",
+        "loading": "Metrikák betöltése...",
+        "noData": "Nincs elérhető metrika adat",
+        "cpu": "CPU Használat",
+        "ram": "RAM Használat",
+        "disk": "Lemez Használat",
+        "network": "Hálózati Használat",
+        "networkIn": "Bejövő",
+        "networkOut": "Kimenő"
       },
       "settings": {
         "title": "Szerver Beállítások",

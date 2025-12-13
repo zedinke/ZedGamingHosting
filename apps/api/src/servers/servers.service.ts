@@ -326,6 +326,56 @@ export class ServersService {
   }
 
   /**
+   * Get server metrics
+   */
+  async getMetrics(
+    uuid: string,
+    userId: string,
+    from?: Date,
+    to?: Date,
+    limit: number = 100,
+  ) {
+    const server = await this.prisma.gameServer.findUnique({
+      where: { uuid },
+    });
+
+    if (!server) {
+      throw new NotFoundException(this.i18n.translate('SERVER_NOT_FOUND'));
+    }
+
+    if (server.ownerId !== userId) {
+      throw new ForbiddenException(this.i18n.translate('SERVER_ACCESS_DENIED'));
+    }
+
+    // Build where clause
+    const where: any = {
+      serverUuid: uuid,
+    };
+
+    if (from || to) {
+      where.timestamp = {};
+      if (from) {
+        where.timestamp.gte = from;
+      }
+      if (to) {
+        where.timestamp.lte = to;
+      }
+    }
+
+    // Get metrics
+    const metrics = await this.prisma.metric.findMany({
+      where,
+      orderBy: {
+        timestamp: 'desc',
+      },
+      take: limit,
+    });
+
+    // Reverse to get chronological order
+    return metrics.reverse();
+  }
+
+  /**
    * Delete server
    */
   async remove(uuid: string, userId: string) {

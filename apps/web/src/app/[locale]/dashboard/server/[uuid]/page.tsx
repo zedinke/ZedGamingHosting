@@ -215,6 +215,12 @@ export default function ServerDetailPage() {
               >
                 {t('dashboard.server.tabs.settings') || 'Settings'}
               </Link>
+              <Link
+                href={`/dashboard/server/${serverUuid}/metrics`}
+                className="pb-4 px-2 text-gray-400 hover:text-gray-300 transition-colors"
+              >
+                {t('dashboard.server.tabs.metrics') || 'Metrics'}
+              </Link>
             </nav>
           </div>
 

@@ -78,7 +78,19 @@
         "overview": "Overview",
         "console": "Console",
         "files": "Files",
-        "settings": "Settings"
+        "settings": "Settings",
+        "metrics": "Metrics"
+      },
+      "metrics": {
+        "title": "Server Metrics",
+        "loading": "Loading metrics...",
+        "noData": "No metrics data available",
+        "cpu": "CPU Usage",
+        "ram": "RAM Usage",
+        "disk": "Disk Usage",
+        "network": "Network Usage",
+        "networkIn": "In",
+        "networkOut": "Out"
       },
       "settings": {
         "title": "Server Settings",
