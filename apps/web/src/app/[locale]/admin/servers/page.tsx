@@ -122,11 +122,36 @@ export default function AdminServersPage() {
       }}>
         <div className="container mx-auto px-4 py-8">
           <header className="mb-8">
-            <div className="mb-4">
-              <h1 className="text-3xl font-bold mb-2" style={{ color: '#f8fafc' }}>Összes Szerver</h1>
-              <p style={{ color: '#cbd5e1' }}>
-                Összes szerver áttekintése és kezelése
-              </p>
+            <div className="mb-4 flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold mb-2" style={{ color: '#f8fafc' }}>Összes Szerver</h1>
+                <p style={{ color: '#cbd5e1' }}>
+                  Összes szerver áttekintése és kezelése
+                </p>
+              </div>
+              {filteredServers && filteredServers.length > 0 && (
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    exportToCSV(
+                      filteredServers.map(s => ({
+                        UUID: s.uuid,
+                        'Játék típus': s.gameType,
+                        Státusz: s.status,
+                        Node: s.node?.name || s.nodeId,
+                        'CPU Limit': s.resources?.cpuLimit || 0,
+                        'RAM Limit (GB)': s.resources?.ramLimit ? (s.resources.ramLimit / 1024).toFixed(2) : 0,
+                        'Disk Limit (GB)': s.resources?.diskLimit || 0,
+                      })),
+                      `szerverek_${formatDateForFilename()}.csv`
+                    );
+                  }}
+                  className="flex items-center gap-2"
+                >
+                  <Download className="h-4 w-4" />
+                  CSV export
+                </Button>
+              )}
             </div>
             <div className="flex gap-4">
               <input

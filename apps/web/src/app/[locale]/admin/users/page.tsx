@@ -64,7 +64,18 @@ export default function AdminUsersPage() {
       user.id.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesRole = roleFilter === 'all' || user.role === roleFilter;
     return matchesSearch && matchesRole;
-  });
+  }) || [];
+
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const paginatedUsers = filteredUsers.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, roleFilter]);
 
   if (!isHydrated) {
     return (
@@ -101,12 +112,35 @@ export default function AdminUsersPage() {
                   Felhasználók kezelése és jogosultságok beállítása
                 </p>
               </div>
-              <Button 
-                variant="primary"
-                onClick={() => router.push(`/${locale}/admin/users/create`)}
-              >
-                Új felhasználó
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    if (filteredUsers && filteredUsers.length > 0) {
+                      exportToCSV(
+                        filteredUsers.map(u => ({
+                          ID: u.id,
+                          Email: u.email,
+                          Szerepkör: u.role,
+                          Egyenleg: u.balance,
+                          Létrehozva: u.createdAt ? new Date(u.createdAt).toLocaleString('hu-HU') : '',
+                        })),
+                        `felhasznalok_${formatDateForFilename()}.csv`
+                      );
+                    }
+                  }}
+                  className="flex items-center gap-2"
+                >
+                  <Download className="h-4 w-4" />
+                  CSV export
+                </Button>
+                <Button 
+                  variant="primary"
+                  onClick={() => router.push(`/${locale}/admin/users/create`)}
+                >
+                  Új felhasználó
+                </Button>
+              </div>
             </div>
             <div className="flex gap-4">
               <input
@@ -142,18 +176,17 @@ export default function AdminUsersPage() {
           </header>
 
           {isLoading ? (
-            <div className="text-center py-12">
-              <p style={{ color: '#cbd5e1' }}>Betöltés...</p>
-            </div>
-          ) : !filteredUsers || filteredUsers.length === 0 ? (
+            <ListSkeleton items={5} />
+          ) : filteredUsers.length === 0 ? (
             <Card className="glass elevation-2 p-12 text-center">
               <p style={{ color: '#cbd5e1' }}>
                 {searchQuery || roleFilter !== 'all' ? 'Nincs találat' : 'Nincs felhasználó'}
               </p>
             </Card>
           ) : (
-            <div className="space-y-4">
-              {filteredUsers.map((user) => (
+            <>
+              <div className="space-y-4 mb-6">
+                {paginatedUsers.map((user) => (
                 <Card key={user.id} className="glass elevation-2 p-6">
                   <div className="flex items-center justify-between">
                     <div>
