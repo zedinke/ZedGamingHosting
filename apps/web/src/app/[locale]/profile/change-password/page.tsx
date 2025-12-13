@@ -152,19 +152,29 @@ export default function ChangePasswordPage() {
                   <input
                     type="password"
                     value={formData.newPassword}
-                    onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, newPassword: e.target.value });
+                      if (fieldErrors.newPassword) {
+                        setFieldErrors({ ...fieldErrors, newPassword: '' });
+                      }
+                    }}
                     required
                     minLength={8}
-                    className="w-full px-4 py-2 rounded-lg border"
+                    className={`w-full px-4 py-2 rounded-lg border ${
+                      fieldErrors.newPassword ? 'border-red-500' : ''
+                    }`}
                     style={{
                       backgroundColor: 'var(--color-bg-card)',
-                      borderColor: 'var(--color-border)',
+                      borderColor: fieldErrors.newPassword ? '#ef4444' : 'var(--color-border)',
                       color: 'var(--color-text-main)',
                     }}
                   />
                   <p className="text-xs mt-1" style={{ color: '#cbd5e1' }}>
                     Legalább 8 karakter
                   </p>
+                  {fieldErrors.newPassword && (
+                    <p className="text-sm mt-1 text-red-400">{fieldErrors.newPassword}</p>
+                  )}
                 </div>
 
                 <div>
@@ -174,16 +184,26 @@ export default function ChangePasswordPage() {
                   <input
                     type="password"
                     value={formData.confirmPassword}
-                    onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, confirmPassword: e.target.value });
+                      if (fieldErrors.confirmPassword) {
+                        setFieldErrors({ ...fieldErrors, confirmPassword: '' });
+                      }
+                    }}
                     required
                     minLength={8}
-                    className="w-full px-4 py-2 rounded-lg border"
+                    className={`w-full px-4 py-2 rounded-lg border ${
+                      fieldErrors.confirmPassword ? 'border-red-500' : ''
+                    }`}
                     style={{
                       backgroundColor: 'var(--color-bg-card)',
-                      borderColor: 'var(--color-border)',
+                      borderColor: fieldErrors.confirmPassword ? '#ef4444' : 'var(--color-border)',
                       color: 'var(--color-text-main)',
                     }}
                   />
+                  {fieldErrors.confirmPassword && (
+                    <p className="text-sm mt-1 text-red-400">{fieldErrors.confirmPassword}</p>
+                  )}
                 </div>
 
                 {error && (
