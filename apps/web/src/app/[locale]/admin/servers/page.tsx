@@ -8,7 +8,7 @@ import { useAuthStore } from '../../../../stores/auth-store';
 import { Navigation } from '../../../../components/navigation';
 import { Card, Button } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../lib/api-client';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { GameServer } from '../../../../types/server';
 
 export default function AdminServersPage() {
@@ -260,8 +260,7 @@ export default function AdminServersPage() {
                           if (window.confirm('Biztosan törölni szeretnéd ezt a szervert?')) {
                             try {
                               await apiClient.delete(`/servers/${server.uuid}`);
-                              // Refetch servers
-                              window.location.reload();
+                              queryClient.invalidateQueries({ queryKey: ['admin-servers'] });
                             } catch (err: any) {
                               alert(err.message || 'Szerver törlése sikertelen');
                             }
