@@ -62,6 +62,7 @@ export default function CreateServerPage() {
 
     try {
       const response = await apiClient.post<{ uuid: string }>('/servers', {
+        name: serverName || undefined,
         gameType,
         nodeId: selectedNodeId,
         resources,
