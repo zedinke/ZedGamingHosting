@@ -45,6 +45,7 @@
     "next": "^14.2.3",
     "next-intl": "^4.5.8",
     "passport": "^0.7.0",
+    "recharts": "^2.12.7",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "postcss": "^8.5.6",
