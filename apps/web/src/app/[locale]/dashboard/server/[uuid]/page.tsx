@@ -198,6 +198,12 @@ export default function ServerDetailPage() {
               >
                 {t('dashboard.server.tabs.files') || 'Files'}
               </Link>
+              <Link
+                href={`/dashboard/server/${serverUuid}/settings`}
+                className="pb-4 px-2 text-gray-400 hover:text-gray-300 transition-colors"
+              >
+                {t('dashboard.server.tabs.settings') || 'Settings'}
+              </Link>
             </nav>
           </div>
 

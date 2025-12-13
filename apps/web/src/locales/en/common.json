@@ -77,7 +77,33 @@
       "tabs": {
         "overview": "Overview",
         "console": "Console",
-        "files": "Files"
+        "files": "Files",
+        "settings": "Settings"
+      },
+      "settings": {
+        "title": "Server Settings",
+        "save": "Save Changes",
+        "saving": "Saving...",
+        "cancel": "Cancel",
+        "updateSuccess": "Server updated successfully",
+        "updateError": "Failed to update server",
+        "resources": {
+          "title": "Resources",
+          "cpu": "CPU (Cores)",
+          "ram": "RAM (MB)",
+          "disk": "Disk (GB)"
+        },
+        "startupPriority": {
+          "title": "Startup Priority",
+          "description": "Lower numbers start first (1 = highest priority)"
+        },
+        "envVars": {
+          "title": "Environment Variables",
+          "keyPlaceholder": "Key",
+          "valuePlaceholder": "Value",
+          "add": "Add",
+          "remove": "Remove"
+        }
       },
       "quickActions": "Quick Actions",
       "notFound": "Server not found"

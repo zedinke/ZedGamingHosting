@@ -77,7 +77,33 @@
       "tabs": {
         "overview": "Áttekintés",
         "console": "Konzol",
-        "files": "Fájlok"
+        "files": "Fájlok",
+        "settings": "Beállítások"
+      },
+      "settings": {
+        "title": "Szerver Beállítások",
+        "save": "Módosítások mentése",
+        "saving": "Mentés...",
+        "cancel": "Mégse",
+        "updateSuccess": "Szerver sikeresen frissítve",
+        "updateError": "Hiba a szerver frissítésekor",
+        "resources": {
+          "title": "Erőforrások",
+          "cpu": "CPU (Magok)",
+          "ram": "RAM (MB)",
+          "disk": "Lemez (GB)"
+        },
+        "startupPriority": {
+          "title": "Indítási Prioritás",
+          "description": "Az alacsonyabb számok előbb indulnak (1 = legmagasabb prioritás)"
+        },
+        "envVars": {
+          "title": "Környezeti Változók",
+          "keyPlaceholder": "Kulcs",
+          "valuePlaceholder": "Érték",
+          "add": "Hozzáadás",
+          "remove": "Eltávolítás"
+        }
       },
       "quickActions": "Gyors műveletek",
       "notFound": "Szerver nem található"
