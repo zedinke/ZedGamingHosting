@@ -48,11 +48,11 @@ export default function DashboardPage() {
       <SkipLink href="#main-content">
         {t('accessibility.skipToContent', { defaultValue: 'Skip to main content' })}
       </SkipLink>
-      <main id="main-content" className="min-h-screen bg-mesh">
+      <main id="main-content" className="min-h-screen bg-mesh" style={{ backgroundColor: 'var(--color-bg-app)', color: 'var(--color-text-main)' }}>
         <div className="container mx-auto px-4 py-8">
           <header className="mb-8">
-            <h1 className="text-3xl font-bold mb-2 text-text-primary">{t('dashboard.title')}</h1>
-            <p className="text-text-tertiary">
+            <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--color-text-main)' }}>{t('dashboard.title')}</h1>
+            <p style={{ color: 'var(--color-text-secondary)' }}>
               {t('dashboard.servers.title')}
             </p>
           </header>
@@ -60,39 +60,39 @@ export default function DashboardPage() {
           {/* Metrics Cards - Modern Design */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             <Card className="glass elevation-2 p-6">
-              <h3 className="text-sm text-text-tertiary mb-2">
+              <h3 className="text-sm mb-2" style={{ color: 'var(--color-text-secondary)' }}>
                 {t('dashboard.metrics.totalServers')}
               </h3>
-              <p className="text-3xl font-bold text-text-primary">
+              <p className="text-3xl font-bold" style={{ color: 'var(--color-text-main)' }}>
                 {servers?.length || 0}
               </p>
             </Card>
             <Card className="glass elevation-2 p-6">
-              <h3 className="text-sm text-text-tertiary mb-2">
+              <h3 className="text-sm mb-2" style={{ color: 'var(--color-text-secondary)' }}>
                 {t('dashboard.metrics.activeServers')}
               </h3>
-              <p className="text-3xl font-bold text-success-500">
+              <p className="text-3xl font-bold" style={{ color: 'var(--color-success)' }}>
                 {servers?.filter((s) => s.status === 'RUNNING').length || 0}
               </p>
             </Card>
             <Card className="glass elevation-2 p-6">
-              <h3 className="text-sm text-text-tertiary mb-2">
+              <h3 className="text-sm mb-2" style={{ color: 'var(--color-text-secondary)' }}>
                 {t('dashboard.metrics.totalPlayers')}
               </h3>
-              <p className="text-3xl font-bold text-text-primary">0</p>
+              <p className="text-3xl font-bold" style={{ color: 'var(--color-text-main)' }}>0</p>
             </Card>
             <Card className="glass elevation-2 p-6">
-              <h3 className="text-sm text-text-tertiary mb-2">
+              <h3 className="text-sm mb-2" style={{ color: 'var(--color-text-secondary)' }}>
                 {t('dashboard.metrics.uptime')}
               </h3>
-              <p className="text-3xl font-bold text-text-primary">99.9%</p>
+              <p className="text-3xl font-bold" style={{ color: 'var(--color-text-main)' }}>99.9%</p>
             </Card>
           </div>
 
           {/* Servers Section */}
           <section>
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-semibold text-text-primary">
+              <h2 className="text-2xl font-semibold" style={{ color: 'var(--color-text-main)' }}>
                 {t('dashboard.servers.title')}
               </h2>
               <Button>{t('dashboard.servers.create')}</Button>
@@ -100,11 +100,11 @@ export default function DashboardPage() {
 
             {isLoading ? (
               <div className="text-center py-12">
-                <p className="text-text-tertiary">Loading...</p>
+                <p style={{ color: 'var(--color-text-secondary)' }}>Loading...</p>
               </div>
             ) : !servers || servers.length === 0 ? (
               <Card className="glass elevation-2 p-12 text-center">
-                <p className="text-text-tertiary mb-4">
+                <p className="mb-4" style={{ color: 'var(--color-text-secondary)' }}>
                   {t('dashboard.servers.empty')}
                 </p>
                 <Button>{t('dashboard.servers.create')}</Button>
