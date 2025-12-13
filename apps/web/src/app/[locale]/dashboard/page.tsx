@@ -53,7 +53,13 @@ function DashboardContent() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+      <div 
+        className="min-h-screen text-white"
+        style={{ 
+          backgroundColor: 'var(--color-bg-app, #0f172a)',
+          background: 'linear-gradient(to bottom right, #0f172a, #1e293b, #0f172a)'
+        }}
+      >
       <div className="container mx-auto px-4 py-8">
         <header className="mb-8">
           <h1 className="text-4xl font-bold mb-2">{t('dashboard.title')}</h1>
