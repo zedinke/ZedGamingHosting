@@ -25,7 +25,7 @@ Kedves AI (Cursor/Copilot), te most egy Senior Software Architect keze alá dolg
 7.  **Kétnyelvűség (HU/EN First):**
     * **Hardcoding Tilos:** SOHA ne írj be égetett szöveget a kódba (pl. `return "Szerver elindult"` vagy `<div>Dashboard</div>`).
     * **Backend:** Minden hibaüzenet és válasz `i18n` kulcsokat használjon (pl. `SERVER_STARTED_SUCCESSFULLY`), a fordítást a kliens végzi, vagy a Backend a `Accept-Language` header alapján.
-    * **Frontend:** Használj `next-i18next` vagy hasonló library-t. Minden szövegnek (gombok, címkék, hibaüzenetek) külön JSON fájlban kell lennie (`locales/hu/common.json`, `locales/en/common.json`).
+    * **Frontend:** Használj `next-intl` (ajánlott, App Router kompatibilis) vagy `next-i18next` library-t. Minden szövegnek (gombok, címkék, hibaüzenetek) külön JSON fájlban kell lennie (`messages/hu.json`, `messages/en.json` vagy `locales/hu/common.json`, `locales/en/common.json`).
     * **Default:** A rendszer alapértelmezetten Magyar (HU), de egyetlen kapcsolóval (vagy böngésző beállítás alapján) Angolra (EN) váltható legyen.
 
 ---
@@ -34,12 +34,12 @@ Kedves AI (Cursor/Copilot), te most egy Senior Software Architect keze alá dolg
 
 * **Backend (Control Plane):** NestJS (Modular Monolith) + Fastify adapter.
 * **Async Jobs:** BullMQ (Redis alapú Queue rendszer).
-* **Frontend:** Next.js 14+ (App Router), React, **Zustand** (State Mgmt), **TanStack Query** (API Sync).
-* **UI Framework:** Tailwind CSS, **Shadcn/UI**, **Framer Motion** (Animációk), **Lucide React** (Ikonok).
+* **Frontend:** Next.js 15+ (App Router), React 19+, **Zustand** (State Mgmt), **TanStack Query v5** (API Sync).
+* **UI Framework:** Tailwind CSS v4, **Shadcn/UI v2**, **Framer Motion** (Advanced Animations), **Radix UI Primitives** (Accessible Components), **Lucide React** (Ikonok), **Variable Fonts** (Geist Sans, JetBrains Mono).
 * **Adatbázis:** **MySQL 8.0+** (Fő adatbázis), Redis 7+ (Cache, Session, Queue).
 * **ORM:** Prisma (Séma definíció és Type-safe DB access).
 * **Daemon (Data Plane):** Node.js App + `dockerode` (Docker API) + `systeminformation` (Metrikák) + `ssh2` (SFTP szerver).
-* **Infrastructure:** Ubuntu 22.04 LTS, Docker, Ansible, ZFS, Traefik (Reverse Proxy).
+* **Infrastructure:** Ubuntu 24.04 LTS (vagy 22.04 LTS), Docker 27+, Ansible, ZFS, Traefik v3 (Reverse Proxy).
 * **Backup:** Restic (Inkrementális, deduplikált mentés).
 * **Monitoring:** Prometheus (Metrikák), Grafana (Vizualizáció), Loki (Log aggregáció), OpenTelemetry (Distributed Tracing).
 * **Alerting:** AlertManager (Prometheus), Discord/Slack Webhooks, Email notifications.
@@ -563,7 +563,7 @@ if (process.env.NODE_ENV === 'development') {
 **Lépésről lépésre útmutató új Hetzner szerver hozzáadásához:**
 
 **1. Előfeltételek:**
-   * Hetzner szerver rendelve (Ubuntu 22.04 LTS)
+   * Hetzner szerver rendelve (Ubuntu 24.04 LTS vagy 22.04 LTS)
    * Root SSH hozzáférés (jelszó vagy SSH kulcs)
    * Publikus IP cím
    * Minimum 4 CPU core, 16GB RAM, 100GB SSD (ajánlott: 8 core, 32GB RAM, 500GB NVMe)
@@ -4085,27 +4085,765 @@ DEFAULT_DOMAIN=zedhosting.com
 
 ---
 
-## 4. DESIGN SYSTEM & UI (MODERN & PRÉMIUM)
+## 4. DESIGN SYSTEM & UI (2025 MODERN & PRÉMIUM)
 
-**Stílusirányzat:** "Linear.app-like", "Bento Grid", "Glassmorphism".
-**Technológia:** Tailwind CSS, Shadcn/UI.
+**Stílusirányzat:** "Spatial Design", "Neo-Brutalism meets Minimalism", "Advanced Glassmorphism", "Micro-interactions First".
+**Technológia:** Tailwind CSS v4, Shadcn/UI v2, Framer Motion, Radix UI Primitives, Variable Fonts.
 
-### 4.1 Global Layout
-* **Sidebar:** Sötét üveg hatás (`backdrop-blur-xl`, `bg-black/60`), vékony szegély (`border-white/10`).
-* **Background:** Sötét, finom zaj (noise texture) vagy gradiens a háttérben.
-* **Betűtípus:** Inter vagy Geist Sans.
+### 4.1 Design Philosophy & Core Principles
 
-### 4.2 Dashboard Komponensek
-* **Server Card:** Bento Grid stílusú kártya.
-    * Header: Szerver neve + Státusz pötty (Pulsing Green = Online).
-    * Body: Mini Sparkline grafikon (CPU Usage az elmúlt 1 órában).
-    * Footer: Gyorsgombok (Start, Stop, Console).
-* **Terminal Console:**
-    * Fekete háttér, Monospace font (JetBrains Mono).
-    * Színezett log sorok (Error = Piros, Info = Kék).
-    * Auto-scroll funkció.
-* **File Manager:**
-    * VS Code-szerű felület (Monaco Editor) a config fájlok szerkesztéséhez közvetlenül a böngészőben.
+**1. Spatial Design (Depth & Layering):**
+* **3D Depth Perception:** Subtle shadows, elevation system (0-24dp), parallax scrolling.
+* **Layering:** Z-index system (base: 0, elevated: 10, modal: 50, toast: 100).
+* **Perspective:** Transform-based depth effects (`perspective-1000`, `rotateX(-2deg)`).
+
+**2. Micro-interactions (Purposeful Motion):**
+* **Button Hover:** Scale (1.0 → 1.02), shadow elevation increase, 150ms ease-out.
+* **Card Hover:** Subtle lift (translateY(-2px)), border glow, 200ms ease-out.
+* **Loading States:** Skeleton screens with shimmer animation, progress indicators.
+* **Success/Error:** Toast notifications with slide-in animation (300ms), auto-dismiss (5s).
+
+**3. Accessibility First (WCAG 2.1 AA+):**
+* **Color Contrast:** Minimum 4.5:1 for text, 3:1 for UI components.
+* **Keyboard Navigation:** Full keyboard support, visible focus indicators (2px outline).
+* **Screen Reader:** ARIA labels, semantic HTML, live regions for dynamic content.
+* **Reduced Motion:** Respect `prefers-reduced-motion`, disable animations if requested.
+
+**4. Responsive & Fluid:**
+* **Breakpoints:** Mobile (320px), Tablet (768px), Desktop (1024px), Wide (1440px+).
+* **Fluid Typography:** Clamp-based responsive text (min, preferred, max).
+* **Container Queries:** Component-level responsive design (not just viewport-based).
+* **Touch Targets:** Minimum 44x44px for mobile, 32x32px for desktop.
+
+### 4.2 Color System & Theming
+
+**1. Color Palette (Semantic Colors):**
+
+```typescript
+// Dark Theme (Default)
+const colors = {
+  // Base Colors
+  background: {
+    primary: '#0a0a0a',      // Deep black
+    secondary: '#111111',      // Slightly lighter
+    tertiary: '#1a1a1a',       // Elevated surfaces
+    elevated: '#222222',       // Cards, modals
+  },
+  
+  // Semantic Colors
+  primary: {
+    50: '#f0f9ff',
+    100: '#e0f2fe',
+    500: '#0ea5e9',           // Sky blue (main brand)
+    600: '#0284c7',
+    700: '#0369a1',
+    900: '#0c4a6e',
+  },
+  
+  success: {
+    500: '#22c55e',           // Green
+    600: '#16a34a',
+  },
+  
+  warning: {
+    500: '#f59e0b',           // Amber
+    600: '#d97706',
+  },
+  
+  error: {
+    500: '#ef4444',           // Red
+    600: '#dc2626',
+  },
+  
+  // Text Colors
+  text: {
+    primary: '#ffffff',       // High contrast
+    secondary: '#a3a3a3',      // Medium contrast
+    tertiary: '#737373',      // Low contrast
+    disabled: '#525252',       // Disabled state
+  },
+  
+  // Border Colors
+  border: {
+    default: 'rgba(255, 255, 255, 0.1)',
+    hover: 'rgba(255, 255, 255, 0.2)',
+    focus: 'rgba(14, 165, 233, 0.5)', // Primary with opacity
+  },
+  
+  // Glassmorphism
+  glass: {
+    light: 'rgba(255, 255, 255, 0.05)',
+    medium: 'rgba(255, 255, 255, 0.1)',
+    heavy: 'rgba(255, 255, 255, 0.15)',
+  },
+};
+```
+
+**2. Gradient System:**
+
+```typescript
+const gradients = {
+  // Background Gradients
+  mesh: 'radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.1) 0%, transparent 50%), radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.1) 0%, transparent 50%)',
+  
+  // Accent Gradients
+  primary: 'linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 100%)',
+  success: 'linear-gradient(135deg, #22c55e 0%, #10b981 100%)',
+  
+  // Glassmorphism Gradient
+  glass: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
+};
+```
+
+**3. Theme Switching:**
+* **Default:** Dark theme (reduces eye strain, modern aesthetic).
+* **Light Theme:** Optional, user preference stored in localStorage.
+* **System Preference:** Auto-detect `prefers-color-scheme`, allow manual override.
+* **Smooth Transition:** 300ms fade transition when switching themes.
+
+### 4.3 Typography System
+
+**1. Variable Fonts (Modern Approach):**
+
+```typescript
+const typography = {
+  // Primary Font: Geist Sans (Variable)
+  fontFamily: {
+    sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
+    mono: ['var(--font-jetbrains-mono)', 'Monaco', 'monospace'],
+  },
+  
+  // Fluid Typography Scale
+  fontSize: {
+    xs: 'clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem)',    // 12-14px
+    sm: 'clamp(0.875rem, 0.8rem + 0.375vw, 1rem)',      // 14-16px
+    base: 'clamp(1rem, 0.95rem + 0.25vw, 1.125rem)',    // 16-18px
+    lg: 'clamp(1.125rem, 1rem + 0.625vw, 1.5rem)',       // 18-24px
+    xl: 'clamp(1.5rem, 1.3rem + 1vw, 2rem)',             // 24-32px
+    '2xl': 'clamp(2rem, 1.7rem + 1.5vw, 3rem)',          // 32-48px
+    '3xl': 'clamp(2.5rem, 2rem + 2.5vw, 4.5rem)',        // 40-72px
+  },
+  
+  // Font Weights (Variable Font)
+  fontWeight: {
+    light: 300,
+    normal: 400,
+    medium: 500,
+    semibold: 600,
+    bold: 700,
+  },
+  
+  // Line Heights
+  lineHeight: {
+    tight: 1.2,
+    normal: 1.5,
+    relaxed: 1.75,
+  },
+};
+```
+
+**2. Typography Hierarchy:**
+
+* **H1 (Page Title):** `text-3xl font-bold` - 40-72px, weight 700
+* **H2 (Section Title):** `text-2xl font-semibold` - 32-48px, weight 600
+* **H3 (Subsection):** `text-xl font-semibold` - 24-32px, weight 600
+* **Body:** `text-base font-normal` - 16-18px, weight 400
+* **Caption:** `text-sm font-normal text-text-secondary` - 14-16px, weight 400
+* **Code:** `font-mono text-sm` - JetBrains Mono, 14-16px
+
+### 4.4 Global Layout & Structure
+
+**1. Layout Architecture:**
+
+```typescript
+// App Shell Structure
+<AppShell>
+  <Sidebar />           // Fixed left sidebar (collapsible)
+  <MainContent>
+    <Header />          // Sticky top header
+    <Breadcrumbs />     // Navigation breadcrumbs
+    <PageContent />      // Main content area
+  </MainContent>
+  <CommandPalette />     // ⌘K command palette (overlay)
+  <ToastContainer />    // Toast notifications (top-right)
+</AppShell>
+```
+
+**2. Sidebar (Advanced Glassmorphism):**
+
+```css
+.sidebar {
+  /* Glassmorphism with depth */
+  background: rgba(17, 17, 17, 0.8);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  
+  /* Border with gradient */
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  
+  /* Shadow for depth */
+  box-shadow: 
+    -2px 0 8px rgba(0, 0, 0, 0.3),
+    inset 1px 0 0 rgba(255, 255, 255, 0.05);
+  
+  /* Smooth transitions */
+  transition: transform 300ms ease-out, width 300ms ease-out;
+}
+
+.sidebar-collapsed {
+  width: 64px;  /* Icon-only mode */
+}
+
+.sidebar-expanded {
+  width: 256px; /* Full width */
+}
+```
+
+**3. Background (Spatial Design):**
+
+```css
+.background {
+  /* Base gradient mesh */
+  background: 
+    radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+    #0a0a0a;
+  
+  /* Subtle noise texture */
+  background-image: 
+    url('data:image/svg+xml;base64,...'), /* Noise SVG */
+    radial-gradient(...);
+  
+  /* Parallax effect on scroll */
+  background-attachment: fixed;
+}
+```
+
+### 4.5 Component Library (Shadcn/UI Enhanced)
+
+**1. Server Card (Bento Grid with Advanced Interactions):**
+
+```typescript
+<ServerCard>
+  {/* Header with status indicator */}
+  <CardHeader>
+    <StatusIndicator 
+      status={server.status}
+      pulse={server.status === 'RUNNING'} // Pulsing animation
+    />
+    <ServerName>{server.name}</ServerName>
+    <ServerActions menu={<DropdownMenu />} />
+  </CardHeader>
+  
+  {/* Body with sparkline chart */}
+  <CardBody>
+    <SparklineChart 
+      data={metrics.cpu}
+      color="primary"
+      height={60}
+      smooth={true} // Smooth line interpolation
+    />
+    <ResourceBars>
+      <ResourceBar type="cpu" value={server.cpuUsage} />
+      <ResourceBar type="ram" value={server.ramUsage} />
+      <ResourceBar type="disk" value={server.diskUsage} />
+    </ResourceBars>
+  </CardBody>
+  
+  {/* Footer with quick actions */}
+  <CardFooter>
+    <ButtonGroup>
+      <IconButton icon="play" onClick={startServer} />
+      <IconButton icon="stop" onClick={stopServer} />
+      <IconButton icon="terminal" onClick={openConsole} />
+      <IconButton icon="settings" onClick={openSettings} />
+    </ButtonGroup>
+  </CardFooter>
+</ServerCard>
+
+// Hover Effects
+.card-hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 12px 24px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 0 40px rgba(14, 165, 233, 0.2); // Glow effect
+  transition: all 200ms ease-out;
+}
+```
+
+**2. Terminal Console (Advanced):**
+
+```typescript
+<TerminalConsole>
+  {/* Terminal Header */}
+  <TerminalHeader>
+    <TerminalTabs>
+      <Tab active>Console</Tab>
+      <Tab>Logs</Tab>
+      <Tab>Errors</Tab>
+    </TerminalTabs>
+    <TerminalActions>
+      <IconButton icon="clear" onClick={clearConsole} />
+      <IconButton icon="download" onClick={downloadLogs} />
+      <IconButton icon="fullscreen" onClick={toggleFullscreen} />
+    </TerminalActions>
+  </TerminalHeader>
+  
+  {/* Terminal Body */}
+  <TerminalBody>
+    <TerminalLines>
+      {lines.map(line => (
+        <TerminalLine 
+          key={line.id}
+          type={line.type} // 'info' | 'error' | 'warning' | 'success'
+          timestamp={line.timestamp}
+        >
+          {line.content}
+        </TerminalLine>
+      ))}
+    </TerminalLines>
+    <TerminalInput 
+      onSubmit={handleCommand}
+      placeholder="Enter command..."
+    />
+  </TerminalBody>
+</TerminalConsole>
+
+// Terminal Styling
+.terminal {
+  background: #0d1117; // GitHub dark theme color
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  
+  /* Syntax highlighting */
+  .line-info { color: #58a6ff; }
+  .line-error { color: #f85149; }
+  .line-warning { color: #d29922; }
+  .line-success { color: #3fb950; }
+  
+  /* Auto-scroll with smooth animation */
+  scroll-behavior: smooth;
+}
+```
+
+**3. File Manager (VS Code-like):**
+
+```typescript
+<FileManager>
+  {/* Sidebar: File Tree */}
+  <FileTree>
+    <FileTreeItem 
+      type="folder"
+      expanded={true}
+      icon="folder"
+    >
+      <FileTreeItem type="file" icon="file-code" />
+      <FileTreeItem type="file" icon="file-config" />
+    </FileTreeItem>
+  </FileTree>
+  
+  {/* Main: Editor */}
+  <Editor>
+    <EditorTabs>
+      <Tab active>server.properties</Tab>
+      <Tab>server.cfg</Tab>
+    </EditorTabs>
+    <MonacoEditor
+      language="properties"
+      theme="vs-dark"
+      value={fileContent}
+      onChange={handleChange}
+      options={{
+        minimap: { enabled: true },
+        fontSize: 14,
+        wordWrap: 'on',
+        lineNumbers: 'on',
+      }}
+    />
+  </Editor>
+  
+  {/* Status Bar */}
+  <StatusBar>
+    <StatusItem>Ln 42, Col 15</StatusItem>
+    <StatusItem>UTF-8</StatusItem>
+    <StatusItem>Spaces: 2</StatusItem>
+  </StatusBar>
+</FileManager>
+```
+
+**4. Command Palette (⌘K Pattern):**
+
+```typescript
+<CommandPalette>
+  <CommandInput placeholder="Type a command or search..." />
+  <CommandList>
+    <CommandGroup heading="Navigation">
+      <CommandItem icon="home" onClick={goToDashboard}>
+        Go to Dashboard
+      </CommandItem>
+      <CommandItem icon="servers" onClick={goToServers}>
+        View All Servers
+      </CommandItem>
+    </CommandGroup>
+    <CommandGroup heading="Actions">
+      <CommandItem icon="plus" onClick={createServer}>
+        Create New Server
+      </CommandItem>
+      <CommandItem icon="backup" onClick={createBackup}>
+        Create Backup
+      </CommandItem>
+    </CommandGroup>
+    <CommandGroup heading="Settings">
+      <CommandItem icon="settings" onClick={openSettings}>
+        Open Settings
+      </CommandItem>
+      <CommandItem icon="theme" onClick={toggleTheme}>
+        Toggle Theme
+      </CommandItem>
+    </CommandGroup>
+  </CommandList>
+</CommandPalette>
+
+// Keyboard Shortcut: ⌘K (Mac) / Ctrl+K (Windows/Linux)
+```
+
+### 4.6 Animation System (Framer Motion)
+
+**1. Page Transitions:**
+
+```typescript
+import { motion } from 'framer-motion';
+
+const pageVariants = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -20 },
+};
+
+const pageTransition = {
+  type: 'tween',
+  ease: 'easeInOut',
+  duration: 0.3,
+};
+
+<AnimatePresence mode="wait">
+  <motion.div
+    key={router.pathname}
+    initial="initial"
+    animate="animate"
+    exit="exit"
+    variants={pageVariants}
+    transition={pageTransition}
+  >
+    {children}
+  </motion.div>
+</AnimatePresence>
+```
+
+**2. Micro-interactions:**
+
+```typescript
+// Button Hover Animation
+const buttonVariants = {
+  hover: {
+    scale: 1.02,
+    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
+    transition: { duration: 0.2, ease: 'easeOut' },
+  },
+  tap: {
+    scale: 0.98,
+  },
+};
+
+// Card Hover Animation
+const cardVariants = {
+  hover: {
+    y: -4,
+    boxShadow: '0 12px 24px rgba(0, 0, 0, 0.4)',
+    transition: { duration: 0.2, ease: 'easeOut' },
+  },
+};
+
+// Loading Skeleton Animation
+const skeletonVariants = {
+  animate: {
+    backgroundPosition: ['0%', '100%'],
+    transition: {
+      duration: 1.5,
+      repeat: Infinity,
+      ease: 'linear',
+    },
+  },
+};
+```
+
+**3. Toast Notifications:**
+
+```typescript
+<Toast
+  variant="success"
+  title="Server Started"
+  description="Your server is now running"
+  duration={5000}
+  position="top-right"
+  animation={{
+    initial: { x: 400, opacity: 0 },
+    animate: { x: 0, opacity: 1 },
+    exit: { x: 400, opacity: 0 },
+  }}
+/>
+```
+
+### 4.7 Responsive Design Strategy
+
+**1. Mobile-First Approach:**
+
+```typescript
+// Breakpoints
+const breakpoints = {
+  mobile: '320px',
+  tablet: '768px',
+  desktop: '1024px',
+  wide: '1440px',
+};
+
+// Container Queries (Modern Approach)
+.container {
+  container-type: inline-size;
+}
+
+@container (min-width: 768px) {
+  .card {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+```
+
+**2. Adaptive Components:**
+
+* **Sidebar:** Desktop: Fixed, Tablet: Collapsible, Mobile: Drawer (overlay).
+* **Server Cards:** Desktop: 3 columns, Tablet: 2 columns, Mobile: 1 column.
+* **Table:** Desktop: Full table, Mobile: Card-based list view.
+* **Navigation:** Desktop: Horizontal tabs, Mobile: Bottom sheet.
+
+### 4.8 Accessibility Features
+
+**1. Keyboard Navigation:**
+
+* **Tab Order:** Logical focus order, skip links for main content.
+* **Shortcuts:** 
+  * `⌘K` / `Ctrl+K`: Command palette
+  * `⌘/` / `Ctrl+/`: Keyboard shortcuts help
+  * `Esc`: Close modals/drawers
+  * `Enter`: Activate primary action
+  * `Arrow Keys`: Navigate lists/menus
+
+**2. Screen Reader Support:**
+
+```typescript
+// ARIA Labels
+<button aria-label="Start server">
+  <Icon name="play" aria-hidden="true" />
+</button>
+
+// Live Regions
+<div aria-live="polite" aria-atomic="true">
+  {toastMessage}
+</div>
+
+// Semantic HTML
+<nav aria-label="Main navigation">
+  <ul role="list">
+    <li><a href="/dashboard">Dashboard</a></li>
+  </ul>
+</nav>
+```
+
+**3. Focus Management:**
+
+```css
+/* Visible Focus Indicator */
+*:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Skip Link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-primary-500);
+  color: white;
+  padding: 8px 16px;
+  z-index: 1000;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+```
+
+### 4.9 Performance Optimizations
+
+**1. Code Splitting:**
+
+* **Route-based:** Next.js automatic code splitting per route.
+* **Component-based:** Dynamic imports for heavy components (Monaco Editor, Charts).
+* **Lazy Loading:** Images with `next/image`, lazy load below-fold content.
+
+**2. Animation Performance:**
+
+* **GPU Acceleration:** Use `transform` and `opacity` for animations (not `width`, `height`).
+* **Will-change:** Hint browser for upcoming animations: `will-change: transform`.
+* **Reduced Motion:** Respect `prefers-reduced-motion`, disable animations if needed.
+
+**3. Bundle Size:**
+
+* **Tree Shaking:** Import only used components from libraries.
+* **Font Subsetting:** Load only required font weights/glyphs.
+* **Image Optimization:** WebP format, responsive images, lazy loading.
+
+### 4.10 Design Tokens & Configuration
+
+**1. Tailwind Config (Extended):**
+
+```typescript
+// tailwind.config.ts
+export default {
+  theme: {
+    extend: {
+      colors: {
+        // Semantic colors (from color system above)
+        background: { ... },
+        primary: { ... },
+        text: { ... },
+      },
+      fontFamily: {
+        sans: ['var(--font-geist-sans)', ...],
+        mono: ['var(--font-jetbrains-mono)', ...],
+      },
+      fontSize: {
+        // Fluid typography scale
+        ...typography.fontSize,
+      },
+      boxShadow: {
+        'glass': '0 8px 32px rgba(0, 0, 0, 0.3)',
+        'glow': '0 0 20px rgba(14, 165, 233, 0.3)',
+      },
+      backdropBlur: {
+        xs: '2px',
+        sm: '4px',
+        md: '8px',
+        lg: '16px',
+        xl: '24px',
+      },
+    },
+  },
+  plugins: [
+    require('@tailwindcss/container-queries'),
+    require('@tailwindcss/typography'),
+  ],
+};
+```
+
+**2. CSS Variables (Theme System):**
+
+```css
+:root {
+  /* Colors */
+  --color-primary-500: #0ea5e9;
+  --color-background-primary: #0a0a0a;
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.3);
+  
+  /* Transitions */
+  --transition-fast: 150ms ease-out;
+  --transition-base: 200ms ease-out;
+  --transition-slow: 300ms ease-out;
+}
+```
+
+### 4.11 Component Examples (Implementation Reference)
+
+**1. Modern Button Component:**
+
+```typescript
+// components/ui/button.tsx
+export const Button = ({
+  variant = 'primary',
+  size = 'md',
+  children,
+  ...props
+}) => {
+  return (
+    <motion.button
+      className={cn(
+        'button',
+        `button-${variant}`,
+        `button-${size}`
+      )}
+      variants={buttonVariants}
+      whileHover="hover"
+      whileTap="tap"
+      {...props}
+    >
+      {children}
+    </motion.button>
+  );
+};
+```
+
+**2. Server Status Badge:**
+
+```typescript
+// components/server-status-badge.tsx
+export const ServerStatusBadge = ({ status }: { status: ServerStatus }) => {
+  const config = {
+    RUNNING: { color: 'success', icon: 'check-circle', pulse: true },
+    STOPPED: { color: 'text-tertiary', icon: 'stop-circle', pulse: false },
+    STARTING: { color: 'warning', icon: 'loader', pulse: true, spin: true },
+    CRASHED: { color: 'error', icon: 'alert-circle', pulse: false },
+  };
+  
+  const { color, icon, pulse, spin } = config[status];
+  
+  return (
+    <div className={cn('status-badge', `status-${color}`)}>
+      <motion.div
+        animate={pulse ? { scale: [1, 1.1, 1] } : {}}
+        transition={{ duration: 2, repeat: Infinity }}
+      >
+        <Icon name={icon} spin={spin} />
+      </motion.div>
+      <span>{t(`server.status.${status}`)}</span>
+    </div>
+  );
+};
+```
+
+---
+
+**Megjegyzés:** Ez a design system 2025-ös modern trendeket követ, figyelembe véve a spatial design, micro-interactions, accessibility, és performance optimalizációkat. Minden komponens teljes mértékben i18n-támogatott, és követi a WCAG 2.1 AA+ accessibility standardokat.
 
 ---
 

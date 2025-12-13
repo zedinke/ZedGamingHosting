@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { motion } from 'framer-motion';
 import { Card, CardContent } from '@zed-hosting/ui-kit';
 import { Button } from '@zed-hosting/ui-kit';
 import { Badge } from '@zed-hosting/ui-kit';
@@ -8,6 +9,7 @@ import { GameServer } from '../types/server';
 import { apiClient } from '../lib/api-client';
 import { useRouter } from 'next/navigation';
 import { cn } from '../lib/utils';
+import { Play, Square, RotateCw, Settings, Terminal } from 'lucide-react';
 
 interface ServerCardProps {
   server: GameServer;
@@ -51,11 +53,15 @@ export function ServerCard({ server }: ServerCardProps) {
     }
   };
 
+  const isRunning = server.status === 'RUNNING';
+  const isStopped = server.status === 'STOPPED';
+
   return (
     <Card
+      hoverable
       className={cn(
-        'group transition-all duration-200 hover:shadow-lg cursor-pointer',
-        'border-[var(--color-border)] bg-[var(--color-bg-card)] hover:border-[var(--color-border-light)]'
+        'group cursor-pointer overflow-hidden',
+        'border-border bg-background-tertiary'
       )}
       onClick={() => router.push(`/${locale}/dashboard/server/${server.uuid}`)}
     >
@@ -63,22 +69,21 @@ export function ServerCard({ server }: ServerCardProps) {
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1 min-w-0">
-            <h3 
-              className="text-lg font-semibold mb-1 truncate"
-              style={{ color: 'var(--color-text-main)' }}
-            >
+            <h3 className="text-lg font-semibold mb-1 truncate text-text-primary">
               {(server as any).name || server.gameType}
             </h3>
-            <p 
-              className="text-sm truncate"
-              style={{ color: 'var(--color-text-muted)' }}
-            >
+            <p className="text-sm truncate text-text-tertiary">
               {server.gameType}
             </p>
           </div>
-          <Badge variant={getStatusVariant(server.status)} size="sm">
-            {getStatusText(server.status)}
-          </Badge>
+          <motion.div
+            animate={isRunning ? { scale: [1, 1.1, 1] } : {}}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            <Badge variant={getStatusVariant(server.status)} size="sm">
+              {getStatusText(server.status)}
+            </Badge>
+          </motion.div>
         </div>
 
         {/* Resource Metrics */}
@@ -151,8 +156,8 @@ export function ServerCard({ server }: ServerCardProps) {
         )}
 
         {/* Actions */}
-        <div className="flex gap-2 pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
-          {server.status === 'STOPPED' && (
+        <div className="flex gap-2 pt-4 border-t border-border">
+          {isStopped && (
             <Button
               variant="primary"
               size="sm"
@@ -162,10 +167,11 @@ export function ServerCard({ server }: ServerCardProps) {
                 handleAction('start');
               }}
             >
+              <Play className="h-4 w-4 mr-1" />
               {t('dashboard.server.actions.start')}
             </Button>
           )}
-          {server.status === 'RUNNING' && (
+          {isRunning && (
             <>
               <Button
                 variant="secondary"
@@ -176,6 +182,7 @@ export function ServerCard({ server }: ServerCardProps) {
                   handleAction('stop');
                 }}
               >
+                <Square className="h-4 w-4 mr-1" />
                 {t('dashboard.server.actions.stop')}
               </Button>
               <Button
@@ -187,6 +194,7 @@ export function ServerCard({ server }: ServerCardProps) {
                   handleAction('restart');
                 }}
               >
+                <RotateCw className="h-4 w-4 mr-1" />
                 {t('dashboard.server.actions.restart')}
               </Button>
             </>
@@ -196,10 +204,22 @@ export function ServerCard({ server }: ServerCardProps) {
             size="sm"
             onClick={(e) => {
               e.stopPropagation();
-              router.push(`/${locale}/dashboard/server/${server.uuid}`);
+              router.push(`/${locale}/dashboard/server/${server.uuid}/console`);
             }}
+            title={t('dashboard.server.actions.console')}
           >
-            {t('dashboard.server.actions.view')}
+            <Terminal className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              router.push(`/${locale}/dashboard/server/${server.uuid}/settings`);
+            }}
+            title={t('dashboard.server.actions.settings')}
+          >
+            <Settings className="h-4 w-4" />
           </Button>
         </div>
       </CardContent>

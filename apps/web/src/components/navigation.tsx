@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useAuthStore } from '../stores/auth-store';
 import { Button } from '@zed-hosting/ui-kit';
+import { ThemeToggle } from '../lib/theme';
 import { cn } from '../lib/utils';
 
 export function Navigation() {
@@ -63,6 +64,7 @@ export function Navigation() {
 
           {/* User Menu */}
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             <div className="text-right">
               <p className="text-sm font-medium" style={{ color: 'var(--color-text-main)' }}>
                 {user?.email}

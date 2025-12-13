@@ -60,10 +60,15 @@ Ez a dokumentum a [docs/PROJECT_SPEC.md](docs/PROJECT_SPEC.md) specifikáció al
 - ⏳ Cloudflare integration
 
 #### PHASE 7: Frontend
-- ⏳ Next.js setup
-- ⏳ i18n (next-i18next)
-- ⏳ Design System (Shadcn/UI, Tailwind)
-- ⏳ Dashboard components
+- ⏳ Next.js setup (App Router)
+- ⏳ i18n (next-intl vagy next-i18next)
+- ⏳ Design System (Shadcn/UI v2, Tailwind CSS v4, Framer Motion)
+- ⏳ Modern UI Components (Spatial Design, Micro-interactions)
+- ⏳ Accessibility (WCAG 2.1 AA+ compliance)
+- ⏳ Command Palette (⌘K pattern)
+- ⏳ Dashboard components (Bento Grid, Server Cards, Terminal, File Manager)
+- ⏳ Responsive Design (Mobile-first, Container Queries)
+- ⏳ Theme System (Dark/Light mode, Variable Fonts)
 
 #### PHASE 8-13: További fázisok
 - Monitoring & Observability
@@ -132,7 +137,7 @@ zed-hosting/
 ## Telepítési Útmutató
 
 ### Előfeltételek
-- Node.js 20+ LTS
+- Node.js 22+ LTS (vagy 20+ LTS)
 - Docker & Docker Compose
 - MySQL 8.0+
 - Redis 7+
