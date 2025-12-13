@@ -108,9 +108,9 @@ export default function ServerDetailPage() {
     return t(key);
   };
 
-  if (isLoading) {
-    return (
-      <ProtectedRoute>
+  return (
+    <ProtectedRoute>
+      {isLoading ? (
         <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-app)' }}>
           <div className="container mx-auto px-4 py-8">
             <div className="text-center py-12">
@@ -118,13 +118,7 @@ export default function ServerDetailPage() {
             </div>
           </div>
         </div>
-      </ProtectedRoute>
-    );
-  }
-
-  if (error || !server) {
-    return (
-      <ProtectedRoute>
+      ) : error || !server ? (
         <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-app)' }}>
           <div className="container mx-auto px-4 py-8">
             <div className="text-center py-12">
@@ -141,12 +135,8 @@ export default function ServerDetailPage() {
             </div>
           </div>
         </div>
-      </ProtectedRoute>
-    );
-  }
-
-  return React.createElement(ProtectedRoute, null,
-    React.createElement('div', { className: 'min-h-screen', style: { backgroundColor: 'var(--color-bg-app)' } },
+      ) : (
+        <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-app)' }}>
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
           <div className="mb-8">
@@ -390,7 +380,8 @@ export default function ServerDetailPage() {
           </div>
         </div>
       </div>
-    )
+      )}
+    </ProtectedRoute>
   );
 }
 
