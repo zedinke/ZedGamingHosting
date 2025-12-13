@@ -1,5 +1,4 @@
 import { JetBrains_Mono, Inter } from 'next/font/google';
-import localFont from 'next/font/local';
 
 // Inter - Primary sans-serif font (Google Fonts)
 // This is the main font, Geist can be added later if needed
