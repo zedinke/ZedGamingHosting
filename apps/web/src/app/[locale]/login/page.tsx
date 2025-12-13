@@ -122,7 +122,7 @@ export default function LoginPage() {
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-5">
                 {/* Error Message */}
                 {error && (
                   <motion.div
@@ -191,37 +191,42 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                {/* Remember Me */}
-                <div className="flex items-center">
-                  <label className="flex items-center cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4 rounded border-slate-700 bg-slate-950 text-primary-500 focus:ring-primary-500/20 focus:ring-2 transition-all cursor-pointer"
-                    />
-                    <span className="ml-2.5 text-sm text-slate-400 transition-colors group-hover:text-slate-300">
-                      {t('rememberMe') || 'Remember me'}
-                    </span>
-                  </label>
-                </div>
+                {/* Remember Me & Submit Button Container */}
+                <div className="space-y-5">
+                  <div className="flex items-center">
+                    <label className="flex items-center cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 rounded border-slate-700 bg-slate-950 text-primary-500 focus:ring-primary-500/20 focus:ring-2 transition-all cursor-pointer"
+                      />
+                      <span className="ml-2.5 text-sm text-slate-400 transition-colors group-hover:text-slate-300">
+                        {t('rememberMe') || 'Remember me'}
+                      </span>
+                    </label>
+                  </div>
 
-                {/* Submit Button */}
-                <Button
+                  {/* Submit Button */}
+                <button
                   type="submit"
-                  variant="primary"
-                  size="lg"
-                  className="w-full h-12 text-base font-semibold rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 transition-all duration-200 group"
                   disabled={loading}
-                  isLoading={loading}
+                  className="w-full h-12 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 transition-all duration-200 group font-semibold text-base flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? (
-                    t('loggingIn') || 'Logging in...'
+                    <>
+                      <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      <span>{t('loggingIn') || 'Logging in...'}</span>
+                    </>
                   ) : (
                     <>
-                      {t('submit') || 'Sign in'}
-                      <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      <span>{t('submit') || 'Sign in'}</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </>
                   )}
-                </Button>
+                </button>
+                </div>
               </form>
 
               {/* Divider */}
