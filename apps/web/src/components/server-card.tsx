@@ -1,153 +1,138 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import { motion } from 'framer-motion';
-import { Card, CardContent } from '@zed-hosting/ui-kit';
-import { Button } from '@zed-hosting/ui-kit';
-import { Badge } from '@zed-hosting/ui-kit';
-import { GameServer } from '../types/server';
-import { apiClient } from '../lib/api-client';
+import Link from 'next/link';
+import { Card } from '@zed-hosting/ui-kit';
+import { Play, Square, RotateCcw, Trash2, Server } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { cn } from '../lib/utils';
-import { Play, Square, RotateCw, Settings, Terminal } from 'lucide-react';
 
 interface ServerCardProps {
-  server: GameServer;
+  server: {
+    uuid: string;
+    name?: string;
+    gameType: string;
+    status: 'RUNNING' | 'STOPPED' | 'STARTING' | 'STOPPING' | 'CRASHED' | 'INSTALLING' | 'UPDATING';
+    resources?: {
+      cpuLimit: number;
+      ramLimit: number;
+      diskLimit: number;
+    };
+    node?: {
+      name: string;
+    };
+    metrics?: {
+      cpuUsage?: number;
+      ramUsage?: number;
+      diskUsage?: number;
+    };
+  };
+  locale: string;
+  onStart?: (uuid: string) => void;
+  onStop?: (uuid: string) => void;
+  onRestart?: (uuid: string) => void;
+  onDelete?: (uuid: string) => void;
 }
 
-export function ServerCard({ server }: ServerCardProps) {
-  const t = useTranslations();
+export function ServerCard({ server, locale, onStart, onStop, onRestart, onDelete }: ServerCardProps) {
   const router = useRouter();
-  const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'hu' : 'hu';
 
-  const getStatusVariant = (status: string): 'default' | 'success' | 'danger' | 'warning' | 'info' => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'RUNNING':
-        return 'success';
+        return '#22c55e';
       case 'STOPPED':
-        return 'default';
+        return '#6b7280';
       case 'STARTING':
       case 'STOPPING':
-        return 'warning';
+        return '#f59e0b';
+      case 'CRASHED':
+        return '#ef4444';
       case 'INSTALLING':
       case 'UPDATING':
-        return 'info';
-      case 'CRASHED':
-        return 'danger';
+        return '#3b82f6';
       default:
-        return 'default';
+        return '#6b7280';
     }
   };
 
   const getStatusText = (status: string) => {
-    const key = `dashboard.server.status.${status.toLowerCase()}`;
-    return t(key);
-  };
-
-  const handleAction = async (action: 'start' | 'stop' | 'restart') => {
-    try {
-      await apiClient.post(`/servers/${server.uuid}/${action}`);
-      window.location.reload();
-    } catch (error: any) {
-      alert(error.message || `Failed to ${action} server`);
+    switch (status) {
+      case 'RUNNING':
+        return 'Futó';
+      case 'STOPPED':
+        return 'Leállított';
+      case 'STARTING':
+        return 'Indítás...';
+      case 'STOPPING':
+        return 'Leállítás...';
+      case 'CRASHED':
+        return 'Összeomlott';
+      case 'INSTALLING':
+        return 'Telepítés...';
+      case 'UPDATING':
+        return 'Frissítés...';
+      default:
+        return status;
     }
   };
 
-  const isRunning = server.status === 'RUNNING';
-  const isStopped = server.status === 'STOPPED';
-
   return (
-    <Card
-      hoverable
-      className={cn(
-        'group cursor-pointer overflow-hidden',
-        'border-border bg-background-tertiary'
-      )}
-      onClick={() => router.push(`/${locale}/dashboard/server/${server.uuid}`)}
-    >
-      <CardContent className="p-6">
-        {/* Header */}
+    <Card className="glass elevation-2 hover:elevation-3 transition-all duration-200">
+      <div className="p-6">
         <div className="flex items-start justify-between mb-4">
-          <div className="flex-1 min-w-0">
-            <h3 className="text-lg font-semibold mb-1 truncate text-text-primary">
-              {(server as any).name || server.gameType}
-            </h3>
-            <p className="text-sm truncate text-text-tertiary">
-              {server.gameType}
-            </p>
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-2">
+              <Server className="h-5 w-5" style={{ color: '#cbd5e1' }} />
+              <Link
+                href={`/${locale}/dashboard/server/${server.uuid}`}
+                className="text-lg font-semibold hover:opacity-70 transition-opacity"
+                style={{ color: '#f8fafc' }}
+              >
+                {server.name || `${server.gameType} Server`}
+              </Link>
+            </div>
+            <div className="flex items-center gap-2">
+              <div
+                className="w-2 h-2 rounded-full"
+                style={{ backgroundColor: getStatusColor(server.status) }}
+              />
+              <span className="text-sm" style={{ color: '#cbd5e1' }}>
+                {getStatusText(server.status)}
+              </span>
+              <span className="text-sm mx-2" style={{ color: '#6b7280' }}>•</span>
+              <span className="text-sm" style={{ color: '#cbd5e1' }}>
+                {server.gameType}
+              </span>
+            </div>
           </div>
-          <motion.div
-            animate={isRunning ? { scale: [1, 1.1, 1] } : {}}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            <Badge variant={getStatusVariant(server.status)} size="sm">
-              {getStatusText(server.status)}
-            </Badge>
-          </motion.div>
         </div>
 
-        {/* Resource Metrics */}
+        {/* Resource Usage */}
         {server.metrics && (
-          <div className="space-y-3 mb-4">
+          <div className="mb-4 space-y-2">
             {server.metrics.cpuUsage !== undefined && (
               <div>
-                <div className="flex justify-between text-xs mb-1.5">
-                  <span style={{ color: 'var(--color-text-muted)' }}>
-                    {t('dashboard.server.resources.cpu')}
-                  </span>
-                  <span style={{ color: 'var(--color-text-secondary)' }}>
-                    {server.metrics.cpuUsage.toFixed(1)}%
-                  </span>
+                <div className="flex justify-between text-xs mb-1" style={{ color: '#9ca3af' }}>
+                  <span>CPU</span>
+                  <span>{server.metrics.cpuUsage.toFixed(1)}%</span>
                 </div>
-                <div 
-                  className="w-full rounded-full overflow-hidden"
-                  style={{ backgroundColor: 'var(--color-bg-surface)', height: '6px' }}
-                >
+                <div className="w-full rounded-full overflow-hidden" style={{ backgroundColor: '#1f2937', height: '6px' }}>
                   <div
                     className="h-full rounded-full transition-all duration-300 bg-gradient-to-r from-blue-500 to-blue-400"
-                    style={{ width: `${Math.min(server.metrics.cpuUsage, 100)}%` }}
+                    style={{ width: `${Math.min(server.metrics.cpuUsage || 0, 100)}%` }}
                   />
                 </div>
               </div>
             )}
-            {server.metrics.ramUsagePercent !== undefined && (
+            {server.metrics.ramUsage !== undefined && (
               <div>
-                <div className="flex justify-between text-xs mb-1.5">
-                  <span style={{ color: 'var(--color-text-muted)' }}>
-                    {t('dashboard.server.resources.ram')}
-                  </span>
-                  <span style={{ color: 'var(--color-text-secondary)' }}>
-                    {server.metrics.ramUsagePercent.toFixed(1)}%
-                  </span>
+                <div className="flex justify-between text-xs mb-1" style={{ color: '#9ca3af' }}>
+                  <span>RAM</span>
+                  <span>{server.metrics.ramUsage.toFixed(1)}%</span>
                 </div>
-                <div 
-                  className="w-full rounded-full overflow-hidden"
-                  style={{ backgroundColor: 'var(--color-bg-surface)', height: '6px' }}
-                >
+                <div className="w-full rounded-full overflow-hidden" style={{ backgroundColor: '#1f2937', height: '6px' }}>
                   <div
                     className="h-full rounded-full transition-all duration-300 bg-gradient-to-r from-green-500 to-green-400"
-                    style={{ width: `${Math.min(server.metrics.ramUsagePercent, 100)}%` }}
-                  />
-                </div>
-              </div>
-            )}
-            {server.metrics.diskUsagePercent !== undefined && (
-              <div>
-                <div className="flex justify-between text-xs mb-1.5">
-                  <span style={{ color: 'var(--color-text-muted)' }}>
-                    {t('dashboard.server.resources.disk')}
-                  </span>
-                  <span style={{ color: 'var(--color-text-secondary)' }}>
-                    {server.metrics.diskUsagePercent.toFixed(1)}%
-                  </span>
-                </div>
-                <div 
-                  className="w-full rounded-full overflow-hidden"
-                  style={{ backgroundColor: 'var(--color-bg-surface)', height: '6px' }}
-                >
-                  <div
-                    className="h-full rounded-full transition-all duration-300 bg-gradient-to-r from-yellow-500 to-yellow-400"
-                    style={{ width: `${Math.min(server.metrics.diskUsagePercent, 100)}%` }}
+                    style={{ width: `${Math.min(server.metrics.ramUsage || 0, 100)}%` }}
                   />
                 </div>
               </div>
@@ -155,74 +140,113 @@ export function ServerCard({ server }: ServerCardProps) {
           </div>
         )}
 
+        {/* Resources */}
+        {server.resources && (
+          <div className="mb-4 text-xs space-y-1" style={{ color: '#9ca3af' }}>
+            <div>
+              CPU: {server.resources.cpuLimit} mag • RAM: {(server.resources.ramLimit / 1024).toFixed(1)} GB • Disk: {server.resources.diskLimit} GB
+            </div>
+            {server.node && (
+              <div>Node: {server.node.name}</div>
+            )}
+          </div>
+        )}
+
         {/* Actions */}
-        <div className="flex gap-2 pt-4 border-t border-border">
-          {isStopped && (
-            <Button
-              variant="primary"
-              size="sm"
-              className="flex-1"
+        <div className="flex gap-2 flex-wrap">
+          <button
+            onClick={() => router.push(`/${locale}/dashboard/server/${server.uuid}`)}
+            className="flex-1 px-3 py-2 text-sm rounded-lg border transition-colors"
+            style={{
+              backgroundColor: 'var(--color-bg-card)',
+              borderColor: 'var(--color-border)',
+              color: 'var(--color-text-main)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'var(--color-bg-elevated)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'var(--color-bg-card)';
+            }}
+          >
+            Részletek
+          </button>
+          {server.status === 'STOPPED' && onStart && (
+            <button
               onClick={(e) => {
                 e.stopPropagation();
-                handleAction('start');
+                onStart(server.uuid);
               }}
+              className="px-3 py-2 text-sm rounded-lg border transition-colors"
+              style={{
+                backgroundColor: '#22c55e20',
+                borderColor: '#22c55e50',
+                color: '#22c55e',
+              }}
+              title="Indítás"
             >
-              <Play className="h-4 w-4 mr-1" />
-              {t('dashboard.server.actions.start')}
-            </Button>
+              <Play className="h-4 w-4" />
+            </button>
           )}
-          {isRunning && (
+          {server.status === 'RUNNING' && (
             <>
-              <Button
-                variant="secondary"
-                size="sm"
-                className="flex-1"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleAction('stop');
-                }}
-              >
-                <Square className="h-4 w-4 mr-1" />
-                {t('dashboard.server.actions.stop')}
-              </Button>
-              <Button
-                variant="secondary"
-                size="sm"
-                className="flex-1"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleAction('restart');
-                }}
-              >
-                <RotateCw className="h-4 w-4 mr-1" />
-                {t('dashboard.server.actions.restart')}
-              </Button>
+              {onStop && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onStop(server.uuid);
+                  }}
+                  className="px-3 py-2 text-sm rounded-lg border transition-colors"
+                  style={{
+                    backgroundColor: '#ef444420',
+                    borderColor: '#ef444450',
+                    color: '#ef4444',
+                  }}
+                  title="Leállítás"
+                >
+                  <Square className="h-4 w-4" />
+                </button>
+              )}
+              {onRestart && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onRestart(server.uuid);
+                  }}
+                  className="px-3 py-2 text-sm rounded-lg border transition-colors"
+                  style={{
+                    backgroundColor: '#f59e0b20',
+                    borderColor: '#f59e0b50',
+                    color: '#f59e0b',
+                  }}
+                  title="Újraindítás"
+                >
+                  <RotateCcw className="h-4 w-4" />
+                </button>
+              )}
             </>
           )}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              router.push(`/${locale}/dashboard/server/${server.uuid}/console`);
-            }}
-            title={t('dashboard.server.actions.console')}
-          >
-            <Terminal className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              router.push(`/${locale}/dashboard/server/${server.uuid}/settings`);
-            }}
-            title={t('dashboard.server.actions.settings')}
-          >
-            <Settings className="h-4 w-4" />
-          </Button>
+          {onDelete && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (window.confirm('Biztosan törölni szeretnéd ezt a szervert?')) {
+                  onDelete(server.uuid);
+                }
+              }}
+              className="px-3 py-2 text-sm rounded-lg border transition-colors"
+              style={{
+                backgroundColor: '#ef444420',
+                borderColor: '#ef444450',
+                color: '#ef4444',
+              }}
+              title="Törlés"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          )}
         </div>
-      </CardContent>
+      </div>
     </Card>
   );
 }

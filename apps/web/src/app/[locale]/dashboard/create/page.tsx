@@ -8,6 +8,7 @@ import { useAuthStore } from '../../../../stores/auth-store';
 import { Button } from '@zed-hosting/ui-kit';
 import { ProtectedRoute } from '../../../../components/protected-route';
 import { Navigation } from '../../../../components/navigation';
+import { useNotificationContext } from '../../../../context/notification-context';
 
 interface Node {
   id: string;
@@ -23,6 +24,7 @@ export default function CreateServerPage() {
   const t = useTranslations();
   const router = useRouter();
   const { accessToken } = useAuthStore();
+  const notifications = useNotificationContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [nodes, setNodes] = useState<Node[]>([]);
