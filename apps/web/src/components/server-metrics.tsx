@@ -42,16 +42,6 @@ export function ServerMetrics({ serverUuid, refreshInterval = 30000 }: ServerMet
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState<'1h' | '6h' | '24h' | '7d'>('1h');
 
-  useEffect(() => {
-    apiClient.setAccessToken(accessToken);
-    loadMetrics();
-
-    if (refreshInterval > 0) {
-      const interval = setInterval(loadMetrics, refreshInterval);
-      return () => clearInterval(interval);
-    }
-  }, [serverUuid, accessToken, timeRange, refreshInterval]);
-
   const loadMetrics = async () => {
     try {
       setLoading(true);
@@ -77,6 +67,18 @@ export function ServerMetrics({ serverUuid, refreshInterval = 30000 }: ServerMet
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    apiClient.setAccessToken(accessToken);
+    loadMetrics();
+
+    if (refreshInterval > 0) {
+      const interval = setInterval(() => {
+        loadMetrics();
+      }, refreshInterval);
+      return () => clearInterval(interval);
+    }
+  }, [serverUuid, accessToken, timeRange, refreshInterval]);
 
   const getTimeRangeMs = (range: string): number => {
     switch (range) {
