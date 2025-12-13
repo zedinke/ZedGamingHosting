@@ -36,11 +36,16 @@ export default function DashboardPage() {
     if (!isAuthenticated) {
       const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'hu' : 'hu';
       window.location.href = `/${locale}/login`;
+      return;
     }
   }, [isAuthenticated]);
 
   if (!isAuthenticated) {
-    return null;
+    return (
+      <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', color: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p>Redirecting to login...</p>
+      </div>
+    );
   }
 
   return (
@@ -48,11 +53,16 @@ export default function DashboardPage() {
       <SkipLink href="#main-content">
         {t('accessibility.skipToContent', { defaultValue: 'Skip to main content' })}
       </SkipLink>
-      <main id="main-content" className="min-h-screen bg-mesh" style={{ backgroundColor: 'var(--color-bg-app)', color: 'var(--color-text-main)' }}>
+      <main id="main-content" className="min-h-screen" style={{ 
+        backgroundColor: '#0a0a0a', 
+        background: 'radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.05) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%), #0a0a0a',
+        color: '#f8fafc',
+        minHeight: '100vh'
+      }}>
         <div className="container mx-auto px-4 py-8">
           <header className="mb-8">
-            <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--color-text-main)' }}>{t('dashboard.title')}</h1>
-            <p style={{ color: 'var(--color-text-secondary)' }}>
+            <h1 className="text-3xl font-bold mb-2" style={{ color: '#f8fafc' }}>{t('dashboard.title')}</h1>
+            <p style={{ color: '#cbd5e1' }}>
               {t('dashboard.servers.title')}
             </p>
           </header>
@@ -60,39 +70,39 @@ export default function DashboardPage() {
           {/* Metrics Cards - Modern Design */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             <Card className="glass elevation-2 p-6">
-              <h3 className="text-sm mb-2" style={{ color: 'var(--color-text-secondary)' }}>
+              <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>
                 {t('dashboard.metrics.totalServers')}
               </h3>
-              <p className="text-3xl font-bold" style={{ color: 'var(--color-text-main)' }}>
+              <p className="text-3xl font-bold" style={{ color: '#f8fafc' }}>
                 {servers?.length || 0}
               </p>
             </Card>
             <Card className="glass elevation-2 p-6">
-              <h3 className="text-sm mb-2" style={{ color: 'var(--color-text-secondary)' }}>
+              <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>
                 {t('dashboard.metrics.activeServers')}
               </h3>
-              <p className="text-3xl font-bold" style={{ color: 'var(--color-success)' }}>
+              <p className="text-3xl font-bold" style={{ color: '#10b981' }}>
                 {servers?.filter((s) => s.status === 'RUNNING').length || 0}
               </p>
             </Card>
             <Card className="glass elevation-2 p-6">
-              <h3 className="text-sm mb-2" style={{ color: 'var(--color-text-secondary)' }}>
+              <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>
                 {t('dashboard.metrics.totalPlayers')}
               </h3>
-              <p className="text-3xl font-bold" style={{ color: 'var(--color-text-main)' }}>0</p>
+              <p className="text-3xl font-bold" style={{ color: '#f8fafc' }}>0</p>
             </Card>
             <Card className="glass elevation-2 p-6">
-              <h3 className="text-sm mb-2" style={{ color: 'var(--color-text-secondary)' }}>
+              <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>
                 {t('dashboard.metrics.uptime')}
               </h3>
-              <p className="text-3xl font-bold" style={{ color: 'var(--color-text-main)' }}>99.9%</p>
+              <p className="text-3xl font-bold" style={{ color: '#f8fafc' }}>99.9%</p>
             </Card>
           </div>
 
           {/* Servers Section */}
           <section>
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-semibold" style={{ color: 'var(--color-text-main)' }}>
+              <h2 className="text-2xl font-semibold" style={{ color: '#f8fafc' }}>
                 {t('dashboard.servers.title')}
               </h2>
               <Button>{t('dashboard.servers.create')}</Button>
@@ -100,11 +110,11 @@ export default function DashboardPage() {
 
             {isLoading ? (
               <div className="text-center py-12">
-                <p style={{ color: 'var(--color-text-secondary)' }}>Loading...</p>
+                <p style={{ color: '#cbd5e1' }}>Loading...</p>
               </div>
             ) : !servers || servers.length === 0 ? (
               <Card className="glass elevation-2 p-12 text-center">
-                <p className="mb-4" style={{ color: 'var(--color-text-secondary)' }}>
+                <p className="mb-4" style={{ color: '#cbd5e1' }}>
                   {t('dashboard.servers.empty')}
                 </p>
                 <Button>{t('dashboard.servers.create')}</Button>
