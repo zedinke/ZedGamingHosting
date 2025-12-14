@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../../../../../../lib/api-client';
 import { useAuthStore } from '../../../../../../stores/auth-store';
 import { Card, Button } from '@zed-hosting/ui-kit';
