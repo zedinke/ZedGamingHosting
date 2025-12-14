@@ -46,7 +46,7 @@ export default function ServerConsolePage() {
     : null;
 
   // SSE hook
-  const { data: sseData, isConnected: sseConnected } = useSSE({
+  useSSE({
     url: sseUrl || '',
     enabled: !!sseUrl && useSSEStream,
     onMessage: (data) => {
