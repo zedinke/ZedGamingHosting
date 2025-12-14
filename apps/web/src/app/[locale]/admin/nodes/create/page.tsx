@@ -8,11 +8,12 @@ import { useAuthStore } from '../../../../../stores/auth-store';
 import { Navigation } from '../../../../../components/navigation';
 import { Card, Button } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../../lib/api-client';
+import { useNotificationContext } from '../../../../../context/notification-context';
 
 export default function CreateNodePage() {
   const router = useRouter();
   const params = useParams();
-  const t = useTranslations();
+  // const t = useTranslations();
   const { user: currentUser, isAuthenticated, accessToken } = useAuthStore();
   const locale = (params.locale as string) || 'hu';
   const [isHydrated, setIsHydrated] = useState(false);
