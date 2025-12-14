@@ -3,9 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useAuthStore } from '../../../stores/auth-store';
 import { Navigation } from '../../../components/navigation';
 import { Card } from '@zed-hosting/ui-kit';
+import { SkipLink } from '../../../components/accessibility';
 
 export default function AdminPage() {
   const router = useRouter();
@@ -50,10 +52,15 @@ export default function AdminPage() {
     );
   }
 
+  const t = useTranslations();
+
   return (
     <>
+      <SkipLink href="#main-content">
+        {t('accessibility.skipToContent', { defaultValue: 'Skip to main content' })}
+      </SkipLink>
       <Navigation />
-      <main className="min-h-screen" style={{ 
+      <main id="main-content" className="min-h-screen" style={{ 
         backgroundColor: '#0a0a0a', 
         background: 'radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.05) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%), #0a0a0a',
         color: '#f8fafc',
