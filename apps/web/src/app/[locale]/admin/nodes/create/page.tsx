@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import { useAuthStore } from '../../../../../stores/auth-store';
 import { Navigation } from '../../../../../components/navigation';
 import { Card, Button } from '@zed-hosting/ui-kit';
