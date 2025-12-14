@@ -12,6 +12,7 @@ import { SkipLink } from '../../../components/accessibility';
 import { useRouter } from 'next/navigation';
 import { Navigation } from '../../../components/navigation';
 import { useToast } from '../../../hooks/use-toast';
+import { ToastContainer } from '../../../components/toast-container';
 import { useNotificationContext } from '../../../context/notification-context';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -20,7 +21,7 @@ export default function DashboardPage() {
   const router = useRouter();
   const { isAuthenticated, accessToken } = useAuthStore();
   const [isHydrated, setIsHydrated] = useState(false);
-  const { showToast, ToastContainer } = useToast();
+  const { showToast, removeToast, toasts } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
 
   // Wait for hydration to avoid hydration mismatch
@@ -196,7 +197,7 @@ export default function DashboardPage() {
         {t('accessibility.skipToContent', { defaultValue: 'Skip to main content' })}
       </SkipLink>
       <Navigation />
-      <ToastContainer />
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
       <main id="main-content" className="min-h-screen" style={{ 
         backgroundColor: '#0a0a0a', 
         background: 'radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.05) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%), #0a0a0a',
