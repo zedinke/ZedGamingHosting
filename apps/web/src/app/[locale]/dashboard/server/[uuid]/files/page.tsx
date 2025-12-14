@@ -408,7 +408,7 @@ export default function ServerFilesPage() {
                 ))}
               </div>
             )}
-          </Card>
+          </div>
         </div>
       </main>
     </ProtectedRoute>
