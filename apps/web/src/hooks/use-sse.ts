@@ -11,7 +11,7 @@ interface UseSSEOptions {
 /**
  * Hook for Server-Sent Events (SSE)
  */
-export function useSSE({ url, headers, enabled = true, onMessage, onError }: UseSSEOptions) {
+export function useSSE({ url, enabled = true, onMessage, onError }: UseSSEOptions) {
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<Event | null>(null);
   const [isConnected, setIsConnected] = useState(false);
