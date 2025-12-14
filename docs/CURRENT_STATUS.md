@@ -13,6 +13,7 @@
 - ✅ Admin Settings frontend integráció - beállítások betöltése és mentése
 - ✅ Admin Logs frontend integráció - audit logok megjelenítése szűréssel
 - ✅ Admin oldalak hiányzó importok javítása (useNotificationContext, useMutation)
+- ✅ Metrics frontend integráció - backend API használata mock adatok helyett
 
 ## ✅ Teljesen Implementált Funkciók
 
@@ -95,13 +96,14 @@
   - Backend endpoint-ok kész
   - TODO: WebSocket/SSE real-time support
 
-- ⚠️ **Files**
-  - Frontend oldal alapokkal kész
-  - TODO: File upload/download kezelés
-  - TODO: Drag & drop support
+- ✅ **Files**
+  - Frontend oldal kész
+  - ✅ File upload/download kezelés implementálva
+  - ✅ Drag & drop support implementálva
 
 - ⚠️ **Metrics**
   - Frontend grafikonokkal kész
+  - ✅ Backend API integráció kész (GET /api/servers/:uuid/metrics)
   - TODO: WebSocket/SSE real-time frissítés
 
 ### Frontend

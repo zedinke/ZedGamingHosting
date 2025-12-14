@@ -37,6 +37,7 @@ export default function ServerFilesPage() {
   }, [serverUuid, router, locale]);
   const [currentPath, setCurrentPath] = useState('/');
   const [uploading, setUploading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     if (accessToken) {
@@ -212,6 +213,38 @@ export default function ServerFilesPage() {
     }
   };
 
+  // Drag and drop handlers
+  const handleDragEnter = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    if (droppedFiles.length > 0) {
+      // Upload all dropped files
+      droppedFiles.forEach((file) => {
+        handleFileUpload(file);
+      });
+    }
+  };
+
   const handleDownload = (file: FileItem, e: React.MouseEvent) => {
     e.stopPropagation();
     downloadMutation.mutate(file);
@@ -251,6 +284,7 @@ export default function ServerFilesPage() {
                   type="file"
                   ref={fileInputRef}
                   onChange={handleFileInputChange}
+                  multiple
                   style={{ display: 'none' }}
                 />
                 <Button 
@@ -271,7 +305,27 @@ export default function ServerFilesPage() {
             </div>
           </header>
 
-          <Card className="glass elevation-2 p-6">
+          <Card 
+            className="glass elevation-2 p-6 relative"
+            onDragEnter={handleDragEnter}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            style={{
+              border: isDragging ? '2px dashed #3b82f6' : '1px solid transparent',
+              backgroundColor: isDragging ? 'rgba(59, 130, 246, 0.1)' : undefined,
+            }}
+          >
+            {isDragging && (
+              <div className="absolute inset-0 flex items-center justify-center bg-opacity-50 rounded-lg pointer-events-none z-10" style={{ backgroundColor: 'rgba(59, 130, 246, 0.2)' }}>
+                <div className="text-center">
+                  <Upload className="h-12 w-12 mx-auto mb-2" style={{ color: '#3b82f6' }} />
+                  <p className="text-lg font-semibold" style={{ color: '#3b82f6' }}>
+                    Engedje el a fájlokat a feltöltéshez
+                  </p>
+                </div>
+              </div>
+            )}
             {/* Breadcrumb */}
             <div className="flex items-center gap-2 mb-4 pb-4 border-b" style={{ borderColor: 'var(--color-border)' }}>
               <button
