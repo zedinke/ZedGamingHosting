@@ -51,7 +51,7 @@ export default function AdminNodesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
 
-  const { data: nodes, isLoading, refetch } = useQuery<Node[]>({
+  const { data: nodes, isLoading } = useQuery<Node[]>({
     queryKey: ['admin-nodes'],
     queryFn: async () => {
       return await apiClient.get<Node[]>('/nodes');
