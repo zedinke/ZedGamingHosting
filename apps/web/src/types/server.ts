@@ -14,6 +14,7 @@ export interface ServerPort {
 export interface GameServer {
   id: string;
   uuid: string;
+  name?: string;
   gameType: string;
   status: 'INSTALLING' | 'RUNNING' | 'STOPPED' | 'STARTING' | 'STOPPING' | 'CRASHED' | 'UPDATING';
   nodeId: string;
