@@ -36,17 +36,18 @@ export default function AdminStatsPage() {
     }
   }, [isAuthenticated, isHydrated, currentUser, router, locale]);
 
-  const { data: stats, isLoading } = useQuery({
-    queryKey: ['admin-stats'],
-    queryFn: async () => {
-      return await apiClient.get('/admin/stats');
-    },
-    enabled: isHydrated && isAuthenticated && !!accessToken,
-    refetchInterval: 60000,
-  });
+  interface StatsData {
+    totalUsers?: number;
+    totalServers?: number;
+    totalNodes?: number;
+    activeServers?: number;
+    totalRevenue?: number;
+    monthlyRevenue?: Array<{ month: string; revenue: number }>;
+    serverDistribution?: Array<{ game: string; count: number }>;
+  }
 
   // Mock data fallback (if API fails)
-  const mockStats = {
+  const mockStats: StatsData = {
         totalUsers: 150,
         totalServers: 45,
         totalNodes: 5,
@@ -69,7 +70,16 @@ export default function AdminStatsPage() {
       ],
   };
 
-  const displayStats = stats || mockStats;
+  const { data: stats, isLoading } = useQuery<StatsData>({
+    queryKey: ['admin-stats'],
+    queryFn: async () => {
+      return await apiClient.get<StatsData>('/admin/stats');
+    },
+    enabled: isHydrated && isAuthenticated && !!accessToken,
+    refetchInterval: 60000,
+  });
+
+  const displayStats: StatsData = stats || mockStats;
 
   if (!isHydrated) {
     return (
