@@ -7,7 +7,7 @@ import { Navigation } from '../../../../components/navigation';
 import { Card } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../lib/api-client';
 import { useQuery } from '@tanstack/react-query';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 
 export default function AdminStatsPage() {
   const router = useRouter();
