@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import { useAuthStore } from '../../../stores/auth-store';
 import { Navigation } from '../../../components/navigation';
 import { Card } from '@zed-hosting/ui-kit';
@@ -11,7 +10,6 @@ import { Card } from '@zed-hosting/ui-kit';
 export default function AdminPage() {
   const router = useRouter();
   const params = useParams();
-  const t = useTranslations();
   const { user, isAuthenticated } = useAuthStore();
   const locale = (params.locale as string) || 'hu';
   const [isHydrated, setIsHydrated] = useState(false);
