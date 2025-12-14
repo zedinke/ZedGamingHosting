@@ -22,7 +22,7 @@ interface LicenseInfo {
 export default function AdminLicensingPage() {
   const router = useRouter();
   const params = useParams();
-  const t = useTranslations();
+  // const t = useTranslations();
   const { user: currentUser, isAuthenticated, accessToken } = useAuthStore();
   const locale = (params.locale as string) || 'hu';
   const [isHydrated, setIsHydrated] = useState(false);
