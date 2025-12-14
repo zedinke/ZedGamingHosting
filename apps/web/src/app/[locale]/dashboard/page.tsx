@@ -122,7 +122,7 @@ export default function DashboardPage() {
   });
 
   // Fetch servers
-  const { data: servers, isLoading, refetch } = useQuery<GameServer[]>({
+  const { data: servers, isLoading } = useQuery<GameServer[]>({
     queryKey: ['servers'],
     queryFn: async () => {
       try {
