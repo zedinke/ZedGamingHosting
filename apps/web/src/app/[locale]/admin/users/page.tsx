@@ -51,6 +51,8 @@ export default function AdminUsersPage() {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState<string>('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const { data: users, isLoading } = useQuery<User[]>({
     queryKey: ['admin-users'],
