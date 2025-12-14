@@ -8,6 +8,7 @@ import { Navigation } from '../../../../../components/navigation';
 import { Card, Button } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../../lib/api-client';
 import { useQuery } from '@tanstack/react-query';
+import { useNotificationContext } from '../../../../../context/notification-context';
 import { GameServer } from '../../../../../types/server';
 
 export default function AdminServerDetailPage() {
@@ -15,6 +16,7 @@ export default function AdminServerDetailPage() {
   const params = useParams();
   const t = useTranslations();
   const { user: currentUser, isAuthenticated, accessToken } = useAuthStore();
+  const notifications = useNotificationContext();
   const locale = (params?.locale as string) || 'hu';
   const serverUuid = params?.uuid as string;
   const [isHydrated, setIsHydrated] = useState(false);
@@ -73,9 +75,18 @@ export default function AdminServerDetailPage() {
 
     try {
       await apiClient.delete(`/servers/${serverUuid}`);
+      notifications.addNotification({
+        type: 'success',
+        title: 'Szerver törölve',
+        message: 'A szerver sikeresen törölve.',
+      });
       router.push(`/${locale}/admin/servers`);
     } catch (err: any) {
-      alert(err.message || 'Szerver törlése sikertelen');
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: err.message || 'Szerver törlése sikertelen',
+      });
     }
   };
 
