@@ -144,7 +144,7 @@ export function ServerCard({ server, locale, onStart, onStop, onRestart, onDelet
         {server.resources && (
           <div className="mb-4 text-xs space-y-1" style={{ color: '#9ca3af' }}>
             <div>
-              CPU: {server.resources.cpuLimit} mag • RAM: {(server.resources.ramLimit / 1024).toFixed(1)} GB • Disk: {server.resources.diskLimit} GB
+              CPU: {server.resources.cpuLimit || 0} mag • RAM: {((server.resources.ramLimit || 0) / 1024).toFixed(1)} GB • Disk: {server.resources.diskLimit || 0} GB
             </div>
             {server.node && (
               <div>Node: {server.node.name}</div>
