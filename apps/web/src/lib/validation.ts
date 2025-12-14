@@ -1,141 +1,93 @@
 /**
- * Form validation utilities
+ * Zod validation schemas for form validation
  */
+import { z } from 'zod';
 
-export interface ValidationError {
-  field: string;
-  message: string;
-}
+export const userSchema = z.object({
+  email: z.string()
+    .min(1, 'Email cím megadása kötelező')
+    .email('Érvénytelen email cím formátum')
+    .max(255, 'Az email cím túl hosszú (max. 255 karakter)'),
+  password: z.string()
+    .min(8, 'A jelszónak legalább 8 karakter hosszúnak kell lennie')
+    .max(128, 'A jelszó túl hosszú (max. 128 karakter)')
+    .regex(/[A-Z]/, 'A jelszónak tartalmaznia kell legalább egy nagybetűt')
+    .regex(/[a-z]/, 'A jelszónak tartalmaznia kell legalább egy kisbetűt')
+    .regex(/[0-9]/, 'A jelszónak tartalmaznia kell legalább egy számot'),
+  confirmPassword: z.string().min(1, 'Jelszó megerősítés megadása kötelező'),
+  role: z.enum(['USER', 'SUPPORT', 'RESELLER_ADMIN', 'SUPERADMIN'], {
+    errorMap: () => ({ message: 'Érvénytelen szerepkör' }),
+  }),
+  balance: z.number()
+    .min(0, 'Az egyenleg nem lehet negatív')
+    .max(999999, 'Az egyenleg túl nagy (max. 999999)')
+    .optional(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: 'A jelszavak nem egyeznek',
+  path: ['confirmPassword'],
+});
 
-export class ValidationError extends Error {
-  constructor(public field: string, message: string) {
-    super(message);
-    this.name = 'ValidationError';
-  }
-}
+export const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1, 'Jelenlegi jelszó megadása kötelező'),
+  newPassword: z.string()
+    .min(8, 'Az új jelszónak legalább 8 karakter hosszúnak kell lennie')
+    .max(128, 'A jelszó túl hosszú (max. 128 karakter)')
+    .regex(/[A-Z]/, 'A jelszónak tartalmaznia kell legalább egy nagybetűt')
+    .regex(/[a-z]/, 'A jelszónak tartalmaznia kell legalább egy kisbetűt')
+    .regex(/[0-9]/, 'A jelszónak tartalmaznia kell legalább egy számot'),
+  confirmPassword: z.string().min(1, 'Jelszó megerősítés megadása kötelező'),
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: 'Az új jelszavak nem egyeznek',
+  path: ['confirmPassword'],
+});
 
-export const validators = {
-  email: (value: string): string | null => {
-    if (!value) return 'Az email cím kötelező';
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(value)) {
-      return 'Érvényes email címet adj meg';
-    }
-    return null;
-  },
+export const nodeSchema = z.object({
+  name: z.string()
+    .min(1, 'Név megadása kötelező')
+    .max(100, 'A név túl hosszú (max. 100 karakter)')
+    .regex(/^[a-zA-Z0-9-_]+$/, 'A név csak betűket, számokat, kötőjelet és aláhúzást tartalmazhat'),
+  ipAddress: z.string()
+    .min(1, 'IP cím megadása kötelező')
+    .ip({ version: 'v4', message: 'Érvénytelen IPv4 cím formátum (pl. 192.168.1.1)' }),
+  publicFqdn: z.string()
+    .max(255, 'Az FQDN túl hosszú (max. 255 karakter)')
+    .regex(/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/i, 'Érvénytelen FQDN formátum (pl. example.com)')
+    .optional()
+    .or(z.literal('')),
+  totalRam: z.number()
+    .min(1024, 'A RAM legalább 1024 MB (1 GB) kell legyen')
+    .max(1048576, 'A RAM túl nagy (max. 1048576 MB = 1 TB)')
+    .int('A RAM értéknek egész számnak kell lennie'),
+  totalCpu: z.number()
+    .min(1, 'A CPU legalább 1 mag kell legyen')
+    .max(512, 'A CPU túl nagy (max. 512 mag)')
+    .int('A CPU értéknek egész számnak kell lennie'),
+  diskType: z.enum(['NVME', 'SSD', 'HDD'], {
+    errorMap: () => ({ message: 'Érvénytelen lemeztípus' }),
+  }),
+  isClusterStorage: z.boolean(),
+  maxConcurrentUpdates: z.number()
+    .min(1, 'Az egyidejű frissítések száma legalább 1 kell legyen')
+    .max(100, 'Az egyidejű frissítések száma túl nagy (max. 100)')
+    .int('Az egyidejű frissítések számának egész számnak kell lennie'),
+});
 
-  password: (value: string, minLength: number = 8): string | null => {
-    if (!value) return 'A jelszó kötelező';
-    if (value.length < minLength) {
-      return `A jelszónak legalább ${minLength} karakter hosszúnak kell lennie`;
-    }
-    return null;
-  },
-
-  passwordMatch: (value: string, matchValue: string): string | null => {
-    if (!value) return 'A jelszó megerősítése kötelező';
-    if (value !== matchValue) {
-      return 'A jelszavak nem egyeznek';
-    }
-    return null;
-  },
-
-  required: (value: any, fieldName: string = 'Ez a mező'): string | null => {
-    if (value === null || value === undefined || value === '') {
-      return `${fieldName} kötelező`;
-    }
-    return null;
-  },
-
-  min: (value: number, min: number, fieldName: string = 'Az érték'): string | null => {
-    if (value < min) {
-      return `${fieldName} legalább ${min} kell legyen`;
-    }
-    return null;
-  },
-
-  max: (value: number, max: number, fieldName: string = 'Az érték'): string | null => {
-    if (value > max) {
-      return `${fieldName} legfeljebb ${max} lehet`;
-    }
-    return null;
-  },
-
-  positive: (value: number, fieldName: string = 'Az érték'): string | null => {
-    if (value <= 0) {
-      return `${fieldName} pozitív szám kell legyen`;
-    }
-    return null;
-  },
-
-  url: (value: string): string | null => {
-    if (!value) return null;
-    try {
-      new URL(value);
-      return null;
-    } catch {
-      return 'Érvényes URL-t adj meg';
-    }
-  },
-
-  ipAddress: (value: string): string | null => {
-    if (!value) return 'Az IP cím kötelező';
-    const ipRegex = /^(\d{1,3}\.){3}\d{1,3}$/;
-    if (!ipRegex.test(value)) {
-      return 'Érvényes IP címet adj meg';
-    }
-    const parts = value.split('.').map(Number);
-    if (parts.some(part => part < 0 || part > 255)) {
-      return 'Érvényes IP címet adj meg (0-255)';
-    }
-    return null;
-  },
-
-  fqdn: (value: string): string | null => {
-    if (!value) return null; // Optional field
-    const fqdnRegex = /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/i;
-    if (!fqdnRegex.test(value)) {
-      return 'Érvényes FQDN-t adj meg';
-    }
-    return null;
-  },
-
-  serverName: (value: string): string | null => {
-    if (!value) return null; // Optional
-    if (value.length > 100) {
-      return 'A szerver név legfeljebb 100 karakter lehet';
-    }
-    if (!/^[a-zA-Z0-9áéíóöőúüűÁÉÍÓÖŐÚÜŰ\s\-_]+$/.test(value)) {
-      return 'A szerver név csak betűket, számokat, szóközt és speciális karaktereket tartalmazhat (-, _)';
-    }
-    return null;
-  },
-
-  port: (value: number): string | null => {
-    if (value < 1 || value > 65535) {
-      return 'A port számnak 1 és 65535 között kell lennie';
-    }
-    return null;
-  },
-};
-
-export function validateForm<T extends Record<string, any>>(
-  data: T,
-  rules: Record<keyof T, Array<(value: any) => string | null>>
-): Record<string, string> {
-  const errors: Record<string, string> = {};
-
-  for (const [field, fieldRules] of Object.entries(rules)) {
-    const value = data[field];
-    for (const rule of fieldRules) {
-      const error = rule(value);
-      if (error) {
-        errors[field] = error;
-        break; // Only show first error per field
-      }
-    }
-  }
-
-  return errors;
-}
-
+export const serverCreateSchema = z.object({
+  nodeId: z.string().min(1, 'Node kiválasztása kötelező'),
+  gameType: z.string().min(1, 'Játék típus kiválasztása kötelező'),
+  cpuLimit: z.number()
+    .min(0.5, 'A CPU legalább 0.5 mag kell legyen')
+    .max(128, 'A CPU túl nagy (max. 128 mag)'),
+  ramLimit: z.number()
+    .min(512, 'A RAM legalább 512 MB kell legyen')
+    .max(1048576, 'A RAM túl nagy (max. 1048576 MB = 1 TB)')
+    .int('A RAM értéknek egész számnak kell lennie'),
+  diskLimit: z.number()
+    .min(1, 'A lemez legalább 1 GB kell legyen')
+    .max(10000, 'A lemez túl nagy (max. 10000 GB = 10 TB)')
+    .int('A lemez értéknek egész számnak kell lennie'),
+  name: z.string()
+    .max(100, 'A szerver neve túl hosszú (max. 100 karakter)')
+    .regex(/^[a-zA-Z0-9áéíóöőúüűÁÉÍÓÖŐÚÜŰ\s\-_]*$/, 'A szerver név csak betűket, számokat, szóközt és speciális karaktereket tartalmazhat (-, _)')
+    .optional(),
+});

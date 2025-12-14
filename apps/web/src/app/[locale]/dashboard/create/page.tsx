@@ -9,6 +9,9 @@ import { Button } from '@zed-hosting/ui-kit';
 import { ProtectedRoute } from '../../../../components/protected-route';
 import { Navigation } from '../../../../components/navigation';
 import { useNotificationContext } from '../../../../context/notification-context';
+import { serverCreateSchema } from '../../../../lib/validation';
+import { z } from 'zod';
+import { ServerNameInput } from '../../../../components/server-name-input';
 
 interface Node {
   id: string;
@@ -27,9 +30,11 @@ export default function CreateServerPage() {
   const notifications = useNotificationContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [nodes, setNodes] = useState<Node[]>([]);
   const [selectedNodeId, setSelectedNodeId] = useState<string>('');
   const [gameType, setGameType] = useState<string>('MINECRAFT');
+  const [serverName, setServerName] = useState<string>('');
   const [resources, setResources] = useState({
     cpuLimit: 2,
     ramLimit: 2048,
@@ -61,8 +66,21 @@ export default function CreateServerPage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setFieldErrors({});
 
     try {
+      const formData = {
+        nodeId: selectedNodeId,
+        gameType,
+        cpuLimit: resources.cpuLimit,
+        ramLimit: resources.ramLimit,
+        diskLimit: resources.diskLimit,
+        name: serverName || undefined,
+      };
+
+      // Validate with Zod
+      serverCreateSchema.parse(formData);
+
       const response = await apiClient.post<{ uuid: string }>('/servers', {
         name: serverName || undefined,
         gameType,
@@ -71,10 +89,32 @@ export default function CreateServerPage() {
         startupPriority: 10,
       });
 
+      notifications.addNotification({
+        type: 'success',
+        title: 'Szerver létrehozva',
+        message: 'A szerver sikeresen létrejött',
+      });
+
       const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'hu' : 'hu';
       router.push(`/${locale}/dashboard/server/${response.uuid}`);
     } catch (err: any) {
-      setError(err.message || 'Failed to create server');
+      if (err instanceof z.ZodError) {
+        const errors: { [key: string]: string } = {};
+        err.errors.forEach((e) => {
+          if (e.path.length > 0) {
+            errors[e.path[0]] = e.message;
+          }
+        });
+        setFieldErrors(errors);
+        setError('Kérjük, javítsa ki a hibákat az űrlapban');
+      } else {
+        setError(err.message || 'Szerver létrehozása sikertelen');
+        notifications.addNotification({
+          type: 'error',
+          title: 'Hiba',
+          message: err.message || 'Szerver létrehozása sikertelen',
+        });
+      }
       setLoading(false);
     }
   };
@@ -102,12 +142,19 @@ export default function CreateServerPage() {
               </label>
               <select
                 value={selectedNodeId}
-                onChange={(e) => setSelectedNodeId(e.target.value)}
+                onChange={(e) => {
+                  setSelectedNodeId(e.target.value);
+                  if (fieldErrors.nodeId) {
+                    setFieldErrors({ ...fieldErrors, nodeId: '' });
+                  }
+                }}
                 required
-                className="w-full px-4 py-2 rounded-lg border"
+                className={`w-full px-4 py-2 rounded-lg border ${
+                  fieldErrors.nodeId ? 'border-red-500' : ''
+                }`}
                 style={{
                   backgroundColor: 'var(--color-bg-card)',
-                  borderColor: 'var(--color-border)',
+                  borderColor: fieldErrors.nodeId ? '#ef4444' : 'var(--color-border)',
                   color: 'var(--color-text-main)',
                 }}
               >
@@ -121,6 +168,9 @@ export default function CreateServerPage() {
                   ))
                 )}
               </select>
+              {fieldErrors.nodeId && (
+                <p className="mt-1 text-sm text-red-400">{fieldErrors.nodeId}</p>
+              )}
             </div>
 
             {/* Game Type */}
@@ -155,20 +205,29 @@ export default function CreateServerPage() {
                 </label>
                 <input
                   type="number"
-                  min="1"
-                  max="16"
+                  min="0.5"
+                  max="128"
+                  step="0.5"
                   value={resources.cpuLimit}
-                  onChange={(e) =>
-                    setResources({ ...resources, cpuLimit: parseInt(e.target.value) || 1 })
-                  }
+                  onChange={(e) => {
+                    setResources({ ...resources, cpuLimit: parseFloat(e.target.value) || 0.5 });
+                    if (fieldErrors.cpuLimit) {
+                      setFieldErrors({ ...fieldErrors, cpuLimit: '' });
+                    }
+                  }}
                   required
-                  className="w-full px-4 py-2 rounded-lg border"
+                  className={`w-full px-4 py-2 rounded-lg border ${
+                    fieldErrors.cpuLimit ? 'border-red-500' : ''
+                  }`}
                   style={{
                     backgroundColor: 'var(--color-bg-card)',
-                    borderColor: 'var(--color-border)',
+                    borderColor: fieldErrors.cpuLimit ? '#ef4444' : 'var(--color-border)',
                     color: 'var(--color-text-main)',
                   }}
                 />
+                {fieldErrors.cpuLimit && (
+                  <p className="mt-1 text-xs text-red-400">{fieldErrors.cpuLimit}</p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text-main)' }}>
@@ -179,17 +238,25 @@ export default function CreateServerPage() {
                   min="512"
                   step="512"
                   value={resources.ramLimit}
-                  onChange={(e) =>
-                    setResources({ ...resources, ramLimit: parseInt(e.target.value) || 512 })
-                  }
+                  onChange={(e) => {
+                    setResources({ ...resources, ramLimit: parseInt(e.target.value) || 512 });
+                    if (fieldErrors.ramLimit) {
+                      setFieldErrors({ ...fieldErrors, ramLimit: '' });
+                    }
+                  }}
                   required
-                  className="w-full px-4 py-2 rounded-lg border"
+                  className={`w-full px-4 py-2 rounded-lg border ${
+                    fieldErrors.ramLimit ? 'border-red-500' : ''
+                  }`}
                   style={{
                     backgroundColor: 'var(--color-bg-card)',
-                    borderColor: 'var(--color-border)',
+                    borderColor: fieldErrors.ramLimit ? '#ef4444' : 'var(--color-border)',
                     color: 'var(--color-text-main)',
                   }}
                 />
+                {fieldErrors.ramLimit && (
+                  <p className="mt-1 text-xs text-red-400">{fieldErrors.ramLimit}</p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text-main)' }}>
@@ -197,20 +264,28 @@ export default function CreateServerPage() {
                 </label>
                 <input
                   type="number"
-                  min="10"
-                  step="10"
+                  min="1"
+                  step="1"
                   value={resources.diskLimit}
-                  onChange={(e) =>
-                    setResources({ ...resources, diskLimit: parseInt(e.target.value) || 10 })
-                  }
+                  onChange={(e) => {
+                    setResources({ ...resources, diskLimit: parseInt(e.target.value) || 1 });
+                    if (fieldErrors.diskLimit) {
+                      setFieldErrors({ ...fieldErrors, diskLimit: '' });
+                    }
+                  }}
                   required
-                  className="w-full px-4 py-2 rounded-lg border"
+                  className={`w-full px-4 py-2 rounded-lg border ${
+                    fieldErrors.diskLimit ? 'border-red-500' : ''
+                  }`}
                   style={{
                     backgroundColor: 'var(--color-bg-card)',
-                    borderColor: 'var(--color-border)',
+                    borderColor: fieldErrors.diskLimit ? '#ef4444' : 'var(--color-border)',
                     color: 'var(--color-text-main)',
                   }}
                 />
+                {fieldErrors.diskLimit && (
+                  <p className="mt-1 text-xs text-red-400">{fieldErrors.diskLimit}</p>
+                )}
               </div>
             </div>
 
