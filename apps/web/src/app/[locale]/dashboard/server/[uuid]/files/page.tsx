@@ -132,7 +132,7 @@ export default function ServerFilesPage() {
       if (!file || file.type !== 'file' || !serverUuid) return;
       
       const filePath = currentPath === '/' ? `/${file.name}` : `${currentPath}/${file.name}`;
-      const response = await apiClient.get(`/servers/${serverUuid}/files/content?path=${encodeURIComponent(filePath)}`);
+      const response = await apiClient.get<{ content: string | ArrayBuffer }>(`/servers/${serverUuid}/files/content?path=${encodeURIComponent(filePath)}`);
       
       // If response is base64, decode it
       let blob: Blob;
