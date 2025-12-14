@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../../../../../../lib/api-client';
 import { useAuthStore } from '../../../../../../stores/auth-store';
-import { Card, Button } from '@zed-hosting/ui-kit';
+import { Button } from '@zed-hosting/ui-kit';
 import { Navigation } from '../../../../../../components/navigation';
 import { ProtectedRoute } from '../../../../../../components/protected-route';
 import { Folder, File, Upload, Download, Trash2 } from 'lucide-react';
