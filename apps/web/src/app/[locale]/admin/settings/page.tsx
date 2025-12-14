@@ -30,10 +30,19 @@ export default function AdminSettingsPage() {
     maxDiskPerUser: 500, // GB
   });
 
-  const { data: currentSettings, isLoading: isLoadingSettings } = useQuery({
+  interface SettingsData {
+    maintenanceMode?: boolean;
+    allowNewRegistrations?: boolean;
+    defaultUserRole?: string;
+    maxServersPerUser?: number;
+    maxRamPerUser?: number;
+    maxDiskPerUser?: number;
+  }
+
+  const { data: currentSettings, isLoading: isLoadingSettings } = useQuery<SettingsData>({
     queryKey: ['admin-settings'],
     queryFn: async () => {
-      return await apiClient.get('/admin/settings');
+      return await apiClient.get<SettingsData>('/admin/settings');
     },
     enabled: isHydrated && isAuthenticated && !!accessToken,
   });
