@@ -8,6 +8,7 @@ import { Button } from '@zed-hosting/ui-kit';
 import { ThemeToggle } from '../lib/theme';
 import { cn } from '../lib/utils';
 import { NotificationCenter } from './notification-center';
+import { ThemeToggle } from './theme-toggle';
 import { useNotificationContext } from '../context/notification-context';
 
 export function Navigation() {
