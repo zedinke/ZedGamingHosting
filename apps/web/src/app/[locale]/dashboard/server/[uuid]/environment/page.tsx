@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../../../../../../lib/api-client';
 import { useAuthStore } from '../../../../../../stores/auth-store';
@@ -19,7 +18,6 @@ interface EnvVar {
 export default function ServerEnvironmentPage() {
   const router = useRouter();
   const params = useParams();
-  const t = useTranslations();
   const { accessToken } = useAuthStore();
   const queryClient = useQueryClient();
   const serverUuid = params?.uuid as string;
