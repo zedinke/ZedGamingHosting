@@ -40,7 +40,14 @@ export default function AdminSettingsPage() {
 
   useEffect(() => {
     if (currentSettings) {
-      setSettings(currentSettings);
+      setSettings({
+        maintenanceMode: currentSettings.maintenanceMode ?? false,
+        allowNewRegistrations: currentSettings.allowNewRegistrations ?? true,
+        defaultUserRole: currentSettings.defaultUserRole ?? 'USER',
+        maxServersPerUser: currentSettings.maxServersPerUser ?? 10,
+        maxRamPerUser: currentSettings.maxRamPerUser ?? 16384,
+        maxDiskPerUser: currentSettings.maxDiskPerUser ?? 500,
+      });
     }
   }, [currentSettings]);
 
