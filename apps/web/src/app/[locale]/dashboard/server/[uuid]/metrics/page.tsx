@@ -43,7 +43,7 @@ export default function ServerMetricsPage() {
   }, [serverUuid, router, locale]);
 
   // Fetch server metrics
-  const { data: server, isLoading: serverLoading } = useQuery({
+  const { data: server } = useQuery({
     queryKey: ['server', serverUuid],
     queryFn: async () => {
       const response = await apiClient.get<any>(`/servers/${serverUuid}`);
