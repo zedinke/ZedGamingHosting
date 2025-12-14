@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import { useAuthStore } from '../../../../stores/auth-store';
 import { Navigation } from '../../../../components/navigation';
 import { Card } from '@zed-hosting/ui-kit';
@@ -13,7 +12,6 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 export default function AdminStatsPage() {
   const router = useRouter();
   const params = useParams();
-  const t = useTranslations();
   const { user: currentUser, isAuthenticated, accessToken } = useAuthStore();
   const locale = (params?.locale as string) || 'hu';
   const [isHydrated, setIsHydrated] = useState(false);

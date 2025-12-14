@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '../../../../stores/auth-store';
 import { Navigation } from '../../../../components/navigation';
@@ -14,7 +13,6 @@ import { useNotificationContext } from '../../../../context/notification-context
 export default function AdminSettingsPage() {
   const router = useRouter();
   const params = useParams();
-  const t = useTranslations();
   const { user: currentUser, isAuthenticated, accessToken } = useAuthStore();
   const notifications = useNotificationContext();
   const locale = (params.locale as string) || 'hu';
