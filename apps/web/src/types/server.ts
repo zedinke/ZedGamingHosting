@@ -37,5 +37,6 @@ export interface GameServer {
     ramUsagePercent?: number;
     diskUsage?: number;
     diskUsagePercent?: number;
+    players?: number;
   };
 }
