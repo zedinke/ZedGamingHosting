@@ -8,6 +8,10 @@ import { Navigation } from '../../../../components/navigation';
 import { Card, Button } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../lib/api-client';
 import { useQuery } from '@tanstack/react-query';
+import { Download } from 'lucide-react';
+import { exportToCSV, formatDateForFilename } from '../../../../utils/export';
+import { ListSkeleton } from '../../../../components/loading-skeleton';
+import { Pagination } from '../../../../components/pagination';
 
 interface User {
   id: string;
@@ -207,6 +211,13 @@ export default function AdminUsersPage() {
                 </Card>
               ))}
             </div>
+            {totalPages > 1 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
+            )}
           )}
         </div>
       </main>
