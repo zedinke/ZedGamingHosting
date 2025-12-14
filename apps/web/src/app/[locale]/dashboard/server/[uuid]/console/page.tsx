@@ -11,6 +11,7 @@ import { Navigation } from '../../../../../../components/navigation';
 import { ProtectedRoute } from '../../../../../../components/protected-route';
 import { useSSE } from '../../../../../../hooks/use-sse';
 import { useNotificationContext } from '../../../../../../context/notification-context';
+import { Trash2, RotateCcw, Wifi, WifiOff } from 'lucide-react';
 
 export default function ServerConsolePage() {
   const router = useRouter();
