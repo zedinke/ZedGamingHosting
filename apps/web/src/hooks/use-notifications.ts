@@ -3,6 +3,8 @@
 import { useState, useCallback } from 'react';
 import { Notification } from '../components/notification-center';
 
+export type { Notification };
+
 export function useNotifications() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
