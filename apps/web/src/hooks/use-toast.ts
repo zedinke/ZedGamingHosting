@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { Toast } from '../components/toast';
 
 interface ToastState {
   message: string;
