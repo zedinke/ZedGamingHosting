@@ -8,6 +8,10 @@
 - ✅ SSE (Server-Sent Events) alapok console logokhoz
 - ✅ Email értesítések implementálása (SMTP) - szerver állapot, backup, welcome email
 - ✅ Backup/Restore frontend javítások - UI fejlesztések, error handling, validációk
+- ✅ Admin Settings backend endpoint implementálása (GET/PUT /api/admin/settings)
+- ✅ Admin Audit Logs backend endpoint implementálása (GET /api/admin/audit-logs)
+- ✅ Admin Settings frontend integráció - beállítások betöltése és mentése
+- ✅ Admin Logs frontend integráció - audit logok megjelenítése szűréssel
 
 ## ✅ Teljesen Implementált Funkciók
 
