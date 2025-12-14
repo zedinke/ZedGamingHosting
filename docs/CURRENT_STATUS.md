@@ -91,10 +91,12 @@
   - TODO: Daemon API integráció
   - TODO: Backup tárolás (Restic)
 
-- ⚠️ **Console**
+- ✅ **Console**
   - Frontend oldal kész
   - Backend endpoint-ok kész
-  - TODO: WebSocket/SSE real-time support
+  - ✅ SSE real-time support implementálva (token-alapú auth)
+  - ✅ Error handling és notificationök
+  - ✅ Clear log és refresh funkciók
 
 - ✅ **Files**
   - Frontend oldal kész
