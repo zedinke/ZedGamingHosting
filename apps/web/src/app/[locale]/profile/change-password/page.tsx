@@ -7,7 +7,6 @@ import { useTranslations } from 'next-intl';
 import { useAuthStore } from '../../../../stores/auth-store';
 import { Navigation } from '../../../../components/navigation';
 import { Card, Button } from '@zed-hosting/ui-kit';
-import { useNotificationContext } from '../../../../context/notification-context';
 import { apiClient } from '../../../../lib/api-client';
 import { validators, validateForm } from '../../../../lib/validation';
 
