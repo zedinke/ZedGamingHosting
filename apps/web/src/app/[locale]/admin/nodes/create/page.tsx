@@ -8,7 +8,6 @@ import { useAuthStore } from '../../../../../stores/auth-store';
 import { Navigation } from '../../../../../components/navigation';
 import { Card, Button } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../../lib/api-client';
-import { validators, validateForm } from '../../../../../lib/validation';
 import { useNotificationContext } from '../../../../../context/notification-context';
 
 export default function CreateNodePage() {
