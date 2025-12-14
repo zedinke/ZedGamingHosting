@@ -188,38 +188,40 @@ export default function AdminUsersPage() {
               </p>
             </Card>
           ) : (
-            <div className="space-y-4 mb-6">
-              {paginatedUsers.map((user) => (
-                <Card key={user.id} className="glass elevation-2 p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="text-lg font-semibold" style={{ color: '#f8fafc' }}>
-                        {user.email}
-                      </h3>
-                      <p className="text-sm" style={{ color: '#cbd5e1' }}>
-                        Szerepkör: {user.role} | Egyenleg: {user.balance.toFixed(2)} €
-                      </p>
+            <>
+              <div className="space-y-4 mb-6">
+                {paginatedUsers.map((user) => (
+                  <Card key={user.id} className="glass elevation-2 p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg font-semibold" style={{ color: '#f8fafc' }}>
+                          {user.email}
+                        </h3>
+                        <p className="text-sm" style={{ color: '#cbd5e1' }}>
+                          Szerepkör: {user.role} | Egyenleg: {user.balance.toFixed(2)} €
+                        </p>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => router.push(`/${locale}/admin/users/${user.id}`)}
+                        >
+                          Szerkesztés
+                        </Button>
+                      </div>
                     </div>
-                    <div className="flex gap-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => router.push(`/${locale}/admin/users/${user.id}`)}
-                      >
-                        Szerkesztés
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
-              ))}
-            </div>
-            {totalPages > 1 && (
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={setCurrentPage}
-              />
-            )}
+                  </Card>
+                ))}
+              </div>
+              {totalPages > 1 && (
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                />
+              )}
+            </>
           )}
         </div>
       </main>
