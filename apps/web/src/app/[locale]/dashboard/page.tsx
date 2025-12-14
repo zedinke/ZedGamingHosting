@@ -20,7 +20,6 @@ export default function DashboardPage() {
   const router = useRouter();
   const { isAuthenticated, accessToken } = useAuthStore();
   const [isHydrated, setIsHydrated] = useState(false);
-  const { showToast, removeToast, toasts } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
 
   // Wait for hydration to avoid hydration mismatch
