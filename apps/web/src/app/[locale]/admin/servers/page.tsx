@@ -93,12 +93,9 @@ export default function AdminServersPage() {
     deleteServerMutation.mutate(uuid);
   };
 
-  const handleBulkDelete = async () => {
-    if (selectedServers.size === 0) return;
-    if (!window.confirm(`Biztosan törölni szeretnéd a kiválasztott ${selectedServers.size} szervert? Ez a művelet visszavonhatatlan.`)) {
-      return;
-    }
-    await Promise.all(Array.from(selectedServers).map(uuid => deleteServerMutation.mutateAsync(uuid)));
+  const handleBulkDelete = async (items: string[]) => {
+    if (items.length === 0) return;
+    await Promise.all(items.map(uuid => deleteServerMutation.mutateAsync(uuid)));
     setSelectedServers(new Set());
   };
 
@@ -250,9 +247,8 @@ export default function AdminServersPage() {
         {/* Bulk Actions */}
         {selectedServers.size > 0 && (
           <BulkActions
-            count={selectedServers.size}
+            selectedItems={Array.from(selectedServers)}
             onDelete={handleBulkDelete}
-            onClearSelection={() => setSelectedServers(new Set())}
           />
         )}
 
