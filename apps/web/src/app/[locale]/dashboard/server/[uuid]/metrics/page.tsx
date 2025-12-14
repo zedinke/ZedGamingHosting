@@ -57,24 +57,25 @@ export default function ServerMetricsPage() {
   const { data: metricsHistory, isLoading: metricsLoading } = useQuery<MetricData[]>({
     queryKey: ['server-metrics', serverUuid],
     queryFn: async () => {
-      // TODO: Implement GET /api/servers/:uuid/metrics endpoint
-      // return await apiClient.get<MetricData[]>(`/servers/${serverUuid}/metrics`);
+      // Get metrics from the last 24 hours
+      const to = new Date();
+      const from = new Date(to.getTime() - 24 * 60 * 60 * 1000);
       
-      // Mock data for demonstration
-      const now = new Date();
-      return Array.from({ length: 24 }, (_, i) => {
-        const timestamp = new Date(now.getTime() - (23 - i) * 60 * 60 * 1000);
-        return {
-          timestamp: timestamp.toISOString(),
-          cpuUsage: Math.random() * 100,
-          ramUsage: Math.random() * 2048,
-          ramUsagePercent: Math.random() * 100,
-          diskUsage: Math.random() * 20,
-          diskUsagePercent: Math.random() * 100,
-          networkIn: Math.random() * 1000,
-          networkOut: Math.random() * 1000,
-        };
-      });
+      const response = await apiClient.get<any[]>(
+        `/servers/${serverUuid}/metrics?from=${from.toISOString()}&to=${to.toISOString()}&limit=100`
+      );
+      
+      // Transform backend response to frontend format
+      return response.map((metric: any) => ({
+        timestamp: metric.timestamp || new Date().toISOString(),
+        cpuUsage: metric.cpuUsage || 0,
+        ramUsage: metric.ramUsage || 0,
+        ramUsagePercent: metric.ramUsagePercent || 0,
+        diskUsage: metric.diskUsage || 0,
+        diskUsagePercent: metric.diskUsagePercent || 0,
+        networkIn: metric.networkIn ? Number(metric.networkIn) : 0,
+        networkOut: metric.networkOut ? Number(metric.networkOut) : 0,
+      }));
     },
     enabled: !!accessToken && !!serverUuid,
     refetchInterval: 60000, // Refetch every minute

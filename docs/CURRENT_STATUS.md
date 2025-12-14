@@ -12,6 +12,7 @@
 - ✅ Admin Audit Logs backend endpoint implementálása (GET /api/admin/audit-logs)
 - ✅ Admin Settings frontend integráció - beállítások betöltése és mentése
 - ✅ Admin Logs frontend integráció - audit logok megjelenítése szűréssel
+- ✅ Admin oldalak hiányzó importok javítása (useNotificationContext, useMutation)
 
 ## ✅ Teljesen Implementált Funkciók
 
