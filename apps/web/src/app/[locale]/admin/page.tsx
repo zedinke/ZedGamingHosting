@@ -6,7 +6,6 @@ import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useAuthStore } from '../../../stores/auth-store';
 import { Navigation } from '../../../components/navigation';
-import { Card } from '@zed-hosting/ui-kit';
 import { SkipLink } from '../../../components/accessibility';
 
 export default function AdminPage() {
@@ -75,8 +74,13 @@ export default function AdminPage() {
           </header>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card 
-              className="glass elevation-2 p-6 cursor-pointer hover:scale-105 transition-transform"
+            <div 
+              className="p-6 cursor-pointer hover:scale-105 transition-transform rounded-lg border"
+              style={{ 
+                backgroundColor: 'rgba(30, 41, 59, 0.8)', 
+                borderColor: 'rgba(148, 163, 184, 0.2)',
+                backdropFilter: 'blur(10px)'
+              }}
               onClick={() => router.push(`/${locale}/admin/users`)}
             >
               <h3 className="text-lg font-semibold mb-2" style={{ color: '#f8fafc' }}>
@@ -85,10 +89,15 @@ export default function AdminPage() {
               <p className="text-sm" style={{ color: '#cbd5e1' }}>
                 Felhasználók kezelése és jogosultságok beállítása
               </p>
-            </Card>
+            </div>
 
-            <Card 
-              className="glass elevation-2 p-6 cursor-pointer hover:scale-105 transition-transform"
+            <div 
+              className="p-6 cursor-pointer hover:scale-105 transition-transform rounded-lg border"
+              style={{ 
+                backgroundColor: 'rgba(30, 41, 59, 0.8)', 
+                borderColor: 'rgba(148, 163, 184, 0.2)',
+                backdropFilter: 'blur(10px)'
+              }}
               onClick={() => router.push(`/${locale}/admin/nodes`)}
             >
               <h3 className="text-lg font-semibold mb-2" style={{ color: '#f8fafc' }}>
@@ -97,10 +106,15 @@ export default function AdminPage() {
               <p className="text-sm" style={{ color: '#cbd5e1' }}>
                 Szerver node-ok kezelése és monitorozása
               </p>
-            </Card>
+            </div>
 
-            <Card 
-              className="glass elevation-2 p-6 cursor-pointer hover:scale-105 transition-transform"
+            <div 
+              className="p-6 cursor-pointer hover:scale-105 transition-transform rounded-lg border"
+              style={{ 
+                backgroundColor: 'rgba(30, 41, 59, 0.8)', 
+                borderColor: 'rgba(148, 163, 184, 0.2)',
+                backdropFilter: 'blur(10px)'
+              }}
               onClick={() => router.push(`/${locale}/admin/servers`)}
             >
               <h3 className="text-lg font-semibold mb-2" style={{ color: '#f8fafc' }}>
@@ -109,10 +123,15 @@ export default function AdminPage() {
               <p className="text-sm" style={{ color: '#cbd5e1' }}>
                 Összes szerver áttekintése és kezelése
               </p>
-            </Card>
+            </div>
 
-            <Card 
-              className="glass elevation-2 p-6 cursor-pointer hover:scale-105 transition-transform"
+            <div 
+              className="p-6 cursor-pointer hover:scale-105 transition-transform rounded-lg border"
+              style={{ 
+                backgroundColor: 'rgba(30, 41, 59, 0.8)', 
+                borderColor: 'rgba(148, 163, 184, 0.2)',
+                backdropFilter: 'blur(10px)'
+              }}
               onClick={() => router.push(`/${locale}/admin/settings`)}
             >
               <h3 className="text-lg font-semibold mb-2" style={{ color: '#f8fafc' }}>
@@ -121,10 +140,15 @@ export default function AdminPage() {
               <p className="text-sm" style={{ color: '#cbd5e1' }}>
                 Platform konfiguráció és beállítások
               </p>
-            </Card>
+            </div>
 
-            <Card 
-              className="glass elevation-2 p-6 cursor-pointer hover:scale-105 transition-transform"
+            <div 
+              className="p-6 cursor-pointer hover:scale-105 transition-transform rounded-lg border"
+              style={{ 
+                backgroundColor: 'rgba(30, 41, 59, 0.8)', 
+                borderColor: 'rgba(148, 163, 184, 0.2)',
+                backdropFilter: 'blur(10px)'
+              }}
               onClick={() => router.push(`/${locale}/admin/logs`)}
             >
               <h3 className="text-lg font-semibold mb-2" style={{ color: '#f8fafc' }}>
@@ -133,10 +157,15 @@ export default function AdminPage() {
               <p className="text-sm" style={{ color: '#cbd5e1' }}>
                 Rendszernaplók és audit trail
               </p>
-            </Card>
+            </div>
 
-            <Card 
-              className="glass elevation-2 p-6 cursor-pointer hover:scale-105 transition-transform"
+            <div 
+              className="p-6 cursor-pointer hover:scale-105 transition-transform rounded-lg border"
+              style={{ 
+                backgroundColor: 'rgba(30, 41, 59, 0.8)', 
+                borderColor: 'rgba(148, 163, 184, 0.2)',
+                backdropFilter: 'blur(10px)'
+              }}
               onClick={() => router.push(`/${locale}/admin/licensing`)}
             >
               <h3 className="text-lg font-semibold mb-2" style={{ color: '#f8fafc' }}>
@@ -145,10 +174,15 @@ export default function AdminPage() {
               <p className="text-sm" style={{ color: '#cbd5e1' }}>
                 Licenc kezelés és validáció
               </p>
-            </Card>
+            </div>
 
-            <Card 
-              className="glass elevation-2 p-6 cursor-pointer hover:scale-105 transition-transform"
+            <div 
+              className="p-6 cursor-pointer hover:scale-105 transition-transform rounded-lg border"
+              style={{ 
+                backgroundColor: 'rgba(30, 41, 59, 0.8)', 
+                borderColor: 'rgba(148, 163, 184, 0.2)',
+                backdropFilter: 'blur(10px)'
+              }}
               onClick={() => router.push(`/${locale}/admin/stats`)}
             >
               <h3 className="text-lg font-semibold mb-2" style={{ color: '#f8fafc' }}>
@@ -157,7 +191,7 @@ export default function AdminPage() {
               <p className="text-sm" style={{ color: '#cbd5e1' }}>
                 Platform statisztikák és jelentések
               </p>
-            </Card>
+            </div>
           </div>
         </div>
       </main>
