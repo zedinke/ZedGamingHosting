@@ -184,9 +184,8 @@ export default function AdminUsersPage() {
               </p>
             </Card>
           ) : (
-            <>
-              <div className="space-y-4 mb-6">
-                {paginatedUsers.map((user) => (
+            <div className="space-y-4 mb-6">
+              {paginatedUsers.map((user) => (
                 <Card key={user.id} className="glass elevation-2 p-6">
                   <div className="flex items-center justify-between">
                     <div>
