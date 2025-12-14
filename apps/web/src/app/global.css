@@ -386,3 +386,84 @@ button {
         radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%);
     background-color: var(--color-bg-app);
 }
+
+/* Responsive Design Improvements */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    /* Mobile navigation */
+    nav .flex {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    /* Stack cards on mobile */
+    .grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .grid-cols-3,
+    .grid-cols-2,
+    .grid-cols-4 {
+        grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+    }
+
+    /* Mobile-friendly buttons */
+    button,
+    .btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* Better spacing on mobile */
+    .space-y-6 > * + * {
+        margin-top: 1rem;
+    }
+
+    /* Stack form elements */
+    form .flex {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 640px) {
+    /* Smaller text on very small screens */
+    .text-3xl {
+        font-size: 1.5rem;
+    }
+
+    .text-2xl {
+        font-size: 1.25rem;
+    }
+
+    /* Tighter spacing */
+    .py-8 {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    .px-4 {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+}
+
+/* Skip to content link for accessibility */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--color-primary);
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    z-index: 100;
+    border-radius: 0 0 4px 0;
+}
+
+.skip-link:focus {
+    top: 0;
+}
