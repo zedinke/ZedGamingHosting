@@ -250,7 +250,7 @@ export default function AdminServersPage() {
         {/* Bulk Actions */}
         {selectedServers.size > 0 && (
           <BulkActions
-            selectedCount={selectedServers.size}
+            count={selectedServers.size}
             onDelete={handleBulkDelete}
             onClearSelection={() => setSelectedServers(new Set())}
           />
