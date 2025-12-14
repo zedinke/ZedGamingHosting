@@ -9,6 +9,7 @@ import { useAuthStore } from '../../../../../../stores/auth-store';
 import { Card, Button } from '@zed-hosting/ui-kit';
 import { Navigation } from '../../../../../../components/navigation';
 import { ProtectedRoute } from '../../../../../../components/protected-route';
+import { useSSE } from '../../../../../../hooks/use-sse';
 
 export default function ServerConsolePage() {
   const router = useRouter();
@@ -34,25 +35,54 @@ export default function ServerConsolePage() {
     }
   }, [accessToken]);
 
-  // Fetch console logs
+  // Use SSE for real-time console logs if enabled, otherwise fallback to polling
+  const [useSSEStream, setUseSSEStream] = useState(false); // Disabled for now, will enable after testing
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 
+    (typeof window !== 'undefined' ? window.location.origin.replace(/:\d+$/, ':3000') : '');
+  const sseUrl = useSSEStream && accessToken && serverUuid
+    ? `${apiBaseUrl}/api/servers/${serverUuid}/console/stream`
+    : null;
+
+  // SSE hook
+  const { data: sseData, isConnected: sseConnected } = useSSE({
+    url: sseUrl || '',
+    enabled: !!sseUrl && useSSEStream,
+    onMessage: (data) => {
+      if (data?.logs) {
+        setLogs(data.logs);
+        // Auto-scroll to bottom
+        setTimeout(() => {
+          if (consoleRef.current) {
+            consoleRef.current.scrollTop = consoleRef.current.scrollHeight;
+          }
+        }, 0);
+      }
+    },
+    onError: () => {
+      // Fallback to polling if SSE fails
+      setUseSSEStream(false);
+    },
+  });
+
+  // Fallback to polling if SSE is disabled
   const { data: consoleData, isLoading } = useQuery<{ logs: string[] }>({
     queryKey: ['server-console', serverUuid],
     queryFn: async () => {
       return await apiClient.get<{ logs: string[] }>(`/servers/${serverUuid}/console?limit=100`);
     },
-    enabled: !!accessToken && !!serverUuid,
+    enabled: !!accessToken && !!serverUuid && !useSSEStream,
     refetchInterval: 2000, // Refetch every 2 seconds
   });
 
   useEffect(() => {
-    if (consoleData?.logs) {
+    if (!useSSEStream && consoleData?.logs) {
       setLogs(consoleData.logs);
       // Auto-scroll to bottom
       if (consoleRef.current) {
         consoleRef.current.scrollTop = consoleRef.current.scrollHeight;
       }
     }
-  }, [consoleData]);
+  }, [consoleData, useSSEStream]);
 
   // Send command mutation
   const sendCommandMutation = useMutation({

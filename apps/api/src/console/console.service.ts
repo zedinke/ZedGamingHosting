@@ -19,7 +19,7 @@ export class ConsoleService {
   /**
    * Verifies user has access to the server
    */
-  private async verifyAccess(serverUuid: string, userId: string) {
+  async verifyAccess(serverUuid: string, userId: string) {
     const server = await this.prisma.gameServer.findUnique({
       where: { uuid: serverUuid },
     });
