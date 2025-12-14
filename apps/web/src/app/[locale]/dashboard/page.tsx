@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation';
 import { Navigation } from '../../../components/navigation';
 import { useToast } from '../../../hooks/use-toast';
 import { ToastContainer } from '../../../components/toast-container';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 export default function DashboardPage() {
   const t = useTranslations();
