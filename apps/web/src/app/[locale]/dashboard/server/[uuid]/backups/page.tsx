@@ -10,7 +10,7 @@ import { Card, Button } from '@zed-hosting/ui-kit';
 import { useNotificationContext } from '../../../../../../context/notification-context';
 import { apiClient } from '../../../../../../lib/api-client';
 import { ProtectedRoute } from '../../../../../../components/protected-route';
-import { ArrowLeft, Plus, Download, Trash2, RotateCcw, Calendar, HardDrive, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, RotateCcw, Calendar, HardDrive, AlertCircle } from 'lucide-react';
 
 interface Backup {
   id: string;
