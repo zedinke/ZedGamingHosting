@@ -10,12 +10,14 @@ import { Card, Button } from '@zed-hosting/ui-kit';
 import { Navigation } from '../../../../../../components/navigation';
 import { ProtectedRoute } from '../../../../../../components/protected-route';
 import { useSSE } from '../../../../../../hooks/use-sse';
+import { useNotificationContext } from '../../../../../../context/notification-context';
 
 export default function ServerConsolePage() {
   const router = useRouter();
   const params = useParams();
   const t = useTranslations();
   const { accessToken } = useAuthStore();
+  const notifications = useNotificationContext();
   const queryClient = useQueryClient();
   const serverUuid = params?.uuid as string;
   const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'hu' : 'hu';
@@ -36,11 +38,10 @@ export default function ServerConsolePage() {
   }, [accessToken]);
 
   // Use SSE for real-time console logs if enabled, otherwise fallback to polling
-  const [useSSEStream, setUseSSEStream] = useState(false); // Disabled for now, will enable after testing
-  const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 
-    (typeof window !== 'undefined' ? window.location.origin.replace(/:\d+$/, ':3000') : '');
+  const [useSSEStream, setUseSSEStream] = useState(true); // Enable SSE by default
+  const apiBaseUrl = typeof window !== 'undefined' ? window.location.origin.replace(/:\d+$/, ':3000') : '';
   const sseUrl = useSSEStream && accessToken && serverUuid
-    ? `${apiBaseUrl}/api/servers/${serverUuid}/console/stream`
+    ? `${apiBaseUrl}/api/servers/${serverUuid}/console/stream?token=${accessToken}`
     : null;
 
   // SSE hook
@@ -60,7 +61,13 @@ export default function ServerConsolePage() {
     },
     onError: () => {
       // Fallback to polling if SSE fails
+      console.warn('SSE connection failed, falling back to polling');
       setUseSSEStream(false);
+      notifications.addNotification({
+        type: 'warning',
+        title: 'Real-time kapcsolat sikertelen',
+        message: 'Polling módra váltás...',
+      });
     },
   });
 
@@ -93,6 +100,13 @@ export default function ServerConsolePage() {
       setCommand('');
       queryClient.invalidateQueries({ queryKey: ['server-console', serverUuid] });
     },
+    onError: (err: any) => {
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: err.message || 'Parancs küldése sikertelen',
+      });
+    },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -122,16 +136,58 @@ export default function ServerConsolePage() {
                   {t('dashboard.server.console.description', { defaultValue: 'Szerver konzol kimenet és parancsok küldése' })}
                 </p>
               </div>
-              <Button
-                variant="outline"
-                onClick={() => router.push(`/${locale}/dashboard/server/${serverUuid}`)}
-              >
-                Vissza
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setLogs([])}
+                  title="Konzol törlése"
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Törlés
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    queryClient.invalidateQueries({ queryKey: ['server-console', serverUuid] });
+                  }}
+                  title="Frissítés"
+                >
+                  <RotateCcw className="h-4 w-4 mr-2" />
+                  Frissítés
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => router.push(`/${locale}/dashboard/server/${serverUuid}`)}
+                >
+                  Vissza
+                </Button>
+              </div>
             </div>
           </header>
 
           <Card className="glass elevation-2 p-6">
+            {/* Connection Status */}
+            <div className="flex items-center justify-between mb-4 pb-2 border-b" style={{ borderColor: 'var(--color-border)' }}>
+              <div className="flex items-center gap-2">
+                {useSSEStream ? (
+                  <>
+                    <Wifi className="h-4 w-4" style={{ color: '#10b981' }} />
+                    <span className="text-sm" style={{ color: '#10b981' }}>Real-time kapcsolat (SSE)</span>
+                  </>
+                ) : (
+                  <>
+                    <WifiOff className="h-4 w-4" style={{ color: '#f59e0b' }} />
+                    <span className="text-sm" style={{ color: '#f59e0b' }}>Polling mód</span>
+                  </>
+                )}
+              </div>
+              <span className="text-xs" style={{ color: '#cbd5e1' }}>
+                {logs.length} sor
+              </span>
+            </div>
+
             {/* Console Output */}
             <div
               ref={consoleRef}
