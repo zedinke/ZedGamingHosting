@@ -2,6 +2,11 @@
 
 **Utolsó frissítés:** 2025-12-13
 
+**Elkészült fejlesztések:**
+- ✅ Form validációk fejlesztése (validation library)
+- ✅ File upload/download/delete funkciók
+- ✅ SSE (Server-Sent Events) alapok console logokhoz
+
 ## ✅ Teljesen Implementált Funkciók
 
 ### Frontend
