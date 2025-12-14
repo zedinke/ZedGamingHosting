@@ -9,6 +9,8 @@ interface ServerNameInputProps {
   gameType?: string;
   placeholder?: string;
   className?: string;
+  error?: string;
+  label?: string;
 }
 
 export function ServerNameInput({
@@ -17,6 +19,8 @@ export function ServerNameInput({
   gameType,
   placeholder = 'Szerver neve...',
   className = '',
+  error,
+  label = 'Szerver neve (opcionális)',
 }: ServerNameInputProps) {
   const [suggestedName, setSuggestedName] = useState('');
 
@@ -43,13 +47,22 @@ export function ServerNameInput({
 
   return (
     <div className={className}>
+      <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text-main)' }}>
+        {label}
+      </label>
       <Input
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full"
+        className={`w-full ${error ? 'border-red-500' : ''}`}
+        style={{
+          borderColor: error ? '#ef4444' : undefined,
+        }}
       />
-      {suggestedName && !value && (
+      {error && (
+        <p className="mt-1 text-sm text-red-400">{error}</p>
+      )}
+      {suggestedName && !value && !error && (
         <button
           type="button"
           onClick={() => onChange(suggestedName)}

@@ -113,10 +113,11 @@
   - ThemeToggle komponens van
   - TODO: Ellenőrizni, hogy működik-e a light mode
 
-- ⚠️ **Form Validációk**
-  - Alap validációk vannak
-  - TODO: Részletesebb validációk
-  - TODO: Error messages javítása
+- ✅ **Form Validációk**
+  - ✅ Zod sémák minden formhoz implementálva
+  - ✅ Részletes validációs szabályok (jelszó komplexitás, IP cím, FQDN, stb.)
+  - ✅ Field-level error messages minden formban
+  - ✅ ServerNameInput komponens error támogatással
 
 ## ❌ Hiányzó Funkciók
 
