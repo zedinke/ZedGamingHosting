@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Card, Button } from '@zed-hosting/ui-kit';
 import { Bell, X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
 
