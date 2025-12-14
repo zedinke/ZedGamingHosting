@@ -59,7 +59,7 @@ export default function ProfilePage() {
   return (
     <>
       <Navigation />
-      <main className="min-h-screen" style={{ 
+      <main id="main-content" className="min-h-screen" style={{ 
         backgroundColor: '#0a0a0a', 
         background: 'radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.05) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%), #0a0a0a',
         color: '#f8fafc',
@@ -77,6 +77,10 @@ export default function ProfilePage() {
             <div className="text-center py-12">
               <p style={{ color: '#cbd5e1' }}>Betöltés...</p>
             </div>
+          ) : !userData ? (
+            <Card className="glass elevation-2 p-12 text-center">
+              <p style={{ color: '#cbd5e1' }}>Nem sikerült betölteni a felhasználói adatokat.</p>
+            </Card>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card className="glass elevation-2 p-6">
