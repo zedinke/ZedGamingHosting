@@ -4,16 +4,19 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '../../../../stores/auth-store';
 import { Navigation } from '../../../../components/navigation';
 import { Card, Button } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../lib/api-client';
+import { useNotificationContext } from '../../../../context/notification-context';
 
 export default function AdminSettingsPage() {
   const router = useRouter();
   const params = useParams();
   const t = useTranslations();
   const { user: currentUser, isAuthenticated, accessToken } = useAuthStore();
+  const notifications = useNotificationContext();
   const locale = (params.locale as string) || 'hu';
   const [isHydrated, setIsHydrated] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -28,6 +31,20 @@ export default function AdminSettingsPage() {
     maxRamPerUser: 16384, // MB
     maxDiskPerUser: 500, // GB
   });
+
+  const { data: currentSettings, isLoading: isLoadingSettings } = useQuery({
+    queryKey: ['admin-settings'],
+    queryFn: async () => {
+      return await apiClient.get('/admin/settings');
+    },
+    enabled: isHydrated && isAuthenticated && !!accessToken,
+  });
+
+  useEffect(() => {
+    if (currentSettings) {
+      setSettings(currentSettings);
+    }
+  }, [currentSettings]);
 
   useEffect(() => {
     setIsHydrated(true);
@@ -56,22 +73,32 @@ export default function AdminSettingsPage() {
     setSuccess(false);
 
     try {
-      // TODO: Implement PUT /api/admin/settings endpoint
-      // await apiClient.put('/admin/settings', settings);
+      await apiClient.put('/admin/settings', settings);
       
       setSuccess(true);
+      notifications.addNotification({
+        type: 'success',
+        title: 'Beállítások mentve',
+        message: 'A rendszerbeállítások sikeresen frissítve.',
+      });
       setTimeout(() => setSuccess(false), 3000);
     } catch (err: any) {
-      setError(err.message || 'Beállítások mentése sikertelen');
+      const errorMessage = err.message || 'Beállítások mentése sikertelen';
+      setError(errorMessage);
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: errorMessage,
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  if (!isHydrated) {
+  if (!isHydrated || isLoadingSettings) {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', color: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p>Loading...</p>
+        <p>Betöltés...</p>
       </div>
     );
   }

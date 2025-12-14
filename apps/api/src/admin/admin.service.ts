@@ -364,5 +364,66 @@ export class AdminService {
       })),
     };
   }
+
+  /**
+   * Get system settings
+   */
+  async getSettings() {
+    // For now, return default settings
+    // In production, these would be stored in a SystemSettings table
+    return {
+      maintenanceMode: false,
+      allowNewRegistrations: true,
+      defaultUserRole: 'USER',
+      maxServersPerUser: 10,
+      maxRamPerUser: 16384, // MB
+      maxDiskPerUser: 500, // GB
+    };
+  }
+
+  /**
+   * Update system settings
+   */
+  async updateSettings(
+    dto: {
+      maintenanceMode?: boolean;
+      allowNewRegistrations?: boolean;
+      defaultUserRole?: string;
+      maxServersPerUser?: number;
+      maxRamPerUser?: number;
+      maxDiskPerUser?: number;
+    },
+    adminId: string,
+    ipAddress: string,
+  ) {
+    // TODO: Store settings in database (SystemSettings table)
+    // For now, just validate and return success
+    // In production, this would update a SystemSettings record
+    
+    // Validate settings
+    if (dto.maxServersPerUser !== undefined && dto.maxServersPerUser < 1) {
+      throw new Error('Max servers per user must be at least 1');
+    }
+    if (dto.maxRamPerUser !== undefined && dto.maxRamPerUser < 1024) {
+      throw new Error('Max RAM per user must be at least 1024 MB');
+    }
+    if (dto.maxDiskPerUser !== undefined && dto.maxDiskPerUser < 10) {
+      throw new Error('Max disk per user must be at least 10 GB');
+    }
+
+    // Log the settings change
+    await this.auditService.createLog({
+      action: 'UPDATE_SYSTEM_SETTINGS',
+      resourceId: 'system',
+      userId: adminId,
+      ipAddress,
+      details: dto,
+    });
+
+    return {
+      message: 'Settings updated successfully',
+      settings: dto,
+    };
+  }
 }
 

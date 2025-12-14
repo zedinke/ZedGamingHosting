@@ -6,6 +6,8 @@
 - ✅ Form validációk fejlesztése (validation library)
 - ✅ File upload/download/delete funkciók
 - ✅ SSE (Server-Sent Events) alapok console logokhoz
+- ✅ Email értesítések implementálása (SMTP) - szerver állapot, backup, welcome email
+- ✅ Backup/Restore frontend javítások - UI fejlesztések, error handling, validációk
 
 ## ✅ Teljesen Implementált Funkciók
 

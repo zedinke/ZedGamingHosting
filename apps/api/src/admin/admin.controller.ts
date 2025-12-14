@@ -131,5 +131,34 @@ export class AdminController {
   async getStats() {
     return await this.adminService.getStats();
   }
+
+  /**
+   * Get system settings
+   * GET /api/admin/settings
+   */
+  @Get('settings')
+  async getSettings() {
+    return await this.adminService.getSettings();
+  }
+
+  /**
+   * Update system settings
+   * PUT /api/admin/settings
+   */
+  @Put('settings')
+  async updateSettings(
+    @Body() dto: {
+      maintenanceMode?: boolean;
+      allowNewRegistrations?: boolean;
+      defaultUserRole?: string;
+      maxServersPerUser?: number;
+      maxRamPerUser?: number;
+      maxDiskPerUser?: number;
+    },
+    @Request() req: any,
+  ) {
+    const ipAddress = req.ip || req.headers['x-forwarded-for'] || 'unknown';
+    return await this.adminService.updateSettings(dto, req.user.id, ipAddress);
+  }
 }
 

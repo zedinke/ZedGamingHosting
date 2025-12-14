@@ -71,6 +71,57 @@ export class AuditService {
       where: { userId },
       orderBy: { createdAt: 'desc' },
       take: limit,
+      include: {
+        user: {
+          select: {
+            id: true,
+            email: true,
+          },
+        },
+      },
+    });
+  }
+
+  /**
+   * Gets audit logs with optional filters
+   */
+  async getLogs(filters: {
+    resourceId?: string;
+    userId?: string;
+    action?: string;
+    limit?: number;
+    offset?: number;
+  }) {
+    const where: any = {};
+    
+    if (filters.resourceId) {
+      where.resourceId = filters.resourceId;
+    }
+    
+    if (filters.userId) {
+      where.userId = filters.userId;
+    }
+    
+    if (filters.action) {
+      where.action = { contains: filters.action };
+    }
+
+    const limit = filters.limit || 100;
+    const offset = filters.offset || 0;
+
+    return await this.prisma.auditLog.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      take: limit,
+      skip: offset,
+      include: {
+        user: {
+          select: {
+            id: true,
+            email: true,
+          },
+        },
+      },
     });
   }
 }
