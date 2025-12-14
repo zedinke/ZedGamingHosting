@@ -23,6 +23,7 @@ export default function ChangePasswordPage() {
     newPassword: '',
     confirmPassword: '',
   });
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     setIsHydrated(true);
