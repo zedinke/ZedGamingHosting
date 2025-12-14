@@ -11,7 +11,6 @@ import { Navigation } from '../../../../components/navigation';
 import { useNotificationContext } from '../../../../context/notification-context';
 import { serverCreateSchema } from '../../../../lib/validation';
 import { z } from 'zod';
-import { ServerNameInput } from '../../../../components/server-name-input';
 
 interface Node {
   id: string;
