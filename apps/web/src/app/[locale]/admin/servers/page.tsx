@@ -8,7 +8,7 @@ import { Navigation } from '../../../../components/navigation';
 import { Card, Button } from '@zed-hosting/ui-kit';
 import { useNotificationContext } from '../../../../context/notification-context';
 import { apiClient } from '../../../../lib/api-client';
-import { Search, Filter, Download, Trash2, ExternalLink, Eye } from 'lucide-react';
+import { Search, Download, Trash2, ExternalLink, Eye } from 'lucide-react';
 import { exportToCSV } from '../../../../utils/export';
 import { BulkActions } from '../../../../components/bulk-actions';
 import { Checkbox } from '../../../../components/checkbox';
