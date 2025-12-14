@@ -10,14 +10,14 @@ import { Card, Button } from '@zed-hosting/ui-kit';
 import { useNotificationContext } from '../../../../../../context/notification-context';
 import { apiClient } from '../../../../../../lib/api-client';
 import { ProtectedRoute } from '../../../../../../components/protected-route';
-import { ArrowLeft, Plus, Download, Trash2, RotateCcw, Calendar, HardDrive } from 'lucide-react';
+import { ArrowLeft, Plus, Download, Trash2, RotateCcw, Calendar, HardDrive, AlertCircle } from 'lucide-react';
 
 interface Backup {
   id: string;
   name: string;
   status: 'PENDING' | 'COMPLETED' | 'FAILED' | 'RESTORING';
   size?: number;
-  createdAt: string;
+  createdAt: string | Date;
 }
 
 export default function ServerBackupsPage() {
@@ -40,11 +40,15 @@ export default function ServerBackupsPage() {
     }
   }, [accessToken]);
 
-  const { data: backups = [], isLoading } = useQuery<Backup[]>({
+  const { data: backups = [], isLoading, error } = useQuery<Backup[]>({
     queryKey: ['server-backups', serverUuid],
     queryFn: async () => {
       const response = await apiClient.get<Backup[]>(`/servers/${serverUuid}/backups`);
-      return response;
+      // Convert Date strings to Date objects if needed
+      return response.map((backup) => ({
+        ...backup,
+        createdAt: typeof backup.createdAt === 'string' ? backup.createdAt : new Date(backup.createdAt).toISOString(),
+      }));
     },
     enabled: !!accessToken && !!serverUuid,
     refetchInterval: 30000,
@@ -115,22 +119,37 @@ export default function ServerBackupsPage() {
     },
   });
 
-  const handleCreateBackup = () => {
-    if (!window.confirm('Biztosan létre szeretnéd hozni a backup-ot?')) {
+  const handleCreateBackup = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (backupName.trim().length > 100) {
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: 'A backup név legfeljebb 100 karakter lehet.',
+      });
       return;
     }
-    createBackupMutation.mutate(backupName || undefined);
+    createBackupMutation.mutate(backupName.trim() || undefined);
   };
 
   const handleRestoreBackup = (backupId: string, backupName: string) => {
-    if (!window.confirm(`Biztosan vissza szeretnéd állítani ezt a backup-ot: ${backupName}? Ez felülírja a jelenlegi szerver állapotát.`)) {
+    const confirmed = window.confirm(
+      `Biztosan vissza szeretnéd állítani ezt a backup-ot: ${backupName}?\n\n` +
+      `Ez felülírja a jelenlegi szerver állapotát és adatait.\n` +
+      `Ez a művelet visszavonhatatlan.`
+    );
+    if (!confirmed) {
       return;
     }
     restoreBackupMutation.mutate(backupId);
   };
 
   const handleDeleteBackup = (backupId: string, backupName: string) => {
-    if (!window.confirm(`Biztosan törölni szeretnéd ezt a backup-ot: ${backupName}? Ez a művelet visszavonhatatlan.`)) {
+    const confirmed = window.confirm(
+      `Biztosan törölni szeretnéd ezt a backup-ot: ${backupName}?\n\n` +
+      `Ez a művelet visszavonhatatlan és nem lehet visszavonni.`
+    );
+    if (!confirmed) {
       return;
     }
     deleteBackupMutation.mutate(backupId);
@@ -152,11 +171,26 @@ export default function ServerBackupsPage() {
   };
 
   const formatSize = (bytes?: number) => {
-    if (!bytes) return 'N/A';
+    if (!bytes || bytes === 0) return 'N/A';
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(2)} KB`;
     if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
     return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
+  };
+
+  const formatDate = (date: string | Date) => {
+    try {
+      const d = typeof date === 'string' ? new Date(date) : date;
+      return d.toLocaleString('hu-HU', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    } catch {
+      return 'Ismeretlen dátum';
+    }
   };
 
   return (
@@ -203,9 +237,9 @@ export default function ServerBackupsPage() {
               <h2 className="text-xl font-semibold mb-4" style={{ color: '#f8fafc' }}>
                 Új Backup Létrehozása
               </h2>
-              <div className="space-y-4">
+              <form onSubmit={handleCreateBackup} className="space-y-4">
                 <div>
-                  <label className="block text-sm mb-2" style={{ color: '#cbd5e1' }}>
+                  <label className="block text-sm font-medium mb-2" style={{ color: '#cbd5e1' }}>
                     Backup neve (opcionális)
                   </label>
                   <input
@@ -213,6 +247,7 @@ export default function ServerBackupsPage() {
                     value={backupName}
                     onChange={(e) => setBackupName(e.target.value)}
                     placeholder="Backup neve..."
+                    maxLength={100}
                     className="w-full px-4 py-2 rounded-lg border"
                     style={{
                       backgroundColor: 'var(--color-bg-card)',
@@ -220,23 +255,43 @@ export default function ServerBackupsPage() {
                       color: 'var(--color-text-main)',
                     }}
                   />
+                  <p className="text-xs mt-1" style={{ color: '#9ca3af' }}>
+                    {backupName.length}/100 karakter
+                  </p>
                 </div>
                 <div className="flex gap-2">
                   <Button
-                    onClick={handleCreateBackup}
+                    type="submit"
                     disabled={createBackupMutation.isPending}
                   >
                     {createBackupMutation.isPending ? 'Létrehozás...' : 'Backup Létrehozása'}
                   </Button>
                   <Button
+                    type="button"
                     variant="outline"
                     onClick={() => {
                       setShowCreateDialog(false);
                       setBackupName('');
                     }}
+                    disabled={createBackupMutation.isPending}
                   >
                     Mégse
                   </Button>
+                </div>
+              </form>
+            </Card>
+          )}
+
+          {/* Error State */}
+          {error && (
+            <Card className="glass elevation-2 p-6 mb-6 border-l-4" style={{ borderLeftColor: '#ef4444' }}>
+              <div className="flex items-center gap-3">
+                <AlertCircle className="h-5 w-5" style={{ color: '#ef4444' }} />
+                <div>
+                  <h3 className="font-semibold" style={{ color: '#ef4444' }}>Hiba történt</h3>
+                  <p className="text-sm mt-1" style={{ color: '#cbd5e1' }}>
+                    {(error as any)?.message || 'Nem sikerült betölteni a backup-okat.'}
+                  </p>
                 </div>
               </div>
             </Card>
@@ -244,8 +299,15 @@ export default function ServerBackupsPage() {
 
           {/* Backups List */}
           {isLoading ? (
-            <div className="text-center py-12">
-              <p style={{ color: '#cbd5e1' }}>Betöltés...</p>
+            <div className="space-y-4">
+              {[1, 2, 3].map((i) => (
+                <Card key={i} className="glass elevation-2 p-6">
+                  <div className="animate-pulse">
+                    <div className="h-4 bg-gray-700 rounded w-1/4 mb-3"></div>
+                    <div className="h-3 bg-gray-700 rounded w-1/3"></div>
+                  </div>
+                </Card>
+              ))}
             </div>
           ) : backups.length === 0 ? (
             <Card className="glass elevation-2 p-12 text-center">
@@ -259,8 +321,8 @@ export default function ServerBackupsPage() {
             <div className="space-y-4">
               {backups.map((backup) => (
                 <Card key={backup.id} className="glass elevation-2 p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
+                  <div className="flex items-center justify-between flex-wrap gap-4">
+                    <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-2">
                         <HardDrive className="h-5 w-5" style={{ color: '#cbd5e1' }} />
                         <h3 className="text-lg font-semibold" style={{ color: '#f8fafc' }}>
@@ -276,38 +338,56 @@ export default function ServerBackupsPage() {
                           {backup.status}
                         </span>
                       </div>
-                      <div className="flex items-center gap-4 text-sm" style={{ color: '#cbd5e1' }}>
+                      <div className="flex items-center gap-4 text-sm flex-wrap" style={{ color: '#cbd5e1' }}>
                         <div className="flex items-center gap-1">
                           <Calendar className="h-4 w-4" />
-                          {new Date(backup.createdAt).toLocaleString('hu-HU')}
+                          {formatDate(backup.createdAt)}
                         </div>
-                        {backup.size && (
+                        {backup.size !== undefined && (
                           <div className="flex items-center gap-1">
-                            <Download className="h-4 w-4" />
+                            <HardDrive className="h-4 w-4" />
                             {formatSize(backup.size)}
                           </div>
                         )}
                       </div>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 flex-wrap">
                       {backup.status === 'COMPLETED' && (
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => handleRestoreBackup(backup.id, backup.name)}
-                          disabled={restoreBackupMutation.isPending}
+                          disabled={restoreBackupMutation.isPending || deleteBackupMutation.isPending}
                           className="flex items-center gap-2"
+                          title="Backup visszaállítása"
                         >
                           <RotateCcw className="h-4 w-4" />
                           Visszaállítás
                         </Button>
                       )}
+                      {backup.status === 'PENDING' && (
+                        <span className="text-xs px-2 py-1 rounded" style={{ color: '#f59e0b', backgroundColor: '#f59e0b20' }}>
+                          Folyamatban...
+                        </span>
+                      )}
+                      {backup.status === 'RESTORING' && (
+                        <span className="text-xs px-2 py-1 rounded" style={{ color: '#3b82f6', backgroundColor: '#3b82f620' }}>
+                          Visszaállítás folyamatban...
+                        </span>
+                      )}
+                      {backup.status === 'FAILED' && (
+                        <span className="text-xs px-2 py-1 rounded flex items-center gap-1" style={{ color: '#ef4444', backgroundColor: '#ef444420' }}>
+                          <AlertCircle className="h-3 w-3" />
+                          Sikertelen
+                        </span>
+                      )}
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => handleDeleteBackup(backup.id, backup.name)}
-                        disabled={deleteBackupMutation.isPending}
+                        disabled={deleteBackupMutation.isPending || restoreBackupMutation.isPending || backup.status === 'RESTORING'}
                         className="flex items-center gap-2"
+                        title="Backup törlése"
                       >
                         <Trash2 className="h-4 w-4" />
                         Törlés
