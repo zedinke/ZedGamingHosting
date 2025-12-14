@@ -305,15 +305,15 @@ export default function ServerFilesPage() {
             </div>
           </header>
 
-          <Card 
-            className="glass elevation-2 p-6 relative"
+          <div
+            className="glass elevation-2 p-6 relative rounded-lg"
             onDragEnter={handleDragEnter}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             style={{
-              border: isDragging ? '2px dashed #3b82f6' : '1px solid transparent',
-              backgroundColor: isDragging ? 'rgba(59, 130, 246, 0.1)' : undefined,
+              border: isDragging ? '2px dashed #3b82f6' : '1px solid var(--color-border)',
+              backgroundColor: isDragging ? 'rgba(59, 130, 246, 0.1)' : 'var(--color-bg-card)',
             }}
           >
             {isDragging && (
