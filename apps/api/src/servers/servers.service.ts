@@ -14,6 +14,7 @@ export class ServersService {
     private readonly i18n: I18nService,
     private readonly tasksService: TasksService,
     private readonly portManager: PortManagerService,
+    private readonly emailService: EmailService,
   ) {}
 
   /**
@@ -479,10 +480,20 @@ export class ServersService {
     );
 
     // Update server status
-    await this.prisma.gameServer.update({
+    const updatedServer = await this.prisma.gameServer.update({
       where: { uuid },
       data: { status: 'STOPPING' },
+      include: { owner: true },
     });
+
+    // Send email notification
+    if (updatedServer.owner?.email) {
+      this.emailService.sendServerStatusNotification(
+        updatedServer.owner.email,
+        updatedServer.name || uuid,
+        'STOPPING',
+      ).catch((err) => console.error('Failed to send email:', err));
+    }
 
     return { message: this.i18n.translate('SERVER_STOPPED_SUCCESSFULLY') };
   }
@@ -512,10 +523,20 @@ export class ServersService {
     );
 
     // Update server status to STARTING (restart = stop then start)
-    await this.prisma.gameServer.update({
+    const updatedServer = await this.prisma.gameServer.update({
       where: { uuid },
       data: { status: 'STARTING' },
+      include: { owner: true },
     });
+
+    // Send email notification
+    if (updatedServer.owner?.email) {
+      this.emailService.sendServerStatusNotification(
+        updatedServer.owner.email,
+        updatedServer.name || uuid,
+        'STARTING',
+      ).catch((err) => console.error('Failed to send email:', err));
+    }
 
     return { message: this.i18n.translate('SERVER_STARTED_SUCCESSFULLY') };
   }
@@ -536,11 +557,26 @@ export class ServersService {
     // TODO: Trigger backup via daemon API
     // For now, return a mock backup response
     // In production, this should create a backup record and trigger the daemon
-    return {
+    const backup = {
       id: `backup-${Date.now()}`,
       name: name || `Backup ${new Date().toISOString()}`,
       createdAt: new Date(),
     };
+
+    // Send email notification
+    const serverWithOwner = await this.prisma.gameServer.findUnique({
+      where: { uuid: serverUuid },
+      include: { owner: true },
+    });
+    if (serverWithOwner?.owner?.email) {
+      this.emailService.sendBackupNotification(
+        serverWithOwner.owner.email,
+        serverWithOwner.name || serverUuid,
+        'created',
+      ).catch((err) => console.error('Failed to send email:', err));
+    }
+
+    return backup;
   }
 
   async getBackups(serverUuid: string, userId: string): Promise<any[]> {
@@ -578,6 +614,15 @@ export class ServersService {
     // For now, just validate the backup exists
     if (!backupId) {
       throw new NotFoundException('Backup not found');
+    }
+
+    // Send email notification
+    if (server.owner?.email) {
+      this.emailService.sendBackupNotification(
+        server.owner.email,
+        server.name || serverUuid,
+        'restored',
+      ).catch((err) => console.error('Failed to send email:', err));
     }
   }
 

@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
 import { AuditService } from '../audit/audit.service';
+import { EmailService } from '../email/email.service';
 import * as bcrypt from 'bcrypt';
 
 interface CreateUserDto {
@@ -27,6 +28,7 @@ export class AdminService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly auditService: AuditService,
+    private readonly emailService: EmailService,
   ) {}
 
   /**
@@ -114,6 +116,11 @@ export class AdminService {
         email: user.email,
         role: user.role,
       },
+    });
+
+    // Send welcome email
+    this.emailService.sendWelcomeEmail(user.email, user.email.split('@')[0]).catch((err) => {
+      console.error('Failed to send welcome email:', err);
     });
 
     return user;
