@@ -14,6 +14,7 @@ export default function CreateNodePage() {
   const params = useParams();
   // const t = useTranslations();
   const { user: currentUser, isAuthenticated, accessToken } = useAuthStore();
+  const notifications = useNotificationContext();
   const locale = (params.locale as string) || 'hu';
   const [isHydrated, setIsHydrated] = useState(false);
   const [loading, setLoading] = useState(false);
