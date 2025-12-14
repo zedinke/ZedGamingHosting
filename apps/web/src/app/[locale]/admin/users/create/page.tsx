@@ -12,6 +12,7 @@ export default function CreateUserPage() {
   const router = useRouter();
   const params = useParams();
   const { user: currentUser, isAuthenticated, accessToken } = useAuthStore();
+  const notifications = useNotificationContext();
   const locale = (params?.locale as string) || 'hu';
   const [isHydrated, setIsHydrated] = useState(false);
   const [loading, setLoading] = useState(false);
