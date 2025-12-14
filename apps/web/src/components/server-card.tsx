@@ -17,7 +17,7 @@ interface ServerCardProps {
       diskLimit?: number;
     };
     node?: {
-      name: string;
+      name?: string;
     };
     metrics?: {
       cpuUsage?: number;
