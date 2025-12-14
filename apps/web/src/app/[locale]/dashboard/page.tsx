@@ -11,7 +11,6 @@ import { GameServer } from '../../../types/server';
 import { SkipLink } from '../../../components/accessibility';
 import { useRouter } from 'next/navigation';
 import { Navigation } from '../../../components/navigation';
-import { useToast } from '../../../hooks/use-toast';
 import { ToastContainer } from '../../../components/toast-container';
 import { useMutation } from '@tanstack/react-query';
 
