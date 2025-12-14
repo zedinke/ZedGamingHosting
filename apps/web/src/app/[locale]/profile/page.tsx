@@ -30,10 +30,10 @@ export default function ProfilePage() {
   }, [isAuthenticated, isHydrated, router, locale]);
 
   // Fetch user profile from API
-  const { data: profile, isLoading } = useQuery({
+  const { data: profile, isLoading } = useQuery<{ email?: string; role?: string; id?: string; balance?: number; createdAt?: string }>({
     queryKey: ['user-profile'],
     queryFn: async () => {
-      return await apiClient.get('/auth/me');
+      return await apiClient.get<{ email?: string; role?: string; id?: string; balance?: number; createdAt?: string }>('/auth/me');
     },
     enabled: isHydrated && isAuthenticated && !!accessToken,
   });
