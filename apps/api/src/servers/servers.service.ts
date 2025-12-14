@@ -3,6 +3,7 @@ import { PrismaService } from '@zed-hosting/db';
 import { I18nService } from '../i18n/i18n.service';
 import { TasksService } from '../tasks/tasks.service';
 import { PortManagerService } from '../networking/port-manager.service';
+import { EmailService } from '../email/email.service';
 import { UpdateServerDto } from './dto/update-server.dto';
 import { randomUUID } from 'crypto';
 import { Protocol } from '@zed-hosting/shared-types';
