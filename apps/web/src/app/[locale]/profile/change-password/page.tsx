@@ -8,7 +8,6 @@ import { useAuthStore } from '../../../../stores/auth-store';
 import { Navigation } from '../../../../components/navigation';
 import { Card, Button } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../lib/api-client';
-import { validators, validateForm } from '../../../../lib/validation';
 
 export default function ChangePasswordPage() {
   const router = useRouter();
