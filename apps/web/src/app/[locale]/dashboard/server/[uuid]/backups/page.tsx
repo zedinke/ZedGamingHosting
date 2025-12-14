@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '../../../../../../stores/auth-store';
 import { Navigation } from '../../../../../../components/navigation';
@@ -23,7 +22,6 @@ interface Backup {
 export default function ServerBackupsPage() {
   const router = useRouter();
   const params = useParams();
-  const t = useTranslations();
   const { accessToken } = useAuthStore();
   const notifications = useNotificationContext();
   const queryClient = useQueryClient();
