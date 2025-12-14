@@ -54,7 +54,7 @@ export default function ProfilePage() {
     );
   }
 
-  const userData = profile || user;
+  const userData: { email?: string; role?: string; id?: string; balance?: number; createdAt?: string } = profile || user;
 
   return (
     <>
