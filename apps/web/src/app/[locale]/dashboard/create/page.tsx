@@ -33,7 +33,6 @@ export default function CreateServerPage() {
   const [nodes, setNodes] = useState<Node[]>([]);
   const [selectedNodeId, setSelectedNodeId] = useState<string>('');
   const [gameType, setGameType] = useState<string>('MINECRAFT');
-  const [serverName, setServerName] = useState<string>('');
   const [resources, setResources] = useState({
     cpuLimit: 2,
     ramLimit: 2048,
@@ -74,14 +73,12 @@ export default function CreateServerPage() {
         cpuLimit: resources.cpuLimit,
         ramLimit: resources.ramLimit,
         diskLimit: resources.diskLimit,
-        name: serverName || undefined,
       };
 
       // Validate with Zod
       serverCreateSchema.parse(formData);
 
       const response = await apiClient.post<{ uuid: string }>('/servers', {
-        name: serverName || undefined,
         gameType,
         nodeId: selectedNodeId,
         resources,
