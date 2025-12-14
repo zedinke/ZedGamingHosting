@@ -12,9 +12,9 @@ interface ServerCardProps {
     gameType: string;
     status: 'RUNNING' | 'STOPPED' | 'STARTING' | 'STOPPING' | 'CRASHED' | 'INSTALLING' | 'UPDATING';
     resources?: {
-      cpuLimit: number;
-      ramLimit: number;
-      diskLimit: number;
+      cpuLimit?: number;
+      ramLimit?: number;
+      diskLimit?: number;
     };
     node?: {
       name: string;
