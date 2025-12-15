@@ -14,7 +14,6 @@ import {
   FileText,
   Key,
   BarChart3,
-  LayoutDashboard,
 } from 'lucide-react';
 
 export default function AdminPage() {
