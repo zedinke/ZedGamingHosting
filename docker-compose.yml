@@ -112,6 +112,31 @@ services:
       - "traefik.http.routers.adminer-http.middlewares=redirect-to-https"
       - "traefik.http.services.adminer.loadbalancer.server.port=8080"
 
+  # Daemon - Task Processor & Container Manager (one per node)
+  daemon:
+    build:
+      context: .
+      dockerfile: apps/daemon/Dockerfile
+    container_name: zed-daemon
+    restart: always
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      BACKEND_URL: http://api:3000
+      DOCKER_HOST: unix:///var/run/docker.sock
+      TASK_POLL_INTERVAL: 5000
+      HEARTBEAT_INTERVAL: 30000
+    depends_on:
+      - api
+    networks:
+      - zed-network
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - daemon_cache:/opt/daemon-cache
+    ports:
+      - "3001:3001"
+
   # Traefik Reverse Proxy
   traefik:
     image: traefik:v3.2
@@ -137,6 +162,7 @@ volumes:
   mysql_data:
   redis_data:
   traefik_acme:
+  daemon_cache:
 
 networks:
   zed-network:
