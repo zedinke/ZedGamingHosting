@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
+import { EmailModule } from '../email/email.module';
 import { AuthModule } from '../auth/auth.module';
 import { DatabaseModule } from '../database/database.module';
 import { AuditModule } from '../audit/audit.module';
@@ -9,7 +10,7 @@ import { AuditModule } from '../audit/audit.module';
  * Admin Module - handles admin-only endpoints
  */
 @Module({
-  imports: [AuthModule, DatabaseModule, AuditModule],
+  imports: [AuthModule, DatabaseModule, AuditModule, EmailModule],
   controllers: [AdminController],
   providers: [AdminService],
   exports: [AdminService],
