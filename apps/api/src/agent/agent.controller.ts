@@ -1,4 +1,5 @@
 import { Controller, Post, Get, Patch, Body, Param, Query, HttpCode, HttpStatus } from '@nestjs/common';
+import { Public } from '../auth/decorators/public.decorator';
 import { AgentService } from './agent.service';
 
 /**
@@ -13,6 +14,7 @@ export class AgentController {
    * POST /agent/register
    * Registers a daemon instance with the backend
    */
+  @Public()
   @Post('register')
   @HttpCode(HttpStatus.OK)
   async register(
@@ -36,6 +38,7 @@ export class AgentController {
    * POST /agent/heartbeat
    * Sends heartbeat from daemon to backend
    */
+  @Public()
   @Post('heartbeat')
   @HttpCode(HttpStatus.OK)
   async heartbeat(
@@ -59,6 +62,7 @@ export class AgentController {
    * GET /agent/tasks?nodeId={nodeId}
    * Gets pending tasks for a daemon instance
    */
+  @Public()
   @Get('tasks')
   async getTasks(@Query('nodeId') nodeId: string) {
     return this.agentService.getPendingTasks(nodeId);
@@ -68,6 +72,7 @@ export class AgentController {
    * PATCH /agent/tasks/:id
    * Updates task status and result
    */
+  @Public()
   @Patch('tasks/:id')
   @HttpCode(HttpStatus.OK)
   async updateTask(
