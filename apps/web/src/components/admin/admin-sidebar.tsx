@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import { cn } from '../../lib/utils';
 import {
   LayoutDashboard,
@@ -26,7 +25,6 @@ interface NavItem {
 
 export function AdminSidebar() {
   const pathname = usePathname();
-  const t = useTranslations();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const locale = pathname.split('/')[1] || 'hu';
