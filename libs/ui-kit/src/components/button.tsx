@@ -34,19 +34,19 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           'disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed',
           {
             // Primary - Sky Blue (2025 Modern)
-            'bg-primary-500 text-white hover:bg-primary-600 shadow-md hover:shadow-lg hover:shadow-glow focus-visible:ring-primary-500':
+            'bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-hover)] shadow-md hover:shadow-lg focus-visible:ring-[var(--color-primary)]':
               variant === 'primary',
             // Secondary - Subtle Gray
-            'bg-background-elevated text-text-primary border border-border hover:bg-background-hover focus-visible:ring-border-light':
+            'bg-[var(--color-bg-elevated)] text-[var(--color-text-main)] border border-[var(--color-border)] hover:bg-[var(--color-bg-hover)] focus-visible:ring-[var(--color-border-light)]':
               variant === 'secondary',
             // Destructive - Red
-            'bg-error-500 text-white hover:bg-error-600 shadow-md hover:shadow-lg focus-visible:ring-error-500':
+            'bg-[var(--color-danger)] text-white hover:bg-[var(--color-danger-light)] shadow-md hover:shadow-lg focus-visible:ring-[var(--color-danger)]':
               variant === 'destructive',
             // Outline - Transparent with border
-            'border border-border-light bg-transparent text-text-primary hover:bg-background-elevated focus-visible:ring-primary-500':
+            'border border-[var(--color-border)] bg-transparent text-[var(--color-text-main)] hover:bg-[var(--color-bg-elevated)] focus-visible:ring-[var(--color-primary)]':
               variant === 'outline',
             // Ghost - No background
-            'text-text-primary hover:bg-background-elevated focus-visible:ring-border-light':
+            'text-[var(--color-text-main)] hover:bg-[var(--color-bg-elevated)] focus-visible:ring-[var(--color-border-light)]':
               variant === 'ghost',
             // Sizes
             'h-8 px-3 text-xs': size === 'sm',

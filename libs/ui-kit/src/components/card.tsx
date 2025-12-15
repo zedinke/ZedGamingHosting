@@ -6,8 +6,7 @@ import { cn } from '../utils/cn';
 
 const cardVariants = {
   hover: {
-    y: -4,
-    boxShadow: '0 12px 24px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 40px rgba(14, 165, 233, 0.2)',
+    y: -2,
     transition: { duration: 0.2, ease: 'easeOut' },
   },
 };
@@ -25,7 +24,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
           ref={ref}
           className={cn(
             'rounded-xl border transition-all duration-200',
-            'bg-background-tertiary border-border elevation-2',
+            'bg-[var(--color-bg-card)] border-[var(--color-border)] elevation-2',
             'cursor-pointer',
             className
           )}
@@ -43,7 +42,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
         ref={ref}
         className={cn(
           'rounded-xl border transition-all duration-200',
-          'bg-background-tertiary border-border elevation-2',
+          'bg-[var(--color-bg-card)] border-[var(--color-border)] elevation-2',
           className
         )}
         {...(props as React.HTMLAttributes<HTMLDivElement>)}

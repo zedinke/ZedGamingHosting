@@ -3,15 +3,23 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import { useAuthStore } from '../../../stores/auth-store';
-import { Navigation } from '../../../components/navigation';
-import { SkipLink } from '../../../components/accessibility';
+import { AdminLayout } from '../../../components/admin/admin-layout';
+import { Card } from '@zed-hosting/ui-kit';
+import {
+  Users,
+  Network,
+  Server,
+  Settings,
+  FileText,
+  Key,
+  BarChart3,
+  LayoutDashboard,
+} from 'lucide-react';
 
 export default function AdminPage() {
   const router = useRouter();
   const params = useParams();
-  const t = useTranslations();
   const { user, isAuthenticated } = useAuthStore();
   const locale = (params.locale as string) || 'hu';
   const [isHydrated, setIsHydrated] = useState(false);
@@ -26,8 +34,6 @@ export default function AdminPage() {
       return;
     }
 
-    // Check if user is admin - handle both uppercase and lowercase, and different formats
-    // Prisma schema uses: SUPERADMIN, RESELLER_ADMIN, USER, SUPPORT
     const userRole = user?.role?.toUpperCase();
     if (isHydrated && isAuthenticated && userRole !== 'ADMIN' && userRole !== 'SUPER_ADMIN' && userRole !== 'SUPERADMIN' && userRole !== 'RESELLER_ADMIN') {
       router.push(`/${locale}/dashboard`);
@@ -37,8 +43,8 @@ export default function AdminPage() {
 
   if (!isHydrated) {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', color: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p>Loading...</p>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg-surface)' }}>
+        <p style={{ color: 'var(--color-text-muted)' }}>Betöltés...</p>
       </div>
     );
   }
@@ -46,155 +52,113 @@ export default function AdminPage() {
   const userRole = user?.role?.toUpperCase();
   if (!isAuthenticated || (userRole !== 'ADMIN' && userRole !== 'SUPER_ADMIN' && userRole !== 'SUPERADMIN' && userRole !== 'RESELLER_ADMIN')) {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', color: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p>Redirecting...</p>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg-surface)' }}>
+        <p style={{ color: 'var(--color-text-muted)' }}>Átirányítás...</p>
       </div>
     );
   }
 
+  const menuItems = [
+    {
+      title: 'Felhasználók',
+      description: 'Felhasználók kezelése és jogosultságok beállítása',
+      href: `/${locale}/admin/users`,
+      icon: Users,
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-50',
+    },
+    {
+      title: 'Node-ok',
+      description: 'Szerver node-ok kezelése és monitorozása',
+      href: `/${locale}/admin/nodes`,
+      icon: Network,
+      color: 'text-green-600',
+      bgColor: 'bg-green-50',
+    },
+    {
+      title: 'Szerverek',
+      description: 'Összes szerver áttekintése és kezelése',
+      href: `/${locale}/admin/servers`,
+      icon: Server,
+      color: 'text-purple-600',
+      bgColor: 'bg-purple-50',
+    },
+    {
+      title: 'Statisztikák',
+      description: 'Platform statisztikák és jelentések',
+      href: `/${locale}/admin/stats`,
+      icon: BarChart3,
+      color: 'text-orange-600',
+      bgColor: 'bg-orange-50',
+    },
+    {
+      title: 'Beállítások',
+      description: 'Platform konfiguráció és beállítások',
+      href: `/${locale}/admin/settings`,
+      icon: Settings,
+      color: 'text-gray-600',
+      bgColor: 'bg-gray-50',
+    },
+    {
+      title: 'Licencelés',
+      description: 'Licenc kezelés és validáció',
+      href: `/${locale}/admin/licensing`,
+      icon: Key,
+      color: 'text-indigo-600',
+      bgColor: 'bg-indigo-50',
+    },
+    {
+      title: 'Naplók',
+      description: 'Rendszernaplók és audit trail',
+      href: `/${locale}/admin/logs`,
+      icon: FileText,
+      color: 'text-red-600',
+      bgColor: 'bg-red-50',
+    },
+  ];
+
   return (
-    <>
-      <SkipLink href="#main-content">
-        {t('accessibility.skipToContent', { defaultValue: 'Skip to main content' })}
-      </SkipLink>
-      <Navigation />
-      <main id="main-content" className="min-h-screen" style={{ 
-        backgroundColor: '#0a0a0a', 
-        background: 'radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.05) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%), #0a0a0a',
-        color: '#f8fafc',
-        minHeight: '100vh',
-        padding: '2rem'
-      }}>
-        <div className="container mx-auto px-4 py-8">
+    <div className="light">
+      <AdminLayout title="Admin Panel">
+        <div>
           <header className="mb-8">
-            <h1 className="text-3xl font-bold mb-2" style={{ color: '#f8fafc' }}>Admin Panel</h1>
-            <p style={{ color: '#cbd5e1' }}>
+            <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--color-text-main)' }}>
+              Admin Panel
+            </h1>
+            <p style={{ color: 'var(--color-text-muted)' }}>
               Rendszerfelügyelet és konfiguráció
             </p>
           </header>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div 
-              className="p-6 cursor-pointer hover:scale-105 transition-transform rounded-lg border"
-              style={{ 
-                backgroundColor: 'rgba(30, 41, 59, 0.8)', 
-                borderColor: 'rgba(148, 163, 184, 0.2)',
-                backdropFilter: 'blur(10px)'
-              }}
-              onClick={() => router.push(`/${locale}/admin/users`)}
-            >
-              <h3 className="text-lg font-semibold mb-2" style={{ color: '#f8fafc' }}>
-                Felhasználók
-              </h3>
-              <p className="text-sm" style={{ color: '#cbd5e1' }}>
-                Felhasználók kezelése és jogosultságok beállítása
-              </p>
-            </div>
-
-            <div 
-              className="p-6 cursor-pointer hover:scale-105 transition-transform rounded-lg border"
-              style={{ 
-                backgroundColor: 'rgba(30, 41, 59, 0.8)', 
-                borderColor: 'rgba(148, 163, 184, 0.2)',
-                backdropFilter: 'blur(10px)'
-              }}
-              onClick={() => router.push(`/${locale}/admin/nodes`)}
-            >
-              <h3 className="text-lg font-semibold mb-2" style={{ color: '#f8fafc' }}>
-                Node-ok
-              </h3>
-              <p className="text-sm" style={{ color: '#cbd5e1' }}>
-                Szerver node-ok kezelése és monitorozása
-              </p>
-            </div>
-
-            <div 
-              className="p-6 cursor-pointer hover:scale-105 transition-transform rounded-lg border"
-              style={{ 
-                backgroundColor: 'rgba(30, 41, 59, 0.8)', 
-                borderColor: 'rgba(148, 163, 184, 0.2)',
-                backdropFilter: 'blur(10px)'
-              }}
-              onClick={() => router.push(`/${locale}/admin/servers`)}
-            >
-              <h3 className="text-lg font-semibold mb-2" style={{ color: '#f8fafc' }}>
-                Szerverek
-              </h3>
-              <p className="text-sm" style={{ color: '#cbd5e1' }}>
-                Összes szerver áttekintése és kezelése
-              </p>
-            </div>
-
-            <div 
-              className="p-6 cursor-pointer hover:scale-105 transition-transform rounded-lg border"
-              style={{ 
-                backgroundColor: 'rgba(30, 41, 59, 0.8)', 
-                borderColor: 'rgba(148, 163, 184, 0.2)',
-                backdropFilter: 'blur(10px)'
-              }}
-              onClick={() => router.push(`/${locale}/admin/settings`)}
-            >
-              <h3 className="text-lg font-semibold mb-2" style={{ color: '#f8fafc' }}>
-                Rendszerbeállítások
-              </h3>
-              <p className="text-sm" style={{ color: '#cbd5e1' }}>
-                Platform konfiguráció és beállítások
-              </p>
-            </div>
-
-            <div 
-              className="p-6 cursor-pointer hover:scale-105 transition-transform rounded-lg border"
-              style={{ 
-                backgroundColor: 'rgba(30, 41, 59, 0.8)', 
-                borderColor: 'rgba(148, 163, 184, 0.2)',
-                backdropFilter: 'blur(10px)'
-              }}
-              onClick={() => router.push(`/${locale}/admin/logs`)}
-            >
-              <h3 className="text-lg font-semibold mb-2" style={{ color: '#f8fafc' }}>
-                Naplók
-              </h3>
-              <p className="text-sm" style={{ color: '#cbd5e1' }}>
-                Rendszernaplók és audit trail
-              </p>
-            </div>
-
-            <div 
-              className="p-6 cursor-pointer hover:scale-105 transition-transform rounded-lg border"
-              style={{ 
-                backgroundColor: 'rgba(30, 41, 59, 0.8)', 
-                borderColor: 'rgba(148, 163, 184, 0.2)',
-                backdropFilter: 'blur(10px)'
-              }}
-              onClick={() => router.push(`/${locale}/admin/licensing`)}
-            >
-              <h3 className="text-lg font-semibold mb-2" style={{ color: '#f8fafc' }}>
-                Licencelés
-              </h3>
-              <p className="text-sm" style={{ color: '#cbd5e1' }}>
-                Licenc kezelés és validáció
-              </p>
-            </div>
-
-            <div 
-              className="p-6 cursor-pointer hover:scale-105 transition-transform rounded-lg border"
-              style={{ 
-                backgroundColor: 'rgba(30, 41, 59, 0.8)', 
-                borderColor: 'rgba(148, 163, 184, 0.2)',
-                backdropFilter: 'blur(10px)'
-              }}
-              onClick={() => router.push(`/${locale}/admin/stats`)}
-            >
-              <h3 className="text-lg font-semibold mb-2" style={{ color: '#f8fafc' }}>
-                Statisztikák
-              </h3>
-              <p className="text-sm" style={{ color: '#cbd5e1' }}>
-                Platform statisztikák és jelentések
-              </p>
-            </div>
+            {menuItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Card
+                  key={item.href}
+                  hoverable
+                  className="p-6 cursor-pointer transition-all"
+                  onClick={() => router.push(item.href)}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className={`${item.bgColor} p-3 rounded-lg`}>
+                      <Icon className={`h-6 w-6 ${item.color}`} />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold mb-1" style={{ color: 'var(--color-text-main)' }}>
+                        {item.title}
+                      </h3>
+                      <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              );
+            })}
           </div>
         </div>
-      </main>
-    </>
+      </AdminLayout>
+    </div>
   );
 }

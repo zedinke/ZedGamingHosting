@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAuthStore } from '../../../../stores/auth-store';
-import { Navigation } from '../../../../components/navigation';
+import { AdminLayout } from '../../../../components/admin/admin-layout';
 import { Card } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../lib/api-client';
 import { useQuery } from '@tanstack/react-query';
@@ -83,8 +83,8 @@ export default function AdminStatsPage() {
 
   if (!isHydrated) {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', color: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p>Loading...</p>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg-surface)' }}>
+        <p style={{ color: 'var(--color-text-muted)' }}>Betöltés...</p>
       </div>
     );
   }
@@ -92,58 +92,51 @@ export default function AdminStatsPage() {
   const userRole = currentUser?.role?.toUpperCase();
   if (!isAuthenticated || (userRole !== 'ADMIN' && userRole !== 'SUPER_ADMIN' && userRole !== 'SUPERADMIN' && userRole !== 'RESELLER_ADMIN')) {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', color: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p>Redirecting...</p>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg-surface)' }}>
+        <p style={{ color: 'var(--color-text-muted)' }}>Átirányítás...</p>
       </div>
     );
   }
 
   return (
-    <>
-      <Navigation />
-      <main className="min-h-screen" style={{ 
-        backgroundColor: '#0a0a0a', 
-        background: 'radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.05) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%), #0a0a0a',
-        color: '#f8fafc',
-        minHeight: '100vh'
-      }}>
-        <div className="container mx-auto px-4 py-8">
-          <header className="mb-8">
-            <h1 className="text-3xl font-bold mb-2" style={{ color: '#f8fafc' }}>Statisztikák</h1>
-            <p style={{ color: '#cbd5e1' }}>
+    <div className="light">
+      <AdminLayout title="Statisztikák">
+        <div>
+          <div className="mb-6">
+            <p style={{ color: 'var(--color-text-muted)' }}>
               Platform statisztikák és jelentések
             </p>
-          </header>
+          </div>
 
           {isLoading ? (
             <div className="text-center py-12">
-              <p style={{ color: '#cbd5e1' }}>Betöltés...</p>
+              <p style={{ color: 'var(--color-text-muted)' }}>Betöltés...</p>
             </div>
           ) : displayStats ? (
             <>
               {/* Overview Cards */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                <Card className="glass elevation-2 p-6">
-                  <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>Összes felhasználó</h3>
-                  <p className="text-3xl font-bold" style={{ color: '#f8fafc' }}>
+                <Card className="p-6">
+                  <h3 className="text-sm mb-2" style={{ color: 'var(--color-text-muted)' }}>Összes felhasználó</h3>
+                  <p className="text-3xl font-bold" style={{ color: 'var(--color-text-main)' }}>
                     {displayStats.totalUsers}
                   </p>
                 </Card>
-                <Card className="glass elevation-2 p-6">
-                  <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>Összes szerver</h3>
-                  <p className="text-3xl font-bold" style={{ color: '#f8fafc' }}>
+                <Card className="p-6">
+                  <h3 className="text-sm mb-2" style={{ color: 'var(--color-text-muted)' }}>Összes szerver</h3>
+                  <p className="text-3xl font-bold" style={{ color: 'var(--color-text-main)' }}>
                     {displayStats.totalServers}
                   </p>
                 </Card>
-                <Card className="glass elevation-2 p-6">
-                  <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>Aktív szerverek</h3>
-                  <p className="text-3xl font-bold" style={{ color: '#10b981' }}>
+                <Card className="p-6">
+                  <h3 className="text-sm mb-2" style={{ color: 'var(--color-text-muted)' }}>Aktív szerverek</h3>
+                  <p className="text-3xl font-bold" style={{ color: 'var(--color-success)' }}>
                     {displayStats.activeServers}
                   </p>
                 </Card>
-                <Card className="glass elevation-2 p-6">
-                  <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>Összes bevétel</h3>
-                  <p className="text-3xl font-bold" style={{ color: '#f8fafc' }}>
+                <Card className="p-6">
+                  <h3 className="text-sm mb-2" style={{ color: 'var(--color-text-muted)' }}>Összes bevétel</h3>
+                  <p className="text-3xl font-bold" style={{ color: 'var(--color-text-main)' }}>
                     {displayStats.totalRevenue?.toFixed(2) || '0.00'} €
                   </p>
                 </Card>
@@ -151,57 +144,59 @@ export default function AdminStatsPage() {
 
               {/* Charts */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                <Card className="glass elevation-2 p-6">
-                  <h2 className="text-xl font-semibold mb-4" style={{ color: '#f8fafc' }}>
+                <Card className="p-6">
+                  <h2 className="text-xl font-semibold mb-4" style={{ color: 'var(--color-text-main)' }}>
                     Havi bevétel
                   </h2>
                   <ResponsiveContainer width="100%" height={300}>
                     <LineChart data={displayStats.monthlyRevenue || []}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                      <XAxis dataKey="month" stroke="#9ca3af" />
-                      <YAxis stroke="#9ca3af" />
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
+                      <XAxis dataKey="month" stroke="var(--color-text-muted)" />
+                      <YAxis stroke="var(--color-text-muted)" />
                       <Tooltip 
                         contentStyle={{ 
-                          backgroundColor: '#1f2937', 
-                          border: '1px solid #374151',
-                          borderRadius: '8px'
+                          backgroundColor: 'var(--color-bg-card)', 
+                          border: '1px solid var(--color-border)',
+                          borderRadius: '8px',
+                          color: 'var(--color-text-main)'
                         }}
                       />
-                      <Line type="monotone" dataKey="revenue" stroke="#3b82f6" name="Bevétel (€)" />
+                      <Line type="monotone" dataKey="revenue" stroke="var(--color-primary)" name="Bevétel (€)" />
                     </LineChart>
                   </ResponsiveContainer>
                 </Card>
 
-                <Card className="glass elevation-2 p-6">
-                  <h2 className="text-xl font-semibold mb-4" style={{ color: '#f8fafc' }}>
+                <Card className="p-6">
+                  <h2 className="text-xl font-semibold mb-4" style={{ color: 'var(--color-text-main)' }}>
                     Szerver eloszlás játék típus szerint
                   </h2>
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={displayStats.serverDistribution || []}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                      <XAxis dataKey="game" stroke="#9ca3af" />
-                      <YAxis stroke="#9ca3af" />
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
+                      <XAxis dataKey="game" stroke="var(--color-text-muted)" />
+                      <YAxis stroke="var(--color-text-muted)" />
                       <Tooltip 
                         contentStyle={{ 
-                          backgroundColor: '#1f2937', 
-                          border: '1px solid #374151',
-                          borderRadius: '8px'
+                          backgroundColor: 'var(--color-bg-card)', 
+                          border: '1px solid var(--color-border)',
+                          borderRadius: '8px',
+                          color: 'var(--color-text-main)'
                         }}
                       />
-                      <Bar dataKey="count" fill="#3b82f6" name="Szerverek száma" />
+                      <Bar dataKey="count" fill="var(--color-primary)" name="Szerverek száma" />
                     </BarChart>
                   </ResponsiveContainer>
                 </Card>
               </div>
             </>
           ) : (
-            <Card className="glass elevation-2 p-12 text-center">
-              <p style={{ color: '#cbd5e1' }}>Statisztikák nem elérhetőek</p>
+            <Card className="p-12 text-center">
+              <p style={{ color: 'var(--color-text-muted)' }}>Statisztikák nem elérhetőek</p>
             </Card>
           )}
         </div>
-      </main>
-    </>
+      </AdminLayout>
+    </div>
   );
 }
 

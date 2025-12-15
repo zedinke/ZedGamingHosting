@@ -4,10 +4,11 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
 import { useAuthStore } from '../../../../stores/auth-store';
-import { Navigation } from '../../../../components/navigation';
-import { Card, Button } from '@zed-hosting/ui-kit';
+import { AdminLayout } from '../../../../components/admin/admin-layout';
+import { Card, Button, Input, Badge } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../lib/api-client';
 import { useQuery } from '@tanstack/react-query';
+import { Plus, Search } from 'lucide-react';
 
 interface Node {
   id: string;
@@ -71,8 +72,8 @@ export default function AdminNodesPage() {
 
   if (!isHydrated) {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', color: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p>Loading...</p>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg-surface)' }}>
+        <p style={{ color: 'var(--color-text-muted)' }}>Betöltés...</p>
       </div>
     );
   }
@@ -80,147 +81,131 @@ export default function AdminNodesPage() {
   const userRole = currentUser?.role?.toUpperCase();
   if (!isAuthenticated || (userRole !== 'ADMIN' && userRole !== 'SUPER_ADMIN' && userRole !== 'SUPERADMIN' && userRole !== 'RESELLER_ADMIN')) {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', color: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p>Redirecting...</p>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg-surface)' }}>
+        <p style={{ color: 'var(--color-text-muted)' }}>Átirányítás...</p>
       </div>
     );
   }
 
-  const getStatusColor = (status: string) => {
+  const getStatusVariant = (status: string): 'success' | 'danger' | 'warning' | 'default' => {
     switch (status) {
       case 'ONLINE':
-        return '#10b981';
+        return 'success';
       case 'OFFLINE':
-        return '#ef4444';
+        return 'danger';
       case 'MAINTENANCE':
-        return '#f59e0b';
+        return 'warning';
       default:
-        return '#6b7280';
+        return 'default';
     }
   };
 
+  const actions = (
+    <Button variant="primary" onClick={() => router.push(`/${locale}/admin/nodes/create`)}>
+      <Plus className="h-4 w-4 mr-2" />
+      Új node
+    </Button>
+  );
+
   return (
-    <>
-      <Navigation />
-      <main className="min-h-screen" style={{ 
-        backgroundColor: '#0a0a0a', 
-        background: 'radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.05) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%), #0a0a0a',
-        color: '#f8fafc',
-        minHeight: '100vh'
-      }}>
-        <div className="container mx-auto px-4 py-8">
-          <header className="mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h1 className="text-3xl font-bold mb-2" style={{ color: '#f8fafc' }}>Node-ok</h1>
-                <p style={{ color: '#cbd5e1' }}>
-                  Szerver node-ok kezelése és monitorozása
-                </p>
-              </div>
-              <Button variant="primary" onClick={() => router.push(`/${locale}/admin/nodes/create`)}>
-                Új node
-              </Button>
-            </div>
-            <div className="flex gap-4">
-              <input
+    <div className="light">
+      <AdminLayout title="Node-ok" actions={actions}>
+        <div>
+          <div className="mb-6">
+            <p style={{ color: 'var(--color-text-muted)' }}>
+              Szerver node-ok kezelése és monitorozása
+            </p>
+          </div>
+
+          <div className="flex gap-4 mb-6">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" style={{ color: 'var(--color-text-muted)' }} />
+              <Input
                 type="text"
                 placeholder="Keresés név, IP vagy FQDN alapján..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 px-4 py-2 rounded-lg border"
-                style={{
-                  backgroundColor: 'var(--color-bg-card)',
-                  borderColor: 'var(--color-border)',
-                  color: 'var(--color-text-main)',
-                }}
+                className="pl-10"
               />
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-4 py-2 rounded-lg border"
-                style={{
-                  backgroundColor: 'var(--color-bg-card)',
-                  borderColor: 'var(--color-border)',
-                  color: 'var(--color-text-main)',
-                }}
-              >
-                <option value="all">Minden státusz</option>
-                <option value="ONLINE">ONLINE</option>
-                <option value="OFFLINE">OFFLINE</option>
-                <option value="MAINTENANCE">MAINTENANCE</option>
-                <option value="PROVISIONING">PROVISIONING</option>
-              </select>
             </div>
-          </header>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="px-4 py-2 rounded-lg border text-sm"
+              style={{
+                backgroundColor: 'var(--color-bg-card)',
+                borderColor: 'var(--color-border)',
+                color: 'var(--color-text-main)',
+              }}
+            >
+              <option value="all">Minden státusz</option>
+              <option value="ONLINE">ONLINE</option>
+              <option value="OFFLINE">OFFLINE</option>
+              <option value="MAINTENANCE">MAINTENANCE</option>
+              <option value="PROVISIONING">PROVISIONING</option>
+            </select>
+          </div>
 
           {isLoading ? (
             <div className="text-center py-12">
-              <p style={{ color: '#cbd5e1' }}>Betöltés...</p>
+              <p style={{ color: 'var(--color-text-muted)' }}>Betöltés...</p>
             </div>
           ) : !filteredNodes || filteredNodes.length === 0 ? (
-            <Card className="glass elevation-2 p-12 text-center">
-              <p style={{ color: '#cbd5e1' }}>
+            <Card className="p-12 text-center">
+              <p style={{ color: 'var(--color-text-muted)' }}>
                 {searchQuery || statusFilter !== 'all' ? 'Nincs találat' : 'Nincs node'}
               </p>
             </Card>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredNodes.map((node) => (
-                <Card key={node.id} className="glass elevation-2 p-6">
+                <Card key={node.id} className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold mb-1" style={{ color: '#f8fafc' }}>
+                      <h3 className="text-lg font-semibold mb-1" style={{ color: 'var(--color-text-main)' }}>
                         {node.name}
                       </h3>
-                      <p className="text-sm" style={{ color: '#cbd5e1' }}>
+                      <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
                         {node.publicFqdn || node.ipAddress}
                       </p>
                     </div>
-                    <div 
-                      className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: getStatusColor(node.status) }}
-                      title={node.status}
-                    />
+                    <Badge variant={getStatusVariant(node.status)} size="sm">
+                      {node.status}
+                    </Badge>
                   </div>
                   
-                  <div className="space-y-2 text-sm">
+                  <div className="space-y-2 text-sm mb-4">
                     <div className="flex justify-between">
-                      <span style={{ color: '#cbd5e1' }}>CPU:</span>
-                      <span style={{ color: '#f8fafc' }}>{node.totalCpu} mag</span>
+                      <span style={{ color: 'var(--color-text-muted)' }}>CPU:</span>
+                      <span style={{ color: 'var(--color-text-main)' }}>{node.totalCpu} mag</span>
                     </div>
                     <div className="flex justify-between">
-                      <span style={{ color: '#cbd5e1' }}>RAM:</span>
-                      <span style={{ color: '#f8fafc' }}>{(node.totalRam / 1024).toFixed(1)} GB</span>
+                      <span style={{ color: 'var(--color-text-muted)' }}>RAM:</span>
+                      <span style={{ color: 'var(--color-text-main)' }}>{(node.totalRam / 1024).toFixed(1)} GB</span>
                     </div>
                     <div className="flex justify-between">
-                      <span style={{ color: '#cbd5e1' }}>Lemez:</span>
-                      <span style={{ color: '#f8fafc' }}>{node.diskType}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span style={{ color: '#cbd5e1' }}>Státusz:</span>
-                      <span style={{ color: getStatusColor(node.status) }}>{node.status}</span>
+                      <span style={{ color: 'var(--color-text-muted)' }}>Lemez:</span>
+                      <span style={{ color: 'var(--color-text-main)' }}>{node.diskType}</span>
                     </div>
                   </div>
 
-                  <div className="mt-4 pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
-                    <div className="flex gap-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="flex-1"
-                        onClick={() => router.push(`/${locale}/admin/nodes/${node.id}`)}
-                      >
-                        Szerkesztés
-                      </Button>
-                    </div>
+                  <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full"
+                      onClick={() => router.push(`/${locale}/admin/nodes/${node.id}`)}
+                    >
+                      Szerkesztés
+                    </Button>
                   </div>
                 </Card>
               ))}
             </div>
           )}
         </div>
-      </main>
-    </>
+      </AdminLayout>
+    </div>
   );
 }
 

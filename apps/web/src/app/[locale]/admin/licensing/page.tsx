@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
 import { useAuthStore } from '../../../../stores/auth-store';
-import { Navigation } from '../../../../components/navigation';
-import { Card } from '@zed-hosting/ui-kit';
+import { AdminLayout } from '../../../../components/admin/admin-layout';
+import { Card, Badge } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../lib/api-client';
 import { useQuery } from '@tanstack/react-query';
 
@@ -57,8 +57,8 @@ export default function AdminLicensingPage() {
 
   if (!isHydrated) {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', color: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p>Loading...</p>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg-surface)' }}>
+        <p style={{ color: 'var(--color-text-muted)' }}>Betöltés...</p>
       </div>
     );
   }
@@ -66,130 +66,111 @@ export default function AdminLicensingPage() {
   const userRole = currentUser?.role?.toUpperCase();
   if (!isAuthenticated || (userRole !== 'ADMIN' && userRole !== 'SUPER_ADMIN' && userRole !== 'SUPERADMIN' && userRole !== 'RESELLER_ADMIN')) {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', color: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p>Redirecting...</p>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg-surface)' }}>
+        <p style={{ color: 'var(--color-text-muted)' }}>Átirányítás...</p>
       </div>
     );
   }
 
-  const getStatusColor = (status: string) => {
+  const getStatusVariant = (status: string): 'success' | 'danger' | 'warning' | 'default' => {
     switch (status) {
       case 'HEALTHY':
       case 'ACTIVE':
-        return '#10b981';
+        return 'success';
       case 'UNHEALTHY':
       case 'EXPIRED':
-        return '#ef4444';
+        return 'danger';
       case 'SUSPENDED':
-        return '#f59e0b';
+        return 'warning';
       default:
-        return '#6b7280';
+        return 'default';
     }
   };
 
   return (
-    <>
-      <Navigation />
-      <main className="min-h-screen" style={{ 
-        backgroundColor: '#0a0a0a', 
-        background: 'radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.05) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%), #0a0a0a',
-        color: '#f8fafc',
-        minHeight: '100vh'
-      }}>
-        <div className="container mx-auto px-4 py-8">
-          <header className="mb-8">
-            <h1 className="text-3xl font-bold mb-2" style={{ color: '#f8fafc' }}>Licencelés</h1>
-            <p style={{ color: '#cbd5e1' }}>
+    <div className="light">
+      <AdminLayout title="Licencelés">
+        <div>
+          <div className="mb-6">
+            <p style={{ color: 'var(--color-text-muted)' }}>
               Licenc kezelés és validáció
             </p>
-          </header>
+          </div>
 
           {isLoading ? (
             <div className="text-center py-12">
-              <p style={{ color: '#cbd5e1' }}>Betöltés...</p>
+              <p style={{ color: 'var(--color-text-muted)' }}>Betöltés...</p>
             </div>
           ) : !licenseInfo ? (
-            <Card className="glass elevation-2 p-12 text-center">
-              <p style={{ color: '#cbd5e1' }}>
+            <Card className="p-12 text-center">
+              <p style={{ color: 'var(--color-text-muted)' }}>
                 Licenc információ nem elérhető
               </p>
             </Card>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card className="glass elevation-2 p-6">
-                <h3 className="text-lg font-semibold mb-4" style={{ color: '#f8fafc' }}>
+              <Card className="p-6">
+                <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--color-text-main)' }}>
                   Licenc Státusz
                 </h3>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span style={{ color: '#cbd5e1' }}>Állapot:</span>
-                    <span 
-                      className="font-semibold"
-                      style={{ color: getStatusColor(licenseInfo.status) }}
-                    >
+                    <span style={{ color: 'var(--color-text-muted)' }}>Állapot:</span>
+                    <Badge variant={getStatusVariant(licenseInfo.status)}>
                       {licenseInfo.status}
-                    </span>
+                    </Badge>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span style={{ color: '#cbd5e1' }}>Licenc Státusz:</span>
-                    <span 
-                      className="font-semibold"
-                      style={{ color: getStatusColor(licenseInfo.licenseStatus) }}
-                    >
+                    <span style={{ color: 'var(--color-text-muted)' }}>Licenc Státusz:</span>
+                    <Badge variant={getStatusVariant(licenseInfo.licenseStatus)}>
                       {licenseInfo.licenseStatus}
-                    </span>
+                    </Badge>
                   </div>
                   {licenseInfo.validUntil && (
                     <div className="flex items-center justify-between">
-                      <span style={{ color: '#cbd5e1' }}>Érvényes:</span>
-                      <span style={{ color: '#f8fafc' }}>
+                      <span style={{ color: 'var(--color-text-muted)' }}>Érvényes:</span>
+                      <span style={{ color: 'var(--color-text-main)' }}>
                         {new Date(licenseInfo.validUntil).toLocaleDateString('hu-HU')}
                       </span>
                     </div>
                   )}
                   {licenseInfo.daysUntilExpiry !== undefined && (
                     <div className="flex items-center justify-between">
-                      <span style={{ color: '#cbd5e1' }}>Napok lejáratig:</span>
-                      <span 
-                        className="font-semibold"
-                        style={{ 
-                          color: licenseInfo.daysUntilExpiry < 30 ? '#ef4444' : licenseInfo.daysUntilExpiry < 90 ? '#f59e0b' : '#10b981'
-                        }}
+                      <span style={{ color: 'var(--color-text-muted)' }}>Napok lejáratig:</span>
+                      <Badge 
+                        variant={licenseInfo.daysUntilExpiry < 30 ? 'danger' : licenseInfo.daysUntilExpiry < 90 ? 'warning' : 'success'}
                       >
                         {licenseInfo.daysUntilExpiry} nap
-                      </span>
+                      </Badge>
                     </div>
                   )}
                 </div>
               </Card>
 
-              <Card className="glass elevation-2 p-6">
-                <h3 className="text-lg font-semibold mb-4" style={{ color: '#f8fafc' }}>
+              <Card className="p-6">
+                <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--color-text-main)' }}>
                   Licenc Korlátok
                 </h3>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span style={{ color: '#cbd5e1' }}>Max. Node-ok:</span>
-                    <span className="text-2xl font-bold" style={{ color: '#f8fafc' }}>
+                    <span style={{ color: 'var(--color-text-muted)' }}>Max. Node-ok:</span>
+                    <span className="text-2xl font-bold" style={{ color: 'var(--color-text-main)' }}>
                       {licenseInfo.maxNodesAllowed}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span style={{ color: '#cbd5e1' }}>White-label:</span>
-                    <span 
-                      className="font-semibold"
-                      style={{ color: licenseInfo.whitelabelEnabled ? '#10b981' : '#6b7280' }}
-                    >
+                    <span style={{ color: 'var(--color-text-muted)' }}>White-label:</span>
+                    <Badge variant={licenseInfo.whitelabelEnabled ? 'success' : 'default'}>
                       {licenseInfo.whitelabelEnabled ? 'Engedélyezve' : 'Letiltva'}
-                    </span>
+                    </Badge>
                   </div>
                 </div>
               </Card>
             </div>
           )}
         </div>
-      </main>
-    </>
+      </AdminLayout>
+    </div>
   );
 }
 

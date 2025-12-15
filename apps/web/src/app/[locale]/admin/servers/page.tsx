@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '../../../../stores/auth-store';
-import { Navigation } from '../../../../components/navigation';
-import { Card, Button } from '@zed-hosting/ui-kit';
+import { AdminLayout } from '../../../../components/admin/admin-layout';
+import { Card, Button, Input, Badge } from '@zed-hosting/ui-kit';
 import { useNotificationContext } from '../../../../context/notification-context';
 import { apiClient } from '../../../../lib/api-client';
 import { Search, Download, Trash2, ExternalLink, Eye } from 'lucide-react';
@@ -150,7 +150,11 @@ export default function AdminServersPage() {
   };
 
   if (!isHydrated) {
-    return null;
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg-surface)' }}>
+        <p style={{ color: 'var(--color-text-muted)' }}>Betöltés...</p>
+      </div>
+    );
   }
 
   if (!isAuthenticated) {
@@ -166,83 +170,86 @@ export default function AdminServersPage() {
     return null;
   }
 
+  const getStatusVariant = (status: string): 'success' | 'danger' | 'warning' | 'default' => {
+    switch (status) {
+      case 'ONLINE':
+        return 'success';
+      case 'OFFLINE':
+        return 'default';
+      case 'CRASHED':
+        return 'danger';
+      case 'STARTING':
+      case 'STOPPING':
+        return 'warning';
+      default:
+        return 'default';
+    }
+  };
+
   return (
-    <div className="min-h-screen" style={{ 
-      backgroundColor: '#0a0a0a', 
-      background: 'radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.05) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%), #0a0a0a',
-      color: '#f8fafc',
-      minHeight: '100vh'
-    }}>
-      <Navigation />
-      <main className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2" style={{ color: '#f8fafc' }}>
-            Admin - Szerverek
-          </h1>
-          <p style={{ color: '#cbd5e1' }}>
-            Összes szerver kezelése és monitorozása
-          </p>
-        </div>
+    <div className="light">
+      <AdminLayout title="Szerverek">
+        <div>
+          <div className="mb-6">
+            <p style={{ color: 'var(--color-text-muted)' }}>
+              Összes szerver kezelése és monitorozása
+            </p>
+          </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <Card className="glass elevation-1 p-4">
-            <div className="text-sm" style={{ color: '#cbd5e1' }}>Összes szerver</div>
-            <div className="text-2xl font-bold" style={{ color: '#f8fafc' }}>{stats.total}</div>
-          </Card>
-          <Card className="glass elevation-1 p-4">
-            <div className="text-sm" style={{ color: '#cbd5e1' }}>Futó</div>
-            <div className="text-2xl font-bold" style={{ color: '#22c55e' }}>{stats.running}</div>
-          </Card>
-          <Card className="glass elevation-1 p-4">
-            <div className="text-sm" style={{ color: '#cbd5e1' }}>Leállított</div>
-            <div className="text-2xl font-bold" style={{ color: '#cbd5e1' }}>{stats.stopped}</div>
-          </Card>
-          <Card className="glass elevation-1 p-4">
-            <div className="text-sm" style={{ color: '#cbd5e1' }}>Összeomlott</div>
-            <div className="text-2xl font-bold" style={{ color: '#ef4444' }}>{stats.crashed}</div>
-          </Card>
-        </div>
+          {/* Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <Card className="p-4">
+              <div className="text-sm mb-1" style={{ color: 'var(--color-text-muted)' }}>Összes szerver</div>
+              <div className="text-2xl font-bold" style={{ color: 'var(--color-text-main)' }}>{stats.total}</div>
+            </Card>
+            <Card className="p-4">
+              <div className="text-sm mb-1" style={{ color: 'var(--color-text-muted)' }}>Futó</div>
+              <div className="text-2xl font-bold" style={{ color: 'var(--color-success)' }}>{stats.running}</div>
+            </Card>
+            <Card className="p-4">
+              <div className="text-sm mb-1" style={{ color: 'var(--color-text-muted)' }}>Leállított</div>
+              <div className="text-2xl font-bold" style={{ color: 'var(--color-text-muted)' }}>{stats.stopped}</div>
+            </Card>
+            <Card className="p-4">
+              <div className="text-sm mb-1" style={{ color: 'var(--color-text-muted)' }}>Összeomlott</div>
+              <div className="text-2xl font-bold" style={{ color: 'var(--color-danger)' }}>{stats.crashed}</div>
+            </Card>
+          </div>
 
-        {/* Filters and Actions */}
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" style={{ color: '#9ca3af' }} />
-            <input
-              type="text"
-              placeholder="Keresés szerver neve, játék típusa, node vagy tulajdonos szerint..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-lg border"
+          {/* Filters and Actions */}
+          <div className="flex flex-col md:flex-row gap-4 mb-6">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" style={{ color: 'var(--color-text-muted)' }} />
+              <Input
+                type="text"
+                placeholder="Keresés szerver neve, játék típusa, node vagy tulajdonos szerint..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="px-4 py-2 rounded-lg border text-sm"
               style={{
                 backgroundColor: 'var(--color-bg-card)',
                 borderColor: 'var(--color-border)',
                 color: 'var(--color-text-main)',
               }}
-            />
+            >
+              <option value="all">Összes állapot</option>
+              <option value="ONLINE">Online</option>
+              <option value="OFFLINE">Offline</option>
+              <option value="CRASHED">Összeomlott</option>
+              <option value="STARTING">Indítás</option>
+              <option value="STOPPING">Leállítás</option>
+            </select>
+            <Button onClick={handleExport} variant="outline">
+              <Download className="h-4 w-4 mr-2" />
+              Export CSV
+            </Button>
           </div>
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2 rounded-lg border"
-            style={{
-              backgroundColor: 'var(--color-bg-card)',
-              borderColor: 'var(--color-border)',
-              color: 'var(--color-text-main)',
-            }}
-          >
-            <option value="all">Összes állapot</option>
-            <option value="ONLINE">Online</option>
-            <option value="OFFLINE">Offline</option>
-            <option value="CRASHED">Összeomlott</option>
-            <option value="STARTING">Indítás</option>
-            <option value="STOPPING">Leállítás</option>
-          </select>
-          <Button onClick={handleExport} variant="outline">
-            <Download className="h-4 w-4 mr-2" />
-            Export CSV
-          </Button>
-        </div>
 
         {/* Bulk Actions */}
         {selectedServers.size > 0 && (
@@ -252,50 +259,41 @@ export default function AdminServersPage() {
           />
         )}
 
-        {/* Servers Table */}
-        <Card className="glass elevation-2 overflow-hidden">
-          {isLoading ? (
-            <div className="p-8 text-center" style={{ color: '#cbd5e1' }}>
-              Betöltés...
-            </div>
-          ) : filteredServers.length === 0 ? (
-            <div className="p-8 text-center" style={{ color: '#cbd5e1' }}>
-              Nincs szerver
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b" style={{ borderColor: 'var(--color-border)' }}>
-                    <th className="px-4 py-3 text-left">
-                      <Checkbox
-                        checked={selectedServers.size === filteredServers.length && filteredServers.length > 0}
-                        onChange={toggleAllServers}
-                      />
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-medium" style={{ color: '#cbd5e1' }}>Név</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium" style={{ color: '#cbd5e1' }}>Állapot</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium" style={{ color: '#cbd5e1' }}>Játék</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium" style={{ color: '#cbd5e1' }}>Node</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium" style={{ color: '#cbd5e1' }}>Erőforrások</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium" style={{ color: '#cbd5e1' }}>Tulajdonos</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium" style={{ color: '#cbd5e1' }}>Műveletek</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredServers.map((server) => {
-                    const statusColors: Record<string, string> = {
-                      ONLINE: '#22c55e',
-                      OFFLINE: '#6b7280',
-                      CRASHED: '#ef4444',
-                      STARTING: '#f59e0b',
-                      STOPPING: '#f59e0b',
-                    };
-
-                    return (
+          {/* Servers Table */}
+          <Card className="overflow-hidden">
+            {isLoading ? (
+              <div className="p-8 text-center" style={{ color: 'var(--color-text-muted)' }}>
+                Betöltés...
+              </div>
+            ) : filteredServers.length === 0 ? (
+              <div className="p-8 text-center" style={{ color: 'var(--color-text-muted)' }}>
+                Nincs szerver
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b" style={{ borderColor: 'var(--color-border)' }}>
+                      <th className="px-4 py-3 text-left">
+                        <Checkbox
+                          checked={selectedServers.size === filteredServers.length && filteredServers.length > 0}
+                          onChange={toggleAllServers}
+                        />
+                      </th>
+                      <th className="px-4 py-3 text-left text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>Név</th>
+                      <th className="px-4 py-3 text-left text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>Állapot</th>
+                      <th className="px-4 py-3 text-left text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>Játék</th>
+                      <th className="px-4 py-3 text-left text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>Node</th>
+                      <th className="px-4 py-3 text-left text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>Erőforrások</th>
+                      <th className="px-4 py-3 text-left text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>Tulajdonos</th>
+                      <th className="px-4 py-3 text-left text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>Műveletek</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredServers.map((server) => (
                       <tr
                         key={server.uuid}
-                        className="border-b hover:bg-opacity-10 transition-colors"
+                        className="border-b hover:bg-[var(--color-bg-hover)] transition-colors"
                         style={{ borderColor: 'var(--color-border)' }}
                       >
                         <td className="px-4 py-3">
@@ -305,29 +303,23 @@ export default function AdminServersPage() {
                           />
                         </td>
                         <td className="px-4 py-3">
-                          <div className="font-medium" style={{ color: '#f8fafc' }}>{server.name}</div>
+                          <div className="font-medium" style={{ color: 'var(--color-text-main)' }}>{server.name}</div>
                         </td>
                         <td className="px-4 py-3">
-                          <span
-                            className="px-2 py-1 rounded text-xs font-medium"
-                            style={{
-                              backgroundColor: `${statusColors[server.status]}20`,
-                              color: statusColors[server.status],
-                            }}
-                          >
+                          <Badge variant={getStatusVariant(server.status)} size="sm">
                             {server.status}
-                          </span>
+                          </Badge>
                         </td>
-                        <td className="px-4 py-3" style={{ color: '#cbd5e1' }}>{server.gameType}</td>
-                        <td className="px-4 py-3" style={{ color: '#cbd5e1' }}>{server.node.name}</td>
-                        <td className="px-4 py-3" style={{ color: '#cbd5e1' }}>
+                        <td className="px-4 py-3" style={{ color: 'var(--color-text-secondary)' }}>{server.gameType}</td>
+                        <td className="px-4 py-3" style={{ color: 'var(--color-text-secondary)' }}>{server.node.name}</td>
+                        <td className="px-4 py-3" style={{ color: 'var(--color-text-secondary)' }}>
                           <div className="text-xs">
                             <div>CPU: {server.resources.cpuLimit}</div>
                             <div>RAM: {server.resources.ramLimit} MB</div>
                             <div>Disk: {server.resources.diskLimit} GB</div>
                           </div>
                         </td>
-                        <td className="px-4 py-3" style={{ color: '#cbd5e1' }}>
+                        <td className="px-4 py-3" style={{ color: 'var(--color-text-secondary)' }}>
                           {server.owner?.email || 'N/A'}
                         </td>
                         <td className="px-4 py-3">
@@ -356,14 +348,14 @@ export default function AdminServersPage() {
                           </div>
                         </td>
                       </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </Card>
-      </main>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </Card>
+        </div>
+      </AdminLayout>
     </div>
   );
 }
