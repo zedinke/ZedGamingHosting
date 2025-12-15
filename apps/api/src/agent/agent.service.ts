@@ -135,8 +135,8 @@ export class AgentService {
 
     return tasks.map((task) => ({
       id: task.id,
-      type: task.action,
-      data: task.payload,
+      type: task.type,
+      data: task.data,
     }));
   }
 
@@ -158,14 +158,13 @@ export class AgentService {
       data: {
         status: data.status,
         completedAt: new Date(),
-        result: data.result ? (data.result as unknown as Prisma.JsonObject) : task.result,
         error: data.error,
       },
     });
 
     // If this was a PROVISION task and it succeeded, update server status
-    if (task.action === 'PROVISION' && data.status === 'COMPLETED') {
-      const payload = task.payload as any;
+    if (task.type === 'PROVISION' && data.status === 'COMPLETED') {
+      const payload = task.data as any;
       if (payload?.serverUuid) {
         await this.prisma.gameServer.update({
           where: { uuid: payload.serverUuid },
@@ -175,8 +174,8 @@ export class AgentService {
     }
 
     // If this was a START task and it succeeded, update server status
-    if (task.action === 'START' && data.status === 'COMPLETED') {
-      const payload = task.payload as any;
+    if (task.type === 'START' && data.status === 'COMPLETED') {
+      const payload = task.data as any;
       if (payload?.serverUuid) {
         await this.prisma.gameServer.update({
           where: { uuid: payload.serverUuid },
@@ -186,8 +185,8 @@ export class AgentService {
     }
 
     // If this was a STOP task and it succeeded, update server status
-    if (task.action === 'STOP' && data.status === 'COMPLETED') {
-      const payload = task.payload as any;
+    if (task.type === 'STOP' && data.status === 'COMPLETED') {
+      const payload = task.data as any;
       if (payload?.serverUuid) {
         await this.prisma.gameServer.update({
           where: { uuid: payload.serverUuid },
