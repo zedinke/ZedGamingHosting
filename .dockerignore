@@ -1,0 +1,46 @@
+# Node
+node_modules
+npm-debug.log
+.npm
+
+# Next.js
+.next/
+out/
+
+# Build outputs
+dist/
+.nx/
+
+# Development
+.git/
+.gitignore
+.env.local
+.env.*.local
+
+# Testing
+coverage/
+*.test.ts
+*.spec.ts
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Misc
+*.md
+README.md
+docs/
+cmms_backend/
+scripts/
+*.tar.gz
