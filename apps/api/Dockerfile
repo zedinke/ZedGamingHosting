@@ -49,12 +49,23 @@ RUN npm install --only=production
 COPY --from=builder /app/libs/db/prisma ./prisma
 COPY --from=builder /app/libs/db/src/generated ./libs/db/src/generated
 
-# Copy Prisma Client from node_modules (if needed)
+# Copy Prisma Client from node_modules (engines included)
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
-# Copy i18n locale files (needed at runtime)
-COPY --from=builder /app/apps/api/src/i18n/locales ./dist/i18n/locales
+# Ensure Prisma Query Engine is available next to the generated client for musl
+# If present in node_modules, copy it into libs/db/src/generated so bundlers can find it
+RUN set -e \
+	&& ENGINE_PATH=$(find ./node_modules -path "*/.prisma/client/libquery_engine-*.so.node" | head -n 1 || true) \
+	&& if [ -n "$ENGINE_PATH" ]; then \
+			 echo "Copying Prisma engine: $ENGINE_PATH -> ./libs/db/src/generated/"; \
+			 cp "$ENGINE_PATH" ./libs/db/src/generated/; \
+		 else \
+			 echo "Prisma engine binary not found in node_modules/.prisma/client"; \
+		 fi
+
+# Copy i18n locale files (needed at runtime) to the path expected by the app
+COPY --from=builder /app/apps/api/src/i18n/locales ./dist/locales
 
 # Create non-root user
 RUN addgroup -S zedhosting && adduser -S zedhosting -G zedhosting
