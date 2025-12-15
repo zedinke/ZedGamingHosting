@@ -18,6 +18,7 @@ import { FilesModule } from './files/files.module';
 import { AdminModule } from './admin/admin.module';
 import { ConsoleModule } from './console/console.module';
 import { EmailModule } from './email/email.module';
+import { AgentModule } from './agent/agent.module';
 import { MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { TenantMiddleware } from './common/middleware/tenant.middleware';
 import { APP_GUARD } from '@nestjs/core';
@@ -56,6 +57,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     AdminModule,
     ConsoleModule,
     EmailModule,
+    AgentModule, // Daemon communication
   ],
   providers: [
     {

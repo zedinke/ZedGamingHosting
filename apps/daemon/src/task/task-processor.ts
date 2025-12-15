@@ -46,9 +46,11 @@ export class TaskProcessor {
     try {
       console.log(`Processing task: ${task.type} (${task.id})`);
 
+      let result: any;
+
       switch (task.type) {
         case 'PROVISION':
-          await this.containerManager.createContainer(task.data as any);
+          result = await this.containerManager.createContainer(task.data as any);
           break;
         case 'START':
           await this.containerManager.startContainer((task.data as { serverUuid: string }).serverUuid);
@@ -73,9 +75,17 @@ export class TaskProcessor {
           break;
         default:
           console.warn(`Unknown task type: ${task.type}`);
+          await this.backendClient.reportTaskResult(task.id, 'FAILED', undefined, `Unknown task type: ${task.type}`);
+          return;
       }
-    } catch (error) {
+
+      // Report success
+      await this.backendClient.reportTaskResult(task.id, 'COMPLETED', result);
+      console.log(`✅ Task completed: ${task.type} (${task.id})`);
+    } catch (error: any) {
       console.error(`Task processing failed: ${task.id}`, error);
+      // Report failure
+      await this.backendClient.reportTaskResult(task.id, 'FAILED', undefined, error.message || String(error));
     }
   }
 }

@@ -19,22 +19,21 @@ export class BackendClient {
    * Registers daemon with backend
    */
   async register(): Promise<void> {
-    const response = await fetch(`${this.managerUrl}/api/nodes/register`, {
+    const response = await fetch(`${this.managerUrl}/api/agent/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${this.apiKey}`,
       },
       body: JSON.stringify({
-        agentId: this.nodeId,
-        agentIp: await this.getLocalIp(),
-        machineId: this.nodeId,
-        version: '1.0.0',
-        provisioningToken: process.env.PROVISIONING_TOKEN || '',
-        capabilities: {
-          docker: true,
-          zfs: true,
-          nfs: false, // Will be detected
+        nodeId: this.nodeId,
+        daemonVersion: '1.0.0',
+        systemInfo: {
+          cpu: 0,
+          memory: { used: 0, total: 0, percent: 0 },
+          disk: [],
+          network: { in: 0, out: 0 },
+          containerCount: 0,
         },
       }),
     });
@@ -58,7 +57,7 @@ export class BackendClient {
       containerCount: number;
     };
   }): Promise<void> {
-    await fetch(`${this.managerUrl}/api/nodes/${data.nodeId}/heartbeat`, {
+    await fetch(`${this.managerUrl}/api/agent/heartbeat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -72,7 +71,7 @@ export class BackendClient {
    * Gets pending tasks from backend
    */
   async getPendingTasks(nodeId: string): Promise<unknown[]> {
-    const response = await fetch(`${this.managerUrl}/api/nodes/${nodeId}/tasks`, {
+    const response = await fetch(`${this.managerUrl}/api/agent/tasks?nodeId=${nodeId}`, {
       headers: {
         'Authorization': `Bearer ${this.apiKey}`,
       },
@@ -83,6 +82,20 @@ export class BackendClient {
     }
 
     return await response.json();
+  }
+
+  /**
+   * Reports task result to backend
+   */
+  async reportTaskResult(taskId: string, status: 'COMPLETED' | 'FAILED', result?: any, error?: string): Promise<void> {
+    await fetch(`${this.managerUrl}/api/agent/tasks/${taskId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.apiKey}`,
+      },
+      body: JSON.stringify({ status, result, error }),
+    });
   }
 
   /**
