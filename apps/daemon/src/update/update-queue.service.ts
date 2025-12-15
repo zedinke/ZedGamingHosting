@@ -1,6 +1,6 @@
 import { Queue, Worker, Job } from 'bullmq';
 import IORedis from 'ioredis';
-import { SteamService, SteamUpdateOptions, SteamUpdateProgress } from './steam.service';
+import { SteamService, SteamUpdateProgress } from './steam.service';
 import { CacheManager } from '../cache/cache-manager.service';
 
 export interface UpdateJobData {
@@ -86,7 +86,7 @@ export class UpdateQueueService {
    * Gets update job status
    */
   async getJobStatus(jobId: string): Promise<Job<UpdateJobData, UpdateJobResult> | null> {
-    return await this.queue.getJob(jobId);
+    return (await this.queue.getJob(jobId)) || null;
   }
 
   /**

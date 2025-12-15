@@ -1,5 +1,4 @@
 import Docker from 'dockerode';
-import * as Stream from 'stream';
 
 /**
  * File Service - handles file operations on Docker containers

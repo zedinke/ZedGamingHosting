@@ -116,11 +116,5 @@ export class BackendClient {
     return await response.json();
   }
 
-  /**
-   * Gets local IP address
-   */
-  private async getLocalIp(): Promise<string> {
-    // Simple implementation - would use network interfaces in production
-    return process.env.NODE_IP || '127.0.0.1';
-  }
+
 }

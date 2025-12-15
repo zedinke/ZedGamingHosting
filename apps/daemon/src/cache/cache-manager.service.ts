@@ -7,8 +7,6 @@ const stat = promisify(fs.stat);
 const unlink = promisify(fs.unlink);
 const rmdir = promisify(fs.rmdir);
 const mkdir = promisify(fs.mkdir);
-const readlink = promisify(fs.readlink);
-const symlink = promisify(fs.symlink);
 
 export interface CacheEntry {
   appId: string;

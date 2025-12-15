@@ -146,7 +146,7 @@ export class NFSManager {
    */
   async isMounted(localPath: string): Promise<boolean> {
     try {
-      const result = await execAsync(`mountpoint -q ${localPath}`);
+      await execAsync(`mountpoint -q ${localPath}`);
       return true;
     } catch {
       return false;
