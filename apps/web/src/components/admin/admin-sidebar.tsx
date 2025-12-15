@@ -1,7 +1,6 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
   Users,
@@ -23,6 +22,7 @@ interface NavItem {
 }
 
 export function AdminSidebar() {
+  const router = useRouter();
   const pathname = usePathname();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
@@ -97,15 +97,20 @@ export function AdminSidebar() {
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="h-16 flex items-center px-6 border-b border-border">
-            <Link href={`/${locale}/admin`} className="flex items-center gap-2">
+          <div className="h-16 flex items-center px-6 border-b border-border cursor-pointer hover:bg-background-surface transition-colors"
+            onClick={() => {
+              setIsMobileOpen(false);
+              router.push(`/${locale}/admin`);
+            }}
+          >
+            <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-primary-500 to-primary-600">
                 <LayoutDashboard className="w-5 h-5 text-white" />
               </div>
               <span className="font-bold text-lg text-text-primary">
                 Admin Panel
               </span>
-            </Link>
+            </div>
           </div>
 
           {/* Navigation */}
@@ -114,11 +119,13 @@ export function AdminSidebar() {
               const Icon = item.icon;
               const active = isActive(item.href);
               return (
-                <Link
+                <button
                   key={item.href}
-                  href={item.href}
-                  onClick={() => setIsMobileOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium ${
+                  onClick={() => {
+                    setIsMobileOpen(false);
+                    router.push(item.href);
+                  }}
+                  className={`w-full text-left flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium ${
                     active
                       ? 'bg-primary-500/10 text-primary-500'
                       : 'text-text-muted hover:bg-background-surface hover:text-text-primary'
@@ -126,7 +133,7 @@ export function AdminSidebar() {
                 >
                   <Icon className="h-5 w-5" />
                   <span>{item.label}</span>
-                </Link>
+                </button>
               );
             })}
           </nav>
