@@ -25,11 +25,13 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale || routing.defaultLocale} className="dark" suppressHydrationWarning>
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
       <body 
         className={`${geistSans.variable} ${jetbrainsMono.variable} font-sans`}
         style={{ 
-          backgroundColor: '#0a0a0a',
-          color: '#f8fafc',
           margin: 0,
           padding: 0,
           minHeight: '100vh'

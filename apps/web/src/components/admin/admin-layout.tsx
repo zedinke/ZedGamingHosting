@@ -2,7 +2,7 @@
 
 import { AdminSidebar } from './admin-sidebar';
 import { AdminHeader } from './admin-header';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 
 interface AdminLayoutProps {
   children: ReactNode;
@@ -11,8 +11,20 @@ interface AdminLayoutProps {
 }
 
 export function AdminLayout({ children, title, actions }: AdminLayoutProps) {
+  useEffect(() => {
+    // Apply light theme to html tag for admin pages
+    document.documentElement.classList.add('light');
+    document.documentElement.classList.remove('dark');
+    
+    return () => {
+      // Cleanup: remove light class when leaving admin pages
+      document.documentElement.classList.remove('light');
+      document.documentElement.classList.add('dark');
+    };
+  }, []);
+
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-surface)' }}>
+    <div className="min-h-screen light" style={{ backgroundColor: 'var(--color-bg-surface)' }}>
       <AdminSidebar />
       <div className="lg:pl-64">
         <AdminHeader title={title} actions={actions} />
