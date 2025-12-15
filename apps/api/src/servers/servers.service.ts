@@ -491,7 +491,7 @@ export class ServersService {
     if (updatedServer.owner?.email) {
       this.emailService.sendServerStatusNotification(
         updatedServer.owner.email,
-        updatedServer.name || uuid,
+        updatedServer.uuid,
         'STOPPING',
       ).catch((err) => console.error('Failed to send email:', err));
     }
@@ -534,7 +534,7 @@ export class ServersService {
     if (updatedServer.owner?.email) {
       this.emailService.sendServerStatusNotification(
         updatedServer.owner.email,
-        updatedServer.name || uuid,
+        updatedServer.uuid,
         'STARTING',
       ).catch((err) => console.error('Failed to send email:', err));
     }
@@ -572,7 +572,7 @@ export class ServersService {
     if (serverWithOwner?.owner?.email) {
       this.emailService.sendBackupNotification(
         serverWithOwner.owner.email,
-        serverWithOwner.name || serverUuid,
+        serverWithOwner.uuid,
         'created',
       ).catch((err) => console.error('Failed to send email:', err));
     }
@@ -601,6 +601,7 @@ export class ServersService {
   async restoreBackup(serverUuid: string, backupId: string, userId: string): Promise<void> {
     const server = await this.prisma.gameServer.findUnique({
       where: { uuid: serverUuid },
+      include: { owner: true },
     });
 
     if (!server) {
@@ -621,7 +622,7 @@ export class ServersService {
     if (server.owner?.email) {
       this.emailService.sendBackupNotification(
         server.owner.email,
-        server.name || serverUuid,
+        server.uuid,
         'restored',
       ).catch((err) => console.error('Failed to send email:', err));
     }

@@ -47,7 +47,7 @@ export class AdminController {
    * GET /api/admin/users
    */
   @Get('users')
-  async getAllUsers(@Request() req: any) {
+  async getAllUsers() {
     return await this.adminService.getAllUsers();
   }
 

@@ -143,6 +143,7 @@ enum TaskType {
   RESTART
   UPDATE
   DELETE
+  EXECUTE_COMMAND
 }
 
 model Task {

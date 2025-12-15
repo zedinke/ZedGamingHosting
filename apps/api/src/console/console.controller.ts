@@ -7,7 +7,6 @@ import {
   Query,
   UseGuards,
   Request,
-  Res,
   Sse,
   MessageEvent,
 } from '@nestjs/common';

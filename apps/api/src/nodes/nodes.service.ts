@@ -136,7 +136,7 @@ export class NodesService {
     return await this.prisma.node.findUnique({
       where: { id },
       include: {
-        gameServers: {
+        servers: {
           select: {
             id: true,
             uuid: true,
@@ -187,7 +187,7 @@ export class NodesService {
     const node = await this.prisma.node.findUnique({
       where: { id },
       include: {
-        gameServers: {
+        servers: {
           select: {
             id: true,
           },
@@ -200,7 +200,7 @@ export class NodesService {
     }
 
     // Check if node has servers
-    if (node.gameServers.length > 0) {
+    if (node.servers.length > 0) {
       throw new ForbiddenException('Cannot delete node with active servers');
     }
 

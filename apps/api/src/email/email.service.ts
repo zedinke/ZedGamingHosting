@@ -28,7 +28,6 @@ export class EmailService {
     const smtpUser = this.configService.get<string>('SMTP_USER');
     const smtpPassword = this.configService.get<string>('SMTP_PASSWORD');
     const smtpSecure = this.configService.get<boolean>('SMTP_SECURE', false);
-    const smtpFrom = this.configService.get<string>('SMTP_FROM', smtpUser || 'noreply@zedgaminghosting.hu');
 
     // If SMTP is not configured, disable email service
     if (!smtpHost || !smtpUser || !smtpPassword) {

@@ -143,7 +143,8 @@ export const TaskType: {
   STOP: 'STOP',
   RESTART: 'RESTART',
   UPDATE: 'UPDATE',
-  DELETE: 'DELETE'
+  DELETE: 'DELETE',
+  EXECUTE_COMMAND: 'EXECUTE_COMMAND'
 };
 
 export type TaskType = (typeof TaskType)[keyof typeof TaskType]

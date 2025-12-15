@@ -1,6 +1,5 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
-import { Prisma } from '@prisma/client';
 
 /**
  * Agent Service - business logic for daemon communication
@@ -85,10 +84,14 @@ export class AgentService {
       data: {
         nodeId: data.nodeId,
         timestamp: new Date(data.timestamp),
-        metricType: 'SYSTEM',
-        value: data.systemInfo.cpu,
-        unit: 'PERCENT',
-        metadata: data.systemInfo as unknown as Prisma.JsonObject,
+        cpuUsage: data.systemInfo.cpu || 0,
+        ramUsage: data.systemInfo.memory?.used || 0,
+        ramUsagePercent: data.systemInfo.memory?.percent || 0,
+        diskUsage: data.systemInfo.disk?.[0]?.used || 0,
+        diskUsagePercent: data.systemInfo.disk?.[0]?.percent || 0,
+        networkIn: BigInt(data.systemInfo.network?.in || 0),
+        networkOut: BigInt(data.systemInfo.network?.out || 0),
+        uptime: null,
       },
     });
 
@@ -127,8 +130,7 @@ export class AgentService {
           id: { in: tasks.map((t) => t.id) },
         },
         data: {
-          status: 'IN_PROGRESS',
-          startedAt: new Date(),
+          status: 'PROCESSING',
         },
       });
     }

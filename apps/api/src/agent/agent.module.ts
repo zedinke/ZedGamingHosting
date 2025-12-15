@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AgentController } from './agent.controller';
 import { AgentService } from './agent.service';
-import { PrismaModule } from '@zed-hosting/db';
+import { DatabaseModule } from '../database/database.module';
 import { NodesModule } from '../nodes/nodes.module';
 import { TasksModule } from '../tasks/tasks.module';
 
@@ -9,7 +9,7 @@ import { TasksModule } from '../tasks/tasks.module';
  * Agent Module - handles communication with daemon instances
  */
 @Module({
-  imports: [PrismaModule, NodesModule, TasksModule],
+  imports: [DatabaseModule, NodesModule, TasksModule],
   controllers: [AgentController],
   providers: [AgentService],
   exports: [AgentService],

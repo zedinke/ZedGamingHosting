@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
 import { AuditService } from '../audit/audit.service';
 import { EmailService } from '../email/email.service';
@@ -94,7 +94,7 @@ export class AdminService {
       data: {
         email: dto.email,
         passwordHash,
-        role: dto.role,
+        role: dto.role as any,
         balance: dto.balance || 0,
       },
       select: {
@@ -153,7 +153,7 @@ export class AdminService {
       where: { id: userId },
       data: {
         ...(dto.email && { email: dto.email }),
-        ...(dto.role && { role: dto.role }),
+        ...(dto.role && { role: dto.role as any }),
         ...(dto.balance !== undefined && { balance: dto.balance }),
       },
       select: {
@@ -304,7 +304,7 @@ export class AdminService {
         },
         metrics: {
           take: 1,
-          orderBy: { createdAt: 'desc' },
+          orderBy: { timestamp: 'desc' },
         },
       },
       orderBy: {

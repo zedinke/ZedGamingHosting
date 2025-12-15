@@ -386,7 +386,8 @@ exports.TaskType = exports.$Enums.TaskType = {
   STOP: 'STOP',
   RESTART: 'RESTART',
   UPDATE: 'UPDATE',
-  DELETE: 'DELETE'
+  DELETE: 'DELETE',
+  EXECUTE_COMMAND: 'EXECUTE_COMMAND'
 };
 
 exports.TaskStatus = exports.$Enums.TaskStatus = {

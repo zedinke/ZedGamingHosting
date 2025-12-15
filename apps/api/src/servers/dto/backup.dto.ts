@@ -6,14 +6,14 @@ export class CreateBackupDto {
   name?: string;
 
   @IsUUID()
-  serverUuid: string;
+  serverUuid!: string;
 }
 
 export class RestoreBackupDto {
   @IsUUID()
-  backupId: string;
+  backupId!: string;
 
   @IsUUID()
-  serverUuid: string;
+  serverUuid!: string;
 }
 

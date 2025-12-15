@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Patch, Body, Param, Query, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Patch, Body, Param, Query, HttpCode, HttpStatus } from '@nestjs/common';
 import { AgentService } from './agent.service';
 
 /**
