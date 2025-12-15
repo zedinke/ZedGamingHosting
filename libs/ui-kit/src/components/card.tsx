@@ -24,7 +24,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
           ref={ref}
           className={cn(
             'rounded-xl border transition-all duration-200',
-            'bg-[var(--color-bg-card)] border-[var(--color-border)] elevation-2',
+            'bg-background-card border-border shadow-md',
             'cursor-pointer',
             className
           )}
@@ -42,7 +42,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
         ref={ref}
         className={cn(
           'rounded-xl border transition-all duration-200',
-          'bg-[var(--color-bg-card)] border-[var(--color-border)] elevation-2',
+          'bg-background-card border-border shadow-md',
           className
         )}
         {...(props as React.HTMLAttributes<HTMLDivElement>)}

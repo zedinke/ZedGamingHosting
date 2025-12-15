@@ -197,10 +197,10 @@ export default function ServerDetailPage() {
   const renderContent = () => {
     if (isLoading) {
       return (
-        <div className="flex items-center justify-center py-12">
+        <div className="flex items-center justify-center py-12 min-h-[400px]">
           <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2" style={{ borderColor: 'var(--color-primary)' }}></div>
-            <p className="mt-4 text-sm" style={{ color: 'var(--color-text-muted)' }}>
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
+            <p className="mt-4 text-sm text-text-muted">
               {t('loading') || 'Loading...'}
             </p>
           </div>
@@ -211,9 +211,9 @@ export default function ServerDetailPage() {
     if (error || !server) {
       return (
         <div className="flex items-center justify-center py-12">
-          <Card className="border-[var(--color-border)] bg-[var(--color-bg-card)]">
+          <Card>
             <CardContent className="p-8 text-center">
-              <p className="mb-4" style={{ color: 'var(--color-danger)' }}>
+              <p className="mb-4 text-error-600">
                 {error ? (error as Error).message : t('dashboard.server.notFound') || 'Server not found'}
               </p>
               <Button variant="outline" onClick={() => router.push(`/${locale}/dashboard`)}>
@@ -240,14 +240,14 @@ export default function ServerDetailPage() {
           
           <div className="flex items-start justify-between flex-wrap gap-4">
             <div>
-              <h1 className="text-3xl font-bold mb-3" style={{ color: 'var(--color-text-main)' }}>
+              <h1 className="text-3xl font-bold mb-3 text-text-primary">
                 {(server as any).name || server.gameType}
               </h1>
               <div className="flex items-center gap-3">
                 <Badge variant={getStatusVariant(server.status)}>
                   {getStatusText(server.status)}
                 </Badge>
-                <span className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                <span className="text-sm text-text-muted">
                   {server.gameType}
                 </span>
               </div>
@@ -274,111 +274,47 @@ export default function ServerDetailPage() {
         </div>
 
         {/* Navigation Tabs */}
-        <div className="mb-6 border-b" style={{ borderColor: 'var(--color-border)' }}>
+        <div className="mb-6 border-b border-border">
           <nav className="flex gap-1 -mb-px">
             <Link
               href={`/${locale}/dashboard/server/${serverUuid}`}
-              className="px-4 py-3 text-sm font-medium border-b-2 transition-colors"
-              style={{
-                borderColor: 'var(--color-primary)',
-                color: 'var(--color-primary)',
-              }}
+              className="px-4 py-3 text-sm font-medium border-b-2 border-primary-500 text-primary-500 transition-colors"
             >
               {t('dashboard.server.tabs.overview') || 'Overview'}
             </Link>
             <Link
               href={`/${locale}/dashboard/server/${serverUuid}/console`}
-              className="px-4 py-3 text-sm font-medium border-b-2 transition-colors"
-              style={{
-                borderColor: 'transparent',
-                color: 'var(--color-text-muted)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--color-text-main)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--color-text-muted)';
-              }}
+              className="px-4 py-3 text-sm font-medium border-b-2 border-transparent text-text-muted hover:text-text-primary transition-colors"
             >
               {t('dashboard.server.tabs.console') || 'Console'}
             </Link>
             <Link
               href={`/${locale}/dashboard/server/${serverUuid}/files`}
-              className="px-4 py-3 text-sm font-medium border-b-2 transition-colors"
-              style={{
-                borderColor: 'transparent',
-                color: 'var(--color-text-muted)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--color-text-main)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--color-text-muted)';
-              }}
+              className="px-4 py-3 text-sm font-medium border-b-2 border-transparent text-text-muted hover:text-text-primary transition-colors"
             >
               {t('dashboard.server.tabs.files') || 'Files'}
             </Link>
             <Link
               href={`/${locale}/dashboard/server/${serverUuid}/settings`}
-              className="px-4 py-3 text-sm font-medium border-b-2 transition-colors"
-              style={{
-                borderColor: 'transparent',
-                color: 'var(--color-text-muted)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--color-text-main)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--color-text-muted)';
-              }}
+              className="px-4 py-3 text-sm font-medium border-b-2 border-transparent text-text-muted hover:text-text-primary transition-colors"
             >
               {t('dashboard.server.tabs.settings') || 'Settings'}
             </Link>
             <Link
               href={`/${locale}/dashboard/server/${serverUuid}/metrics`}
-              className="px-4 py-3 text-sm font-medium border-b-2 transition-colors"
-              style={{
-                borderColor: 'transparent',
-                color: 'var(--color-text-muted)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--color-text-main)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--color-text-muted)';
-              }}
+              className="px-4 py-3 text-sm font-medium border-b-2 border-transparent text-text-muted hover:text-text-primary transition-colors"
             >
               {t('dashboard.server.tabs.metrics') || 'Metrics'}
             </Link>
             <Link
               href={`/${locale}/dashboard/server/${serverUuid}/environment`}
-              className="px-4 py-3 text-sm font-medium border-b-2 transition-colors"
-              style={{
-                borderColor: 'transparent',
-                color: 'var(--color-text-muted)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--color-text-main)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--color-text-muted)';
-              }}
+              className="px-4 py-3 text-sm font-medium border-b-2 border-transparent text-text-muted hover:text-text-primary transition-colors"
             >
               {t('dashboard.server.tabs.environment') || 'Environment'}
             </Link>
             <Link
               href={`/${locale}/dashboard/server/${serverUuid}/backups`}
-              className="px-4 py-3 text-sm font-medium border-b-2 transition-colors"
-              style={{
-                borderColor: 'transparent',
-                color: 'var(--color-text-muted)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--color-text-main)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--color-text-muted)';
-              }}
+              className="px-4 py-3 text-sm font-medium border-b-2 border-transparent text-text-muted hover:text-text-primary transition-colors"
             >
               {t('dashboard.server.tabs.backups') || 'Backups'}
             </Link>
@@ -388,30 +324,30 @@ export default function ServerDetailPage() {
         {/* Content Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {/* Server Information */}
-          <Card className="border-[var(--color-border)] bg-[var(--color-bg-card)]">
+          <Card>
             <CardHeader>
-              <CardTitle style={{ color: 'var(--color-text-main)' }}>
+              <CardTitle>
                 {t('dashboard.server.info.title') || 'Server Information'}
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-3 text-sm">
               <div className="flex justify-between items-center text-sm">
-                <span style={{ color: 'var(--color-text-muted)' }}>UUID:</span>
-                <code className="text-xs px-2 py-1 rounded" style={{ backgroundColor: 'var(--color-bg-surface)', color: 'var(--color-text-main)' }}>
+                <span className="text-text-muted">UUID:</span>
+                <code className="text-xs px-2 py-1 rounded bg-background-surface text-text-primary font-mono">
                   {server.uuid.slice(0, 8)}...
                 </code>
               </div>
               <div className="flex justify-between items-center text-sm">
-                <span style={{ color: 'var(--color-text-muted)' }}>
+                <span className="text-text-muted">
                   {t('dashboard.server.info.gameType') || 'Game Type'}:
                 </span>
-                <span style={{ color: 'var(--color-text-main)' }}>{server.gameType}</span>
+                <span className="text-text-primary">{server.gameType}</span>
               </div>
               <div className="flex justify-between items-center text-sm">
-                <span style={{ color: 'var(--color-text-muted)' }}>
+                <span className="text-text-muted">
                   {t('dashboard.server.info.node') || 'Node'}:
                 </span>
-                <span style={{ color: 'var(--color-text-main)' }}>
+                <span className="text-text-primary">
                   {(server.node as any)?.name || server.nodeId}
                 </span>
               </div>
@@ -419,17 +355,17 @@ export default function ServerDetailPage() {
           </Card>
 
           {/* Resources */}
-          <Card className="border-[var(--color-border)] bg-[var(--color-bg-card)]">
+          <Card>
             <CardHeader>
-              <CardTitle style={{ color: 'var(--color-text-main)' }}>
+              <CardTitle>
                 {t('dashboard.server.resources.title') || 'Resources'}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
                 <div className="flex justify-between text-sm mb-2">
-                  <span style={{ color: 'var(--color-text-muted)' }}>CPU:</span>
-                  <span style={{ color: 'var(--color-text-main)' }}>
+                  <span className="text-text-muted">CPU:</span>
+                  <span className="text-text-primary">
                     {server.resources?.cpuLimit || 0} {t('dashboard.server.resources.cores') || 'cores'}
                   </span>
                 </div>
@@ -444,13 +380,13 @@ export default function ServerDetailPage() {
               </div>
               <div>
                 <div className="flex justify-between text-sm mb-2">
-                  <span style={{ color: 'var(--color-text-muted)' }}>RAM:</span>
-                  <span style={{ color: 'var(--color-text-main)' }}>
+                  <span className="text-text-muted">RAM:</span>
+                  <span className="text-text-primary">
                     {server.resources?.ramLimit || 0} MB
                   </span>
                 </div>
                 {server.metrics?.ramUsagePercent !== undefined && (
-                  <div className="w-full rounded-full overflow-hidden" style={{ backgroundColor: 'var(--color-bg-surface)', height: '8px' }}>
+                  <div className="w-full rounded-full overflow-hidden bg-background-surface h-2">
                     <div
                       className="h-full rounded-full transition-all duration-300 bg-gradient-to-r from-green-500 to-green-400"
                       style={{ width: `${Math.min(server.metrics.ramUsagePercent || 0, 100)}%` }}
@@ -460,13 +396,13 @@ export default function ServerDetailPage() {
               </div>
               <div>
                 <div className="flex justify-between text-sm mb-2">
-                  <span style={{ color: 'var(--color-text-muted)' }}>Disk:</span>
-                  <span style={{ color: 'var(--color-text-main)' }}>
+                  <span className="text-text-muted">Disk:</span>
+                  <span className="text-text-primary">
                     {server.resources?.diskLimit || 0} GB
                   </span>
                 </div>
                 {server.metrics?.diskUsagePercent !== undefined && (
-                  <div className="w-full rounded-full overflow-hidden" style={{ backgroundColor: 'var(--color-bg-surface)', height: '8px' }}>
+                  <div className="w-full rounded-full overflow-hidden bg-background-surface h-2">
                     <div
                       className="h-full rounded-full transition-all duration-300 bg-gradient-to-r from-yellow-500 to-yellow-400"
                       style={{ width: `${Math.min(server.metrics.diskUsagePercent || 0, 100)}%` }}
@@ -478,9 +414,9 @@ export default function ServerDetailPage() {
           </Card>
 
           {/* Network Ports */}
-          <Card className="border-[var(--color-border)] bg-[var(--color-bg-card)]">
+          <Card>
             <CardHeader>
-              <CardTitle style={{ color: 'var(--color-text-main)' }}>
+              <CardTitle>
                 {t('dashboard.server.ports.title') || 'Network Ports'}
               </CardTitle>
             </CardHeader>
@@ -490,10 +426,9 @@ export default function ServerDetailPage() {
                   {server.ports.map((port: any, index: number) => (
                     <div
                       key={index}
-                      className="flex justify-between items-center p-2 rounded-lg text-sm"
-                      style={{ backgroundColor: 'var(--color-bg-surface)' }}
+                      className="flex justify-between items-center p-2 rounded-lg text-sm bg-background-surface"
                     >
-                      <span style={{ color: 'var(--color-text-main)' }}>
+                      <span className="text-text-primary font-mono">
                         {port.type}:{port.port}
                       </span>
                       <Badge
@@ -506,7 +441,7 @@ export default function ServerDetailPage() {
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-center py-4" style={{ color: 'var(--color-text-muted)' }}>
+                <p className="text-sm text-center py-4 text-text-muted">
                   {t('dashboard.server.ports.none') || 'No ports allocated'}
                 </p>
               )}
@@ -515,9 +450,9 @@ export default function ServerDetailPage() {
         </div>
 
         {/* Quick Actions */}
-        <Card className="border-[var(--color-border)] bg-[var(--color-bg-card)]">
+        <Card>
           <CardHeader>
-            <CardTitle style={{ color: 'var(--color-text-main)' }}>
+            <CardTitle>
               {t('dashboard.server.quickActions') || 'Quick Actions'}
             </CardTitle>
           </CardHeader>
@@ -566,7 +501,7 @@ export default function ServerDetailPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-app)' }}>
+      <div className="min-h-screen bg-background-app">
         <Navigation />
         {renderContent()}
         

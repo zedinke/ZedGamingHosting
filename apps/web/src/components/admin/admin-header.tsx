@@ -7,6 +7,7 @@ import { NotificationCenter } from '../notification-center';
 import { useNotificationContext } from '../../context/notification-context';
 import { ThemeToggle } from '../../lib/theme';
 import { LogOut, User } from 'lucide-react';
+import { css } from '../../styled-system/css';
 
 interface AdminHeaderProps {
   title?: string;
@@ -27,22 +28,27 @@ export function AdminHeader({ title, actions }: AdminHeaderProps) {
 
   return (
     <header
-      className="h-16 border-b flex items-center justify-between px-6"
-      style={{
+      className={css({
+        height: '4rem',
+        borderBottomWidth: '1px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingX: '1.5rem',
         backgroundColor: 'var(--color-bg-card)',
         borderColor: 'var(--color-border)',
-      }}
+      })}
     >
-      <div className="flex items-center gap-4">
+      <div className={css({ display: 'flex', alignItems: 'center', gap: '1rem' })}>
         {title && (
-          <h1 className="text-xl font-semibold" style={{ color: 'var(--color-text-main)' }}>
+          <h1 className={css({ fontSize: 'xl', fontWeight: 'semibold', color: 'var(--color-text-main)' })}>
             {title}
           </h1>
         )}
       </div>
 
-      <div className="flex items-center gap-3">
-        {actions && <div className="flex items-center gap-2">{actions}</div>}
+      <div className={css({ display: 'flex', alignItems: 'center', gap: '0.75rem' })}>
+        {actions && <div className={css({ display: 'flex', alignItems: 'center', gap: '0.5rem' })}>{actions}</div>}
 
         <NotificationCenter
           notifications={notifications.notifications}
@@ -55,26 +61,37 @@ export function AdminHeader({ title, actions }: AdminHeaderProps) {
         <ThemeToggle />
 
         <div
-          className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer hover:bg-[var(--color-bg-hover)] transition-colors"
+          className={css({
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            paddingX: '0.75rem',
+            paddingY: '0.5rem',
+            borderRadius: '0.5rem',
+            cursor: 'pointer',
+            _hover: {
+              backgroundColor: 'var(--color-bg-hover)',
+            },
+            transition: 'colors 200ms',
+          })}
           onClick={() => router.push(`/${locale}/profile`)}
         >
-          <User className="h-4 w-4" style={{ color: 'var(--color-text-muted)' }} />
-          <div className="text-right">
-            <p className="text-sm font-medium" style={{ color: 'var(--color-text-main)' }}>
+          <User className={css({ height: '1rem', width: '1rem', color: 'var(--color-text-muted)' })} />
+          <div className={css({ textAlign: 'right' })}>
+            <p className={css({ fontSize: 'sm', fontWeight: 'medium', color: 'var(--color-text-main)' })}>
               {user?.email}
             </p>
-            <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+            <p className={css({ fontSize: 'xs', color: 'var(--color-text-muted)' })}>
               {user?.role}
             </p>
           </div>
         </div>
 
         <Button variant="outline" size="sm" onClick={handleLogout}>
-          <LogOut className="h-4 w-4 mr-2" />
+          <LogOut className={css({ height: '1rem', width: '1rem', marginRight: '0.5rem', display: 'inline' })} />
           Kijelentkezés
         </Button>
       </div>
     </header>
   );
 }
-

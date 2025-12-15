@@ -36,10 +36,10 @@ const Toast: React.FC<ToastProps> = ({
   }, [duration, onClose]);
 
   const variantStyles = {
-    success: 'bg-success-500 border-success-600',
-    error: 'bg-error-500 border-error-600',
-    warning: 'bg-warning-500 border-warning-600',
-    info: 'bg-primary-500 border-primary-600',
+    success: 'bg-success-500/10 border-success-600/40',
+    error: 'bg-error-500/10 border-error-600/40',
+    warning: 'bg-warning-500/10 border-warning-600/40',
+    info: 'bg-primary-500/10 border-primary-600/40',
   };
 
   const iconColors = {
@@ -58,7 +58,7 @@ const Toast: React.FC<ToastProps> = ({
           exit={{ x: 400, opacity: 0 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
           className={cn(
-            'min-w-[320px] max-w-md rounded-lg border p-4 shadow-elevation-4',
+            'min-w-[320px] max-w-md rounded-lg border p-4 shadow-lg',
             'bg-background-elevated border-border',
             variantStyles[variant]
           )}
@@ -88,7 +88,7 @@ const Toast: React.FC<ToastProps> = ({
                   setIsVisible(false);
                   setTimeout(() => onClose(), 300);
                 }}
-                className="flex-shrink-0 text-text-tertiary hover:text-text-primary transition-colors"
+                className="flex-shrink-0 text-text-muted hover:text-text-primary transition-colors"
                 aria-label="Close"
               >
                 <X className="h-4 w-4" />

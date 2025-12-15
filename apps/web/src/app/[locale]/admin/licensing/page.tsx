@@ -8,6 +8,7 @@ import { AdminLayout } from '../../../../components/admin/admin-layout';
 import { Card, Badge } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../lib/api-client';
 import { useQuery } from '@tanstack/react-query';
+import { css } from '../../../../styled-system/css';
 
 interface LicenseInfo {
   status: string;
@@ -57,8 +58,8 @@ export default function AdminLicensingPage() {
 
   if (!isHydrated) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg-surface)' }}>
-        <p style={{ color: 'var(--color-text-muted)' }}>Betöltés...</p>
+      <div className={css({ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-bg-surface)' })}>
+        <p className={css({ color: 'var(--color-text-muted)' })}>Betöltés...</p>
       </div>
     );
   }
@@ -66,8 +67,8 @@ export default function AdminLicensingPage() {
   const userRole = currentUser?.role?.toUpperCase();
   if (!isAuthenticated || (userRole !== 'ADMIN' && userRole !== 'SUPER_ADMIN' && userRole !== 'SUPERADMIN' && userRole !== 'RESELLER_ADMIN')) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg-surface)' }}>
-        <p style={{ color: 'var(--color-text-muted)' }}>Átirányítás...</p>
+      <div className={css({ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-bg-surface)' })}>
+        <p className={css({ color: 'var(--color-text-muted)' })}>Átirányítás...</p>
       </div>
     );
   }
@@ -88,55 +89,55 @@ export default function AdminLicensingPage() {
   };
 
   return (
-    <div className="light">
+    <div>
       <AdminLayout title="Licencelés">
         <div>
-          <div className="mb-6">
-            <p style={{ color: 'var(--color-text-muted)' }}>
+          <div className={css({ marginBottom: '1.5rem' })}>
+            <p className={css({ color: 'var(--color-text-muted)' })}>
               Licenc kezelés és validáció
             </p>
           </div>
 
           {isLoading ? (
-            <div className="text-center py-12">
-              <p style={{ color: 'var(--color-text-muted)' }}>Betöltés...</p>
+            <div className={css({ textAlign: 'center', paddingY: '3rem' })}>
+              <p className={css({ color: 'var(--color-text-muted)' })}>Betöltés...</p>
             </div>
           ) : !licenseInfo ? (
-            <Card className="p-12 text-center">
-              <p style={{ color: 'var(--color-text-muted)' }}>
+            <Card className={css({ padding: '3rem', textAlign: 'center' })}>
+              <p className={css({ color: 'var(--color-text-muted)' })}>
                 Licenc információ nem elérhető
               </p>
             </Card>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card className="p-6">
-                <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--color-text-main)' }}>
+            <div className={css({ display: 'grid', gridTemplateColumns: { base: '1fr', md: 'repeat(2, 1fr)' }, gap: '1.5rem' })}>
+              <Card className={css({ padding: '1.5rem' })}>
+                <h3 className={css({ fontSize: 'lg', fontWeight: 'semibold', marginBottom: '1rem', color: 'var(--color-text-main)' })}>
                   Licenc Státusz
                 </h3>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span style={{ color: 'var(--color-text-muted)' }}>Állapot:</span>
+                <div className={css({ display: 'flex', flexDirection: 'column', gap: '1rem' })}>
+                  <div className={css({ display: 'flex', alignItems: 'center', justifyContent: 'space-between' })}>
+                    <span className={css({ color: 'var(--color-text-muted)' })}>Állapot:</span>
                     <Badge variant={getStatusVariant(licenseInfo.status)}>
                       {licenseInfo.status}
                     </Badge>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span style={{ color: 'var(--color-text-muted)' }}>Licenc Státusz:</span>
+                  <div className={css({ display: 'flex', alignItems: 'center', justifyContent: 'space-between' })}>
+                    <span className={css({ color: 'var(--color-text-muted)' })}>Licenc Státusz:</span>
                     <Badge variant={getStatusVariant(licenseInfo.licenseStatus)}>
                       {licenseInfo.licenseStatus}
                     </Badge>
                   </div>
                   {licenseInfo.validUntil && (
-                    <div className="flex items-center justify-between">
-                      <span style={{ color: 'var(--color-text-muted)' }}>Érvényes:</span>
-                      <span style={{ color: 'var(--color-text-main)' }}>
+                    <div className={css({ display: 'flex', alignItems: 'center', justifyContent: 'space-between' })}>
+                      <span className={css({ color: 'var(--color-text-muted)' })}>Érvényes:</span>
+                      <span className={css({ color: 'var(--color-text-main)' })}>
                         {new Date(licenseInfo.validUntil).toLocaleDateString('hu-HU')}
                       </span>
                     </div>
                   )}
                   {licenseInfo.daysUntilExpiry !== undefined && (
-                    <div className="flex items-center justify-between">
-                      <span style={{ color: 'var(--color-text-muted)' }}>Napok lejáratig:</span>
+                    <div className={css({ display: 'flex', alignItems: 'center', justifyContent: 'space-between' })}>
+                      <span className={css({ color: 'var(--color-text-muted)' })}>Napok lejáratig:</span>
                       <Badge 
                         variant={licenseInfo.daysUntilExpiry < 30 ? 'danger' : licenseInfo.daysUntilExpiry < 90 ? 'warning' : 'success'}
                       >
@@ -147,19 +148,19 @@ export default function AdminLicensingPage() {
                 </div>
               </Card>
 
-              <Card className="p-6">
-                <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--color-text-main)' }}>
+              <Card className={css({ padding: '1.5rem' })}>
+                <h3 className={css({ fontSize: 'lg', fontWeight: 'semibold', marginBottom: '1rem', color: 'var(--color-text-main)' })}>
                   Licenc Korlátok
                 </h3>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span style={{ color: 'var(--color-text-muted)' }}>Max. Node-ok:</span>
-                    <span className="text-2xl font-bold" style={{ color: 'var(--color-text-main)' }}>
+                <div className={css({ display: 'flex', flexDirection: 'column', gap: '1rem' })}>
+                  <div className={css({ display: 'flex', alignItems: 'center', justifyContent: 'space-between' })}>
+                    <span className={css({ color: 'var(--color-text-muted)' })}>Max. Node-ok:</span>
+                    <span className={css({ fontSize: '2xl', fontWeight: 'bold', color: 'var(--color-text-main)' })}>
                       {licenseInfo.maxNodesAllowed}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span style={{ color: 'var(--color-text-muted)' }}>White-label:</span>
+                  <div className={css({ display: 'flex', alignItems: 'center', justifyContent: 'space-between' })}>
+                    <span className={css({ color: 'var(--color-text-muted)' })}>White-label:</span>
                     <Badge variant={licenseInfo.whitelabelEnabled ? 'success' : 'default'}>
                       {licenseInfo.whitelabelEnabled ? 'Engedélyezve' : 'Letiltva'}
                     </Badge>

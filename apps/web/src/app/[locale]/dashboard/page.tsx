@@ -198,51 +198,46 @@ export default function DashboardPage() {
       </SkipLink>
       <Navigation />
       <ToastContainer />
-      <main id="main-content" className="min-h-screen" style={{ 
-        backgroundColor: '#0a0a0a', 
-        background: 'radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.05) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%), #0a0a0a',
-        color: '#f8fafc',
-        minHeight: '100vh'
-      }}>
+      <main id="main-content" className="min-h-screen bg-mesh text-text-primary">
         <div className="container mx-auto px-4 py-8">
           <header className="mb-8">
-            <h1 className="text-3xl font-bold mb-2" style={{ color: '#f8fafc' }}>{t('dashboard.title')}</h1>
-            <p style={{ color: '#cbd5e1' }}>
+            <h1 className="text-3xl font-bold mb-2 text-text-primary">{t('dashboard.title')}</h1>
+            <p className="text-text-secondary">
               {t('dashboard.servers.title')}
             </p>
           </header>
 
           {/* Metrics Cards - Modern Design */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <Card className="glass elevation-2 p-6">
-              <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>
+            <Card className="p-6">
+              <h3 className="text-sm mb-2 text-text-secondary">
                 {t('dashboard.metrics.totalServers')}
               </h3>
-              <p className="text-3xl font-bold" style={{ color: '#f8fafc' }}>
+              <p className="text-3xl font-bold text-text-primary">
                 {servers?.length || 0}
               </p>
             </Card>
-            <Card className="glass elevation-2 p-6">
-              <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>
+            <Card className="p-6">
+              <h3 className="text-sm mb-2 text-text-secondary">
                 {t('dashboard.metrics.activeServers')}
               </h3>
-              <p className="text-3xl font-bold" style={{ color: '#10b981' }}>
+              <p className="text-3xl font-bold text-success-500">
                 {servers?.filter((s) => s.status === 'RUNNING').length || 0}
               </p>
             </Card>
-                <Card className="glass elevation-2 p-6">
-                  <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>
+                <Card className="p-6">
+                  <h3 className="text-sm mb-2 text-text-secondary">
                     {t('dashboard.metrics.totalPlayers')}
                   </h3>
-                  <p className="text-3xl font-bold" style={{ color: '#f8fafc' }}>
+                  <p className="text-3xl font-bold text-text-primary">
                     {servers?.reduce((sum, s) => sum + (s.metrics?.players || 0), 0) || 0}
                   </p>
                 </Card>
-                <Card className="glass elevation-2 p-6">
-                  <h3 className="text-sm mb-2" style={{ color: '#cbd5e1' }}>
+                <Card className="p-6">
+                  <h3 className="text-sm mb-2 text-text-secondary">
                     {t('dashboard.metrics.uptime')}
                   </h3>
-                  <p className="text-3xl font-bold" style={{ color: '#f8fafc' }}>
+                  <p className="text-3xl font-bold text-text-primary">
                     {servers && servers.length > 0
                       ? ((servers.filter((s) => s.status === 'RUNNING').length / servers.length) * 100).toFixed(1)
                       : '0'}%
@@ -254,7 +249,7 @@ export default function DashboardPage() {
           <section>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
               <div className="flex-1">
-                <h2 className="text-2xl font-semibold mb-4" style={{ color: '#f8fafc' }}>
+                <h2 className="text-2xl font-semibold mb-4 text-text-primary">
                   {t('dashboard.servers.title')}
                 </h2>
                 <input

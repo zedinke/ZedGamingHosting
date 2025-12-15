@@ -9,6 +9,7 @@ import { Card, Button, Input, Badge } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../lib/api-client';
 import { useQuery } from '@tanstack/react-query';
 import { Plus, Search } from 'lucide-react';
+import { css } from '../../../../styled-system/css';
 
 interface Node {
   id: string;
@@ -72,8 +73,8 @@ export default function AdminNodesPage() {
 
   if (!isHydrated) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg-surface)' }}>
-        <p style={{ color: 'var(--color-text-muted)' }}>Betöltés...</p>
+      <div className={css({ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-bg-surface)' })}>
+        <p className={css({ color: 'var(--color-text-muted)' })}>Betöltés...</p>
       </div>
     );
   }
@@ -81,8 +82,8 @@ export default function AdminNodesPage() {
   const userRole = currentUser?.role?.toUpperCase();
   if (!isAuthenticated || (userRole !== 'ADMIN' && userRole !== 'SUPER_ADMIN' && userRole !== 'SUPERADMIN' && userRole !== 'RESELLER_ADMIN')) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg-surface)' }}>
-        <p style={{ color: 'var(--color-text-muted)' }}>Átirányítás...</p>
+      <div className={css({ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-bg-surface)' })}>
+        <p className={css({ color: 'var(--color-text-muted)' })}>Átirányítás...</p>
       </div>
     );
   }
@@ -102,41 +103,36 @@ export default function AdminNodesPage() {
 
   const actions = (
     <Button variant="primary" onClick={() => router.push(`/${locale}/admin/nodes/create`)}>
-      <Plus className="h-4 w-4 mr-2" />
+      <Plus className={css({ height: '1rem', width: '1rem', marginRight: '0.5rem', display: 'inline' })} />
       Új node
     </Button>
   );
 
   return (
-    <div className="light">
+    <div>
       <AdminLayout title="Node-ok" actions={actions}>
         <div>
-          <div className="mb-6">
-            <p style={{ color: 'var(--color-text-muted)' }}>
+          <div className={css({ marginBottom: '1.5rem' })}>
+            <p className={css({ color: 'var(--color-text-muted)' })}>
               Szerver node-ok kezelése és monitorozása
             </p>
           </div>
 
-          <div className="flex gap-4 mb-6">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" style={{ color: 'var(--color-text-muted)' }} />
+          <div className={css({ display: 'flex', gap: '1rem', marginBottom: '1.5rem' })}>
+            <div className={css({ flex: 1, position: 'relative' })}>
+              <Search className={css({ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', height: '1rem', width: '1rem', color: 'var(--color-text-muted)' })} />
               <Input
                 type="text"
                 placeholder="Keresés név, IP vagy FQDN alapján..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className={css({ paddingLeft: '2.5rem' })}
               />
             </div>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 rounded-lg border text-sm"
-              style={{
-                backgroundColor: 'var(--color-bg-card)',
-                borderColor: 'var(--color-border)',
-                color: 'var(--color-text-main)',
-              }}
+              className={css({ paddingX: '1rem', paddingY: '0.5rem', borderRadius: '0.5rem', borderWidth: '1px', fontSize: 'sm', backgroundColor: 'var(--color-bg-card)', borderColor: 'var(--color-border)', color: 'var(--color-text-main)' })}
             >
               <option value="all">Minden státusz</option>
               <option value="ONLINE">ONLINE</option>
@@ -147,25 +143,25 @@ export default function AdminNodesPage() {
           </div>
 
           {isLoading ? (
-            <div className="text-center py-12">
-              <p style={{ color: 'var(--color-text-muted)' }}>Betöltés...</p>
+            <div className={css({ textAlign: 'center', paddingY: '3rem' })}>
+              <p className={css({ color: 'var(--color-text-muted)' })}>Betöltés...</p>
             </div>
           ) : !filteredNodes || filteredNodes.length === 0 ? (
-            <Card className="p-12 text-center">
-              <p style={{ color: 'var(--color-text-muted)' }}>
+            <Card className={css({ padding: '3rem', textAlign: 'center' })}>
+              <p className={css({ color: 'var(--color-text-muted)' })}>
                 {searchQuery || statusFilter !== 'all' ? 'Nincs találat' : 'Nincs node'}
               </p>
             </Card>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className={css({ display: 'grid', gridTemplateColumns: { base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }, gap: '1.5rem' })}>
               {filteredNodes.map((node) => (
-                <Card key={node.id} className="p-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold mb-1" style={{ color: 'var(--color-text-main)' }}>
+                <Card key={node.id} className={css({ padding: '1.5rem' })}>
+                  <div className={css({ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '1rem' })}>
+                    <div className={css({ flex: 1 })}>
+                      <h3 className={css({ fontSize: 'lg', fontWeight: 'semibold', marginBottom: '0.25rem', color: 'var(--color-text-main)' })}>
                         {node.name}
                       </h3>
-                      <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                      <p className={css({ fontSize: 'sm', color: 'var(--color-text-muted)' })}>
                         {node.publicFqdn || node.ipAddress}
                       </p>
                     </div>
@@ -174,26 +170,26 @@ export default function AdminNodesPage() {
                     </Badge>
                   </div>
                   
-                  <div className="space-y-2 text-sm mb-4">
-                    <div className="flex justify-between">
-                      <span style={{ color: 'var(--color-text-muted)' }}>CPU:</span>
-                      <span style={{ color: 'var(--color-text-main)' }}>{node.totalCpu} mag</span>
+                  <div className={css({ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: 'sm', marginBottom: '1rem' })}>
+                    <div className={css({ display: 'flex', justifyContent: 'space-between' })}>
+                      <span className={css({ color: 'var(--color-text-muted)' })}>CPU:</span>
+                      <span className={css({ color: 'var(--color-text-main)' })}>{node.totalCpu} mag</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span style={{ color: 'var(--color-text-muted)' }}>RAM:</span>
-                      <span style={{ color: 'var(--color-text-main)' }}>{(node.totalRam / 1024).toFixed(1)} GB</span>
+                    <div className={css({ display: 'flex', justifyContent: 'space-between' })}>
+                      <span className={css({ color: 'var(--color-text-muted)' })}>RAM:</span>
+                      <span className={css({ color: 'var(--color-text-main)' })}>{(node.totalRam / 1024).toFixed(1)} GB</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span style={{ color: 'var(--color-text-muted)' }}>Lemez:</span>
-                      <span style={{ color: 'var(--color-text-main)' }}>{node.diskType}</span>
+                    <div className={css({ display: 'flex', justifyContent: 'space-between' })}>
+                      <span className={css({ color: 'var(--color-text-muted)' })}>Lemez:</span>
+                      <span className={css({ color: 'var(--color-text-main)' })}>{node.diskType}</span>
                     </div>
                   </div>
 
-                  <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
+                  <div className={css({ paddingTop: '1rem', borderTopWidth: '1px', borderColor: 'var(--color-border)' })}>
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      className="w-full"
+                      className={css({ width: '100%' })}
                       onClick={() => router.push(`/${locale}/admin/nodes/${node.id}`)}
                     >
                       Szerkesztés

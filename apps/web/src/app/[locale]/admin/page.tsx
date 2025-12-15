@@ -15,6 +15,7 @@ import {
   Key,
   BarChart3,
 } from 'lucide-react';
+import { css } from '../../../styled-system/css';
 
 export default function AdminPage() {
   const router = useRouter();
@@ -42,8 +43,8 @@ export default function AdminPage() {
 
   if (!isHydrated) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg-surface)' }}>
-        <p style={{ color: 'var(--color-text-muted)' }}>Betöltés...</p>
+      <div className={css({ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-bg-surface)' })}>
+        <p className={css({ color: 'var(--color-text-muted)' })}>Betöltés...</p>
       </div>
     );
   }
@@ -51,8 +52,8 @@ export default function AdminPage() {
   const userRole = user?.role?.toUpperCase();
   if (!isAuthenticated || (userRole !== 'ADMIN' && userRole !== 'SUPER_ADMIN' && userRole !== 'SUPERADMIN' && userRole !== 'RESELLER_ADMIN')) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg-surface)' }}>
-        <p style={{ color: 'var(--color-text-muted)' }}>Átirányítás...</p>
+      <div className={css({ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-bg-surface)' })}>
+        <p className={css({ color: 'var(--color-text-muted)' })}>Átirányítás...</p>
       </div>
     );
   }
@@ -63,91 +64,91 @@ export default function AdminPage() {
       description: 'Felhasználók kezelése és jogosultságok beállítása',
       href: `/${locale}/admin/users`,
       icon: Users,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
+      iconColor: '#2563eb',
+      bgColor: '#eff6ff',
     },
     {
       title: 'Node-ok',
       description: 'Szerver node-ok kezelése és monitorozása',
       href: `/${locale}/admin/nodes`,
       icon: Network,
-      color: 'text-green-600',
-      bgColor: 'bg-green-50',
+      iconColor: '#16a34a',
+      bgColor: '#f0fdf4',
     },
     {
       title: 'Szerverek',
       description: 'Összes szerver áttekintése és kezelése',
       href: `/${locale}/admin/servers`,
       icon: Server,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50',
+      iconColor: '#9333ea',
+      bgColor: '#faf5ff',
     },
     {
       title: 'Statisztikák',
       description: 'Platform statisztikák és jelentések',
       href: `/${locale}/admin/stats`,
       icon: BarChart3,
-      color: 'text-orange-600',
-      bgColor: 'bg-orange-50',
+      iconColor: '#ea580c',
+      bgColor: '#fff7ed',
     },
     {
       title: 'Beállítások',
       description: 'Platform konfiguráció és beállítások',
       href: `/${locale}/admin/settings`,
       icon: Settings,
-      color: 'text-gray-600',
-      bgColor: 'bg-gray-50',
+      iconColor: '#475569',
+      bgColor: '#f8fafc',
     },
     {
       title: 'Licencelés',
       description: 'Licenc kezelés és validáció',
       href: `/${locale}/admin/licensing`,
       icon: Key,
-      color: 'text-indigo-600',
-      bgColor: 'bg-indigo-50',
+      iconColor: '#4f46e5',
+      bgColor: '#eef2ff',
     },
     {
       title: 'Naplók',
       description: 'Rendszernaplók és audit trail',
       href: `/${locale}/admin/logs`,
       icon: FileText,
-      color: 'text-red-600',
-      bgColor: 'bg-red-50',
+      iconColor: '#dc2626',
+      bgColor: '#fef2f2',
     },
   ];
 
   return (
-    <div className="light">
+    <div>
       <AdminLayout title="Admin Panel">
         <div>
-          <header className="mb-8">
-            <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--color-text-main)' }}>
+          <header className={css({ marginBottom: '2rem' })}>
+            <h1 className={css({ fontSize: '3xl', fontWeight: 'bold', marginBottom: '0.5rem', color: 'var(--color-text-main)' })}>
               Admin Panel
             </h1>
-            <p style={{ color: 'var(--color-text-muted)' }}>
+            <p className={css({ color: 'var(--color-text-muted)' })}>
               Rendszerfelügyelet és konfiguráció
             </p>
           </header>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className={css({ display: 'grid', gridTemplateColumns: { base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }, gap: '1.5rem' })}>
             {menuItems.map((item) => {
               const Icon = item.icon;
               return (
                 <Card
                   key={item.href}
                   hoverable
-                  className="p-6 cursor-pointer transition-all"
+                  className={css({ padding: '1.5rem', cursor: 'pointer', transition: 'all 200ms' })}
                   onClick={() => router.push(item.href)}
                 >
-                  <div className="flex items-start gap-4">
-                    <div className={`${item.bgColor} p-3 rounded-lg`}>
-                      <Icon className={`h-6 w-6 ${item.color}`} />
+                  <div className={css({ display: 'flex', alignItems: 'flex-start', gap: '1rem' })}>
+                    <div className={css({ padding: '0.75rem', borderRadius: '0.5rem', backgroundColor: item.bgColor })}>
+                      <Icon className={css({ height: '1.5rem', width: '1.5rem', color: item.iconColor })} />
                     </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold mb-1" style={{ color: 'var(--color-text-main)' }}>
+                    <div className={css({ flex: 1 })}>
+                      <h3 className={css({ fontSize: 'lg', fontWeight: 'semibold', marginBottom: '0.25rem', color: 'var(--color-text-main)' })}>
                         {item.title}
                       </h3>
-                      <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                      <p className={css({ fontSize: 'sm', color: 'var(--color-text-muted)' })}>
                         {item.description}
                       </p>
                     </div>

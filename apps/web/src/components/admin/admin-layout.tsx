@@ -3,6 +3,7 @@
 import { AdminSidebar } from './admin-sidebar';
 import { AdminHeader } from './admin-header';
 import { ReactNode, useEffect } from 'react';
+import { css } from '../../styled-system/css';
 
 interface AdminLayoutProps {
   children: ReactNode;
@@ -24,16 +25,16 @@ export function AdminLayout({ children, title, actions }: AdminLayoutProps) {
   }, []);
 
   return (
-    <div className="min-h-screen light" style={{ backgroundColor: 'var(--color-bg-surface)' }}>
+    <div className={css({ minHeight: '100vh', backgroundColor: 'var(--color-bg-surface)' })}>
       <AdminSidebar />
-      <div className="lg:pl-64">
+      <div className={css({ paddingLeft: { base: 0, lg: '16rem' } })}>
         <AdminHeader title={title} actions={actions} />
         <main
-          className="p-6"
-          style={{
+          className={css({
+            padding: '1.5rem',
             backgroundColor: 'var(--color-bg-surface)',
             minHeight: 'calc(100vh - 4rem)',
-          }}
+          })}
         >
           {children}
         </main>
@@ -41,4 +42,3 @@ export function AdminLayout({ children, title, actions }: AdminLayoutProps) {
     </div>
   );
 }
-

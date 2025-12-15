@@ -30,23 +30,23 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <motion.button
         className={cn(
           'inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-app)]',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:ring-offset-background-app',
           'disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed',
           {
             // Primary - Sky Blue (2025 Modern)
-            'bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-hover)] shadow-md hover:shadow-lg focus-visible:ring-[var(--color-primary)]':
+            'bg-primary-500 text-white hover:bg-primary-600 shadow-md shadow-primary-500/25 hover:shadow-lg focus-visible:ring-primary-500':
               variant === 'primary',
             // Secondary - Subtle Gray
-            'bg-[var(--color-bg-elevated)] text-[var(--color-text-main)] border border-[var(--color-border)] hover:bg-[var(--color-bg-hover)] focus-visible:ring-[var(--color-border-light)]':
+            'bg-background-elevated text-text-primary border border-border hover:bg-background-hover focus-visible:ring-border-light':
               variant === 'secondary',
             // Destructive - Red
-            'bg-[var(--color-danger)] text-white hover:bg-[var(--color-danger-light)] shadow-md hover:shadow-lg focus-visible:ring-[var(--color-danger)]':
+            'bg-error-500 text-white hover:bg-error-600 shadow-md shadow-error-500/25 hover:shadow-lg focus-visible:ring-error-500':
               variant === 'destructive',
             // Outline - Transparent with border
-            'border border-[var(--color-border)] bg-transparent text-[var(--color-text-main)] hover:bg-[var(--color-bg-elevated)] focus-visible:ring-[var(--color-primary)]':
+            'border border-border bg-transparent text-text-primary hover:bg-background-elevated focus-visible:ring-primary-500':
               variant === 'outline',
             // Ghost - No background
-            'text-[var(--color-text-main)] hover:bg-[var(--color-bg-elevated)] focus-visible:ring-[var(--color-border-light)]':
+            'text-text-primary hover:bg-background-elevated focus-visible:ring-border-light':
               variant === 'ghost',
             // Sizes
             'h-8 px-3 text-xs': size === 'sm',

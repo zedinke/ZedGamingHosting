@@ -11,6 +11,8 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE:-zedhosting}
     volumes:
       - mysql_data:/var/lib/mysql
+    ports:
+      - "0.0.0.0:3306:3306"  # Expose MySQL port for external access
     networks:
       - zed-network
     healthcheck:

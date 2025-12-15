@@ -9,7 +9,7 @@ export interface ExportableData {
 /**
  * Export data as CSV
  */
-export function exportToCSV(data: ExportableData[], filename: string = 'export.csv') {
+export function exportToCSV(data: ExportableData[], filename = 'export.csv') {
   if (!data || data.length === 0) {
     return;
   }
@@ -47,7 +47,7 @@ export function exportToCSV(data: ExportableData[], filename: string = 'export.c
 /**
  * Export data as JSON
  */
-export function exportToJSON(data: any, filename: string = 'export.json') {
+export function exportToJSON(data: any, filename = 'export.json') {
   const jsonContent = JSON.stringify(data, null, 2);
   const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
   const link = document.createElement('a');
