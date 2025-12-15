@@ -15,7 +15,6 @@ import {
   Key,
   BarChart3,
 } from 'lucide-react';
-import { css } from '../../../styled-system/css';
 
 export default function AdminPage() {
   const router = useRouter();
@@ -43,8 +42,8 @@ export default function AdminPage() {
 
   if (!isHydrated) {
     return (
-      <div className={css({ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-bg-surface)' })}>
-        <p className={css({ color: 'var(--color-text-muted)' })}>Betöltés...</p>
+      <div className="min-h-screen flex items-center justify-center bg-background-surface">
+        <p className="text-text-muted">Betöltés...</p>
       </div>
     );
   }
@@ -52,8 +51,8 @@ export default function AdminPage() {
   const userRole = user?.role?.toUpperCase();
   if (!isAuthenticated || (userRole !== 'ADMIN' && userRole !== 'SUPER_ADMIN' && userRole !== 'SUPERADMIN' && userRole !== 'RESELLER_ADMIN')) {
     return (
-      <div className={css({ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-bg-surface)' })}>
-        <p className={css({ color: 'var(--color-text-muted)' })}>Átirányítás...</p>
+      <div className="min-h-screen flex items-center justify-center bg-background-surface">
+        <p className="text-text-muted">Átirányítás...</p>
       </div>
     );
   }
@@ -121,34 +120,34 @@ export default function AdminPage() {
     <div>
       <AdminLayout title="Admin Panel">
         <div>
-          <header className={css({ marginBottom: '2rem' })}>
-            <h1 className={css({ fontSize: '3xl', fontWeight: 'bold', marginBottom: '0.5rem', color: 'var(--color-text-main)' })}>
+          <header className="mb-8">
+            <h1 className="text-4xl font-bold mb-2 text-text-primary">
               Admin Panel
             </h1>
-            <p className={css({ color: 'var(--color-text-muted)' })}>
+            <p className="text-text-muted">
               Rendszerfelügyelet és konfiguráció
             </p>
           </header>
 
-          <div className={css({ display: 'grid', gridTemplateColumns: { base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }, gap: '1.5rem' })}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {menuItems.map((item) => {
               const Icon = item.icon;
               return (
                 <Card
                   key={item.href}
                   hoverable
-                  className={css({ padding: '1.5rem', cursor: 'pointer', transition: 'all 200ms' })}
+                  className="p-6 cursor-pointer hover:shadow-lg transition-all duration-200"
                   onClick={() => router.push(item.href)}
                 >
-                  <div className={css({ display: 'flex', alignItems: 'flex-start', gap: '1rem' })}>
-                    <div className={css({ padding: '0.75rem', borderRadius: '0.5rem', backgroundColor: item.bgColor })}>
-                      <Icon className={css({ height: '1.5rem', width: '1.5rem', color: item.iconColor })} />
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 rounded-lg" style={{ backgroundColor: item.bgColor }}>
+                      <Icon className="h-6 w-6" style={{ color: item.iconColor }} />
                     </div>
-                    <div className={css({ flex: 1 })}>
-                      <h3 className={css({ fontSize: 'lg', fontWeight: 'semibold', marginBottom: '0.25rem', color: 'var(--color-text-main)' })}>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold mb-1 text-text-primary">
                         {item.title}
                       </h3>
-                      <p className={css({ fontSize: 'sm', color: 'var(--color-text-muted)' })}>
+                      <p className="text-sm text-text-muted">
                         {item.description}
                       </p>
                     </div>

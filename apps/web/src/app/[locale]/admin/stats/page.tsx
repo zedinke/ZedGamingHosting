@@ -8,7 +8,6 @@ import { Card } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../lib/api-client';
 import { useQuery } from '@tanstack/react-query';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { css } from '../../../../styled-system/css';
 
 export default function AdminStatsPage() {
   const router = useRouter();
@@ -84,8 +83,8 @@ export default function AdminStatsPage() {
 
   if (!isHydrated) {
     return (
-      <div className={css({ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-bg-surface)' })}>
-        <p className={css({ color: 'var(--color-text-muted)' })}>Betöltés...</p>
+      <div className="min-h-screen flex items-center justify-center bg-background-surface">
+        <p className="text-text-muted">Betöltés...</p>
       </div>
     );
   }
@@ -93,8 +92,8 @@ export default function AdminStatsPage() {
   const userRole = currentUser?.role?.toUpperCase();
   if (!isAuthenticated || (userRole !== 'ADMIN' && userRole !== 'SUPER_ADMIN' && userRole !== 'SUPERADMIN' && userRole !== 'RESELLER_ADMIN')) {
     return (
-      <div className={css({ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-bg-surface)' })}>
-        <p className={css({ color: 'var(--color-text-muted)' })}>Átirányítás...</p>
+      <div className="min-h-screen flex items-center justify-center bg-background-surface">
+        <p className="text-text-muted">Átirányítás...</p>
       </div>
     );
   }
@@ -103,50 +102,50 @@ export default function AdminStatsPage() {
     <div>
       <AdminLayout title="Statisztikák">
         <div>
-          <div className={css({ marginBottom: '1.5rem' })}>
-            <p className={css({ color: 'var(--color-text-muted)' })}>
+          <div className="mb-6">
+            <p className="text-text-muted">
               Platform statisztikák és jelentések
             </p>
           </div>
 
           {isLoading ? (
-            <div className={css({ textAlign: 'center', paddingY: '3rem' })}>
-              <p className={css({ color: 'var(--color-text-muted)' })}>Betöltés...</p>
+            <div className="text-center py-12">
+              <p className="text-text-muted">Betöltés...</p>
             </div>
           ) : displayStats ? (
             <>
               {/* Overview Cards */}
-              <div className={css({ display: 'grid', gridTemplateColumns: { base: '1fr', md: 'repeat(4, 1fr)' }, gap: '1rem', marginBottom: '2rem' })}>
-                <Card className={css({ padding: '1.5rem' })}>
-                  <h3 className={css({ fontSize: 'sm', marginBottom: '0.5rem', color: 'var(--color-text-muted)' })}>Összes felhasználó</h3>
-                  <p className={css({ fontSize: '3xl', fontWeight: 'bold', color: 'var(--color-text-main)' })}>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                <Card className="p-6">
+                  <h3 className="text-sm mb-2 text-text-muted">Összes felhasználó</h3>
+                  <p className="text-3xl font-bold text-text-main">
                     {displayStats.totalUsers}
                   </p>
                 </Card>
-                <Card className={css({ padding: '1.5rem' })}>
-                  <h3 className={css({ fontSize: 'sm', marginBottom: '0.5rem', color: 'var(--color-text-muted)' })}>Összes szerver</h3>
-                  <p className={css({ fontSize: '3xl', fontWeight: 'bold', color: 'var(--color-text-main)' })}>
+                <Card className="p-6">
+                  <h3 className="text-sm mb-2 text-text-muted">Összes szerver</h3>
+                  <p className="text-3xl font-bold text-text-main">
                     {displayStats.totalServers}
                   </p>
                 </Card>
-                <Card className={css({ padding: '1.5rem' })}>
-                  <h3 className={css({ fontSize: 'sm', marginBottom: '0.5rem', color: 'var(--color-text-muted)' })}>Aktív szerverek</h3>
-                  <p className={css({ fontSize: '3xl', fontWeight: 'bold', color: 'var(--color-success)' })}>
+                <Card className="p-6">
+                  <h3 className="text-sm mb-2 text-text-muted">Aktív szerverek</h3>
+                  <p className="text-3xl font-bold text-success">
                     {displayStats.activeServers}
                   </p>
                 </Card>
-                <Card className={css({ padding: '1.5rem' })}>
-                  <h3 className={css({ fontSize: 'sm', marginBottom: '0.5rem', color: 'var(--color-text-muted)' })}>Összes bevétel</h3>
-                  <p className={css({ fontSize: '3xl', fontWeight: 'bold', color: 'var(--color-text-main)' })}>
+                <Card className="p-6">
+                  <h3 className="text-sm mb-2 text-text-muted">Összes bevétel</h3>
+                  <p className="text-3xl font-bold text-text-main">
                     {displayStats.totalRevenue?.toFixed(2) || '0.00'} €
                   </p>
                 </Card>
               </div>
 
               {/* Charts */}
-              <div className={css({ display: 'grid', gridTemplateColumns: { base: '1fr', lg: 'repeat(2, 1fr)' }, gap: '1.5rem', marginBottom: '2rem' })}>
-                <Card className={css({ padding: '1.5rem' })}>
-                  <h2 className={css({ fontSize: 'xl', fontWeight: 'semibold', marginBottom: '1rem', color: 'var(--color-text-main)' })}>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <Card className="p-6">
+                  <h2 className="text-xl font-semibold mb-4 text-text-main">
                     Havi bevétel
                   </h2>
                   <ResponsiveContainer width="100%" height={300}>
@@ -167,8 +166,8 @@ export default function AdminStatsPage() {
                   </ResponsiveContainer>
                 </Card>
 
-                <Card className={css({ padding: '1.5rem' })}>
-                  <h2 className={css({ fontSize: 'xl', fontWeight: 'semibold', marginBottom: '1rem', color: 'var(--color-text-main)' })}>
+                <Card className="p-6">
+                  <h2 className="text-xl font-semibold mb-4 text-text-main">
                     Szerver eloszlás játék típus szerint
                   </h2>
                   <ResponsiveContainer width="100%" height={300}>
@@ -191,8 +190,8 @@ export default function AdminStatsPage() {
               </div>
             </>
           ) : (
-            <Card className={css({ padding: '3rem', textAlign: 'center' })}>
-              <p className={css({ color: 'var(--color-text-muted)' })}>Statisztikák nem elérhetőek</p>
+            <Card className="p-12 text-center">
+              <p className="text-text-muted">Statisztikák nem elérhetőek</p>
             </Card>
           )}
         </div>

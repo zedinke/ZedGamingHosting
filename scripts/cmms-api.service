@@ -1,0 +1,43 @@
+[Unit]
+Description=CMMS REST API Backend
+Documentation=https://github.com/zedhosting/cmms-backend
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=cmms
+Group=cmms
+WorkingDirectory=/opt/cmms-backend
+Environment="PATH=/opt/cmms-backend/venv/bin"
+Environment="PYTHONPATH=/opt/cmms-backend"
+EnvironmentFile=/opt/cmms-backend/.env
+
+# FastAPI server indítása
+ExecStart=/opt/cmms-backend/venv/bin/python -m uvicorn api.server:app --host 0.0.0.0 --port 8000
+
+# Restart policy
+Restart=always
+RestartSec=10
+StartLimitInterval=200
+StartLimitBurst=5
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=cmms-api
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/cmms-backend
+
+# Resource limits (opcionális, testreszabható)
+# LimitNOFILE=65536
+# LimitNPROC=4096
+
+[Install]
+WantedBy=multi-user.target
+

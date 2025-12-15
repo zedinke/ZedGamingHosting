@@ -9,7 +9,6 @@ import { AdminLayout } from '../../../../components/admin/admin-layout';
 import { Card, Button, Input } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../lib/api-client';
 import { useNotificationContext } from '../../../../context/notification-context';
-import { css } from '../../../../styled-system/css';
 
 export default function AdminSettingsPage() {
   const router = useRouter();
@@ -112,8 +111,8 @@ export default function AdminSettingsPage() {
 
   if (!isHydrated || isLoadingSettings) {
     return (
-      <div className={css({ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-bg-surface)' })}>
-        <p className={css({ color: 'var(--color-text-muted)' })}>Betöltés...</p>
+      <div className="min-h-screen flex items-center justify-center bg-background-surface">
+        <p className="text-text-muted">Betöltés...</p>
       </div>
     );
   }
@@ -121,8 +120,8 @@ export default function AdminSettingsPage() {
   const userRole = currentUser?.role?.toUpperCase();
   if (!isAuthenticated || (userRole !== 'ADMIN' && userRole !== 'SUPER_ADMIN' && userRole !== 'SUPERADMIN' && userRole !== 'RESELLER_ADMIN')) {
     return (
-      <div className={css({ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-bg-surface)' })}>
-        <p className={css({ color: 'var(--color-text-muted)' })}>Átirányítás...</p>
+      <div className="min-h-screen flex items-center justify-center bg-background-surface">
+        <p className="text-text-muted">Átirányítás...</p>
       </div>
     );
   }
@@ -132,18 +131,18 @@ export default function AdminSettingsPage() {
       <AdminLayout title="Rendszerbeállítások">
         <div>
           <form onSubmit={handleSubmit}>
-            <div className={css({ display: 'flex', flexDirection: 'column', gap: '1.5rem' })}>
-              <Card className={css({ padding: '1.5rem' })}>
-                <h2 className={css({ fontSize: 'xl', fontWeight: 'semibold', marginBottom: '1rem', color: 'var(--color-text-main)' })}>
+            <div className="flex flex-col gap-6">
+              <Card className="p-6">
+                <h2 className="text-xl font-semibold mb-4 text-text-main">
                   Általános Beállítások
                 </h2>
-                <div className={css({ display: 'flex', flexDirection: 'column', gap: '1rem' })}>
-                  <div className={css({ display: 'flex', alignItems: 'center', justifyContent: 'space-between' })}>
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center justify-between">
                     <div>
-                      <label className={css({ fontSize: 'sm', fontWeight: 'medium', color: 'var(--color-text-main)' })}>
+                      <label className="text-sm font-medium text-text-main">
                         Karbantartási mód
                       </label>
-                      <p className={css({ fontSize: 'xs', color: 'var(--color-text-muted)' })}>
+                      <p className="text-xs text-text-muted">
                         A karbantartási módban csak adminok férhetnek hozzá a rendszerhez
                       </p>
                     </div>
@@ -151,16 +150,16 @@ export default function AdminSettingsPage() {
                       type="checkbox"
                       checked={settings.maintenanceMode}
                       onChange={(e) => setSettings({ ...settings, maintenanceMode: e.target.checked })}
-                      className={css({ width: '1.25rem', height: '1.25rem', borderRadius: '0.25rem', borderWidth: '2px', borderColor: 'var(--color-border)', backgroundColor: 'var(--color-bg-card)' })}
+                      className="w-5 h-5 rounded border-2 border-border bg-background-card"
                     />
                   </div>
 
-                  <div className={css({ display: 'flex', alignItems: 'center', justifyContent: 'space-between' })}>
+                  <div className="flex items-center justify-between">
                     <div>
-                      <label className={css({ fontSize: 'sm', fontWeight: 'medium', color: 'var(--color-text-main)' })}>
+                      <label className="text-sm font-medium text-text-main">
                         Új regisztrációk engedélyezése
                       </label>
-                      <p className={css({ fontSize: 'xs', color: 'var(--color-text-muted)' })}>
+                      <p className="text-xs text-text-muted">
                         Engedélyezi az új felhasználók regisztrációját
                       </p>
                     </div>
@@ -168,18 +167,18 @@ export default function AdminSettingsPage() {
                       type="checkbox"
                       checked={settings.allowNewRegistrations}
                       onChange={(e) => setSettings({ ...settings, allowNewRegistrations: e.target.checked })}
-                      className={css({ width: '1.25rem', height: '1.25rem', borderRadius: '0.25rem', borderWidth: '2px', borderColor: 'var(--color-border)', backgroundColor: 'var(--color-bg-card)' })}
+                      className="w-5 h-5 rounded border-2 border-border bg-background-card"
                     />
                   </div>
 
                   <div>
-                    <label className={css({ display: 'block', fontSize: 'sm', fontWeight: 'medium', marginBottom: '0.5rem', color: 'var(--color-text-main)' })}>
+                    <label className="block text-sm font-medium mb-2 text-text-main">
                       Alapértelmezett felhasználói szerepkör
                     </label>
                     <select
                       value={settings.defaultUserRole}
                       onChange={(e) => setSettings({ ...settings, defaultUserRole: e.target.value })}
-                      className={css({ width: '100%', paddingX: '1rem', paddingY: '0.5rem', borderRadius: '0.5rem', borderWidth: '1px', fontSize: 'sm', backgroundColor: 'var(--color-bg-card)', borderColor: 'var(--color-border)', color: 'var(--color-text-main)' })}
+                      className="w-full px-4 py-2 rounded-lg border border-border text-sm bg-background-card text-text-main"
                     >
                       <option value="USER">USER</option>
                       <option value="SUPPORT">SUPPORT</option>
@@ -189,13 +188,13 @@ export default function AdminSettingsPage() {
                 </div>
               </Card>
 
-              <Card className={css({ padding: '1.5rem' })}>
-                <h2 className={css({ fontSize: 'xl', fontWeight: 'semibold', marginBottom: '1rem', color: 'var(--color-text-main)' })}>
+              <Card className="p-6">
+                <h2 className="text-xl font-semibold mb-4 text-text-main">
                   Felhasználói Korlátok
                 </h2>
-                <div className={css({ display: 'flex', flexDirection: 'column', gap: '1rem' })}>
+                <div className="flex flex-col gap-4">
                   <div>
-                    <label className={css({ display: 'block', fontSize: 'sm', fontWeight: 'medium', marginBottom: '0.5rem', color: 'var(--color-text-main)' })}>
+                    <label className="block text-sm font-medium mb-2 text-text-main">
                       Max. szerverek felhasználónként
                     </label>
                     <Input
@@ -208,7 +207,7 @@ export default function AdminSettingsPage() {
                   </div>
 
                   <div>
-                    <label className={css({ display: 'block', fontSize: 'sm', fontWeight: 'medium', marginBottom: '0.5rem', color: 'var(--color-text-main)' })}>
+                    <label className="block text-sm font-medium mb-2 text-text-main">
                       Max. RAM felhasználónként (MB)
                     </label>
                     <Input
@@ -221,7 +220,7 @@ export default function AdminSettingsPage() {
                   </div>
 
                   <div>
-                    <label className={css({ display: 'block', fontSize: 'sm', fontWeight: 'medium', marginBottom: '0.5rem', color: 'var(--color-text-main)' })}>
+                    <label className="block text-sm font-medium mb-2 text-text-main">
                       Max. Lemez felhasználónként (GB)
                     </label>
                     <Input
@@ -236,23 +235,23 @@ export default function AdminSettingsPage() {
               </Card>
 
               {error && (
-                <div className={css({ padding: '1rem', borderRadius: '0.5rem', borderWidth: '1px', backgroundColor: 'rgba(239, 68, 68, 0.1)', borderColor: 'var(--color-danger)', color: 'var(--color-danger)' })}>
+                <div className="p-4 rounded-lg border border-danger bg-danger/10 text-danger">
                   {error}
                 </div>
               )}
 
               {success && (
-                <div className={css({ padding: '1rem', borderRadius: '0.5rem', borderWidth: '1px', backgroundColor: 'rgba(16, 185, 129, 0.1)', borderColor: 'var(--color-success)', color: 'var(--color-success)' })}>
+                <div className="p-4 rounded-lg border border-success bg-success/10 text-success">
                   Beállítások sikeresen mentve!
                 </div>
               )}
 
-              <div className={css({ display: 'flex', gap: '1rem' })}>
+              <div className="flex gap-4">
                 <Button
                   type="submit"
                   variant="primary"
                   disabled={loading}
-                  className={css({ flex: 1 })}
+                  className="flex-1"
                 >
                   {loading ? 'Mentés...' : 'Beállítások Mentése'}
                 </Button>
