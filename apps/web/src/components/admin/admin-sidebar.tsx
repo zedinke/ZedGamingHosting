@@ -26,7 +26,12 @@ export function AdminSidebar() {
   const pathname = usePathname();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  const locale = pathname.split('/')[1] || 'hu';
+  // Extract locale from pathname, defaulting to 'hu'
+  const parts = pathname.split('/').filter(Boolean);
+  let locale = 'hu';
+  if (parts.length > 0 && parts[0] !== 'admin') {
+    locale = parts[0];
+  }
 
   const navItems: NavItem[] = [
     {
