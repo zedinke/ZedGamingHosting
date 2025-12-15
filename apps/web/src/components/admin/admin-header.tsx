@@ -7,7 +7,6 @@ import { NotificationCenter } from '../notification-center';
 import { useNotificationContext } from '../../context/notification-context';
 import { ThemeToggle } from '../../lib/theme';
 import { LogOut, User } from 'lucide-react';
-import { css } from '../../styled-system/css';
 
 interface AdminHeaderProps {
   title?: string;
@@ -27,28 +26,17 @@ export function AdminHeader({ title, actions }: AdminHeaderProps) {
   };
 
   return (
-    <header
-      className={css({
-        height: '4rem',
-        borderBottomWidth: '1px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingX: '1.5rem',
-        backgroundColor: 'var(--color-bg-card)',
-        borderColor: 'var(--color-border)',
-      })}
-    >
-      <div className={css({ display: 'flex', alignItems: 'center', gap: '1rem' })}>
+    <header className="h-16 border-b border-border flex items-center justify-between px-6 bg-background-card">
+      <div className="flex items-center gap-4">
         {title && (
-          <h1 className={css({ fontSize: 'xl', fontWeight: 'semibold', color: 'var(--color-text-main)' })}>
+          <h1 className="text-xl font-semibold text-text-primary">
             {title}
           </h1>
         )}
       </div>
 
-      <div className={css({ display: 'flex', alignItems: 'center', gap: '0.75rem' })}>
-        {actions && <div className={css({ display: 'flex', alignItems: 'center', gap: '0.5rem' })}>{actions}</div>}
+      <div className="flex items-center gap-3">
+        {actions && <div className="flex items-center gap-2">{actions}</div>}
 
         <NotificationCenter
           notifications={notifications.notifications}
@@ -61,34 +49,22 @@ export function AdminHeader({ title, actions }: AdminHeaderProps) {
         <ThemeToggle />
 
         <div
-          className={css({
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            paddingX: '0.75rem',
-            paddingY: '0.5rem',
-            borderRadius: '0.5rem',
-            cursor: 'pointer',
-            _hover: {
-              backgroundColor: 'var(--color-bg-hover)',
-            },
-            transition: 'colors 200ms',
-          })}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer hover:bg-background-surface transition-colors"
           onClick={() => router.push(`/${locale}/profile`)}
         >
-          <User className={css({ height: '1rem', width: '1rem', color: 'var(--color-text-muted)' })} />
-          <div className={css({ textAlign: 'right' })}>
-            <p className={css({ fontSize: 'sm', fontWeight: 'medium', color: 'var(--color-text-main)' })}>
+          <User className="h-4 w-4 text-text-muted" />
+          <div className="text-right">
+            <p className="text-sm font-medium text-text-primary">
               {user?.email}
             </p>
-            <p className={css({ fontSize: 'xs', color: 'var(--color-text-muted)' })}>
+            <p className="text-xs text-text-muted">
               {user?.role}
             </p>
           </div>
         </div>
 
         <Button variant="outline" size="sm" onClick={handleLogout}>
-          <LogOut className={css({ height: '1rem', width: '1rem', marginRight: '0.5rem', display: 'inline' })} />
+          <LogOut className="h-4 w-4 mr-2 inline" />
           Kijelentkezés
         </Button>
       </div>
