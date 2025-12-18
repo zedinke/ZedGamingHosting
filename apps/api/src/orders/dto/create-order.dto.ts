@@ -17,5 +17,5 @@ export class CreateOrderDto {
   planSlug?: string;
 
   @IsEnum(BillingCycle)
-  billingCycle: BillingCycle;
+  billingCycle!: BillingCycle;
 }
