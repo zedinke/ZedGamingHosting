@@ -88,12 +88,12 @@ export default function AdminPlansPage() {
               Játékszerver csomagok létrehozása, szerkesztése és törlése
             </p>
           </div>
-          <button
+          {/* <button
             onClick={() => setShowCreateModal(true)}
             className="px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-semibold transition"
           >
             + Új csomag
-          </button>
+          </button> */}
         </div>
 
         {/* Plans Table */}
@@ -183,12 +183,12 @@ export default function AdminPlansPage() {
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <button
+                        {/* <button
                           onClick={() => setEditingPlan(plan)}
                           className="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded transition"
                         >
                           Szerkesztés
-                        </button>
+                        </button> */}
                         <button
                           onClick={() => handleDelete(plan.id)}
                           className="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-sm rounded transition"
