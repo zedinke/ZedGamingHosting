@@ -6,7 +6,27 @@
     "subtitle": "Enterprise-grade performance for your gaming community. Deploy servers in seconds with our automated cloud platform.",
     "ctaButton": "Get Started for Free"
   },
+  "games": {
+    "title": "Supported Games",
+    "subtitle": "Professional hosting for the most popular games",
+    "viewPlans": "View plans"
+  },
+  "plans": {
+    "featured": {
+      "title": "Featured Plans",
+      "subtitle": "Choose the best plan for your community"
+    },
+    "popular": "Popular",
+    "selectPlan": "Select Plan",
+    "viewAll": "View all plans"
+  },
   "features": {
+    "title": "Why Choose Us?",
+    "subtitle": "Professional services that guarantee quality",
+    "instantDeploy": {
+      "title": "Instant Deployment",
+      "description": "Your server is ready in seconds. Automated deployment with one click."
+    },
     "instantDeployment": {
       "title": "Instant Deployment",
       "description": "Our \"Brain\" and \"Muscle\" architecture ensures your server provisioning is handled instantly across our global node network."
@@ -18,6 +38,18 @@
     "ddosProtection": {
       "title": "DDoS Protection",
       "description": "Advanced mitigation strategies keep your community safe from attacks, ensuring 99.9% uptime."
+    },
+    "autoBackups": {
+      "title": "Automatic Backups",
+      "description": "Daily automatic backups to keep your data safe at all times."
+    },
+    "oneClick": {
+      "title": "Easy Management",
+      "description": "Intuitive control panel with one-click mod and plugin installation."
+    },
+    "support247": {
+      "title": "24/7 Support",
+      "description": "Hungarian language support around the clock, so we can always help when you need it."
     }
   },
   "footer": {

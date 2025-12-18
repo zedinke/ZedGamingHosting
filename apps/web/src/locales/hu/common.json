@@ -6,7 +6,27 @@
     "subtitle": "Enterprise szintű teljesítmény a gaming közösséged számára. Telepíts szervereket másodpercek alatt automatizált cloud platformunkkal.",
     "ctaButton": "Ingyen Kezdj El"
   },
+  "games": {
+    "title": "Támogatott Játékok",
+    "subtitle": "Professzionális hosting a legnépszerűbb játékokhoz",
+    "viewPlans": "Csomagok megtekintése"
+  },
+  "plans": {
+    "featured": {
+      "title": "Kiemelt Csomagok",
+      "subtitle": "Válaszd ki a legjobb csomagot a közösséged számára"
+    },
+    "popular": "Népszerű",
+    "selectPlan": "Csomag kiválasztása",
+    "viewAll": "Összes csomag megtekintése"
+  },
   "features": {
+    "title": "Miért minket válassz?",
+    "subtitle": "Professzionális szolgáltatások amelyek minőséget garantálnak",
+    "instantDeploy": {
+      "title": "Azonnali Telepítés",
+      "description": "A szervered másodpercek alatt készen áll. Automatizált telepítés egy kattintással."
+    },
     "instantDeployment": {
       "title": "Azonnali Telepítés",
       "description": "A \"Brain\" és \"Muscle\" architektúránk biztosítja, hogy a szerver kiépítés azonnal történjen globális node hálózatunkon keresztül."
@@ -18,6 +38,18 @@
     "ddosProtection": {
       "title": "DDoS Védelem",
       "description": "Fejlett védekezési stratégiák védik közösségedet a támadásoktól, biztosítva a 99.9% uptime-t."
+    },
+    "autoBackups": {
+      "title": "Automatikus Mentések",
+      "description": "Napi automatikus biztonsági mentések, hogy az adataid mindig biztonságban legyenek."
+    },
+    "oneClick": {
+      "title": "Egyszerű Kezelés",
+      "description": "Intuitív vezérlőpult egy kattintásos modok és pluginok telepítésével."
+    },
+    "support247": {
+      "title": "24/7 Ügyfélszolgálat",
+      "description": "Magyar nyelvű támogatás non-stop, hogy mindig segíthessünk amikor szükséged van rá."
     }
   },
   "footer": {
