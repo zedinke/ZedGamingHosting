@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { PlansService } from './plans.service';
 import { CreatePlanDto, UpdatePlanDto } from '@zed-hosting/shared-types';
-import { PlanStatus, GameType, UserRole } from '@prisma/client';
+import { PlanStatus, GameType, UserRole } from '@zed-hosting/db';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';

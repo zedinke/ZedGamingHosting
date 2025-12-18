@@ -1,5 +1,5 @@
 import { IsString, IsEnum, IsInt, IsOptional, IsBoolean, IsArray, Min } from 'class-validator';
-import { GameType, PlanStatus } from '@prisma/client';
+import { GameType, PlanStatus } from '@zed-hosting/db';
 
 /**
  * DTO for creating a new plan
