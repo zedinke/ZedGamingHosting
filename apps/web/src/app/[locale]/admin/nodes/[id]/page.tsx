@@ -56,7 +56,9 @@ export default function EditNodePage() {
     if (typeof window !== 'undefined') {
       try {
         setManagerUrl(window.location.origin);
-      } catch {}
+      } catch (e) {
+        // Silent error for manager URL
+      }
     }
   }, [accessToken]);
 

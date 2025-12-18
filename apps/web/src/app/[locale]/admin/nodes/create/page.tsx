@@ -41,7 +41,9 @@ export default function CreateNodePage() {
       try {
         const origin = window.location.origin;
         setManagerUrl(origin);
-      } catch {}
+      } catch (e) {
+        // Silent error for manager URL
+      }
     }
   }, [accessToken]);
 

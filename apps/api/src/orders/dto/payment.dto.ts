@@ -1,4 +1,4 @@
-import { IsString, IsEnum } from 'class-validator';
+import { IsEnum } from 'class-validator';
 
 export enum PaymentMethod {
   MOCK = 'mock',
@@ -8,5 +8,5 @@ export enum PaymentMethod {
 
 export class InitiatePaymentDto {
   @IsEnum(PaymentMethod)
-  method: PaymentMethod;
+  method!: PaymentMethod;
 }

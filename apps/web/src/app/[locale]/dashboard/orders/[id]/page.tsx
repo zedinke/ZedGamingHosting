@@ -106,7 +106,8 @@ export default function OrderDetailPage() {
         });
       } else if (method === 'barion' || method === 'stripe') {
         // Redirect to payment gateway
-        window.location.href = result.redirectUrl || result.sessionUrl;
+        const resultData = result as { redirectUrl?: string; sessionUrl?: string };
+        window.location.href = resultData.redirectUrl || resultData.sessionUrl || '';
       }
     } catch (e: any) {
       notifications.addNotification({
@@ -159,7 +160,7 @@ export default function OrderDetailPage() {
               </Link>
               <h1 className="text-3xl font-bold mt-2">Rendelés #{order.id.substring(0, 8)}</h1>
             </div>
-            <Badge variant={statusVariant(order.status)} size="lg">
+            <Badge variant={statusVariant(order.status)} size="md">
               {order.status}
             </Badge>
           </div>

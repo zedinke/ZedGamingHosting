@@ -1,14 +1,23 @@
-import { Controller, Get, Post, Body, Request, UseGuards, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Request, UseGuards } from '@nestjs/common';
 import { WalletService } from './wallet.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from '@zed-hosting/db';
+import { IsString, IsNumber, IsNotEmpty } from 'class-validator';
 
 export class AddBalanceDto {
-  userId: string;
-  amount: number;
-  reason: string;
+  @IsString()
+  @IsNotEmpty()
+  userId!: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  amount!: number;
+
+  @IsString()
+  @IsNotEmpty()
+  reason!: string;
 }
 
 @Controller('wallet')
