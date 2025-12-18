@@ -392,7 +392,7 @@ export default function PromotionsPage() {
                         <h3 className="text-base font-semibold text-text-primary">{promo.name}</h3>
                         <Badge variant={promo.active ? 'success' : 'default'} size="sm">{promo.active ? 'Aktív' : 'Inaktív'}</Badge>
                         <Badge variant="default" size="sm">{promo.scope}</Badge>
-                        <Badge variant="outline" size="sm">{promo.discountPercent}%</Badge>
+                        <Badge variant="info" size="sm">{promo.discountPercent}%</Badge>
                       </div>
                       <p className="text-sm text-text-muted">
                         {promo.scope === 'GLOBAL' && 'Minden csomagra érvényes'}
