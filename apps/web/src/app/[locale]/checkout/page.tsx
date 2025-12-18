@@ -13,7 +13,7 @@ export default function CheckoutPage() {
   const params = useParams();
   const locale = (params?.locale as string) || 'hu';
   const sp = useSearchParams();
-  const { user, isAuthenticated, accessToken } = useAuthStore();
+  const { isAuthenticated, accessToken } = useAuthStore();
   const notifications = useNotificationContext();
 
   const planSlug = sp.get('plan') || '';
