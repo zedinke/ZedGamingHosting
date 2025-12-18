@@ -28,7 +28,4 @@ INSERT INTO Plan (id, name, slug, gameType, status, ramMb, cpuCores, diskGb, max
   (UUID(), 'ARK Basic', 'ark-basic', 'ARK', 'ACTIVE', 6144, 3, 40, 20, 799000, 0, '["24/7 Support", "Automatic Backups", "DDoS Protection", "Mod Support"]', 'Great for small ARK servers', false, 10, NOW(), NOW()),
   (UUID(), 'ARK Cluster', 'ark-cluster', 'ARK', 'ACTIVE', 10240, 4, 80, 50, 149900, 0, '["24/7 Priority Support", "Automatic Backups", "DDoS Protection", "Mod Support", "Cluster Storage", "Multiple Maps", "Dedicated Resources"]', 'Perfect for ARK clusters', true, 5, NOW(), NOW());
 
--- Valheim Plans
-INSERT INTO Plan (id, name, slug, gameType, status, ramMb, cpuCores, diskGb, maxSlots, monthlyPrice, setupFee, features, description, isPopular, sortOrder, createdAt, updatedAt) VALUES
-  (UUID(), 'Valheim Basic', 'valheim-basic', 'VALHEIM', 'ACTIVE', 4096, 2, 20, 10, 449000, 0, '["24/7 Support", "Automatic Backups", "DDoS Protection", "Mod Support"]', 'Perfect for small Viking groups', false, 10, NOW(), NOW()),
-  (UUID(), 'Valheim Standard', 'valheim-standard', 'VALHEIM', 'ACTIVE', 6144, 3, 40, 20, 699000, 0, '["24/7 Support", "Automatic Backups", "DDoS Protection", "Mod Support", "Priority Support"]', 'Great for larger Viking communities', true, 5, NOW(), NOW());
+

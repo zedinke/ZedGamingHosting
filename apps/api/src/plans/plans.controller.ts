@@ -17,6 +17,7 @@ import { PlanStatus, GameType, UserRole } from '@zed-hosting/db';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('plans')
 export class PlansController {
@@ -25,6 +26,7 @@ export class PlansController {
   /**
    * Public: Get all active plans (optionally filtered by game type)
    */
+    @Public()
   @Get('public')
   async getPublicPlans(@Query('gameType') gameType?: GameType) {
     return this.plansService.findAll(gameType, PlanStatus.ACTIVE);
@@ -32,6 +34,7 @@ export class PlansController {
 
   /**
    * Public: Get plans for specific game type
+    @Public()
    */
   @Get('public/game/:gameType')
   async getByGameType(@Param('gameType') gameType: GameType) {
@@ -40,6 +43,7 @@ export class PlansController {
 
   /**
    * Public: Get single plan by slug
+    @Public()
    */
   @Get('public/:slug')
   async getPublicPlan(@Param('slug') slug: string) {
