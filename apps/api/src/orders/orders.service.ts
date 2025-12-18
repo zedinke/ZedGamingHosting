@@ -59,7 +59,6 @@ export class OrdersService {
       billingCycle,
     };
 
-    // Create order
     const order = await this.prisma.order.create({
       data: {
         userId,
@@ -71,9 +70,6 @@ export class OrdersService {
         notes: userRole === 'SUPPORTER' ? 'Invoice suppressed: SUPPORTER role' : undefined,
       },
     });
-
-    // For SUPPORTER role, explicitly skip any invoice generation (future integration point)
-    // In the future, conditionally call InvoiceService here only if userRole !== 'SUPPORTER'
 
     await this.auditService.createLog({
       action: 'CREATE_ORDER',
@@ -87,6 +83,46 @@ export class OrdersService {
         skippedInvoice: userRole === 'SUPPORTER',
       },
     });
+
+    return order;
+  }
+
+  async listOrders(userId: string) {
+    return this.prisma.order.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        plan: {
+          select: {
+            name: true,
+            slug: true,
+            gameType: true,
+            monthlyPrice: true,
+            hourlyPrice: true,
+            setupFee: true,
+          },
+        },
+      },
+    });
+  }
+
+  async getOrderById(id: string, userId: string) {
+    const order = await this.prisma.order.findFirst({
+      where: { id, userId },
+      include: {
+        plan: {
+          select: {
+            name: true,
+            slug: true,
+            gameType: true,
+          },
+        },
+      },
+    });
+
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
 
     return order;
   }

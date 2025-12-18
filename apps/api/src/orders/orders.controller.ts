@@ -1,6 +1,6 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Request, UseGuards, Get, Param } from '@nestjs/common';
 import { OrdersService } from './orders.service';
-import { CreateOrderDto } from './dto/create-order.dto';
+import { BillingCycle, CreateOrderDto } from './dto/create-order.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('orders')
@@ -17,7 +17,17 @@ export class OrdersController {
       userRole,
       planId: dto.planId,
       planSlug: dto.planSlug,
-      billingCycle: dto.billingCycle || 'monthly',
+      billingCycle: dto.billingCycle || BillingCycle.MONTHLY,
     });
+  }
+
+  @Get()
+  async list(@Request() req: any) {
+    return this.ordersService.listOrders(req.user?.id);
+  }
+
+  @Get(':id')
+  async getOne(@Param('id') id: string, @Request() req: any) {
+    return this.ordersService.getOrderById(id, req.user?.id);
   }
 }

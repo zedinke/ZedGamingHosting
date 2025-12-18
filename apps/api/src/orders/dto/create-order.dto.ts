@@ -1,4 +1,5 @@
 import { IsString, IsOptional, IsEnum, ValidateIf } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export enum BillingCycle {
   MONTHLY = 'MONTHLY',
@@ -17,5 +18,6 @@ export class CreateOrderDto {
   planSlug?: string;
 
   @IsEnum(BillingCycle)
-  billingCycle!: BillingCycle;
+  @Transform(({ value }) => (typeof value === 'string' ? value.toUpperCase() : value))
+  billingCycle: BillingCycle = BillingCycle.MONTHLY;
 }

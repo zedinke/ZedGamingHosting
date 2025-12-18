@@ -40,6 +40,7 @@ export function Navigation() {
 
   const navItems = [
     { href: `/dashboard`, label: t('dashboard.title') },
+    { href: `/dashboard/orders`, label: 'Rendelések' },
   ];
 
   useEffect(() => {

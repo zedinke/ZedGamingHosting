@@ -18,6 +18,7 @@ export default function CheckoutPage() {
 
   const planSlug = sp.get('plan') || '';
   const billing = (sp.get('billing') as 'monthly' | 'hourly') || 'monthly';
+  const apiBilling = billing === 'monthly' ? 'MONTHLY' : 'HOURLY';
   const [loading, setLoading] = useState(false);
   const [plan, setPlan] = useState<any | null>(null);
 
@@ -62,7 +63,7 @@ export default function CheckoutPage() {
     try {
       const order = await apiClient.post('/orders', {
         planSlug,
-        billingCycle: billing,
+        billingCycle: apiBilling,
       });
       notifications.addNotification({
         type: 'success',
