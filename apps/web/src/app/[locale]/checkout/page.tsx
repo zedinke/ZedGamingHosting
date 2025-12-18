@@ -78,6 +78,7 @@ export default function CheckoutPage() {
         title: 'Hiba',
         message: e?.message || 'A rendelés nem sikerült.'
       });
+      return null;
     } finally {
       setLoading(false);
     }
