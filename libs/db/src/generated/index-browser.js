@@ -226,6 +226,7 @@ exports.Prisma.GameServerScalarFieldEnum = {
   status: 'status',
   nodeId: 'nodeId',
   ownerId: 'ownerId',
+  planId: 'planId',
   startupPriority: 'startupPriority',
   resources: 'resources',
   envVars: 'envVars',
@@ -325,6 +326,44 @@ exports.Prisma.IncidentScalarFieldEnum = {
   rootCause: 'rootCause',
   resolution: 'resolution',
   affectedResources: 'affectedResources',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PlanScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  gameType: 'gameType',
+  status: 'status',
+  ramMb: 'ramMb',
+  cpuCores: 'cpuCores',
+  diskGb: 'diskGb',
+  maxSlots: 'maxSlots',
+  monthlyPrice: 'monthlyPrice',
+  hourlyPrice: 'hourlyPrice',
+  setupFee: 'setupFee',
+  features: 'features',
+  description: 'description',
+  isPopular: 'isPopular',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.OrderScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  planId: 'planId',
+  status: 'status',
+  priceSnapshot: 'priceSnapshot',
+  totalAmount: 'totalAmount',
+  currency: 'currency',
+  paymentMethod: 'paymentMethod',
+  paymentId: 'paymentId',
+  paidAt: 'paidAt',
+  serverId: 'serverId',
+  notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -461,6 +500,22 @@ exports.IncidentStatus = exports.$Enums.IncidentStatus = {
   CLOSED: 'CLOSED'
 };
 
+exports.PlanStatus = exports.$Enums.PlanStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  ARCHIVED: 'ARCHIVED'
+};
+
+exports.OrderStatus = exports.$Enums.OrderStatus = {
+  PENDING: 'PENDING',
+  PAYMENT_PENDING: 'PAYMENT_PENDING',
+  PAID: 'PAID',
+  PROVISIONING: 'PROVISIONING',
+  ACTIVE: 'ACTIVE',
+  CANCELLED: 'CANCELLED',
+  REFUNDED: 'REFUNDED'
+};
+
 exports.Prisma.ModelName = {
   SystemLicense: 'SystemLicense',
   Tenant: 'Tenant',
@@ -477,7 +532,9 @@ exports.Prisma.ModelName = {
   Alert: 'Alert',
   ResourceQuota: 'ResourceQuota',
   ApiKey: 'ApiKey',
-  Incident: 'Incident'
+  Incident: 'Incident',
+  Plan: 'Plan',
+  Order: 'Order'
 };
 
 /**

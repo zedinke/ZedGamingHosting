@@ -93,6 +93,16 @@ export type ApiKey = $Result.DefaultSelection<Prisma.$ApiKeyPayload>
  * 
  */
 export type Incident = $Result.DefaultSelection<Prisma.$IncidentPayload>
+/**
+ * Model Plan
+ * 
+ */
+export type Plan = $Result.DefaultSelection<Prisma.$PlanPayload>
+/**
+ * Model Order
+ * 
+ */
+export type Order = $Result.DefaultSelection<Prisma.$OrderPayload>
 
 /**
  * Enums
@@ -250,6 +260,28 @@ export const IncidentStatus: {
 
 export type IncidentStatus = (typeof IncidentStatus)[keyof typeof IncidentStatus]
 
+
+export const PlanStatus: {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  ARCHIVED: 'ARCHIVED'
+};
+
+export type PlanStatus = (typeof PlanStatus)[keyof typeof PlanStatus]
+
+
+export const OrderStatus: {
+  PENDING: 'PENDING',
+  PAYMENT_PENDING: 'PAYMENT_PENDING',
+  PAID: 'PAID',
+  PROVISIONING: 'PROVISIONING',
+  ACTIVE: 'ACTIVE',
+  CANCELLED: 'CANCELLED',
+  REFUNDED: 'REFUNDED'
+};
+
+export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
+
 }
 
 export type LicenseStatus = $Enums.LicenseStatus
@@ -311,6 +343,14 @@ export const IncidentSeverity: typeof $Enums.IncidentSeverity
 export type IncidentStatus = $Enums.IncidentStatus
 
 export const IncidentStatus: typeof $Enums.IncidentStatus
+
+export type PlanStatus = $Enums.PlanStatus
+
+export const PlanStatus: typeof $Enums.PlanStatus
+
+export type OrderStatus = $Enums.OrderStatus
+
+export const OrderStatus: typeof $Enums.OrderStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -594,6 +634,26 @@ export class PrismaClient<
     * ```
     */
   get incident(): Prisma.IncidentDelegate<ExtArgs>;
+
+  /**
+   * `prisma.plan`: Exposes CRUD operations for the **Plan** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Plans
+    * const plans = await prisma.plan.findMany()
+    * ```
+    */
+  get plan(): Prisma.PlanDelegate<ExtArgs>;
+
+  /**
+   * `prisma.order`: Exposes CRUD operations for the **Order** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Orders
+    * const orders = await prisma.order.findMany()
+    * ```
+    */
+  get order(): Prisma.OrderDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1050,7 +1110,9 @@ export namespace Prisma {
     Alert: 'Alert',
     ResourceQuota: 'ResourceQuota',
     ApiKey: 'ApiKey',
-    Incident: 'Incident'
+    Incident: 'Incident',
+    Plan: 'Plan',
+    Order: 'Order'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1066,7 +1128,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "systemLicense" | "tenant" | "user" | "auditLog" | "node" | "task" | "networkAllocation" | "subdomain" | "gameServer" | "gameCluster" | "backup" | "metric" | "alert" | "resourceQuota" | "apiKey" | "incident"
+      modelProps: "systemLicense" | "tenant" | "user" | "auditLog" | "node" | "task" | "networkAllocation" | "subdomain" | "gameServer" | "gameCluster" | "backup" | "metric" | "alert" | "resourceQuota" | "apiKey" | "incident" | "plan" | "order"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2126,6 +2188,138 @@ export namespace Prisma {
           }
         }
       }
+      Plan: {
+        payload: Prisma.$PlanPayload<ExtArgs>
+        fields: Prisma.PlanFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PlanFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PlanFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanPayload>
+          }
+          findFirst: {
+            args: Prisma.PlanFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PlanFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanPayload>
+          }
+          findMany: {
+            args: Prisma.PlanFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanPayload>[]
+          }
+          create: {
+            args: Prisma.PlanCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanPayload>
+          }
+          createMany: {
+            args: Prisma.PlanCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.PlanDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanPayload>
+          }
+          update: {
+            args: Prisma.PlanUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanPayload>
+          }
+          deleteMany: {
+            args: Prisma.PlanDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PlanUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PlanUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanPayload>
+          }
+          aggregate: {
+            args: Prisma.PlanAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePlan>
+          }
+          groupBy: {
+            args: Prisma.PlanGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PlanGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PlanCountArgs<ExtArgs>
+            result: $Utils.Optional<PlanCountAggregateOutputType> | number
+          }
+        }
+      }
+      Order: {
+        payload: Prisma.$OrderPayload<ExtArgs>
+        fields: Prisma.OrderFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OrderFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OrderFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>
+          }
+          findFirst: {
+            args: Prisma.OrderFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OrderFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>
+          }
+          findMany: {
+            args: Prisma.OrderFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>[]
+          }
+          create: {
+            args: Prisma.OrderCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>
+          }
+          createMany: {
+            args: Prisma.OrderCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.OrderDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>
+          }
+          update: {
+            args: Prisma.OrderUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>
+          }
+          deleteMany: {
+            args: Prisma.OrderDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OrderUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.OrderUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>
+          }
+          aggregate: {
+            args: Prisma.OrderAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOrder>
+          }
+          groupBy: {
+            args: Prisma.OrderGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OrderGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OrderCountArgs<ExtArgs>
+            result: $Utils.Optional<OrderCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2333,6 +2527,7 @@ export namespace Prisma {
     resourceQuotas: number
     apiKeys: number
     assignedIncidents: number
+    orders: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2342,6 +2537,7 @@ export namespace Prisma {
     resourceQuotas?: boolean | UserCountOutputTypeCountResourceQuotasArgs
     apiKeys?: boolean | UserCountOutputTypeCountApiKeysArgs
     assignedIncidents?: boolean | UserCountOutputTypeCountAssignedIncidentsArgs
+    orders?: boolean | UserCountOutputTypeCountOrdersArgs
   }
 
   // Custom InputTypes
@@ -2395,6 +2591,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountAssignedIncidentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: IncidentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderWhereInput
   }
 
 
@@ -2484,6 +2687,7 @@ export namespace Prisma {
     backups: number
     metrics: number
     alerts: number
+    orders: number
   }
 
   export type GameServerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2492,6 +2696,7 @@ export namespace Prisma {
     backups?: boolean | GameServerCountOutputTypeCountBackupsArgs
     metrics?: boolean | GameServerCountOutputTypeCountMetricsArgs
     alerts?: boolean | GameServerCountOutputTypeCountAlertsArgs
+    orders?: boolean | GameServerCountOutputTypeCountOrdersArgs
   }
 
   // Custom InputTypes
@@ -2540,6 +2745,13 @@ export namespace Prisma {
     where?: AlertWhereInput
   }
 
+  /**
+   * GameServerCountOutputType without action
+   */
+  export type GameServerCountOutputTypeCountOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderWhereInput
+  }
+
 
   /**
    * Count Type GameClusterCountOutputType
@@ -2569,6 +2781,46 @@ export namespace Prisma {
    */
   export type GameClusterCountOutputTypeCountServersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GameServerWhereInput
+  }
+
+
+  /**
+   * Count Type PlanCountOutputType
+   */
+
+  export type PlanCountOutputType = {
+    servers: number
+    orders: number
+  }
+
+  export type PlanCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    servers?: boolean | PlanCountOutputTypeCountServersArgs
+    orders?: boolean | PlanCountOutputTypeCountOrdersArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * PlanCountOutputType without action
+   */
+  export type PlanCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanCountOutputType
+     */
+    select?: PlanCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * PlanCountOutputType without action
+   */
+  export type PlanCountOutputTypeCountServersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GameServerWhereInput
+  }
+
+  /**
+   * PlanCountOutputType without action
+   */
+  export type PlanCountOutputTypeCountOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderWhereInput
   }
 
 
@@ -4673,6 +4925,7 @@ export namespace Prisma {
     resourceQuotas?: boolean | User$resourceQuotasArgs<ExtArgs>
     apiKeys?: boolean | User$apiKeysArgs<ExtArgs>
     assignedIncidents?: boolean | User$assignedIncidentsArgs<ExtArgs>
+    orders?: boolean | User$ordersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -4697,6 +4950,7 @@ export namespace Prisma {
     resourceQuotas?: boolean | User$resourceQuotasArgs<ExtArgs>
     apiKeys?: boolean | User$apiKeysArgs<ExtArgs>
     assignedIncidents?: boolean | User$assignedIncidentsArgs<ExtArgs>
+    orders?: boolean | User$ordersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -4710,6 +4964,7 @@ export namespace Prisma {
       resourceQuotas: Prisma.$ResourceQuotaPayload<ExtArgs>[]
       apiKeys: Prisma.$ApiKeyPayload<ExtArgs>[]
       assignedIncidents: Prisma.$IncidentPayload<ExtArgs>[]
+      orders: Prisma.$OrderPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5068,6 +5323,7 @@ export namespace Prisma {
     resourceQuotas<T extends User$resourceQuotasArgs<ExtArgs> = {}>(args?: Subset<T, User$resourceQuotasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ResourceQuotaPayload<ExtArgs>, T, "findMany"> | Null>
     apiKeys<T extends User$apiKeysArgs<ExtArgs> = {}>(args?: Subset<T, User$apiKeysArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findMany"> | Null>
     assignedIncidents<T extends User$assignedIncidentsArgs<ExtArgs> = {}>(args?: Subset<T, User$assignedIncidentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IncidentPayload<ExtArgs>, T, "findMany"> | Null>
+    orders<T extends User$ordersArgs<ExtArgs> = {}>(args?: Subset<T, User$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5537,6 +5793,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: IncidentScalarFieldEnum | IncidentScalarFieldEnum[]
+  }
+
+  /**
+   * User.orders
+   */
+  export type User$ordersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    where?: OrderWhereInput
+    orderBy?: OrderOrderByWithRelationInput | OrderOrderByWithRelationInput[]
+    cursor?: OrderWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OrderScalarFieldEnum | OrderScalarFieldEnum[]
   }
 
   /**
@@ -10462,6 +10738,7 @@ export namespace Prisma {
     status: $Enums.ServerStatus | null
     nodeId: string | null
     ownerId: string | null
+    planId: string | null
     startupPriority: number | null
     clusterId: string | null
     createdAt: Date | null
@@ -10475,6 +10752,7 @@ export namespace Prisma {
     status: $Enums.ServerStatus | null
     nodeId: string | null
     ownerId: string | null
+    planId: string | null
     startupPriority: number | null
     clusterId: string | null
     createdAt: Date | null
@@ -10488,6 +10766,7 @@ export namespace Prisma {
     status: number
     nodeId: number
     ownerId: number
+    planId: number
     startupPriority: number
     resources: number
     envVars: number
@@ -10513,6 +10792,7 @@ export namespace Prisma {
     status?: true
     nodeId?: true
     ownerId?: true
+    planId?: true
     startupPriority?: true
     clusterId?: true
     createdAt?: true
@@ -10526,6 +10806,7 @@ export namespace Prisma {
     status?: true
     nodeId?: true
     ownerId?: true
+    planId?: true
     startupPriority?: true
     clusterId?: true
     createdAt?: true
@@ -10539,6 +10820,7 @@ export namespace Prisma {
     status?: true
     nodeId?: true
     ownerId?: true
+    planId?: true
     startupPriority?: true
     resources?: true
     envVars?: true
@@ -10641,6 +10923,7 @@ export namespace Prisma {
     status: $Enums.ServerStatus
     nodeId: string
     ownerId: string
+    planId: string | null
     startupPriority: number
     resources: JsonValue
     envVars: JsonValue
@@ -10675,6 +10958,7 @@ export namespace Prisma {
     status?: boolean
     nodeId?: boolean
     ownerId?: boolean
+    planId?: boolean
     startupPriority?: boolean
     resources?: boolean
     envVars?: boolean
@@ -10683,12 +10967,14 @@ export namespace Prisma {
     updatedAt?: boolean
     node?: boolean | NodeDefaultArgs<ExtArgs>
     owner?: boolean | UserDefaultArgs<ExtArgs>
+    plan?: boolean | GameServer$planArgs<ExtArgs>
     cluster?: boolean | GameServer$clusterArgs<ExtArgs>
     networkAllocations?: boolean | GameServer$networkAllocationsArgs<ExtArgs>
     subdomains?: boolean | GameServer$subdomainsArgs<ExtArgs>
     backups?: boolean | GameServer$backupsArgs<ExtArgs>
     metrics?: boolean | GameServer$metricsArgs<ExtArgs>
     alerts?: boolean | GameServer$alertsArgs<ExtArgs>
+    orders?: boolean | GameServer$ordersArgs<ExtArgs>
     _count?: boolean | GameServerCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["gameServer"]>
 
@@ -10700,6 +10986,7 @@ export namespace Prisma {
     status?: boolean
     nodeId?: boolean
     ownerId?: boolean
+    planId?: boolean
     startupPriority?: boolean
     resources?: boolean
     envVars?: boolean
@@ -10711,12 +10998,14 @@ export namespace Prisma {
   export type GameServerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     node?: boolean | NodeDefaultArgs<ExtArgs>
     owner?: boolean | UserDefaultArgs<ExtArgs>
+    plan?: boolean | GameServer$planArgs<ExtArgs>
     cluster?: boolean | GameServer$clusterArgs<ExtArgs>
     networkAllocations?: boolean | GameServer$networkAllocationsArgs<ExtArgs>
     subdomains?: boolean | GameServer$subdomainsArgs<ExtArgs>
     backups?: boolean | GameServer$backupsArgs<ExtArgs>
     metrics?: boolean | GameServer$metricsArgs<ExtArgs>
     alerts?: boolean | GameServer$alertsArgs<ExtArgs>
+    orders?: boolean | GameServer$ordersArgs<ExtArgs>
     _count?: boolean | GameServerCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -10725,12 +11014,14 @@ export namespace Prisma {
     objects: {
       node: Prisma.$NodePayload<ExtArgs>
       owner: Prisma.$UserPayload<ExtArgs>
+      plan: Prisma.$PlanPayload<ExtArgs> | null
       cluster: Prisma.$GameClusterPayload<ExtArgs> | null
       networkAllocations: Prisma.$NetworkAllocationPayload<ExtArgs>[]
       subdomains: Prisma.$SubdomainPayload<ExtArgs>[]
       backups: Prisma.$BackupPayload<ExtArgs>[]
       metrics: Prisma.$MetricPayload<ExtArgs>[]
       alerts: Prisma.$AlertPayload<ExtArgs>[]
+      orders: Prisma.$OrderPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -10739,6 +11030,7 @@ export namespace Prisma {
       status: $Enums.ServerStatus
       nodeId: string
       ownerId: string
+      planId: string | null
       startupPriority: number
       resources: Prisma.JsonValue
       envVars: Prisma.JsonValue
@@ -11087,12 +11379,14 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     node<T extends NodeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, NodeDefaultArgs<ExtArgs>>): Prisma__NodeClient<$Result.GetResult<Prisma.$NodePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     owner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    plan<T extends GameServer$planArgs<ExtArgs> = {}>(args?: Subset<T, GameServer$planArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     cluster<T extends GameServer$clusterArgs<ExtArgs> = {}>(args?: Subset<T, GameServer$clusterArgs<ExtArgs>>): Prisma__GameClusterClient<$Result.GetResult<Prisma.$GameClusterPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     networkAllocations<T extends GameServer$networkAllocationsArgs<ExtArgs> = {}>(args?: Subset<T, GameServer$networkAllocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NetworkAllocationPayload<ExtArgs>, T, "findMany"> | Null>
     subdomains<T extends GameServer$subdomainsArgs<ExtArgs> = {}>(args?: Subset<T, GameServer$subdomainsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubdomainPayload<ExtArgs>, T, "findMany"> | Null>
     backups<T extends GameServer$backupsArgs<ExtArgs> = {}>(args?: Subset<T, GameServer$backupsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BackupPayload<ExtArgs>, T, "findMany"> | Null>
     metrics<T extends GameServer$metricsArgs<ExtArgs> = {}>(args?: Subset<T, GameServer$metricsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MetricPayload<ExtArgs>, T, "findMany"> | Null>
     alerts<T extends GameServer$alertsArgs<ExtArgs> = {}>(args?: Subset<T, GameServer$alertsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AlertPayload<ExtArgs>, T, "findMany"> | Null>
+    orders<T extends GameServer$ordersArgs<ExtArgs> = {}>(args?: Subset<T, GameServer$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11128,6 +11422,7 @@ export namespace Prisma {
     readonly status: FieldRef<"GameServer", 'ServerStatus'>
     readonly nodeId: FieldRef<"GameServer", 'String'>
     readonly ownerId: FieldRef<"GameServer", 'String'>
+    readonly planId: FieldRef<"GameServer", 'String'>
     readonly startupPriority: FieldRef<"GameServer", 'Int'>
     readonly resources: FieldRef<"GameServer", 'Json'>
     readonly envVars: FieldRef<"GameServer", 'Json'>
@@ -11433,6 +11728,21 @@ export namespace Prisma {
   }
 
   /**
+   * GameServer.plan
+   */
+  export type GameServer$planArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+    where?: PlanWhereInput
+  }
+
+  /**
    * GameServer.cluster
    */
   export type GameServer$clusterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11545,6 +11855,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AlertScalarFieldEnum | AlertScalarFieldEnum[]
+  }
+
+  /**
+   * GameServer.orders
+   */
+  export type GameServer$ordersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    where?: OrderWhereInput
+    orderBy?: OrderOrderByWithRelationInput | OrderOrderByWithRelationInput[]
+    cursor?: OrderWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OrderScalarFieldEnum | OrderScalarFieldEnum[]
   }
 
   /**
@@ -18437,6 +18767,2163 @@ export namespace Prisma {
 
 
   /**
+   * Model Plan
+   */
+
+  export type AggregatePlan = {
+    _count: PlanCountAggregateOutputType | null
+    _avg: PlanAvgAggregateOutputType | null
+    _sum: PlanSumAggregateOutputType | null
+    _min: PlanMinAggregateOutputType | null
+    _max: PlanMaxAggregateOutputType | null
+  }
+
+  export type PlanAvgAggregateOutputType = {
+    ramMb: number | null
+    cpuCores: number | null
+    diskGb: number | null
+    maxSlots: number | null
+    monthlyPrice: number | null
+    hourlyPrice: number | null
+    setupFee: number | null
+    sortOrder: number | null
+  }
+
+  export type PlanSumAggregateOutputType = {
+    ramMb: number | null
+    cpuCores: number | null
+    diskGb: number | null
+    maxSlots: number | null
+    monthlyPrice: number | null
+    hourlyPrice: number | null
+    setupFee: number | null
+    sortOrder: number | null
+  }
+
+  export type PlanMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    slug: string | null
+    gameType: $Enums.GameType | null
+    status: $Enums.PlanStatus | null
+    ramMb: number | null
+    cpuCores: number | null
+    diskGb: number | null
+    maxSlots: number | null
+    monthlyPrice: number | null
+    hourlyPrice: number | null
+    setupFee: number | null
+    description: string | null
+    isPopular: boolean | null
+    sortOrder: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PlanMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    slug: string | null
+    gameType: $Enums.GameType | null
+    status: $Enums.PlanStatus | null
+    ramMb: number | null
+    cpuCores: number | null
+    diskGb: number | null
+    maxSlots: number | null
+    monthlyPrice: number | null
+    hourlyPrice: number | null
+    setupFee: number | null
+    description: string | null
+    isPopular: boolean | null
+    sortOrder: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PlanCountAggregateOutputType = {
+    id: number
+    name: number
+    slug: number
+    gameType: number
+    status: number
+    ramMb: number
+    cpuCores: number
+    diskGb: number
+    maxSlots: number
+    monthlyPrice: number
+    hourlyPrice: number
+    setupFee: number
+    features: number
+    description: number
+    isPopular: number
+    sortOrder: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PlanAvgAggregateInputType = {
+    ramMb?: true
+    cpuCores?: true
+    diskGb?: true
+    maxSlots?: true
+    monthlyPrice?: true
+    hourlyPrice?: true
+    setupFee?: true
+    sortOrder?: true
+  }
+
+  export type PlanSumAggregateInputType = {
+    ramMb?: true
+    cpuCores?: true
+    diskGb?: true
+    maxSlots?: true
+    monthlyPrice?: true
+    hourlyPrice?: true
+    setupFee?: true
+    sortOrder?: true
+  }
+
+  export type PlanMinAggregateInputType = {
+    id?: true
+    name?: true
+    slug?: true
+    gameType?: true
+    status?: true
+    ramMb?: true
+    cpuCores?: true
+    diskGb?: true
+    maxSlots?: true
+    monthlyPrice?: true
+    hourlyPrice?: true
+    setupFee?: true
+    description?: true
+    isPopular?: true
+    sortOrder?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PlanMaxAggregateInputType = {
+    id?: true
+    name?: true
+    slug?: true
+    gameType?: true
+    status?: true
+    ramMb?: true
+    cpuCores?: true
+    diskGb?: true
+    maxSlots?: true
+    monthlyPrice?: true
+    hourlyPrice?: true
+    setupFee?: true
+    description?: true
+    isPopular?: true
+    sortOrder?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PlanCountAggregateInputType = {
+    id?: true
+    name?: true
+    slug?: true
+    gameType?: true
+    status?: true
+    ramMb?: true
+    cpuCores?: true
+    diskGb?: true
+    maxSlots?: true
+    monthlyPrice?: true
+    hourlyPrice?: true
+    setupFee?: true
+    features?: true
+    description?: true
+    isPopular?: true
+    sortOrder?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PlanAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Plan to aggregate.
+     */
+    where?: PlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Plans to fetch.
+     */
+    orderBy?: PlanOrderByWithRelationInput | PlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Plans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Plans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Plans
+    **/
+    _count?: true | PlanCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PlanAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PlanSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PlanMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PlanMaxAggregateInputType
+  }
+
+  export type GetPlanAggregateType<T extends PlanAggregateArgs> = {
+        [P in keyof T & keyof AggregatePlan]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePlan[P]>
+      : GetScalarType<T[P], AggregatePlan[P]>
+  }
+
+
+
+
+  export type PlanGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlanWhereInput
+    orderBy?: PlanOrderByWithAggregationInput | PlanOrderByWithAggregationInput[]
+    by: PlanScalarFieldEnum[] | PlanScalarFieldEnum
+    having?: PlanScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PlanCountAggregateInputType | true
+    _avg?: PlanAvgAggregateInputType
+    _sum?: PlanSumAggregateInputType
+    _min?: PlanMinAggregateInputType
+    _max?: PlanMaxAggregateInputType
+  }
+
+  export type PlanGroupByOutputType = {
+    id: string
+    name: string
+    slug: string
+    gameType: $Enums.GameType
+    status: $Enums.PlanStatus
+    ramMb: number
+    cpuCores: number
+    diskGb: number
+    maxSlots: number | null
+    monthlyPrice: number
+    hourlyPrice: number | null
+    setupFee: number
+    features: JsonValue | null
+    description: string | null
+    isPopular: boolean
+    sortOrder: number
+    createdAt: Date
+    updatedAt: Date
+    _count: PlanCountAggregateOutputType | null
+    _avg: PlanAvgAggregateOutputType | null
+    _sum: PlanSumAggregateOutputType | null
+    _min: PlanMinAggregateOutputType | null
+    _max: PlanMaxAggregateOutputType | null
+  }
+
+  type GetPlanGroupByPayload<T extends PlanGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PlanGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PlanGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PlanGroupByOutputType[P]>
+            : GetScalarType<T[P], PlanGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PlanSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    gameType?: boolean
+    status?: boolean
+    ramMb?: boolean
+    cpuCores?: boolean
+    diskGb?: boolean
+    maxSlots?: boolean
+    monthlyPrice?: boolean
+    hourlyPrice?: boolean
+    setupFee?: boolean
+    features?: boolean
+    description?: boolean
+    isPopular?: boolean
+    sortOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    servers?: boolean | Plan$serversArgs<ExtArgs>
+    orders?: boolean | Plan$ordersArgs<ExtArgs>
+    _count?: boolean | PlanCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["plan"]>
+
+
+  export type PlanSelectScalar = {
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    gameType?: boolean
+    status?: boolean
+    ramMb?: boolean
+    cpuCores?: boolean
+    diskGb?: boolean
+    maxSlots?: boolean
+    monthlyPrice?: boolean
+    hourlyPrice?: boolean
+    setupFee?: boolean
+    features?: boolean
+    description?: boolean
+    isPopular?: boolean
+    sortOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PlanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    servers?: boolean | Plan$serversArgs<ExtArgs>
+    orders?: boolean | Plan$ordersArgs<ExtArgs>
+    _count?: boolean | PlanCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+  export type $PlanPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Plan"
+    objects: {
+      servers: Prisma.$GameServerPayload<ExtArgs>[]
+      orders: Prisma.$OrderPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      slug: string
+      gameType: $Enums.GameType
+      status: $Enums.PlanStatus
+      ramMb: number
+      cpuCores: number
+      diskGb: number
+      maxSlots: number | null
+      monthlyPrice: number
+      hourlyPrice: number | null
+      setupFee: number
+      features: Prisma.JsonValue | null
+      description: string | null
+      isPopular: boolean
+      sortOrder: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["plan"]>
+    composites: {}
+  }
+
+  type PlanGetPayload<S extends boolean | null | undefined | PlanDefaultArgs> = $Result.GetResult<Prisma.$PlanPayload, S>
+
+  type PlanCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PlanFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PlanCountAggregateInputType | true
+    }
+
+  export interface PlanDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Plan'], meta: { name: 'Plan' } }
+    /**
+     * Find zero or one Plan that matches the filter.
+     * @param {PlanFindUniqueArgs} args - Arguments to find a Plan
+     * @example
+     * // Get one Plan
+     * const plan = await prisma.plan.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PlanFindUniqueArgs>(args: SelectSubset<T, PlanFindUniqueArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Plan that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PlanFindUniqueOrThrowArgs} args - Arguments to find a Plan
+     * @example
+     * // Get one Plan
+     * const plan = await prisma.plan.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PlanFindUniqueOrThrowArgs>(args: SelectSubset<T, PlanFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Plan that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanFindFirstArgs} args - Arguments to find a Plan
+     * @example
+     * // Get one Plan
+     * const plan = await prisma.plan.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PlanFindFirstArgs>(args?: SelectSubset<T, PlanFindFirstArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Plan that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanFindFirstOrThrowArgs} args - Arguments to find a Plan
+     * @example
+     * // Get one Plan
+     * const plan = await prisma.plan.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PlanFindFirstOrThrowArgs>(args?: SelectSubset<T, PlanFindFirstOrThrowArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Plans that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Plans
+     * const plans = await prisma.plan.findMany()
+     * 
+     * // Get first 10 Plans
+     * const plans = await prisma.plan.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const planWithIdOnly = await prisma.plan.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PlanFindManyArgs>(args?: SelectSubset<T, PlanFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Plan.
+     * @param {PlanCreateArgs} args - Arguments to create a Plan.
+     * @example
+     * // Create one Plan
+     * const Plan = await prisma.plan.create({
+     *   data: {
+     *     // ... data to create a Plan
+     *   }
+     * })
+     * 
+     */
+    create<T extends PlanCreateArgs>(args: SelectSubset<T, PlanCreateArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Plans.
+     * @param {PlanCreateManyArgs} args - Arguments to create many Plans.
+     * @example
+     * // Create many Plans
+     * const plan = await prisma.plan.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PlanCreateManyArgs>(args?: SelectSubset<T, PlanCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Plan.
+     * @param {PlanDeleteArgs} args - Arguments to delete one Plan.
+     * @example
+     * // Delete one Plan
+     * const Plan = await prisma.plan.delete({
+     *   where: {
+     *     // ... filter to delete one Plan
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PlanDeleteArgs>(args: SelectSubset<T, PlanDeleteArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Plan.
+     * @param {PlanUpdateArgs} args - Arguments to update one Plan.
+     * @example
+     * // Update one Plan
+     * const plan = await prisma.plan.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PlanUpdateArgs>(args: SelectSubset<T, PlanUpdateArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Plans.
+     * @param {PlanDeleteManyArgs} args - Arguments to filter Plans to delete.
+     * @example
+     * // Delete a few Plans
+     * const { count } = await prisma.plan.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PlanDeleteManyArgs>(args?: SelectSubset<T, PlanDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Plans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Plans
+     * const plan = await prisma.plan.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PlanUpdateManyArgs>(args: SelectSubset<T, PlanUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Plan.
+     * @param {PlanUpsertArgs} args - Arguments to update or create a Plan.
+     * @example
+     * // Update or create a Plan
+     * const plan = await prisma.plan.upsert({
+     *   create: {
+     *     // ... data to create a Plan
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Plan we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PlanUpsertArgs>(args: SelectSubset<T, PlanUpsertArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Plans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanCountArgs} args - Arguments to filter Plans to count.
+     * @example
+     * // Count the number of Plans
+     * const count = await prisma.plan.count({
+     *   where: {
+     *     // ... the filter for the Plans we want to count
+     *   }
+     * })
+    **/
+    count<T extends PlanCountArgs>(
+      args?: Subset<T, PlanCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PlanCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Plan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PlanAggregateArgs>(args: Subset<T, PlanAggregateArgs>): Prisma.PrismaPromise<GetPlanAggregateType<T>>
+
+    /**
+     * Group by Plan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PlanGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PlanGroupByArgs['orderBy'] }
+        : { orderBy?: PlanGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PlanGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPlanGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Plan model
+   */
+  readonly fields: PlanFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Plan.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PlanClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    servers<T extends Plan$serversArgs<ExtArgs> = {}>(args?: Subset<T, Plan$serversArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GameServerPayload<ExtArgs>, T, "findMany"> | Null>
+    orders<T extends Plan$ordersArgs<ExtArgs> = {}>(args?: Subset<T, Plan$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Plan model
+   */ 
+  interface PlanFieldRefs {
+    readonly id: FieldRef<"Plan", 'String'>
+    readonly name: FieldRef<"Plan", 'String'>
+    readonly slug: FieldRef<"Plan", 'String'>
+    readonly gameType: FieldRef<"Plan", 'GameType'>
+    readonly status: FieldRef<"Plan", 'PlanStatus'>
+    readonly ramMb: FieldRef<"Plan", 'Int'>
+    readonly cpuCores: FieldRef<"Plan", 'Int'>
+    readonly diskGb: FieldRef<"Plan", 'Int'>
+    readonly maxSlots: FieldRef<"Plan", 'Int'>
+    readonly monthlyPrice: FieldRef<"Plan", 'Int'>
+    readonly hourlyPrice: FieldRef<"Plan", 'Int'>
+    readonly setupFee: FieldRef<"Plan", 'Int'>
+    readonly features: FieldRef<"Plan", 'Json'>
+    readonly description: FieldRef<"Plan", 'String'>
+    readonly isPopular: FieldRef<"Plan", 'Boolean'>
+    readonly sortOrder: FieldRef<"Plan", 'Int'>
+    readonly createdAt: FieldRef<"Plan", 'DateTime'>
+    readonly updatedAt: FieldRef<"Plan", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Plan findUnique
+   */
+  export type PlanFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+    /**
+     * Filter, which Plan to fetch.
+     */
+    where: PlanWhereUniqueInput
+  }
+
+  /**
+   * Plan findUniqueOrThrow
+   */
+  export type PlanFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+    /**
+     * Filter, which Plan to fetch.
+     */
+    where: PlanWhereUniqueInput
+  }
+
+  /**
+   * Plan findFirst
+   */
+  export type PlanFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+    /**
+     * Filter, which Plan to fetch.
+     */
+    where?: PlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Plans to fetch.
+     */
+    orderBy?: PlanOrderByWithRelationInput | PlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Plans.
+     */
+    cursor?: PlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Plans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Plans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Plans.
+     */
+    distinct?: PlanScalarFieldEnum | PlanScalarFieldEnum[]
+  }
+
+  /**
+   * Plan findFirstOrThrow
+   */
+  export type PlanFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+    /**
+     * Filter, which Plan to fetch.
+     */
+    where?: PlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Plans to fetch.
+     */
+    orderBy?: PlanOrderByWithRelationInput | PlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Plans.
+     */
+    cursor?: PlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Plans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Plans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Plans.
+     */
+    distinct?: PlanScalarFieldEnum | PlanScalarFieldEnum[]
+  }
+
+  /**
+   * Plan findMany
+   */
+  export type PlanFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+    /**
+     * Filter, which Plans to fetch.
+     */
+    where?: PlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Plans to fetch.
+     */
+    orderBy?: PlanOrderByWithRelationInput | PlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Plans.
+     */
+    cursor?: PlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Plans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Plans.
+     */
+    skip?: number
+    distinct?: PlanScalarFieldEnum | PlanScalarFieldEnum[]
+  }
+
+  /**
+   * Plan create
+   */
+  export type PlanCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Plan.
+     */
+    data: XOR<PlanCreateInput, PlanUncheckedCreateInput>
+  }
+
+  /**
+   * Plan createMany
+   */
+  export type PlanCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Plans.
+     */
+    data: PlanCreateManyInput | PlanCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Plan update
+   */
+  export type PlanUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Plan.
+     */
+    data: XOR<PlanUpdateInput, PlanUncheckedUpdateInput>
+    /**
+     * Choose, which Plan to update.
+     */
+    where: PlanWhereUniqueInput
+  }
+
+  /**
+   * Plan updateMany
+   */
+  export type PlanUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Plans.
+     */
+    data: XOR<PlanUpdateManyMutationInput, PlanUncheckedUpdateManyInput>
+    /**
+     * Filter which Plans to update
+     */
+    where?: PlanWhereInput
+  }
+
+  /**
+   * Plan upsert
+   */
+  export type PlanUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Plan to update in case it exists.
+     */
+    where: PlanWhereUniqueInput
+    /**
+     * In case the Plan found by the `where` argument doesn't exist, create a new Plan with this data.
+     */
+    create: XOR<PlanCreateInput, PlanUncheckedCreateInput>
+    /**
+     * In case the Plan was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PlanUpdateInput, PlanUncheckedUpdateInput>
+  }
+
+  /**
+   * Plan delete
+   */
+  export type PlanDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+    /**
+     * Filter which Plan to delete.
+     */
+    where: PlanWhereUniqueInput
+  }
+
+  /**
+   * Plan deleteMany
+   */
+  export type PlanDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Plans to delete
+     */
+    where?: PlanWhereInput
+  }
+
+  /**
+   * Plan.servers
+   */
+  export type Plan$serversArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GameServer
+     */
+    select?: GameServerSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GameServerInclude<ExtArgs> | null
+    where?: GameServerWhereInput
+    orderBy?: GameServerOrderByWithRelationInput | GameServerOrderByWithRelationInput[]
+    cursor?: GameServerWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GameServerScalarFieldEnum | GameServerScalarFieldEnum[]
+  }
+
+  /**
+   * Plan.orders
+   */
+  export type Plan$ordersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    where?: OrderWhereInput
+    orderBy?: OrderOrderByWithRelationInput | OrderOrderByWithRelationInput[]
+    cursor?: OrderWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OrderScalarFieldEnum | OrderScalarFieldEnum[]
+  }
+
+  /**
+   * Plan without action
+   */
+  export type PlanDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Order
+   */
+
+  export type AggregateOrder = {
+    _count: OrderCountAggregateOutputType | null
+    _avg: OrderAvgAggregateOutputType | null
+    _sum: OrderSumAggregateOutputType | null
+    _min: OrderMinAggregateOutputType | null
+    _max: OrderMaxAggregateOutputType | null
+  }
+
+  export type OrderAvgAggregateOutputType = {
+    totalAmount: number | null
+  }
+
+  export type OrderSumAggregateOutputType = {
+    totalAmount: number | null
+  }
+
+  export type OrderMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    planId: string | null
+    status: $Enums.OrderStatus | null
+    totalAmount: number | null
+    currency: string | null
+    paymentMethod: string | null
+    paymentId: string | null
+    paidAt: Date | null
+    serverId: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OrderMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    planId: string | null
+    status: $Enums.OrderStatus | null
+    totalAmount: number | null
+    currency: string | null
+    paymentMethod: string | null
+    paymentId: string | null
+    paidAt: Date | null
+    serverId: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OrderCountAggregateOutputType = {
+    id: number
+    userId: number
+    planId: number
+    status: number
+    priceSnapshot: number
+    totalAmount: number
+    currency: number
+    paymentMethod: number
+    paymentId: number
+    paidAt: number
+    serverId: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type OrderAvgAggregateInputType = {
+    totalAmount?: true
+  }
+
+  export type OrderSumAggregateInputType = {
+    totalAmount?: true
+  }
+
+  export type OrderMinAggregateInputType = {
+    id?: true
+    userId?: true
+    planId?: true
+    status?: true
+    totalAmount?: true
+    currency?: true
+    paymentMethod?: true
+    paymentId?: true
+    paidAt?: true
+    serverId?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OrderMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    planId?: true
+    status?: true
+    totalAmount?: true
+    currency?: true
+    paymentMethod?: true
+    paymentId?: true
+    paidAt?: true
+    serverId?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OrderCountAggregateInputType = {
+    id?: true
+    userId?: true
+    planId?: true
+    status?: true
+    priceSnapshot?: true
+    totalAmount?: true
+    currency?: true
+    paymentMethod?: true
+    paymentId?: true
+    paidAt?: true
+    serverId?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type OrderAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Order to aggregate.
+     */
+    where?: OrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Orders to fetch.
+     */
+    orderBy?: OrderOrderByWithRelationInput | OrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Orders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Orders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Orders
+    **/
+    _count?: true | OrderCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: OrderAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: OrderSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OrderMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OrderMaxAggregateInputType
+  }
+
+  export type GetOrderAggregateType<T extends OrderAggregateArgs> = {
+        [P in keyof T & keyof AggregateOrder]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOrder[P]>
+      : GetScalarType<T[P], AggregateOrder[P]>
+  }
+
+
+
+
+  export type OrderGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderWhereInput
+    orderBy?: OrderOrderByWithAggregationInput | OrderOrderByWithAggregationInput[]
+    by: OrderScalarFieldEnum[] | OrderScalarFieldEnum
+    having?: OrderScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OrderCountAggregateInputType | true
+    _avg?: OrderAvgAggregateInputType
+    _sum?: OrderSumAggregateInputType
+    _min?: OrderMinAggregateInputType
+    _max?: OrderMaxAggregateInputType
+  }
+
+  export type OrderGroupByOutputType = {
+    id: string
+    userId: string
+    planId: string
+    status: $Enums.OrderStatus
+    priceSnapshot: JsonValue
+    totalAmount: number
+    currency: string
+    paymentMethod: string | null
+    paymentId: string | null
+    paidAt: Date | null
+    serverId: string | null
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: OrderCountAggregateOutputType | null
+    _avg: OrderAvgAggregateOutputType | null
+    _sum: OrderSumAggregateOutputType | null
+    _min: OrderMinAggregateOutputType | null
+    _max: OrderMaxAggregateOutputType | null
+  }
+
+  type GetOrderGroupByPayload<T extends OrderGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OrderGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OrderGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OrderGroupByOutputType[P]>
+            : GetScalarType<T[P], OrderGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OrderSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    planId?: boolean
+    status?: boolean
+    priceSnapshot?: boolean
+    totalAmount?: boolean
+    currency?: boolean
+    paymentMethod?: boolean
+    paymentId?: boolean
+    paidAt?: boolean
+    serverId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    plan?: boolean | PlanDefaultArgs<ExtArgs>
+    server?: boolean | Order$serverArgs<ExtArgs>
+  }, ExtArgs["result"]["order"]>
+
+
+  export type OrderSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    planId?: boolean
+    status?: boolean
+    priceSnapshot?: boolean
+    totalAmount?: boolean
+    currency?: boolean
+    paymentMethod?: boolean
+    paymentId?: boolean
+    paidAt?: boolean
+    serverId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    plan?: boolean | PlanDefaultArgs<ExtArgs>
+    server?: boolean | Order$serverArgs<ExtArgs>
+  }
+
+  export type $OrderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Order"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      plan: Prisma.$PlanPayload<ExtArgs>
+      server: Prisma.$GameServerPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      planId: string
+      status: $Enums.OrderStatus
+      priceSnapshot: Prisma.JsonValue
+      totalAmount: number
+      currency: string
+      paymentMethod: string | null
+      paymentId: string | null
+      paidAt: Date | null
+      serverId: string | null
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["order"]>
+    composites: {}
+  }
+
+  type OrderGetPayload<S extends boolean | null | undefined | OrderDefaultArgs> = $Result.GetResult<Prisma.$OrderPayload, S>
+
+  type OrderCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<OrderFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: OrderCountAggregateInputType | true
+    }
+
+  export interface OrderDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Order'], meta: { name: 'Order' } }
+    /**
+     * Find zero or one Order that matches the filter.
+     * @param {OrderFindUniqueArgs} args - Arguments to find a Order
+     * @example
+     * // Get one Order
+     * const order = await prisma.order.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OrderFindUniqueArgs>(args: SelectSubset<T, OrderFindUniqueArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Order that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {OrderFindUniqueOrThrowArgs} args - Arguments to find a Order
+     * @example
+     * // Get one Order
+     * const order = await prisma.order.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OrderFindUniqueOrThrowArgs>(args: SelectSubset<T, OrderFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Order that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderFindFirstArgs} args - Arguments to find a Order
+     * @example
+     * // Get one Order
+     * const order = await prisma.order.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OrderFindFirstArgs>(args?: SelectSubset<T, OrderFindFirstArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Order that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderFindFirstOrThrowArgs} args - Arguments to find a Order
+     * @example
+     * // Get one Order
+     * const order = await prisma.order.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OrderFindFirstOrThrowArgs>(args?: SelectSubset<T, OrderFindFirstOrThrowArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Orders that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Orders
+     * const orders = await prisma.order.findMany()
+     * 
+     * // Get first 10 Orders
+     * const orders = await prisma.order.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const orderWithIdOnly = await prisma.order.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OrderFindManyArgs>(args?: SelectSubset<T, OrderFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Order.
+     * @param {OrderCreateArgs} args - Arguments to create a Order.
+     * @example
+     * // Create one Order
+     * const Order = await prisma.order.create({
+     *   data: {
+     *     // ... data to create a Order
+     *   }
+     * })
+     * 
+     */
+    create<T extends OrderCreateArgs>(args: SelectSubset<T, OrderCreateArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Orders.
+     * @param {OrderCreateManyArgs} args - Arguments to create many Orders.
+     * @example
+     * // Create many Orders
+     * const order = await prisma.order.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OrderCreateManyArgs>(args?: SelectSubset<T, OrderCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Order.
+     * @param {OrderDeleteArgs} args - Arguments to delete one Order.
+     * @example
+     * // Delete one Order
+     * const Order = await prisma.order.delete({
+     *   where: {
+     *     // ... filter to delete one Order
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OrderDeleteArgs>(args: SelectSubset<T, OrderDeleteArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Order.
+     * @param {OrderUpdateArgs} args - Arguments to update one Order.
+     * @example
+     * // Update one Order
+     * const order = await prisma.order.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OrderUpdateArgs>(args: SelectSubset<T, OrderUpdateArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Orders.
+     * @param {OrderDeleteManyArgs} args - Arguments to filter Orders to delete.
+     * @example
+     * // Delete a few Orders
+     * const { count } = await prisma.order.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OrderDeleteManyArgs>(args?: SelectSubset<T, OrderDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Orders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Orders
+     * const order = await prisma.order.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OrderUpdateManyArgs>(args: SelectSubset<T, OrderUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Order.
+     * @param {OrderUpsertArgs} args - Arguments to update or create a Order.
+     * @example
+     * // Update or create a Order
+     * const order = await prisma.order.upsert({
+     *   create: {
+     *     // ... data to create a Order
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Order we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OrderUpsertArgs>(args: SelectSubset<T, OrderUpsertArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Orders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderCountArgs} args - Arguments to filter Orders to count.
+     * @example
+     * // Count the number of Orders
+     * const count = await prisma.order.count({
+     *   where: {
+     *     // ... the filter for the Orders we want to count
+     *   }
+     * })
+    **/
+    count<T extends OrderCountArgs>(
+      args?: Subset<T, OrderCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OrderCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Order.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OrderAggregateArgs>(args: Subset<T, OrderAggregateArgs>): Prisma.PrismaPromise<GetOrderAggregateType<T>>
+
+    /**
+     * Group by Order.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OrderGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OrderGroupByArgs['orderBy'] }
+        : { orderBy?: OrderGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OrderGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOrderGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Order model
+   */
+  readonly fields: OrderFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Order.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OrderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    plan<T extends PlanDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PlanDefaultArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    server<T extends Order$serverArgs<ExtArgs> = {}>(args?: Subset<T, Order$serverArgs<ExtArgs>>): Prisma__GameServerClient<$Result.GetResult<Prisma.$GameServerPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Order model
+   */ 
+  interface OrderFieldRefs {
+    readonly id: FieldRef<"Order", 'String'>
+    readonly userId: FieldRef<"Order", 'String'>
+    readonly planId: FieldRef<"Order", 'String'>
+    readonly status: FieldRef<"Order", 'OrderStatus'>
+    readonly priceSnapshot: FieldRef<"Order", 'Json'>
+    readonly totalAmount: FieldRef<"Order", 'Int'>
+    readonly currency: FieldRef<"Order", 'String'>
+    readonly paymentMethod: FieldRef<"Order", 'String'>
+    readonly paymentId: FieldRef<"Order", 'String'>
+    readonly paidAt: FieldRef<"Order", 'DateTime'>
+    readonly serverId: FieldRef<"Order", 'String'>
+    readonly notes: FieldRef<"Order", 'String'>
+    readonly createdAt: FieldRef<"Order", 'DateTime'>
+    readonly updatedAt: FieldRef<"Order", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Order findUnique
+   */
+  export type OrderFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * Filter, which Order to fetch.
+     */
+    where: OrderWhereUniqueInput
+  }
+
+  /**
+   * Order findUniqueOrThrow
+   */
+  export type OrderFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * Filter, which Order to fetch.
+     */
+    where: OrderWhereUniqueInput
+  }
+
+  /**
+   * Order findFirst
+   */
+  export type OrderFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * Filter, which Order to fetch.
+     */
+    where?: OrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Orders to fetch.
+     */
+    orderBy?: OrderOrderByWithRelationInput | OrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Orders.
+     */
+    cursor?: OrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Orders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Orders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Orders.
+     */
+    distinct?: OrderScalarFieldEnum | OrderScalarFieldEnum[]
+  }
+
+  /**
+   * Order findFirstOrThrow
+   */
+  export type OrderFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * Filter, which Order to fetch.
+     */
+    where?: OrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Orders to fetch.
+     */
+    orderBy?: OrderOrderByWithRelationInput | OrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Orders.
+     */
+    cursor?: OrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Orders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Orders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Orders.
+     */
+    distinct?: OrderScalarFieldEnum | OrderScalarFieldEnum[]
+  }
+
+  /**
+   * Order findMany
+   */
+  export type OrderFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * Filter, which Orders to fetch.
+     */
+    where?: OrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Orders to fetch.
+     */
+    orderBy?: OrderOrderByWithRelationInput | OrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Orders.
+     */
+    cursor?: OrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Orders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Orders.
+     */
+    skip?: number
+    distinct?: OrderScalarFieldEnum | OrderScalarFieldEnum[]
+  }
+
+  /**
+   * Order create
+   */
+  export type OrderCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Order.
+     */
+    data: XOR<OrderCreateInput, OrderUncheckedCreateInput>
+  }
+
+  /**
+   * Order createMany
+   */
+  export type OrderCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Orders.
+     */
+    data: OrderCreateManyInput | OrderCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Order update
+   */
+  export type OrderUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Order.
+     */
+    data: XOR<OrderUpdateInput, OrderUncheckedUpdateInput>
+    /**
+     * Choose, which Order to update.
+     */
+    where: OrderWhereUniqueInput
+  }
+
+  /**
+   * Order updateMany
+   */
+  export type OrderUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Orders.
+     */
+    data: XOR<OrderUpdateManyMutationInput, OrderUncheckedUpdateManyInput>
+    /**
+     * Filter which Orders to update
+     */
+    where?: OrderWhereInput
+  }
+
+  /**
+   * Order upsert
+   */
+  export type OrderUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Order to update in case it exists.
+     */
+    where: OrderWhereUniqueInput
+    /**
+     * In case the Order found by the `where` argument doesn't exist, create a new Order with this data.
+     */
+    create: XOR<OrderCreateInput, OrderUncheckedCreateInput>
+    /**
+     * In case the Order was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OrderUpdateInput, OrderUncheckedUpdateInput>
+  }
+
+  /**
+   * Order delete
+   */
+  export type OrderDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * Filter which Order to delete.
+     */
+    where: OrderWhereUniqueInput
+  }
+
+  /**
+   * Order deleteMany
+   */
+  export type OrderDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Orders to delete
+     */
+    where?: OrderWhereInput
+  }
+
+  /**
+   * Order.server
+   */
+  export type Order$serverArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GameServer
+     */
+    select?: GameServerSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GameServerInclude<ExtArgs> | null
+    where?: GameServerWhereInput
+  }
+
+  /**
+   * Order without action
+   */
+  export type OrderDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -18578,6 +21065,7 @@ export namespace Prisma {
     status: 'status',
     nodeId: 'nodeId',
     ownerId: 'ownerId',
+    planId: 'planId',
     startupPriority: 'startupPriority',
     resources: 'resources',
     envVars: 'envVars',
@@ -18703,6 +21191,50 @@ export namespace Prisma {
   };
 
   export type IncidentScalarFieldEnum = (typeof IncidentScalarFieldEnum)[keyof typeof IncidentScalarFieldEnum]
+
+
+  export const PlanScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    slug: 'slug',
+    gameType: 'gameType',
+    status: 'status',
+    ramMb: 'ramMb',
+    cpuCores: 'cpuCores',
+    diskGb: 'diskGb',
+    maxSlots: 'maxSlots',
+    monthlyPrice: 'monthlyPrice',
+    hourlyPrice: 'hourlyPrice',
+    setupFee: 'setupFee',
+    features: 'features',
+    description: 'description',
+    isPopular: 'isPopular',
+    sortOrder: 'sortOrder',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PlanScalarFieldEnum = (typeof PlanScalarFieldEnum)[keyof typeof PlanScalarFieldEnum]
+
+
+  export const OrderScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    planId: 'planId',
+    status: 'status',
+    priceSnapshot: 'priceSnapshot',
+    totalAmount: 'totalAmount',
+    currency: 'currency',
+    paymentMethod: 'paymentMethod',
+    paymentId: 'paymentId',
+    paidAt: 'paidAt',
+    serverId: 'serverId',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -18902,6 +21434,20 @@ export namespace Prisma {
    */
   export type EnumIncidentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IncidentStatus'>
     
+
+
+  /**
+   * Reference to a field of type 'PlanStatus'
+   */
+  export type EnumPlanStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PlanStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'OrderStatus'
+   */
+  export type EnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus'>
+    
   /**
    * Deep Input Types
    */
@@ -19074,6 +21620,7 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaListRelationFilter
     apiKeys?: ApiKeyListRelationFilter
     assignedIncidents?: IncidentListRelationFilter
+    orders?: OrderListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -19093,6 +21640,7 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaOrderByRelationAggregateInput
     apiKeys?: ApiKeyOrderByRelationAggregateInput
     assignedIncidents?: IncidentOrderByRelationAggregateInput
+    orders?: OrderOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -19115,6 +21663,7 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaListRelationFilter
     apiKeys?: ApiKeyListRelationFilter
     assignedIncidents?: IncidentListRelationFilter
+    orders?: OrderListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -19568,6 +22117,7 @@ export namespace Prisma {
     status?: EnumServerStatusFilter<"GameServer"> | $Enums.ServerStatus
     nodeId?: StringFilter<"GameServer"> | string
     ownerId?: StringFilter<"GameServer"> | string
+    planId?: StringNullableFilter<"GameServer"> | string | null
     startupPriority?: IntFilter<"GameServer"> | number
     resources?: JsonFilter<"GameServer">
     envVars?: JsonFilter<"GameServer">
@@ -19576,12 +22126,14 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"GameServer"> | Date | string
     node?: XOR<NodeRelationFilter, NodeWhereInput>
     owner?: XOR<UserRelationFilter, UserWhereInput>
+    plan?: XOR<PlanNullableRelationFilter, PlanWhereInput> | null
     cluster?: XOR<GameClusterNullableRelationFilter, GameClusterWhereInput> | null
     networkAllocations?: NetworkAllocationListRelationFilter
     subdomains?: SubdomainListRelationFilter
     backups?: BackupListRelationFilter
     metrics?: MetricListRelationFilter
     alerts?: AlertListRelationFilter
+    orders?: OrderListRelationFilter
   }
 
   export type GameServerOrderByWithRelationInput = {
@@ -19591,6 +22143,7 @@ export namespace Prisma {
     status?: SortOrder
     nodeId?: SortOrder
     ownerId?: SortOrder
+    planId?: SortOrderInput | SortOrder
     startupPriority?: SortOrder
     resources?: SortOrder
     envVars?: SortOrder
@@ -19599,12 +22152,14 @@ export namespace Prisma {
     updatedAt?: SortOrder
     node?: NodeOrderByWithRelationInput
     owner?: UserOrderByWithRelationInput
+    plan?: PlanOrderByWithRelationInput
     cluster?: GameClusterOrderByWithRelationInput
     networkAllocations?: NetworkAllocationOrderByRelationAggregateInput
     subdomains?: SubdomainOrderByRelationAggregateInput
     backups?: BackupOrderByRelationAggregateInput
     metrics?: MetricOrderByRelationAggregateInput
     alerts?: AlertOrderByRelationAggregateInput
+    orders?: OrderOrderByRelationAggregateInput
   }
 
   export type GameServerWhereUniqueInput = Prisma.AtLeast<{
@@ -19617,6 +22172,7 @@ export namespace Prisma {
     status?: EnumServerStatusFilter<"GameServer"> | $Enums.ServerStatus
     nodeId?: StringFilter<"GameServer"> | string
     ownerId?: StringFilter<"GameServer"> | string
+    planId?: StringNullableFilter<"GameServer"> | string | null
     startupPriority?: IntFilter<"GameServer"> | number
     resources?: JsonFilter<"GameServer">
     envVars?: JsonFilter<"GameServer">
@@ -19625,12 +22181,14 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"GameServer"> | Date | string
     node?: XOR<NodeRelationFilter, NodeWhereInput>
     owner?: XOR<UserRelationFilter, UserWhereInput>
+    plan?: XOR<PlanNullableRelationFilter, PlanWhereInput> | null
     cluster?: XOR<GameClusterNullableRelationFilter, GameClusterWhereInput> | null
     networkAllocations?: NetworkAllocationListRelationFilter
     subdomains?: SubdomainListRelationFilter
     backups?: BackupListRelationFilter
     metrics?: MetricListRelationFilter
     alerts?: AlertListRelationFilter
+    orders?: OrderListRelationFilter
   }, "id" | "uuid">
 
   export type GameServerOrderByWithAggregationInput = {
@@ -19640,6 +22198,7 @@ export namespace Prisma {
     status?: SortOrder
     nodeId?: SortOrder
     ownerId?: SortOrder
+    planId?: SortOrderInput | SortOrder
     startupPriority?: SortOrder
     resources?: SortOrder
     envVars?: SortOrder
@@ -19663,6 +22222,7 @@ export namespace Prisma {
     status?: EnumServerStatusWithAggregatesFilter<"GameServer"> | $Enums.ServerStatus
     nodeId?: StringWithAggregatesFilter<"GameServer"> | string
     ownerId?: StringWithAggregatesFilter<"GameServer"> | string
+    planId?: StringNullableWithAggregatesFilter<"GameServer"> | string | null
     startupPriority?: IntWithAggregatesFilter<"GameServer"> | number
     resources?: JsonWithAggregatesFilter<"GameServer">
     envVars?: JsonWithAggregatesFilter<"GameServer">
@@ -20274,6 +22834,239 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Incident"> | Date | string
   }
 
+  export type PlanWhereInput = {
+    AND?: PlanWhereInput | PlanWhereInput[]
+    OR?: PlanWhereInput[]
+    NOT?: PlanWhereInput | PlanWhereInput[]
+    id?: StringFilter<"Plan"> | string
+    name?: StringFilter<"Plan"> | string
+    slug?: StringFilter<"Plan"> | string
+    gameType?: EnumGameTypeFilter<"Plan"> | $Enums.GameType
+    status?: EnumPlanStatusFilter<"Plan"> | $Enums.PlanStatus
+    ramMb?: IntFilter<"Plan"> | number
+    cpuCores?: IntFilter<"Plan"> | number
+    diskGb?: IntFilter<"Plan"> | number
+    maxSlots?: IntNullableFilter<"Plan"> | number | null
+    monthlyPrice?: IntFilter<"Plan"> | number
+    hourlyPrice?: IntNullableFilter<"Plan"> | number | null
+    setupFee?: IntFilter<"Plan"> | number
+    features?: JsonNullableFilter<"Plan">
+    description?: StringNullableFilter<"Plan"> | string | null
+    isPopular?: BoolFilter<"Plan"> | boolean
+    sortOrder?: IntFilter<"Plan"> | number
+    createdAt?: DateTimeFilter<"Plan"> | Date | string
+    updatedAt?: DateTimeFilter<"Plan"> | Date | string
+    servers?: GameServerListRelationFilter
+    orders?: OrderListRelationFilter
+  }
+
+  export type PlanOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    gameType?: SortOrder
+    status?: SortOrder
+    ramMb?: SortOrder
+    cpuCores?: SortOrder
+    diskGb?: SortOrder
+    maxSlots?: SortOrderInput | SortOrder
+    monthlyPrice?: SortOrder
+    hourlyPrice?: SortOrderInput | SortOrder
+    setupFee?: SortOrder
+    features?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    isPopular?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    servers?: GameServerOrderByRelationAggregateInput
+    orders?: OrderOrderByRelationAggregateInput
+  }
+
+  export type PlanWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    slug?: string
+    AND?: PlanWhereInput | PlanWhereInput[]
+    OR?: PlanWhereInput[]
+    NOT?: PlanWhereInput | PlanWhereInput[]
+    name?: StringFilter<"Plan"> | string
+    gameType?: EnumGameTypeFilter<"Plan"> | $Enums.GameType
+    status?: EnumPlanStatusFilter<"Plan"> | $Enums.PlanStatus
+    ramMb?: IntFilter<"Plan"> | number
+    cpuCores?: IntFilter<"Plan"> | number
+    diskGb?: IntFilter<"Plan"> | number
+    maxSlots?: IntNullableFilter<"Plan"> | number | null
+    monthlyPrice?: IntFilter<"Plan"> | number
+    hourlyPrice?: IntNullableFilter<"Plan"> | number | null
+    setupFee?: IntFilter<"Plan"> | number
+    features?: JsonNullableFilter<"Plan">
+    description?: StringNullableFilter<"Plan"> | string | null
+    isPopular?: BoolFilter<"Plan"> | boolean
+    sortOrder?: IntFilter<"Plan"> | number
+    createdAt?: DateTimeFilter<"Plan"> | Date | string
+    updatedAt?: DateTimeFilter<"Plan"> | Date | string
+    servers?: GameServerListRelationFilter
+    orders?: OrderListRelationFilter
+  }, "id" | "slug">
+
+  export type PlanOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    gameType?: SortOrder
+    status?: SortOrder
+    ramMb?: SortOrder
+    cpuCores?: SortOrder
+    diskGb?: SortOrder
+    maxSlots?: SortOrderInput | SortOrder
+    monthlyPrice?: SortOrder
+    hourlyPrice?: SortOrderInput | SortOrder
+    setupFee?: SortOrder
+    features?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    isPopular?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PlanCountOrderByAggregateInput
+    _avg?: PlanAvgOrderByAggregateInput
+    _max?: PlanMaxOrderByAggregateInput
+    _min?: PlanMinOrderByAggregateInput
+    _sum?: PlanSumOrderByAggregateInput
+  }
+
+  export type PlanScalarWhereWithAggregatesInput = {
+    AND?: PlanScalarWhereWithAggregatesInput | PlanScalarWhereWithAggregatesInput[]
+    OR?: PlanScalarWhereWithAggregatesInput[]
+    NOT?: PlanScalarWhereWithAggregatesInput | PlanScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Plan"> | string
+    name?: StringWithAggregatesFilter<"Plan"> | string
+    slug?: StringWithAggregatesFilter<"Plan"> | string
+    gameType?: EnumGameTypeWithAggregatesFilter<"Plan"> | $Enums.GameType
+    status?: EnumPlanStatusWithAggregatesFilter<"Plan"> | $Enums.PlanStatus
+    ramMb?: IntWithAggregatesFilter<"Plan"> | number
+    cpuCores?: IntWithAggregatesFilter<"Plan"> | number
+    diskGb?: IntWithAggregatesFilter<"Plan"> | number
+    maxSlots?: IntNullableWithAggregatesFilter<"Plan"> | number | null
+    monthlyPrice?: IntWithAggregatesFilter<"Plan"> | number
+    hourlyPrice?: IntNullableWithAggregatesFilter<"Plan"> | number | null
+    setupFee?: IntWithAggregatesFilter<"Plan"> | number
+    features?: JsonNullableWithAggregatesFilter<"Plan">
+    description?: StringNullableWithAggregatesFilter<"Plan"> | string | null
+    isPopular?: BoolWithAggregatesFilter<"Plan"> | boolean
+    sortOrder?: IntWithAggregatesFilter<"Plan"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"Plan"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Plan"> | Date | string
+  }
+
+  export type OrderWhereInput = {
+    AND?: OrderWhereInput | OrderWhereInput[]
+    OR?: OrderWhereInput[]
+    NOT?: OrderWhereInput | OrderWhereInput[]
+    id?: StringFilter<"Order"> | string
+    userId?: StringFilter<"Order"> | string
+    planId?: StringFilter<"Order"> | string
+    status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
+    priceSnapshot?: JsonFilter<"Order">
+    totalAmount?: IntFilter<"Order"> | number
+    currency?: StringFilter<"Order"> | string
+    paymentMethod?: StringNullableFilter<"Order"> | string | null
+    paymentId?: StringNullableFilter<"Order"> | string | null
+    paidAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    serverId?: StringNullableFilter<"Order"> | string | null
+    notes?: StringNullableFilter<"Order"> | string | null
+    createdAt?: DateTimeFilter<"Order"> | Date | string
+    updatedAt?: DateTimeFilter<"Order"> | Date | string
+    user?: XOR<UserRelationFilter, UserWhereInput>
+    plan?: XOR<PlanRelationFilter, PlanWhereInput>
+    server?: XOR<GameServerNullableRelationFilter, GameServerWhereInput> | null
+  }
+
+  export type OrderOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    planId?: SortOrder
+    status?: SortOrder
+    priceSnapshot?: SortOrder
+    totalAmount?: SortOrder
+    currency?: SortOrder
+    paymentMethod?: SortOrderInput | SortOrder
+    paymentId?: SortOrderInput | SortOrder
+    paidAt?: SortOrderInput | SortOrder
+    serverId?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    plan?: PlanOrderByWithRelationInput
+    server?: GameServerOrderByWithRelationInput
+  }
+
+  export type OrderWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    serverId?: string
+    AND?: OrderWhereInput | OrderWhereInput[]
+    OR?: OrderWhereInput[]
+    NOT?: OrderWhereInput | OrderWhereInput[]
+    userId?: StringFilter<"Order"> | string
+    planId?: StringFilter<"Order"> | string
+    status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
+    priceSnapshot?: JsonFilter<"Order">
+    totalAmount?: IntFilter<"Order"> | number
+    currency?: StringFilter<"Order"> | string
+    paymentMethod?: StringNullableFilter<"Order"> | string | null
+    paymentId?: StringNullableFilter<"Order"> | string | null
+    paidAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    notes?: StringNullableFilter<"Order"> | string | null
+    createdAt?: DateTimeFilter<"Order"> | Date | string
+    updatedAt?: DateTimeFilter<"Order"> | Date | string
+    user?: XOR<UserRelationFilter, UserWhereInput>
+    plan?: XOR<PlanRelationFilter, PlanWhereInput>
+    server?: XOR<GameServerNullableRelationFilter, GameServerWhereInput> | null
+  }, "id" | "serverId">
+
+  export type OrderOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    planId?: SortOrder
+    status?: SortOrder
+    priceSnapshot?: SortOrder
+    totalAmount?: SortOrder
+    currency?: SortOrder
+    paymentMethod?: SortOrderInput | SortOrder
+    paymentId?: SortOrderInput | SortOrder
+    paidAt?: SortOrderInput | SortOrder
+    serverId?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: OrderCountOrderByAggregateInput
+    _avg?: OrderAvgOrderByAggregateInput
+    _max?: OrderMaxOrderByAggregateInput
+    _min?: OrderMinOrderByAggregateInput
+    _sum?: OrderSumOrderByAggregateInput
+  }
+
+  export type OrderScalarWhereWithAggregatesInput = {
+    AND?: OrderScalarWhereWithAggregatesInput | OrderScalarWhereWithAggregatesInput[]
+    OR?: OrderScalarWhereWithAggregatesInput[]
+    NOT?: OrderScalarWhereWithAggregatesInput | OrderScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Order"> | string
+    userId?: StringWithAggregatesFilter<"Order"> | string
+    planId?: StringWithAggregatesFilter<"Order"> | string
+    status?: EnumOrderStatusWithAggregatesFilter<"Order"> | $Enums.OrderStatus
+    priceSnapshot?: JsonWithAggregatesFilter<"Order">
+    totalAmount?: IntWithAggregatesFilter<"Order"> | number
+    currency?: StringWithAggregatesFilter<"Order"> | string
+    paymentMethod?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    paymentId?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    paidAt?: DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
+    serverId?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
+  }
+
   export type SystemLicenseCreateInput = {
     id?: string
     licenseKey: string
@@ -20459,6 +23252,7 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaCreateNestedManyWithoutUserInput
     apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentCreateNestedManyWithoutAssignedToInput
+    orders?: OrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -20477,6 +23271,7 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUncheckedCreateNestedManyWithoutUserInput
     apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentUncheckedCreateNestedManyWithoutAssignedToInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -20495,6 +23290,7 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUpdateManyWithoutUserNestedInput
     apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -20513,6 +23309,7 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUncheckedUpdateManyWithoutUserNestedInput
     apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUncheckedUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -21015,12 +23812,14 @@ export namespace Prisma {
     updatedAt?: Date | string
     node: NodeCreateNestedOneWithoutServersInput
     owner: UserCreateNestedOneWithoutOwnedServersInput
+    plan?: PlanCreateNestedOneWithoutServersInput
     cluster?: GameClusterCreateNestedOneWithoutServersInput
     networkAllocations?: NetworkAllocationCreateNestedManyWithoutServerInput
     subdomains?: SubdomainCreateNestedManyWithoutServerInput
     backups?: BackupCreateNestedManyWithoutServerInput
     metrics?: MetricCreateNestedManyWithoutServerInput
     alerts?: AlertCreateNestedManyWithoutServerInput
+    orders?: OrderCreateNestedManyWithoutServerInput
   }
 
   export type GameServerUncheckedCreateInput = {
@@ -21030,6 +23829,7 @@ export namespace Prisma {
     status?: $Enums.ServerStatus
     nodeId: string
     ownerId: string
+    planId?: string | null
     startupPriority?: number
     resources: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -21041,6 +23841,7 @@ export namespace Prisma {
     backups?: BackupUncheckedCreateNestedManyWithoutServerInput
     metrics?: MetricUncheckedCreateNestedManyWithoutServerInput
     alerts?: AlertUncheckedCreateNestedManyWithoutServerInput
+    orders?: OrderUncheckedCreateNestedManyWithoutServerInput
   }
 
   export type GameServerUpdateInput = {
@@ -21055,12 +23856,14 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     node?: NodeUpdateOneRequiredWithoutServersNestedInput
     owner?: UserUpdateOneRequiredWithoutOwnedServersNestedInput
+    plan?: PlanUpdateOneWithoutServersNestedInput
     cluster?: GameClusterUpdateOneWithoutServersNestedInput
     networkAllocations?: NetworkAllocationUpdateManyWithoutServerNestedInput
     subdomains?: SubdomainUpdateManyWithoutServerNestedInput
     backups?: BackupUpdateManyWithoutServerNestedInput
     metrics?: MetricUpdateManyWithoutServerNestedInput
     alerts?: AlertUpdateManyWithoutServerNestedInput
+    orders?: OrderUpdateManyWithoutServerNestedInput
   }
 
   export type GameServerUncheckedUpdateInput = {
@@ -21070,6 +23873,7 @@ export namespace Prisma {
     status?: EnumServerStatusFieldUpdateOperationsInput | $Enums.ServerStatus
     nodeId?: StringFieldUpdateOperationsInput | string
     ownerId?: StringFieldUpdateOperationsInput | string
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
     startupPriority?: IntFieldUpdateOperationsInput | number
     resources?: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -21081,6 +23885,7 @@ export namespace Prisma {
     backups?: BackupUncheckedUpdateManyWithoutServerNestedInput
     metrics?: MetricUncheckedUpdateManyWithoutServerNestedInput
     alerts?: AlertUncheckedUpdateManyWithoutServerNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutServerNestedInput
   }
 
   export type GameServerCreateManyInput = {
@@ -21090,6 +23895,7 @@ export namespace Prisma {
     status?: $Enums.ServerStatus
     nodeId: string
     ownerId: string
+    planId?: string | null
     startupPriority?: number
     resources: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -21117,6 +23923,7 @@ export namespace Prisma {
     status?: EnumServerStatusFieldUpdateOperationsInput | $Enums.ServerStatus
     nodeId?: StringFieldUpdateOperationsInput | string
     ownerId?: StringFieldUpdateOperationsInput | string
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
     startupPriority?: IntFieldUpdateOperationsInput | number
     resources?: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -21783,6 +24590,277 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PlanCreateInput = {
+    id?: string
+    name: string
+    slug: string
+    gameType: $Enums.GameType
+    status?: $Enums.PlanStatus
+    ramMb: number
+    cpuCores: number
+    diskGb: number
+    maxSlots?: number | null
+    monthlyPrice: number
+    hourlyPrice?: number | null
+    setupFee?: number
+    features?: NullableJsonNullValueInput | InputJsonValue
+    description?: string | null
+    isPopular?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    servers?: GameServerCreateNestedManyWithoutPlanInput
+    orders?: OrderCreateNestedManyWithoutPlanInput
+  }
+
+  export type PlanUncheckedCreateInput = {
+    id?: string
+    name: string
+    slug: string
+    gameType: $Enums.GameType
+    status?: $Enums.PlanStatus
+    ramMb: number
+    cpuCores: number
+    diskGb: number
+    maxSlots?: number | null
+    monthlyPrice: number
+    hourlyPrice?: number | null
+    setupFee?: number
+    features?: NullableJsonNullValueInput | InputJsonValue
+    description?: string | null
+    isPopular?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    servers?: GameServerUncheckedCreateNestedManyWithoutPlanInput
+    orders?: OrderUncheckedCreateNestedManyWithoutPlanInput
+  }
+
+  export type PlanUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    gameType?: EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
+    status?: EnumPlanStatusFieldUpdateOperationsInput | $Enums.PlanStatus
+    ramMb?: IntFieldUpdateOperationsInput | number
+    cpuCores?: IntFieldUpdateOperationsInput | number
+    diskGb?: IntFieldUpdateOperationsInput | number
+    maxSlots?: NullableIntFieldUpdateOperationsInput | number | null
+    monthlyPrice?: IntFieldUpdateOperationsInput | number
+    hourlyPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    setupFee?: IntFieldUpdateOperationsInput | number
+    features?: NullableJsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPopular?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    servers?: GameServerUpdateManyWithoutPlanNestedInput
+    orders?: OrderUpdateManyWithoutPlanNestedInput
+  }
+
+  export type PlanUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    gameType?: EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
+    status?: EnumPlanStatusFieldUpdateOperationsInput | $Enums.PlanStatus
+    ramMb?: IntFieldUpdateOperationsInput | number
+    cpuCores?: IntFieldUpdateOperationsInput | number
+    diskGb?: IntFieldUpdateOperationsInput | number
+    maxSlots?: NullableIntFieldUpdateOperationsInput | number | null
+    monthlyPrice?: IntFieldUpdateOperationsInput | number
+    hourlyPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    setupFee?: IntFieldUpdateOperationsInput | number
+    features?: NullableJsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPopular?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    servers?: GameServerUncheckedUpdateManyWithoutPlanNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutPlanNestedInput
+  }
+
+  export type PlanCreateManyInput = {
+    id?: string
+    name: string
+    slug: string
+    gameType: $Enums.GameType
+    status?: $Enums.PlanStatus
+    ramMb: number
+    cpuCores: number
+    diskGb: number
+    maxSlots?: number | null
+    monthlyPrice: number
+    hourlyPrice?: number | null
+    setupFee?: number
+    features?: NullableJsonNullValueInput | InputJsonValue
+    description?: string | null
+    isPopular?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PlanUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    gameType?: EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
+    status?: EnumPlanStatusFieldUpdateOperationsInput | $Enums.PlanStatus
+    ramMb?: IntFieldUpdateOperationsInput | number
+    cpuCores?: IntFieldUpdateOperationsInput | number
+    diskGb?: IntFieldUpdateOperationsInput | number
+    maxSlots?: NullableIntFieldUpdateOperationsInput | number | null
+    monthlyPrice?: IntFieldUpdateOperationsInput | number
+    hourlyPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    setupFee?: IntFieldUpdateOperationsInput | number
+    features?: NullableJsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPopular?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlanUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    gameType?: EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
+    status?: EnumPlanStatusFieldUpdateOperationsInput | $Enums.PlanStatus
+    ramMb?: IntFieldUpdateOperationsInput | number
+    cpuCores?: IntFieldUpdateOperationsInput | number
+    diskGb?: IntFieldUpdateOperationsInput | number
+    maxSlots?: NullableIntFieldUpdateOperationsInput | number | null
+    monthlyPrice?: IntFieldUpdateOperationsInput | number
+    hourlyPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    setupFee?: IntFieldUpdateOperationsInput | number
+    features?: NullableJsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPopular?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderCreateInput = {
+    id?: string
+    status?: $Enums.OrderStatus
+    priceSnapshot: JsonNullValueInput | InputJsonValue
+    totalAmount: number
+    currency?: string
+    paymentMethod?: string | null
+    paymentId?: string | null
+    paidAt?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutOrdersInput
+    plan: PlanCreateNestedOneWithoutOrdersInput
+    server?: GameServerCreateNestedOneWithoutOrdersInput
+  }
+
+  export type OrderUncheckedCreateInput = {
+    id?: string
+    userId: string
+    planId: string
+    status?: $Enums.OrderStatus
+    priceSnapshot: JsonNullValueInput | InputJsonValue
+    totalAmount: number
+    currency?: string
+    paymentMethod?: string | null
+    paymentId?: string | null
+    paidAt?: Date | string | null
+    serverId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    priceSnapshot?: JsonNullValueInput | InputJsonValue
+    totalAmount?: IntFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutOrdersNestedInput
+    plan?: PlanUpdateOneRequiredWithoutOrdersNestedInput
+    server?: GameServerUpdateOneWithoutOrdersNestedInput
+  }
+
+  export type OrderUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    planId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    priceSnapshot?: JsonNullValueInput | InputJsonValue
+    totalAmount?: IntFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    serverId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderCreateManyInput = {
+    id?: string
+    userId: string
+    planId: string
+    status?: $Enums.OrderStatus
+    priceSnapshot: JsonNullValueInput | InputJsonValue
+    totalAmount: number
+    currency?: string
+    paymentMethod?: string | null
+    paymentId?: string | null
+    paidAt?: Date | string | null
+    serverId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    priceSnapshot?: JsonNullValueInput | InputJsonValue
+    totalAmount?: IntFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    planId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    priceSnapshot?: JsonNullValueInput | InputJsonValue
+    totalAmount?: IntFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    serverId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -22133,6 +25211,12 @@ export namespace Prisma {
     none?: IncidentWhereInput
   }
 
+  export type OrderListRelationFilter = {
+    every?: OrderWhereInput
+    some?: OrderWhereInput
+    none?: OrderWhereInput
+  }
+
   export type GameServerOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -22150,6 +25234,10 @@ export namespace Prisma {
   }
 
   export type IncidentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type OrderOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -22681,6 +25769,11 @@ export namespace Prisma {
     isNot?: UserWhereInput
   }
 
+  export type PlanNullableRelationFilter = {
+    is?: PlanWhereInput | null
+    isNot?: PlanWhereInput | null
+  }
+
   export type GameClusterNullableRelationFilter = {
     is?: GameClusterWhereInput | null
     isNot?: GameClusterWhereInput | null
@@ -22713,6 +25806,7 @@ export namespace Prisma {
     status?: SortOrder
     nodeId?: SortOrder
     ownerId?: SortOrder
+    planId?: SortOrder
     startupPriority?: SortOrder
     resources?: SortOrder
     envVars?: SortOrder
@@ -22732,6 +25826,7 @@ export namespace Prisma {
     status?: SortOrder
     nodeId?: SortOrder
     ownerId?: SortOrder
+    planId?: SortOrder
     startupPriority?: SortOrder
     clusterId?: SortOrder
     createdAt?: SortOrder
@@ -22745,6 +25840,7 @@ export namespace Prisma {
     status?: SortOrder
     nodeId?: SortOrder
     ownerId?: SortOrder
+    planId?: SortOrder
     startupPriority?: SortOrder
     clusterId?: SortOrder
     createdAt?: SortOrder
@@ -23248,6 +26344,185 @@ export namespace Prisma {
     _max?: NestedEnumIncidentStatusFilter<$PrismaModel>
   }
 
+  export type EnumPlanStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.PlanStatus | EnumPlanStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PlanStatus[]
+    notIn?: $Enums.PlanStatus[]
+    not?: NestedEnumPlanStatusFilter<$PrismaModel> | $Enums.PlanStatus
+  }
+
+  export type PlanCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    gameType?: SortOrder
+    status?: SortOrder
+    ramMb?: SortOrder
+    cpuCores?: SortOrder
+    diskGb?: SortOrder
+    maxSlots?: SortOrder
+    monthlyPrice?: SortOrder
+    hourlyPrice?: SortOrder
+    setupFee?: SortOrder
+    features?: SortOrder
+    description?: SortOrder
+    isPopular?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PlanAvgOrderByAggregateInput = {
+    ramMb?: SortOrder
+    cpuCores?: SortOrder
+    diskGb?: SortOrder
+    maxSlots?: SortOrder
+    monthlyPrice?: SortOrder
+    hourlyPrice?: SortOrder
+    setupFee?: SortOrder
+    sortOrder?: SortOrder
+  }
+
+  export type PlanMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    gameType?: SortOrder
+    status?: SortOrder
+    ramMb?: SortOrder
+    cpuCores?: SortOrder
+    diskGb?: SortOrder
+    maxSlots?: SortOrder
+    monthlyPrice?: SortOrder
+    hourlyPrice?: SortOrder
+    setupFee?: SortOrder
+    description?: SortOrder
+    isPopular?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PlanMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    gameType?: SortOrder
+    status?: SortOrder
+    ramMb?: SortOrder
+    cpuCores?: SortOrder
+    diskGb?: SortOrder
+    maxSlots?: SortOrder
+    monthlyPrice?: SortOrder
+    hourlyPrice?: SortOrder
+    setupFee?: SortOrder
+    description?: SortOrder
+    isPopular?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PlanSumOrderByAggregateInput = {
+    ramMb?: SortOrder
+    cpuCores?: SortOrder
+    diskGb?: SortOrder
+    maxSlots?: SortOrder
+    monthlyPrice?: SortOrder
+    hourlyPrice?: SortOrder
+    setupFee?: SortOrder
+    sortOrder?: SortOrder
+  }
+
+  export type EnumPlanStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PlanStatus | EnumPlanStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PlanStatus[]
+    notIn?: $Enums.PlanStatus[]
+    not?: NestedEnumPlanStatusWithAggregatesFilter<$PrismaModel> | $Enums.PlanStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPlanStatusFilter<$PrismaModel>
+    _max?: NestedEnumPlanStatusFilter<$PrismaModel>
+  }
+
+  export type EnumOrderStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrderStatus[]
+    notIn?: $Enums.OrderStatus[]
+    not?: NestedEnumOrderStatusFilter<$PrismaModel> | $Enums.OrderStatus
+  }
+
+  export type PlanRelationFilter = {
+    is?: PlanWhereInput
+    isNot?: PlanWhereInput
+  }
+
+  export type OrderCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    planId?: SortOrder
+    status?: SortOrder
+    priceSnapshot?: SortOrder
+    totalAmount?: SortOrder
+    currency?: SortOrder
+    paymentMethod?: SortOrder
+    paymentId?: SortOrder
+    paidAt?: SortOrder
+    serverId?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OrderAvgOrderByAggregateInput = {
+    totalAmount?: SortOrder
+  }
+
+  export type OrderMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    planId?: SortOrder
+    status?: SortOrder
+    totalAmount?: SortOrder
+    currency?: SortOrder
+    paymentMethod?: SortOrder
+    paymentId?: SortOrder
+    paidAt?: SortOrder
+    serverId?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OrderMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    planId?: SortOrder
+    status?: SortOrder
+    totalAmount?: SortOrder
+    currency?: SortOrder
+    paymentMethod?: SortOrder
+    paymentId?: SortOrder
+    paidAt?: SortOrder
+    serverId?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OrderSumOrderByAggregateInput = {
+    totalAmount?: SortOrder
+  }
+
+  export type EnumOrderStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrderStatus[]
+    notIn?: $Enums.OrderStatus[]
+    not?: NestedEnumOrderStatusWithAggregatesFilter<$PrismaModel> | $Enums.OrderStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOrderStatusFilter<$PrismaModel>
+    _max?: NestedEnumOrderStatusFilter<$PrismaModel>
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -23408,6 +26683,13 @@ export namespace Prisma {
     connect?: IncidentWhereUniqueInput | IncidentWhereUniqueInput[]
   }
 
+  export type OrderCreateNestedManyWithoutUserInput = {
+    create?: XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput> | OrderCreateWithoutUserInput[] | OrderUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OrderCreateOrConnectWithoutUserInput | OrderCreateOrConnectWithoutUserInput[]
+    createMany?: OrderCreateManyUserInputEnvelope
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+  }
+
   export type GameServerUncheckedCreateNestedManyWithoutOwnerInput = {
     create?: XOR<GameServerCreateWithoutOwnerInput, GameServerUncheckedCreateWithoutOwnerInput> | GameServerCreateWithoutOwnerInput[] | GameServerUncheckedCreateWithoutOwnerInput[]
     connectOrCreate?: GameServerCreateOrConnectWithoutOwnerInput | GameServerCreateOrConnectWithoutOwnerInput[]
@@ -23448,6 +26730,13 @@ export namespace Prisma {
     connectOrCreate?: IncidentCreateOrConnectWithoutAssignedToInput | IncidentCreateOrConnectWithoutAssignedToInput[]
     createMany?: IncidentCreateManyAssignedToInputEnvelope
     connect?: IncidentWhereUniqueInput | IncidentWhereUniqueInput[]
+  }
+
+  export type OrderUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput> | OrderCreateWithoutUserInput[] | OrderUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OrderCreateOrConnectWithoutUserInput | OrderCreateOrConnectWithoutUserInput[]
+    createMany?: OrderCreateManyUserInputEnvelope
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
   }
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
@@ -23560,6 +26849,20 @@ export namespace Prisma {
     deleteMany?: IncidentScalarWhereInput | IncidentScalarWhereInput[]
   }
 
+  export type OrderUpdateManyWithoutUserNestedInput = {
+    create?: XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput> | OrderCreateWithoutUserInput[] | OrderUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OrderCreateOrConnectWithoutUserInput | OrderCreateOrConnectWithoutUserInput[]
+    upsert?: OrderUpsertWithWhereUniqueWithoutUserInput | OrderUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: OrderCreateManyUserInputEnvelope
+    set?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    disconnect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    delete?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    update?: OrderUpdateWithWhereUniqueWithoutUserInput | OrderUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: OrderUpdateManyWithWhereWithoutUserInput | OrderUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
+  }
+
   export type GameServerUncheckedUpdateManyWithoutOwnerNestedInput = {
     create?: XOR<GameServerCreateWithoutOwnerInput, GameServerUncheckedCreateWithoutOwnerInput> | GameServerCreateWithoutOwnerInput[] | GameServerUncheckedCreateWithoutOwnerInput[]
     connectOrCreate?: GameServerCreateOrConnectWithoutOwnerInput | GameServerCreateOrConnectWithoutOwnerInput[]
@@ -23642,6 +26945,20 @@ export namespace Prisma {
     update?: IncidentUpdateWithWhereUniqueWithoutAssignedToInput | IncidentUpdateWithWhereUniqueWithoutAssignedToInput[]
     updateMany?: IncidentUpdateManyWithWhereWithoutAssignedToInput | IncidentUpdateManyWithWhereWithoutAssignedToInput[]
     deleteMany?: IncidentScalarWhereInput | IncidentScalarWhereInput[]
+  }
+
+  export type OrderUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput> | OrderCreateWithoutUserInput[] | OrderUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OrderCreateOrConnectWithoutUserInput | OrderCreateOrConnectWithoutUserInput[]
+    upsert?: OrderUpsertWithWhereUniqueWithoutUserInput | OrderUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: OrderCreateManyUserInputEnvelope
+    set?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    disconnect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    delete?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    update?: OrderUpdateWithWhereUniqueWithoutUserInput | OrderUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: OrderUpdateManyWithWhereWithoutUserInput | OrderUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutAuditLogsInput = {
@@ -24006,6 +27323,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type PlanCreateNestedOneWithoutServersInput = {
+    create?: XOR<PlanCreateWithoutServersInput, PlanUncheckedCreateWithoutServersInput>
+    connectOrCreate?: PlanCreateOrConnectWithoutServersInput
+    connect?: PlanWhereUniqueInput
+  }
+
   export type GameClusterCreateNestedOneWithoutServersInput = {
     create?: XOR<GameClusterCreateWithoutServersInput, GameClusterUncheckedCreateWithoutServersInput>
     connectOrCreate?: GameClusterCreateOrConnectWithoutServersInput
@@ -24047,6 +27370,13 @@ export namespace Prisma {
     connect?: AlertWhereUniqueInput | AlertWhereUniqueInput[]
   }
 
+  export type OrderCreateNestedManyWithoutServerInput = {
+    create?: XOR<OrderCreateWithoutServerInput, OrderUncheckedCreateWithoutServerInput> | OrderCreateWithoutServerInput[] | OrderUncheckedCreateWithoutServerInput[]
+    connectOrCreate?: OrderCreateOrConnectWithoutServerInput | OrderCreateOrConnectWithoutServerInput[]
+    createMany?: OrderCreateManyServerInputEnvelope
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+  }
+
   export type NetworkAllocationUncheckedCreateNestedManyWithoutServerInput = {
     create?: XOR<NetworkAllocationCreateWithoutServerInput, NetworkAllocationUncheckedCreateWithoutServerInput> | NetworkAllocationCreateWithoutServerInput[] | NetworkAllocationUncheckedCreateWithoutServerInput[]
     connectOrCreate?: NetworkAllocationCreateOrConnectWithoutServerInput | NetworkAllocationCreateOrConnectWithoutServerInput[]
@@ -24082,6 +27412,13 @@ export namespace Prisma {
     connect?: AlertWhereUniqueInput | AlertWhereUniqueInput[]
   }
 
+  export type OrderUncheckedCreateNestedManyWithoutServerInput = {
+    create?: XOR<OrderCreateWithoutServerInput, OrderUncheckedCreateWithoutServerInput> | OrderCreateWithoutServerInput[] | OrderUncheckedCreateWithoutServerInput[]
+    connectOrCreate?: OrderCreateOrConnectWithoutServerInput | OrderCreateOrConnectWithoutServerInput[]
+    createMany?: OrderCreateManyServerInputEnvelope
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+  }
+
   export type EnumGameTypeFieldUpdateOperationsInput = {
     set?: $Enums.GameType
   }
@@ -24104,6 +27441,16 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutOwnedServersInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOwnedServersInput, UserUpdateWithoutOwnedServersInput>, UserUncheckedUpdateWithoutOwnedServersInput>
+  }
+
+  export type PlanUpdateOneWithoutServersNestedInput = {
+    create?: XOR<PlanCreateWithoutServersInput, PlanUncheckedCreateWithoutServersInput>
+    connectOrCreate?: PlanCreateOrConnectWithoutServersInput
+    upsert?: PlanUpsertWithoutServersInput
+    disconnect?: PlanWhereInput | boolean
+    delete?: PlanWhereInput | boolean
+    connect?: PlanWhereUniqueInput
+    update?: XOR<XOR<PlanUpdateToOneWithWhereWithoutServersInput, PlanUpdateWithoutServersInput>, PlanUncheckedUpdateWithoutServersInput>
   }
 
   export type GameClusterUpdateOneWithoutServersNestedInput = {
@@ -24186,6 +27533,20 @@ export namespace Prisma {
     deleteMany?: AlertScalarWhereInput | AlertScalarWhereInput[]
   }
 
+  export type OrderUpdateManyWithoutServerNestedInput = {
+    create?: XOR<OrderCreateWithoutServerInput, OrderUncheckedCreateWithoutServerInput> | OrderCreateWithoutServerInput[] | OrderUncheckedCreateWithoutServerInput[]
+    connectOrCreate?: OrderCreateOrConnectWithoutServerInput | OrderCreateOrConnectWithoutServerInput[]
+    upsert?: OrderUpsertWithWhereUniqueWithoutServerInput | OrderUpsertWithWhereUniqueWithoutServerInput[]
+    createMany?: OrderCreateManyServerInputEnvelope
+    set?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    disconnect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    delete?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    update?: OrderUpdateWithWhereUniqueWithoutServerInput | OrderUpdateWithWhereUniqueWithoutServerInput[]
+    updateMany?: OrderUpdateManyWithWhereWithoutServerInput | OrderUpdateManyWithWhereWithoutServerInput[]
+    deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
+  }
+
   export type NetworkAllocationUncheckedUpdateManyWithoutServerNestedInput = {
     create?: XOR<NetworkAllocationCreateWithoutServerInput, NetworkAllocationUncheckedCreateWithoutServerInput> | NetworkAllocationCreateWithoutServerInput[] | NetworkAllocationUncheckedCreateWithoutServerInput[]
     connectOrCreate?: NetworkAllocationCreateOrConnectWithoutServerInput | NetworkAllocationCreateOrConnectWithoutServerInput[]
@@ -24254,6 +27615,20 @@ export namespace Prisma {
     update?: AlertUpdateWithWhereUniqueWithoutServerInput | AlertUpdateWithWhereUniqueWithoutServerInput[]
     updateMany?: AlertUpdateManyWithWhereWithoutServerInput | AlertUpdateManyWithWhereWithoutServerInput[]
     deleteMany?: AlertScalarWhereInput | AlertScalarWhereInput[]
+  }
+
+  export type OrderUncheckedUpdateManyWithoutServerNestedInput = {
+    create?: XOR<OrderCreateWithoutServerInput, OrderUncheckedCreateWithoutServerInput> | OrderCreateWithoutServerInput[] | OrderUncheckedCreateWithoutServerInput[]
+    connectOrCreate?: OrderCreateOrConnectWithoutServerInput | OrderCreateOrConnectWithoutServerInput[]
+    upsert?: OrderUpsertWithWhereUniqueWithoutServerInput | OrderUpsertWithWhereUniqueWithoutServerInput[]
+    createMany?: OrderCreateManyServerInputEnvelope
+    set?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    disconnect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    delete?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    update?: OrderUpdateWithWhereUniqueWithoutServerInput | OrderUpdateWithWhereUniqueWithoutServerInput[]
+    updateMany?: OrderUpdateManyWithWhereWithoutServerInput | OrderUpdateManyWithWhereWithoutServerInput[]
+    deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
   }
 
   export type NodeCreateNestedOneWithoutStorageClustersInput = {
@@ -24498,6 +27873,142 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAssignedIncidentsInput, UserUpdateWithoutAssignedIncidentsInput>, UserUncheckedUpdateWithoutAssignedIncidentsInput>
+  }
+
+  export type GameServerCreateNestedManyWithoutPlanInput = {
+    create?: XOR<GameServerCreateWithoutPlanInput, GameServerUncheckedCreateWithoutPlanInput> | GameServerCreateWithoutPlanInput[] | GameServerUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: GameServerCreateOrConnectWithoutPlanInput | GameServerCreateOrConnectWithoutPlanInput[]
+    createMany?: GameServerCreateManyPlanInputEnvelope
+    connect?: GameServerWhereUniqueInput | GameServerWhereUniqueInput[]
+  }
+
+  export type OrderCreateNestedManyWithoutPlanInput = {
+    create?: XOR<OrderCreateWithoutPlanInput, OrderUncheckedCreateWithoutPlanInput> | OrderCreateWithoutPlanInput[] | OrderUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: OrderCreateOrConnectWithoutPlanInput | OrderCreateOrConnectWithoutPlanInput[]
+    createMany?: OrderCreateManyPlanInputEnvelope
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+  }
+
+  export type GameServerUncheckedCreateNestedManyWithoutPlanInput = {
+    create?: XOR<GameServerCreateWithoutPlanInput, GameServerUncheckedCreateWithoutPlanInput> | GameServerCreateWithoutPlanInput[] | GameServerUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: GameServerCreateOrConnectWithoutPlanInput | GameServerCreateOrConnectWithoutPlanInput[]
+    createMany?: GameServerCreateManyPlanInputEnvelope
+    connect?: GameServerWhereUniqueInput | GameServerWhereUniqueInput[]
+  }
+
+  export type OrderUncheckedCreateNestedManyWithoutPlanInput = {
+    create?: XOR<OrderCreateWithoutPlanInput, OrderUncheckedCreateWithoutPlanInput> | OrderCreateWithoutPlanInput[] | OrderUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: OrderCreateOrConnectWithoutPlanInput | OrderCreateOrConnectWithoutPlanInput[]
+    createMany?: OrderCreateManyPlanInputEnvelope
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+  }
+
+  export type EnumPlanStatusFieldUpdateOperationsInput = {
+    set?: $Enums.PlanStatus
+  }
+
+  export type GameServerUpdateManyWithoutPlanNestedInput = {
+    create?: XOR<GameServerCreateWithoutPlanInput, GameServerUncheckedCreateWithoutPlanInput> | GameServerCreateWithoutPlanInput[] | GameServerUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: GameServerCreateOrConnectWithoutPlanInput | GameServerCreateOrConnectWithoutPlanInput[]
+    upsert?: GameServerUpsertWithWhereUniqueWithoutPlanInput | GameServerUpsertWithWhereUniqueWithoutPlanInput[]
+    createMany?: GameServerCreateManyPlanInputEnvelope
+    set?: GameServerWhereUniqueInput | GameServerWhereUniqueInput[]
+    disconnect?: GameServerWhereUniqueInput | GameServerWhereUniqueInput[]
+    delete?: GameServerWhereUniqueInput | GameServerWhereUniqueInput[]
+    connect?: GameServerWhereUniqueInput | GameServerWhereUniqueInput[]
+    update?: GameServerUpdateWithWhereUniqueWithoutPlanInput | GameServerUpdateWithWhereUniqueWithoutPlanInput[]
+    updateMany?: GameServerUpdateManyWithWhereWithoutPlanInput | GameServerUpdateManyWithWhereWithoutPlanInput[]
+    deleteMany?: GameServerScalarWhereInput | GameServerScalarWhereInput[]
+  }
+
+  export type OrderUpdateManyWithoutPlanNestedInput = {
+    create?: XOR<OrderCreateWithoutPlanInput, OrderUncheckedCreateWithoutPlanInput> | OrderCreateWithoutPlanInput[] | OrderUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: OrderCreateOrConnectWithoutPlanInput | OrderCreateOrConnectWithoutPlanInput[]
+    upsert?: OrderUpsertWithWhereUniqueWithoutPlanInput | OrderUpsertWithWhereUniqueWithoutPlanInput[]
+    createMany?: OrderCreateManyPlanInputEnvelope
+    set?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    disconnect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    delete?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    update?: OrderUpdateWithWhereUniqueWithoutPlanInput | OrderUpdateWithWhereUniqueWithoutPlanInput[]
+    updateMany?: OrderUpdateManyWithWhereWithoutPlanInput | OrderUpdateManyWithWhereWithoutPlanInput[]
+    deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
+  }
+
+  export type GameServerUncheckedUpdateManyWithoutPlanNestedInput = {
+    create?: XOR<GameServerCreateWithoutPlanInput, GameServerUncheckedCreateWithoutPlanInput> | GameServerCreateWithoutPlanInput[] | GameServerUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: GameServerCreateOrConnectWithoutPlanInput | GameServerCreateOrConnectWithoutPlanInput[]
+    upsert?: GameServerUpsertWithWhereUniqueWithoutPlanInput | GameServerUpsertWithWhereUniqueWithoutPlanInput[]
+    createMany?: GameServerCreateManyPlanInputEnvelope
+    set?: GameServerWhereUniqueInput | GameServerWhereUniqueInput[]
+    disconnect?: GameServerWhereUniqueInput | GameServerWhereUniqueInput[]
+    delete?: GameServerWhereUniqueInput | GameServerWhereUniqueInput[]
+    connect?: GameServerWhereUniqueInput | GameServerWhereUniqueInput[]
+    update?: GameServerUpdateWithWhereUniqueWithoutPlanInput | GameServerUpdateWithWhereUniqueWithoutPlanInput[]
+    updateMany?: GameServerUpdateManyWithWhereWithoutPlanInput | GameServerUpdateManyWithWhereWithoutPlanInput[]
+    deleteMany?: GameServerScalarWhereInput | GameServerScalarWhereInput[]
+  }
+
+  export type OrderUncheckedUpdateManyWithoutPlanNestedInput = {
+    create?: XOR<OrderCreateWithoutPlanInput, OrderUncheckedCreateWithoutPlanInput> | OrderCreateWithoutPlanInput[] | OrderUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: OrderCreateOrConnectWithoutPlanInput | OrderCreateOrConnectWithoutPlanInput[]
+    upsert?: OrderUpsertWithWhereUniqueWithoutPlanInput | OrderUpsertWithWhereUniqueWithoutPlanInput[]
+    createMany?: OrderCreateManyPlanInputEnvelope
+    set?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    disconnect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    delete?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    update?: OrderUpdateWithWhereUniqueWithoutPlanInput | OrderUpdateWithWhereUniqueWithoutPlanInput[]
+    updateMany?: OrderUpdateManyWithWhereWithoutPlanInput | OrderUpdateManyWithWhereWithoutPlanInput[]
+    deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutOrdersInput = {
+    create?: XOR<UserCreateWithoutOrdersInput, UserUncheckedCreateWithoutOrdersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOrdersInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type PlanCreateNestedOneWithoutOrdersInput = {
+    create?: XOR<PlanCreateWithoutOrdersInput, PlanUncheckedCreateWithoutOrdersInput>
+    connectOrCreate?: PlanCreateOrConnectWithoutOrdersInput
+    connect?: PlanWhereUniqueInput
+  }
+
+  export type GameServerCreateNestedOneWithoutOrdersInput = {
+    create?: XOR<GameServerCreateWithoutOrdersInput, GameServerUncheckedCreateWithoutOrdersInput>
+    connectOrCreate?: GameServerCreateOrConnectWithoutOrdersInput
+    connect?: GameServerWhereUniqueInput
+  }
+
+  export type EnumOrderStatusFieldUpdateOperationsInput = {
+    set?: $Enums.OrderStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutOrdersNestedInput = {
+    create?: XOR<UserCreateWithoutOrdersInput, UserUncheckedCreateWithoutOrdersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOrdersInput
+    upsert?: UserUpsertWithoutOrdersInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOrdersInput, UserUpdateWithoutOrdersInput>, UserUncheckedUpdateWithoutOrdersInput>
+  }
+
+  export type PlanUpdateOneRequiredWithoutOrdersNestedInput = {
+    create?: XOR<PlanCreateWithoutOrdersInput, PlanUncheckedCreateWithoutOrdersInput>
+    connectOrCreate?: PlanCreateOrConnectWithoutOrdersInput
+    upsert?: PlanUpsertWithoutOrdersInput
+    connect?: PlanWhereUniqueInput
+    update?: XOR<XOR<PlanUpdateToOneWithWhereWithoutOrdersInput, PlanUpdateWithoutOrdersInput>, PlanUncheckedUpdateWithoutOrdersInput>
+  }
+
+  export type GameServerUpdateOneWithoutOrdersNestedInput = {
+    create?: XOR<GameServerCreateWithoutOrdersInput, GameServerUncheckedCreateWithoutOrdersInput>
+    connectOrCreate?: GameServerCreateOrConnectWithoutOrdersInput
+    upsert?: GameServerUpsertWithoutOrdersInput
+    disconnect?: GameServerWhereInput | boolean
+    delete?: GameServerWhereInput | boolean
+    connect?: GameServerWhereUniqueInput
+    update?: XOR<XOR<GameServerUpdateToOneWithWhereWithoutOrdersInput, GameServerUpdateWithoutOrdersInput>, GameServerUncheckedUpdateWithoutOrdersInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -25043,6 +28554,40 @@ export namespace Prisma {
     _max?: NestedEnumIncidentStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumPlanStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.PlanStatus | EnumPlanStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PlanStatus[]
+    notIn?: $Enums.PlanStatus[]
+    not?: NestedEnumPlanStatusFilter<$PrismaModel> | $Enums.PlanStatus
+  }
+
+  export type NestedEnumPlanStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PlanStatus | EnumPlanStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PlanStatus[]
+    notIn?: $Enums.PlanStatus[]
+    not?: NestedEnumPlanStatusWithAggregatesFilter<$PrismaModel> | $Enums.PlanStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPlanStatusFilter<$PrismaModel>
+    _max?: NestedEnumPlanStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumOrderStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrderStatus[]
+    notIn?: $Enums.OrderStatus[]
+    not?: NestedEnumOrderStatusFilter<$PrismaModel> | $Enums.OrderStatus
+  }
+
+  export type NestedEnumOrderStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrderStatus[]
+    notIn?: $Enums.OrderStatus[]
+    not?: NestedEnumOrderStatusWithAggregatesFilter<$PrismaModel> | $Enums.OrderStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOrderStatusFilter<$PrismaModel>
+    _max?: NestedEnumOrderStatusFilter<$PrismaModel>
+  }
+
   export type UserCreateWithoutTenantInput = {
     id?: string
     email: string
@@ -25058,6 +28603,7 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaCreateNestedManyWithoutUserInput
     apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentCreateNestedManyWithoutAssignedToInput
+    orders?: OrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTenantInput = {
@@ -25075,6 +28621,7 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUncheckedCreateNestedManyWithoutUserInput
     apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentUncheckedCreateNestedManyWithoutAssignedToInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTenantInput = {
@@ -25225,12 +28772,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     node: NodeCreateNestedOneWithoutServersInput
+    plan?: PlanCreateNestedOneWithoutServersInput
     cluster?: GameClusterCreateNestedOneWithoutServersInput
     networkAllocations?: NetworkAllocationCreateNestedManyWithoutServerInput
     subdomains?: SubdomainCreateNestedManyWithoutServerInput
     backups?: BackupCreateNestedManyWithoutServerInput
     metrics?: MetricCreateNestedManyWithoutServerInput
     alerts?: AlertCreateNestedManyWithoutServerInput
+    orders?: OrderCreateNestedManyWithoutServerInput
   }
 
   export type GameServerUncheckedCreateWithoutOwnerInput = {
@@ -25239,6 +28788,7 @@ export namespace Prisma {
     gameType: $Enums.GameType
     status?: $Enums.ServerStatus
     nodeId: string
+    planId?: string | null
     startupPriority?: number
     resources: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -25250,6 +28800,7 @@ export namespace Prisma {
     backups?: BackupUncheckedCreateNestedManyWithoutServerInput
     metrics?: MetricUncheckedCreateNestedManyWithoutServerInput
     alerts?: AlertUncheckedCreateNestedManyWithoutServerInput
+    orders?: OrderUncheckedCreateNestedManyWithoutServerInput
   }
 
   export type GameServerCreateOrConnectWithoutOwnerInput = {
@@ -25440,6 +28991,48 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type OrderCreateWithoutUserInput = {
+    id?: string
+    status?: $Enums.OrderStatus
+    priceSnapshot: JsonNullValueInput | InputJsonValue
+    totalAmount: number
+    currency?: string
+    paymentMethod?: string | null
+    paymentId?: string | null
+    paidAt?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    plan: PlanCreateNestedOneWithoutOrdersInput
+    server?: GameServerCreateNestedOneWithoutOrdersInput
+  }
+
+  export type OrderUncheckedCreateWithoutUserInput = {
+    id?: string
+    planId: string
+    status?: $Enums.OrderStatus
+    priceSnapshot: JsonNullValueInput | InputJsonValue
+    totalAmount: number
+    currency?: string
+    paymentMethod?: string | null
+    paymentId?: string | null
+    paidAt?: Date | string | null
+    serverId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderCreateOrConnectWithoutUserInput = {
+    where: OrderWhereUniqueInput
+    create: XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput>
+  }
+
+  export type OrderCreateManyUserInputEnvelope = {
+    data: OrderCreateManyUserInput | OrderCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type TenantUpsertWithoutUsersInput = {
     update: XOR<TenantUpdateWithoutUsersInput, TenantUncheckedUpdateWithoutUsersInput>
     create: XOR<TenantCreateWithoutUsersInput, TenantUncheckedCreateWithoutUsersInput>
@@ -25499,6 +29092,7 @@ export namespace Prisma {
     status?: EnumServerStatusFilter<"GameServer"> | $Enums.ServerStatus
     nodeId?: StringFilter<"GameServer"> | string
     ownerId?: StringFilter<"GameServer"> | string
+    planId?: StringNullableFilter<"GameServer"> | string | null
     startupPriority?: IntFilter<"GameServer"> | number
     resources?: JsonFilter<"GameServer">
     envVars?: JsonFilter<"GameServer">
@@ -25654,6 +29248,42 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Incident"> | Date | string
   }
 
+  export type OrderUpsertWithWhereUniqueWithoutUserInput = {
+    where: OrderWhereUniqueInput
+    update: XOR<OrderUpdateWithoutUserInput, OrderUncheckedUpdateWithoutUserInput>
+    create: XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput>
+  }
+
+  export type OrderUpdateWithWhereUniqueWithoutUserInput = {
+    where: OrderWhereUniqueInput
+    data: XOR<OrderUpdateWithoutUserInput, OrderUncheckedUpdateWithoutUserInput>
+  }
+
+  export type OrderUpdateManyWithWhereWithoutUserInput = {
+    where: OrderScalarWhereInput
+    data: XOR<OrderUpdateManyMutationInput, OrderUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type OrderScalarWhereInput = {
+    AND?: OrderScalarWhereInput | OrderScalarWhereInput[]
+    OR?: OrderScalarWhereInput[]
+    NOT?: OrderScalarWhereInput | OrderScalarWhereInput[]
+    id?: StringFilter<"Order"> | string
+    userId?: StringFilter<"Order"> | string
+    planId?: StringFilter<"Order"> | string
+    status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
+    priceSnapshot?: JsonFilter<"Order">
+    totalAmount?: IntFilter<"Order"> | number
+    currency?: StringFilter<"Order"> | string
+    paymentMethod?: StringNullableFilter<"Order"> | string | null
+    paymentId?: StringNullableFilter<"Order"> | string | null
+    paidAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    serverId?: StringNullableFilter<"Order"> | string | null
+    notes?: StringNullableFilter<"Order"> | string | null
+    createdAt?: DateTimeFilter<"Order"> | Date | string
+    updatedAt?: DateTimeFilter<"Order"> | Date | string
+  }
+
   export type UserCreateWithoutAuditLogsInput = {
     id?: string
     email: string
@@ -25669,6 +29299,7 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaCreateNestedManyWithoutUserInput
     apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentCreateNestedManyWithoutAssignedToInput
+    orders?: OrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -25686,6 +29317,7 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUncheckedCreateNestedManyWithoutUserInput
     apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentUncheckedCreateNestedManyWithoutAssignedToInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -25719,6 +29351,7 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUpdateManyWithoutUserNestedInput
     apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -25736,6 +29369,7 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUncheckedUpdateManyWithoutUserNestedInput
     apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUncheckedUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type GameServerCreateWithoutNodeInput = {
@@ -25749,12 +29383,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     owner: UserCreateNestedOneWithoutOwnedServersInput
+    plan?: PlanCreateNestedOneWithoutServersInput
     cluster?: GameClusterCreateNestedOneWithoutServersInput
     networkAllocations?: NetworkAllocationCreateNestedManyWithoutServerInput
     subdomains?: SubdomainCreateNestedManyWithoutServerInput
     backups?: BackupCreateNestedManyWithoutServerInput
     metrics?: MetricCreateNestedManyWithoutServerInput
     alerts?: AlertCreateNestedManyWithoutServerInput
+    orders?: OrderCreateNestedManyWithoutServerInput
   }
 
   export type GameServerUncheckedCreateWithoutNodeInput = {
@@ -25763,6 +29399,7 @@ export namespace Prisma {
     gameType: $Enums.GameType
     status?: $Enums.ServerStatus
     ownerId: string
+    planId?: string | null
     startupPriority?: number
     resources: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -25774,6 +29411,7 @@ export namespace Prisma {
     backups?: BackupUncheckedCreateNestedManyWithoutServerInput
     metrics?: MetricUncheckedCreateNestedManyWithoutServerInput
     alerts?: AlertUncheckedCreateNestedManyWithoutServerInput
+    orders?: OrderUncheckedCreateNestedManyWithoutServerInput
   }
 
   export type GameServerCreateOrConnectWithoutNodeInput = {
@@ -26285,11 +29923,13 @@ export namespace Prisma {
     updatedAt?: Date | string
     node: NodeCreateNestedOneWithoutServersInput
     owner: UserCreateNestedOneWithoutOwnedServersInput
+    plan?: PlanCreateNestedOneWithoutServersInput
     cluster?: GameClusterCreateNestedOneWithoutServersInput
     subdomains?: SubdomainCreateNestedManyWithoutServerInput
     backups?: BackupCreateNestedManyWithoutServerInput
     metrics?: MetricCreateNestedManyWithoutServerInput
     alerts?: AlertCreateNestedManyWithoutServerInput
+    orders?: OrderCreateNestedManyWithoutServerInput
   }
 
   export type GameServerUncheckedCreateWithoutNetworkAllocationsInput = {
@@ -26299,6 +29939,7 @@ export namespace Prisma {
     status?: $Enums.ServerStatus
     nodeId: string
     ownerId: string
+    planId?: string | null
     startupPriority?: number
     resources: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -26309,6 +29950,7 @@ export namespace Prisma {
     backups?: BackupUncheckedCreateNestedManyWithoutServerInput
     metrics?: MetricUncheckedCreateNestedManyWithoutServerInput
     alerts?: AlertUncheckedCreateNestedManyWithoutServerInput
+    orders?: OrderUncheckedCreateNestedManyWithoutServerInput
   }
 
   export type GameServerCreateOrConnectWithoutNetworkAllocationsInput = {
@@ -26396,11 +30038,13 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     node?: NodeUpdateOneRequiredWithoutServersNestedInput
     owner?: UserUpdateOneRequiredWithoutOwnedServersNestedInput
+    plan?: PlanUpdateOneWithoutServersNestedInput
     cluster?: GameClusterUpdateOneWithoutServersNestedInput
     subdomains?: SubdomainUpdateManyWithoutServerNestedInput
     backups?: BackupUpdateManyWithoutServerNestedInput
     metrics?: MetricUpdateManyWithoutServerNestedInput
     alerts?: AlertUpdateManyWithoutServerNestedInput
+    orders?: OrderUpdateManyWithoutServerNestedInput
   }
 
   export type GameServerUncheckedUpdateWithoutNetworkAllocationsInput = {
@@ -26410,6 +30054,7 @@ export namespace Prisma {
     status?: EnumServerStatusFieldUpdateOperationsInput | $Enums.ServerStatus
     nodeId?: StringFieldUpdateOperationsInput | string
     ownerId?: StringFieldUpdateOperationsInput | string
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
     startupPriority?: IntFieldUpdateOperationsInput | number
     resources?: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -26420,6 +30065,7 @@ export namespace Prisma {
     backups?: BackupUncheckedUpdateManyWithoutServerNestedInput
     metrics?: MetricUncheckedUpdateManyWithoutServerNestedInput
     alerts?: AlertUncheckedUpdateManyWithoutServerNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutServerNestedInput
   }
 
   export type GameServerCreateWithoutSubdomainsInput = {
@@ -26434,11 +30080,13 @@ export namespace Prisma {
     updatedAt?: Date | string
     node: NodeCreateNestedOneWithoutServersInput
     owner: UserCreateNestedOneWithoutOwnedServersInput
+    plan?: PlanCreateNestedOneWithoutServersInput
     cluster?: GameClusterCreateNestedOneWithoutServersInput
     networkAllocations?: NetworkAllocationCreateNestedManyWithoutServerInput
     backups?: BackupCreateNestedManyWithoutServerInput
     metrics?: MetricCreateNestedManyWithoutServerInput
     alerts?: AlertCreateNestedManyWithoutServerInput
+    orders?: OrderCreateNestedManyWithoutServerInput
   }
 
   export type GameServerUncheckedCreateWithoutSubdomainsInput = {
@@ -26448,6 +30096,7 @@ export namespace Prisma {
     status?: $Enums.ServerStatus
     nodeId: string
     ownerId: string
+    planId?: string | null
     startupPriority?: number
     resources: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -26458,6 +30107,7 @@ export namespace Prisma {
     backups?: BackupUncheckedCreateNestedManyWithoutServerInput
     metrics?: MetricUncheckedCreateNestedManyWithoutServerInput
     alerts?: AlertUncheckedCreateNestedManyWithoutServerInput
+    orders?: OrderUncheckedCreateNestedManyWithoutServerInput
   }
 
   export type GameServerCreateOrConnectWithoutSubdomainsInput = {
@@ -26488,11 +30138,13 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     node?: NodeUpdateOneRequiredWithoutServersNestedInput
     owner?: UserUpdateOneRequiredWithoutOwnedServersNestedInput
+    plan?: PlanUpdateOneWithoutServersNestedInput
     cluster?: GameClusterUpdateOneWithoutServersNestedInput
     networkAllocations?: NetworkAllocationUpdateManyWithoutServerNestedInput
     backups?: BackupUpdateManyWithoutServerNestedInput
     metrics?: MetricUpdateManyWithoutServerNestedInput
     alerts?: AlertUpdateManyWithoutServerNestedInput
+    orders?: OrderUpdateManyWithoutServerNestedInput
   }
 
   export type GameServerUncheckedUpdateWithoutSubdomainsInput = {
@@ -26502,6 +30154,7 @@ export namespace Prisma {
     status?: EnumServerStatusFieldUpdateOperationsInput | $Enums.ServerStatus
     nodeId?: StringFieldUpdateOperationsInput | string
     ownerId?: StringFieldUpdateOperationsInput | string
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
     startupPriority?: IntFieldUpdateOperationsInput | number
     resources?: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -26512,6 +30165,7 @@ export namespace Prisma {
     backups?: BackupUncheckedUpdateManyWithoutServerNestedInput
     metrics?: MetricUncheckedUpdateManyWithoutServerNestedInput
     alerts?: AlertUncheckedUpdateManyWithoutServerNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutServerNestedInput
   }
 
   export type NodeCreateWithoutServersInput = {
@@ -26580,6 +30234,7 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaCreateNestedManyWithoutUserInput
     apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentCreateNestedManyWithoutAssignedToInput
+    orders?: OrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOwnedServersInput = {
@@ -26597,11 +30252,61 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUncheckedCreateNestedManyWithoutUserInput
     apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentUncheckedCreateNestedManyWithoutAssignedToInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOwnedServersInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutOwnedServersInput, UserUncheckedCreateWithoutOwnedServersInput>
+  }
+
+  export type PlanCreateWithoutServersInput = {
+    id?: string
+    name: string
+    slug: string
+    gameType: $Enums.GameType
+    status?: $Enums.PlanStatus
+    ramMb: number
+    cpuCores: number
+    diskGb: number
+    maxSlots?: number | null
+    monthlyPrice: number
+    hourlyPrice?: number | null
+    setupFee?: number
+    features?: NullableJsonNullValueInput | InputJsonValue
+    description?: string | null
+    isPopular?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    orders?: OrderCreateNestedManyWithoutPlanInput
+  }
+
+  export type PlanUncheckedCreateWithoutServersInput = {
+    id?: string
+    name: string
+    slug: string
+    gameType: $Enums.GameType
+    status?: $Enums.PlanStatus
+    ramMb: number
+    cpuCores: number
+    diskGb: number
+    maxSlots?: number | null
+    monthlyPrice: number
+    hourlyPrice?: number | null
+    setupFee?: number
+    features?: NullableJsonNullValueInput | InputJsonValue
+    description?: string | null
+    isPopular?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    orders?: OrderUncheckedCreateNestedManyWithoutPlanInput
+  }
+
+  export type PlanCreateOrConnectWithoutServersInput = {
+    where: PlanWhereUniqueInput
+    create: XOR<PlanCreateWithoutServersInput, PlanUncheckedCreateWithoutServersInput>
   }
 
   export type GameClusterCreateWithoutServersInput = {
@@ -26799,6 +30504,48 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type OrderCreateWithoutServerInput = {
+    id?: string
+    status?: $Enums.OrderStatus
+    priceSnapshot: JsonNullValueInput | InputJsonValue
+    totalAmount: number
+    currency?: string
+    paymentMethod?: string | null
+    paymentId?: string | null
+    paidAt?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutOrdersInput
+    plan: PlanCreateNestedOneWithoutOrdersInput
+  }
+
+  export type OrderUncheckedCreateWithoutServerInput = {
+    id?: string
+    userId: string
+    planId: string
+    status?: $Enums.OrderStatus
+    priceSnapshot: JsonNullValueInput | InputJsonValue
+    totalAmount: number
+    currency?: string
+    paymentMethod?: string | null
+    paymentId?: string | null
+    paidAt?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderCreateOrConnectWithoutServerInput = {
+    where: OrderWhereUniqueInput
+    create: XOR<OrderCreateWithoutServerInput, OrderUncheckedCreateWithoutServerInput>
+  }
+
+  export type OrderCreateManyServerInputEnvelope = {
+    data: OrderCreateManyServerInput | OrderCreateManyServerInput[]
+    skipDuplicates?: boolean
+  }
+
   export type NodeUpsertWithoutServersInput = {
     update: XOR<NodeUpdateWithoutServersInput, NodeUncheckedUpdateWithoutServersInput>
     create: XOR<NodeCreateWithoutServersInput, NodeUncheckedCreateWithoutServersInput>
@@ -26882,6 +30629,7 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUpdateManyWithoutUserNestedInput
     apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnedServersInput = {
@@ -26899,6 +30647,62 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUncheckedUpdateManyWithoutUserNestedInput
     apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUncheckedUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type PlanUpsertWithoutServersInput = {
+    update: XOR<PlanUpdateWithoutServersInput, PlanUncheckedUpdateWithoutServersInput>
+    create: XOR<PlanCreateWithoutServersInput, PlanUncheckedCreateWithoutServersInput>
+    where?: PlanWhereInput
+  }
+
+  export type PlanUpdateToOneWithWhereWithoutServersInput = {
+    where?: PlanWhereInput
+    data: XOR<PlanUpdateWithoutServersInput, PlanUncheckedUpdateWithoutServersInput>
+  }
+
+  export type PlanUpdateWithoutServersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    gameType?: EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
+    status?: EnumPlanStatusFieldUpdateOperationsInput | $Enums.PlanStatus
+    ramMb?: IntFieldUpdateOperationsInput | number
+    cpuCores?: IntFieldUpdateOperationsInput | number
+    diskGb?: IntFieldUpdateOperationsInput | number
+    maxSlots?: NullableIntFieldUpdateOperationsInput | number | null
+    monthlyPrice?: IntFieldUpdateOperationsInput | number
+    hourlyPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    setupFee?: IntFieldUpdateOperationsInput | number
+    features?: NullableJsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPopular?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    orders?: OrderUpdateManyWithoutPlanNestedInput
+  }
+
+  export type PlanUncheckedUpdateWithoutServersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    gameType?: EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
+    status?: EnumPlanStatusFieldUpdateOperationsInput | $Enums.PlanStatus
+    ramMb?: IntFieldUpdateOperationsInput | number
+    cpuCores?: IntFieldUpdateOperationsInput | number
+    diskGb?: IntFieldUpdateOperationsInput | number
+    maxSlots?: NullableIntFieldUpdateOperationsInput | number | null
+    monthlyPrice?: IntFieldUpdateOperationsInput | number
+    hourlyPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    setupFee?: IntFieldUpdateOperationsInput | number
+    features?: NullableJsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPopular?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    orders?: OrderUncheckedUpdateManyWithoutPlanNestedInput
   }
 
   export type GameClusterUpsertWithoutServersInput = {
@@ -27040,6 +30844,22 @@ export namespace Prisma {
     data: XOR<AlertUpdateManyMutationInput, AlertUncheckedUpdateManyWithoutServerInput>
   }
 
+  export type OrderUpsertWithWhereUniqueWithoutServerInput = {
+    where: OrderWhereUniqueInput
+    update: XOR<OrderUpdateWithoutServerInput, OrderUncheckedUpdateWithoutServerInput>
+    create: XOR<OrderCreateWithoutServerInput, OrderUncheckedCreateWithoutServerInput>
+  }
+
+  export type OrderUpdateWithWhereUniqueWithoutServerInput = {
+    where: OrderWhereUniqueInput
+    data: XOR<OrderUpdateWithoutServerInput, OrderUncheckedUpdateWithoutServerInput>
+  }
+
+  export type OrderUpdateManyWithWhereWithoutServerInput = {
+    where: OrderScalarWhereInput
+    data: XOR<OrderUpdateManyMutationInput, OrderUncheckedUpdateManyWithoutServerInput>
+  }
+
   export type NodeCreateWithoutStorageClustersInput = {
     id?: string
     name: string
@@ -27103,11 +30923,13 @@ export namespace Prisma {
     updatedAt?: Date | string
     node: NodeCreateNestedOneWithoutServersInput
     owner: UserCreateNestedOneWithoutOwnedServersInput
+    plan?: PlanCreateNestedOneWithoutServersInput
     networkAllocations?: NetworkAllocationCreateNestedManyWithoutServerInput
     subdomains?: SubdomainCreateNestedManyWithoutServerInput
     backups?: BackupCreateNestedManyWithoutServerInput
     metrics?: MetricCreateNestedManyWithoutServerInput
     alerts?: AlertCreateNestedManyWithoutServerInput
+    orders?: OrderCreateNestedManyWithoutServerInput
   }
 
   export type GameServerUncheckedCreateWithoutClusterInput = {
@@ -27117,6 +30939,7 @@ export namespace Prisma {
     status?: $Enums.ServerStatus
     nodeId: string
     ownerId: string
+    planId?: string | null
     startupPriority?: number
     resources: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -27127,6 +30950,7 @@ export namespace Prisma {
     backups?: BackupUncheckedCreateNestedManyWithoutServerInput
     metrics?: MetricUncheckedCreateNestedManyWithoutServerInput
     alerts?: AlertUncheckedCreateNestedManyWithoutServerInput
+    orders?: OrderUncheckedCreateNestedManyWithoutServerInput
   }
 
   export type GameServerCreateOrConnectWithoutClusterInput = {
@@ -27224,11 +31048,13 @@ export namespace Prisma {
     updatedAt?: Date | string
     node: NodeCreateNestedOneWithoutServersInput
     owner: UserCreateNestedOneWithoutOwnedServersInput
+    plan?: PlanCreateNestedOneWithoutServersInput
     cluster?: GameClusterCreateNestedOneWithoutServersInput
     networkAllocations?: NetworkAllocationCreateNestedManyWithoutServerInput
     subdomains?: SubdomainCreateNestedManyWithoutServerInput
     metrics?: MetricCreateNestedManyWithoutServerInput
     alerts?: AlertCreateNestedManyWithoutServerInput
+    orders?: OrderCreateNestedManyWithoutServerInput
   }
 
   export type GameServerUncheckedCreateWithoutBackupsInput = {
@@ -27238,6 +31064,7 @@ export namespace Prisma {
     status?: $Enums.ServerStatus
     nodeId: string
     ownerId: string
+    planId?: string | null
     startupPriority?: number
     resources: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -27248,6 +31075,7 @@ export namespace Prisma {
     subdomains?: SubdomainUncheckedCreateNestedManyWithoutServerInput
     metrics?: MetricUncheckedCreateNestedManyWithoutServerInput
     alerts?: AlertUncheckedCreateNestedManyWithoutServerInput
+    orders?: OrderUncheckedCreateNestedManyWithoutServerInput
   }
 
   export type GameServerCreateOrConnectWithoutBackupsInput = {
@@ -27278,11 +31106,13 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     node?: NodeUpdateOneRequiredWithoutServersNestedInput
     owner?: UserUpdateOneRequiredWithoutOwnedServersNestedInput
+    plan?: PlanUpdateOneWithoutServersNestedInput
     cluster?: GameClusterUpdateOneWithoutServersNestedInput
     networkAllocations?: NetworkAllocationUpdateManyWithoutServerNestedInput
     subdomains?: SubdomainUpdateManyWithoutServerNestedInput
     metrics?: MetricUpdateManyWithoutServerNestedInput
     alerts?: AlertUpdateManyWithoutServerNestedInput
+    orders?: OrderUpdateManyWithoutServerNestedInput
   }
 
   export type GameServerUncheckedUpdateWithoutBackupsInput = {
@@ -27292,6 +31122,7 @@ export namespace Prisma {
     status?: EnumServerStatusFieldUpdateOperationsInput | $Enums.ServerStatus
     nodeId?: StringFieldUpdateOperationsInput | string
     ownerId?: StringFieldUpdateOperationsInput | string
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
     startupPriority?: IntFieldUpdateOperationsInput | number
     resources?: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -27302,6 +31133,7 @@ export namespace Prisma {
     subdomains?: SubdomainUncheckedUpdateManyWithoutServerNestedInput
     metrics?: MetricUncheckedUpdateManyWithoutServerNestedInput
     alerts?: AlertUncheckedUpdateManyWithoutServerNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutServerNestedInput
   }
 
   export type NodeCreateWithoutMetricsInput = {
@@ -27367,11 +31199,13 @@ export namespace Prisma {
     updatedAt?: Date | string
     node: NodeCreateNestedOneWithoutServersInput
     owner: UserCreateNestedOneWithoutOwnedServersInput
+    plan?: PlanCreateNestedOneWithoutServersInput
     cluster?: GameClusterCreateNestedOneWithoutServersInput
     networkAllocations?: NetworkAllocationCreateNestedManyWithoutServerInput
     subdomains?: SubdomainCreateNestedManyWithoutServerInput
     backups?: BackupCreateNestedManyWithoutServerInput
     alerts?: AlertCreateNestedManyWithoutServerInput
+    orders?: OrderCreateNestedManyWithoutServerInput
   }
 
   export type GameServerUncheckedCreateWithoutMetricsInput = {
@@ -27381,6 +31215,7 @@ export namespace Prisma {
     status?: $Enums.ServerStatus
     nodeId: string
     ownerId: string
+    planId?: string | null
     startupPriority?: number
     resources: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -27391,6 +31226,7 @@ export namespace Prisma {
     subdomains?: SubdomainUncheckedCreateNestedManyWithoutServerInput
     backups?: BackupUncheckedCreateNestedManyWithoutServerInput
     alerts?: AlertUncheckedCreateNestedManyWithoutServerInput
+    orders?: OrderUncheckedCreateNestedManyWithoutServerInput
   }
 
   export type GameServerCreateOrConnectWithoutMetricsInput = {
@@ -27478,11 +31314,13 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     node?: NodeUpdateOneRequiredWithoutServersNestedInput
     owner?: UserUpdateOneRequiredWithoutOwnedServersNestedInput
+    plan?: PlanUpdateOneWithoutServersNestedInput
     cluster?: GameClusterUpdateOneWithoutServersNestedInput
     networkAllocations?: NetworkAllocationUpdateManyWithoutServerNestedInput
     subdomains?: SubdomainUpdateManyWithoutServerNestedInput
     backups?: BackupUpdateManyWithoutServerNestedInput
     alerts?: AlertUpdateManyWithoutServerNestedInput
+    orders?: OrderUpdateManyWithoutServerNestedInput
   }
 
   export type GameServerUncheckedUpdateWithoutMetricsInput = {
@@ -27492,6 +31330,7 @@ export namespace Prisma {
     status?: EnumServerStatusFieldUpdateOperationsInput | $Enums.ServerStatus
     nodeId?: StringFieldUpdateOperationsInput | string
     ownerId?: StringFieldUpdateOperationsInput | string
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
     startupPriority?: IntFieldUpdateOperationsInput | number
     resources?: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -27502,6 +31341,7 @@ export namespace Prisma {
     subdomains?: SubdomainUncheckedUpdateManyWithoutServerNestedInput
     backups?: BackupUncheckedUpdateManyWithoutServerNestedInput
     alerts?: AlertUncheckedUpdateManyWithoutServerNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutServerNestedInput
   }
 
   export type UserCreateWithoutResolvedAlertsInput = {
@@ -27519,6 +31359,7 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaCreateNestedManyWithoutUserInput
     apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentCreateNestedManyWithoutAssignedToInput
+    orders?: OrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutResolvedAlertsInput = {
@@ -27536,6 +31377,7 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUncheckedCreateNestedManyWithoutUserInput
     apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentUncheckedCreateNestedManyWithoutAssignedToInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutResolvedAlertsInput = {
@@ -27606,11 +31448,13 @@ export namespace Prisma {
     updatedAt?: Date | string
     node: NodeCreateNestedOneWithoutServersInput
     owner: UserCreateNestedOneWithoutOwnedServersInput
+    plan?: PlanCreateNestedOneWithoutServersInput
     cluster?: GameClusterCreateNestedOneWithoutServersInput
     networkAllocations?: NetworkAllocationCreateNestedManyWithoutServerInput
     subdomains?: SubdomainCreateNestedManyWithoutServerInput
     backups?: BackupCreateNestedManyWithoutServerInput
     metrics?: MetricCreateNestedManyWithoutServerInput
+    orders?: OrderCreateNestedManyWithoutServerInput
   }
 
   export type GameServerUncheckedCreateWithoutAlertsInput = {
@@ -27620,6 +31464,7 @@ export namespace Prisma {
     status?: $Enums.ServerStatus
     nodeId: string
     ownerId: string
+    planId?: string | null
     startupPriority?: number
     resources: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -27630,6 +31475,7 @@ export namespace Prisma {
     subdomains?: SubdomainUncheckedCreateNestedManyWithoutServerInput
     backups?: BackupUncheckedCreateNestedManyWithoutServerInput
     metrics?: MetricUncheckedCreateNestedManyWithoutServerInput
+    orders?: OrderUncheckedCreateNestedManyWithoutServerInput
   }
 
   export type GameServerCreateOrConnectWithoutAlertsInput = {
@@ -27663,6 +31509,7 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUpdateManyWithoutUserNestedInput
     apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedAlertsInput = {
@@ -27680,6 +31527,7 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUncheckedUpdateManyWithoutUserNestedInput
     apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUncheckedUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type NodeUpsertWithoutAlertsInput = {
@@ -27762,11 +31610,13 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     node?: NodeUpdateOneRequiredWithoutServersNestedInput
     owner?: UserUpdateOneRequiredWithoutOwnedServersNestedInput
+    plan?: PlanUpdateOneWithoutServersNestedInput
     cluster?: GameClusterUpdateOneWithoutServersNestedInput
     networkAllocations?: NetworkAllocationUpdateManyWithoutServerNestedInput
     subdomains?: SubdomainUpdateManyWithoutServerNestedInput
     backups?: BackupUpdateManyWithoutServerNestedInput
     metrics?: MetricUpdateManyWithoutServerNestedInput
+    orders?: OrderUpdateManyWithoutServerNestedInput
   }
 
   export type GameServerUncheckedUpdateWithoutAlertsInput = {
@@ -27776,6 +31626,7 @@ export namespace Prisma {
     status?: EnumServerStatusFieldUpdateOperationsInput | $Enums.ServerStatus
     nodeId?: StringFieldUpdateOperationsInput | string
     ownerId?: StringFieldUpdateOperationsInput | string
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
     startupPriority?: IntFieldUpdateOperationsInput | number
     resources?: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -27786,6 +31637,7 @@ export namespace Prisma {
     subdomains?: SubdomainUncheckedUpdateManyWithoutServerNestedInput
     backups?: BackupUncheckedUpdateManyWithoutServerNestedInput
     metrics?: MetricUncheckedUpdateManyWithoutServerNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutServerNestedInput
   }
 
   export type UserCreateWithoutResourceQuotasInput = {
@@ -27803,6 +31655,7 @@ export namespace Prisma {
     resolvedAlerts?: AlertCreateNestedManyWithoutResolvedByInput
     apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentCreateNestedManyWithoutAssignedToInput
+    orders?: OrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutResourceQuotasInput = {
@@ -27820,6 +31673,7 @@ export namespace Prisma {
     resolvedAlerts?: AlertUncheckedCreateNestedManyWithoutResolvedByInput
     apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentUncheckedCreateNestedManyWithoutAssignedToInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutResourceQuotasInput = {
@@ -27880,6 +31734,7 @@ export namespace Prisma {
     resolvedAlerts?: AlertUpdateManyWithoutResolvedByNestedInput
     apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResourceQuotasInput = {
@@ -27897,6 +31752,7 @@ export namespace Prisma {
     resolvedAlerts?: AlertUncheckedUpdateManyWithoutResolvedByNestedInput
     apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUncheckedUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TenantUpsertWithoutResourceQuotasInput = {
@@ -27947,6 +31803,7 @@ export namespace Prisma {
     resolvedAlerts?: AlertCreateNestedManyWithoutResolvedByInput
     resourceQuotas?: ResourceQuotaCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentCreateNestedManyWithoutAssignedToInput
+    orders?: OrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApiKeysInput = {
@@ -27964,6 +31821,7 @@ export namespace Prisma {
     resolvedAlerts?: AlertUncheckedCreateNestedManyWithoutResolvedByInput
     resourceQuotas?: ResourceQuotaUncheckedCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentUncheckedCreateNestedManyWithoutAssignedToInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApiKeysInput = {
@@ -27997,6 +31855,7 @@ export namespace Prisma {
     resolvedAlerts?: AlertUpdateManyWithoutResolvedByNestedInput
     resourceQuotas?: ResourceQuotaUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApiKeysInput = {
@@ -28014,6 +31873,7 @@ export namespace Prisma {
     resolvedAlerts?: AlertUncheckedUpdateManyWithoutResolvedByNestedInput
     resourceQuotas?: ResourceQuotaUncheckedUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUncheckedUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAssignedIncidentsInput = {
@@ -28031,6 +31891,7 @@ export namespace Prisma {
     resolvedAlerts?: AlertCreateNestedManyWithoutResolvedByInput
     resourceQuotas?: ResourceQuotaCreateNestedManyWithoutUserInput
     apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
+    orders?: OrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAssignedIncidentsInput = {
@@ -28048,6 +31909,7 @@ export namespace Prisma {
     resolvedAlerts?: AlertUncheckedCreateNestedManyWithoutResolvedByInput
     resourceQuotas?: ResourceQuotaUncheckedCreateNestedManyWithoutUserInput
     apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAssignedIncidentsInput = {
@@ -28081,6 +31943,7 @@ export namespace Prisma {
     resolvedAlerts?: AlertUpdateManyWithoutResolvedByNestedInput
     resourceQuotas?: ResourceQuotaUpdateManyWithoutUserNestedInput
     apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedIncidentsInput = {
@@ -28098,6 +31961,425 @@ export namespace Prisma {
     resolvedAlerts?: AlertUncheckedUpdateManyWithoutResolvedByNestedInput
     resourceQuotas?: ResourceQuotaUncheckedUpdateManyWithoutUserNestedInput
     apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type GameServerCreateWithoutPlanInput = {
+    id?: string
+    uuid: string
+    gameType: $Enums.GameType
+    status?: $Enums.ServerStatus
+    startupPriority?: number
+    resources: JsonNullValueInput | InputJsonValue
+    envVars?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    node: NodeCreateNestedOneWithoutServersInput
+    owner: UserCreateNestedOneWithoutOwnedServersInput
+    cluster?: GameClusterCreateNestedOneWithoutServersInput
+    networkAllocations?: NetworkAllocationCreateNestedManyWithoutServerInput
+    subdomains?: SubdomainCreateNestedManyWithoutServerInput
+    backups?: BackupCreateNestedManyWithoutServerInput
+    metrics?: MetricCreateNestedManyWithoutServerInput
+    alerts?: AlertCreateNestedManyWithoutServerInput
+    orders?: OrderCreateNestedManyWithoutServerInput
+  }
+
+  export type GameServerUncheckedCreateWithoutPlanInput = {
+    id?: string
+    uuid: string
+    gameType: $Enums.GameType
+    status?: $Enums.ServerStatus
+    nodeId: string
+    ownerId: string
+    startupPriority?: number
+    resources: JsonNullValueInput | InputJsonValue
+    envVars?: JsonNullValueInput | InputJsonValue
+    clusterId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    networkAllocations?: NetworkAllocationUncheckedCreateNestedManyWithoutServerInput
+    subdomains?: SubdomainUncheckedCreateNestedManyWithoutServerInput
+    backups?: BackupUncheckedCreateNestedManyWithoutServerInput
+    metrics?: MetricUncheckedCreateNestedManyWithoutServerInput
+    alerts?: AlertUncheckedCreateNestedManyWithoutServerInput
+    orders?: OrderUncheckedCreateNestedManyWithoutServerInput
+  }
+
+  export type GameServerCreateOrConnectWithoutPlanInput = {
+    where: GameServerWhereUniqueInput
+    create: XOR<GameServerCreateWithoutPlanInput, GameServerUncheckedCreateWithoutPlanInput>
+  }
+
+  export type GameServerCreateManyPlanInputEnvelope = {
+    data: GameServerCreateManyPlanInput | GameServerCreateManyPlanInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OrderCreateWithoutPlanInput = {
+    id?: string
+    status?: $Enums.OrderStatus
+    priceSnapshot: JsonNullValueInput | InputJsonValue
+    totalAmount: number
+    currency?: string
+    paymentMethod?: string | null
+    paymentId?: string | null
+    paidAt?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutOrdersInput
+    server?: GameServerCreateNestedOneWithoutOrdersInput
+  }
+
+  export type OrderUncheckedCreateWithoutPlanInput = {
+    id?: string
+    userId: string
+    status?: $Enums.OrderStatus
+    priceSnapshot: JsonNullValueInput | InputJsonValue
+    totalAmount: number
+    currency?: string
+    paymentMethod?: string | null
+    paymentId?: string | null
+    paidAt?: Date | string | null
+    serverId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderCreateOrConnectWithoutPlanInput = {
+    where: OrderWhereUniqueInput
+    create: XOR<OrderCreateWithoutPlanInput, OrderUncheckedCreateWithoutPlanInput>
+  }
+
+  export type OrderCreateManyPlanInputEnvelope = {
+    data: OrderCreateManyPlanInput | OrderCreateManyPlanInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type GameServerUpsertWithWhereUniqueWithoutPlanInput = {
+    where: GameServerWhereUniqueInput
+    update: XOR<GameServerUpdateWithoutPlanInput, GameServerUncheckedUpdateWithoutPlanInput>
+    create: XOR<GameServerCreateWithoutPlanInput, GameServerUncheckedCreateWithoutPlanInput>
+  }
+
+  export type GameServerUpdateWithWhereUniqueWithoutPlanInput = {
+    where: GameServerWhereUniqueInput
+    data: XOR<GameServerUpdateWithoutPlanInput, GameServerUncheckedUpdateWithoutPlanInput>
+  }
+
+  export type GameServerUpdateManyWithWhereWithoutPlanInput = {
+    where: GameServerScalarWhereInput
+    data: XOR<GameServerUpdateManyMutationInput, GameServerUncheckedUpdateManyWithoutPlanInput>
+  }
+
+  export type OrderUpsertWithWhereUniqueWithoutPlanInput = {
+    where: OrderWhereUniqueInput
+    update: XOR<OrderUpdateWithoutPlanInput, OrderUncheckedUpdateWithoutPlanInput>
+    create: XOR<OrderCreateWithoutPlanInput, OrderUncheckedCreateWithoutPlanInput>
+  }
+
+  export type OrderUpdateWithWhereUniqueWithoutPlanInput = {
+    where: OrderWhereUniqueInput
+    data: XOR<OrderUpdateWithoutPlanInput, OrderUncheckedUpdateWithoutPlanInput>
+  }
+
+  export type OrderUpdateManyWithWhereWithoutPlanInput = {
+    where: OrderScalarWhereInput
+    data: XOR<OrderUpdateManyMutationInput, OrderUncheckedUpdateManyWithoutPlanInput>
+  }
+
+  export type UserCreateWithoutOrdersInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    role: $Enums.UserRole
+    twoFactorSecret?: string | null
+    balance?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant?: TenantCreateNestedOneWithoutUsersInput
+    ownedServers?: GameServerCreateNestedManyWithoutOwnerInput
+    auditLogs?: AuditLogCreateNestedManyWithoutUserInput
+    resolvedAlerts?: AlertCreateNestedManyWithoutResolvedByInput
+    resourceQuotas?: ResourceQuotaCreateNestedManyWithoutUserInput
+    apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
+    assignedIncidents?: IncidentCreateNestedManyWithoutAssignedToInput
+  }
+
+  export type UserUncheckedCreateWithoutOrdersInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    role: $Enums.UserRole
+    twoFactorSecret?: string | null
+    balance?: number
+    tenantId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownedServers?: GameServerUncheckedCreateNestedManyWithoutOwnerInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutUserInput
+    resolvedAlerts?: AlertUncheckedCreateNestedManyWithoutResolvedByInput
+    resourceQuotas?: ResourceQuotaUncheckedCreateNestedManyWithoutUserInput
+    apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
+    assignedIncidents?: IncidentUncheckedCreateNestedManyWithoutAssignedToInput
+  }
+
+  export type UserCreateOrConnectWithoutOrdersInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutOrdersInput, UserUncheckedCreateWithoutOrdersInput>
+  }
+
+  export type PlanCreateWithoutOrdersInput = {
+    id?: string
+    name: string
+    slug: string
+    gameType: $Enums.GameType
+    status?: $Enums.PlanStatus
+    ramMb: number
+    cpuCores: number
+    diskGb: number
+    maxSlots?: number | null
+    monthlyPrice: number
+    hourlyPrice?: number | null
+    setupFee?: number
+    features?: NullableJsonNullValueInput | InputJsonValue
+    description?: string | null
+    isPopular?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    servers?: GameServerCreateNestedManyWithoutPlanInput
+  }
+
+  export type PlanUncheckedCreateWithoutOrdersInput = {
+    id?: string
+    name: string
+    slug: string
+    gameType: $Enums.GameType
+    status?: $Enums.PlanStatus
+    ramMb: number
+    cpuCores: number
+    diskGb: number
+    maxSlots?: number | null
+    monthlyPrice: number
+    hourlyPrice?: number | null
+    setupFee?: number
+    features?: NullableJsonNullValueInput | InputJsonValue
+    description?: string | null
+    isPopular?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    servers?: GameServerUncheckedCreateNestedManyWithoutPlanInput
+  }
+
+  export type PlanCreateOrConnectWithoutOrdersInput = {
+    where: PlanWhereUniqueInput
+    create: XOR<PlanCreateWithoutOrdersInput, PlanUncheckedCreateWithoutOrdersInput>
+  }
+
+  export type GameServerCreateWithoutOrdersInput = {
+    id?: string
+    uuid: string
+    gameType: $Enums.GameType
+    status?: $Enums.ServerStatus
+    startupPriority?: number
+    resources: JsonNullValueInput | InputJsonValue
+    envVars?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    node: NodeCreateNestedOneWithoutServersInput
+    owner: UserCreateNestedOneWithoutOwnedServersInput
+    plan?: PlanCreateNestedOneWithoutServersInput
+    cluster?: GameClusterCreateNestedOneWithoutServersInput
+    networkAllocations?: NetworkAllocationCreateNestedManyWithoutServerInput
+    subdomains?: SubdomainCreateNestedManyWithoutServerInput
+    backups?: BackupCreateNestedManyWithoutServerInput
+    metrics?: MetricCreateNestedManyWithoutServerInput
+    alerts?: AlertCreateNestedManyWithoutServerInput
+  }
+
+  export type GameServerUncheckedCreateWithoutOrdersInput = {
+    id?: string
+    uuid: string
+    gameType: $Enums.GameType
+    status?: $Enums.ServerStatus
+    nodeId: string
+    ownerId: string
+    planId?: string | null
+    startupPriority?: number
+    resources: JsonNullValueInput | InputJsonValue
+    envVars?: JsonNullValueInput | InputJsonValue
+    clusterId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    networkAllocations?: NetworkAllocationUncheckedCreateNestedManyWithoutServerInput
+    subdomains?: SubdomainUncheckedCreateNestedManyWithoutServerInput
+    backups?: BackupUncheckedCreateNestedManyWithoutServerInput
+    metrics?: MetricUncheckedCreateNestedManyWithoutServerInput
+    alerts?: AlertUncheckedCreateNestedManyWithoutServerInput
+  }
+
+  export type GameServerCreateOrConnectWithoutOrdersInput = {
+    where: GameServerWhereUniqueInput
+    create: XOR<GameServerCreateWithoutOrdersInput, GameServerUncheckedCreateWithoutOrdersInput>
+  }
+
+  export type UserUpsertWithoutOrdersInput = {
+    update: XOR<UserUpdateWithoutOrdersInput, UserUncheckedUpdateWithoutOrdersInput>
+    create: XOR<UserCreateWithoutOrdersInput, UserUncheckedCreateWithoutOrdersInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutOrdersInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutOrdersInput, UserUncheckedUpdateWithoutOrdersInput>
+  }
+
+  export type UserUpdateWithoutOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    balance?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneWithoutUsersNestedInput
+    ownedServers?: GameServerUpdateManyWithoutOwnerNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutUserNestedInput
+    resolvedAlerts?: AlertUpdateManyWithoutResolvedByNestedInput
+    resourceQuotas?: ResourceQuotaUpdateManyWithoutUserNestedInput
+    apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
+    assignedIncidents?: IncidentUpdateManyWithoutAssignedToNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    balance?: FloatFieldUpdateOperationsInput | number
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownedServers?: GameServerUncheckedUpdateManyWithoutOwnerNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
+    resolvedAlerts?: AlertUncheckedUpdateManyWithoutResolvedByNestedInput
+    resourceQuotas?: ResourceQuotaUncheckedUpdateManyWithoutUserNestedInput
+    apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+    assignedIncidents?: IncidentUncheckedUpdateManyWithoutAssignedToNestedInput
+  }
+
+  export type PlanUpsertWithoutOrdersInput = {
+    update: XOR<PlanUpdateWithoutOrdersInput, PlanUncheckedUpdateWithoutOrdersInput>
+    create: XOR<PlanCreateWithoutOrdersInput, PlanUncheckedCreateWithoutOrdersInput>
+    where?: PlanWhereInput
+  }
+
+  export type PlanUpdateToOneWithWhereWithoutOrdersInput = {
+    where?: PlanWhereInput
+    data: XOR<PlanUpdateWithoutOrdersInput, PlanUncheckedUpdateWithoutOrdersInput>
+  }
+
+  export type PlanUpdateWithoutOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    gameType?: EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
+    status?: EnumPlanStatusFieldUpdateOperationsInput | $Enums.PlanStatus
+    ramMb?: IntFieldUpdateOperationsInput | number
+    cpuCores?: IntFieldUpdateOperationsInput | number
+    diskGb?: IntFieldUpdateOperationsInput | number
+    maxSlots?: NullableIntFieldUpdateOperationsInput | number | null
+    monthlyPrice?: IntFieldUpdateOperationsInput | number
+    hourlyPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    setupFee?: IntFieldUpdateOperationsInput | number
+    features?: NullableJsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPopular?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    servers?: GameServerUpdateManyWithoutPlanNestedInput
+  }
+
+  export type PlanUncheckedUpdateWithoutOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    gameType?: EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
+    status?: EnumPlanStatusFieldUpdateOperationsInput | $Enums.PlanStatus
+    ramMb?: IntFieldUpdateOperationsInput | number
+    cpuCores?: IntFieldUpdateOperationsInput | number
+    diskGb?: IntFieldUpdateOperationsInput | number
+    maxSlots?: NullableIntFieldUpdateOperationsInput | number | null
+    monthlyPrice?: IntFieldUpdateOperationsInput | number
+    hourlyPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    setupFee?: IntFieldUpdateOperationsInput | number
+    features?: NullableJsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPopular?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    servers?: GameServerUncheckedUpdateManyWithoutPlanNestedInput
+  }
+
+  export type GameServerUpsertWithoutOrdersInput = {
+    update: XOR<GameServerUpdateWithoutOrdersInput, GameServerUncheckedUpdateWithoutOrdersInput>
+    create: XOR<GameServerCreateWithoutOrdersInput, GameServerUncheckedCreateWithoutOrdersInput>
+    where?: GameServerWhereInput
+  }
+
+  export type GameServerUpdateToOneWithWhereWithoutOrdersInput = {
+    where?: GameServerWhereInput
+    data: XOR<GameServerUpdateWithoutOrdersInput, GameServerUncheckedUpdateWithoutOrdersInput>
+  }
+
+  export type GameServerUpdateWithoutOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    uuid?: StringFieldUpdateOperationsInput | string
+    gameType?: EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
+    status?: EnumServerStatusFieldUpdateOperationsInput | $Enums.ServerStatus
+    startupPriority?: IntFieldUpdateOperationsInput | number
+    resources?: JsonNullValueInput | InputJsonValue
+    envVars?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    node?: NodeUpdateOneRequiredWithoutServersNestedInput
+    owner?: UserUpdateOneRequiredWithoutOwnedServersNestedInput
+    plan?: PlanUpdateOneWithoutServersNestedInput
+    cluster?: GameClusterUpdateOneWithoutServersNestedInput
+    networkAllocations?: NetworkAllocationUpdateManyWithoutServerNestedInput
+    subdomains?: SubdomainUpdateManyWithoutServerNestedInput
+    backups?: BackupUpdateManyWithoutServerNestedInput
+    metrics?: MetricUpdateManyWithoutServerNestedInput
+    alerts?: AlertUpdateManyWithoutServerNestedInput
+  }
+
+  export type GameServerUncheckedUpdateWithoutOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    uuid?: StringFieldUpdateOperationsInput | string
+    gameType?: EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
+    status?: EnumServerStatusFieldUpdateOperationsInput | $Enums.ServerStatus
+    nodeId?: StringFieldUpdateOperationsInput | string
+    ownerId?: StringFieldUpdateOperationsInput | string
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
+    startupPriority?: IntFieldUpdateOperationsInput | number
+    resources?: JsonNullValueInput | InputJsonValue
+    envVars?: JsonNullValueInput | InputJsonValue
+    clusterId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    networkAllocations?: NetworkAllocationUncheckedUpdateManyWithoutServerNestedInput
+    subdomains?: SubdomainUncheckedUpdateManyWithoutServerNestedInput
+    backups?: BackupUncheckedUpdateManyWithoutServerNestedInput
+    metrics?: MetricUncheckedUpdateManyWithoutServerNestedInput
+    alerts?: AlertUncheckedUpdateManyWithoutServerNestedInput
   }
 
   export type UserCreateManyTenantInput = {
@@ -28139,6 +32421,7 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUpdateManyWithoutUserNestedInput
     apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTenantInput = {
@@ -28156,6 +32439,7 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUncheckedUpdateManyWithoutUserNestedInput
     apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUncheckedUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutTenantInput = {
@@ -28214,6 +32498,7 @@ export namespace Prisma {
     gameType: $Enums.GameType
     status?: $Enums.ServerStatus
     nodeId: string
+    planId?: string | null
     startupPriority?: number
     resources: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -28286,6 +32571,22 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type OrderCreateManyUserInput = {
+    id?: string
+    planId: string
+    status?: $Enums.OrderStatus
+    priceSnapshot: JsonNullValueInput | InputJsonValue
+    totalAmount: number
+    currency?: string
+    paymentMethod?: string | null
+    paymentId?: string | null
+    paidAt?: Date | string | null
+    serverId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type GameServerUpdateWithoutOwnerInput = {
     id?: StringFieldUpdateOperationsInput | string
     uuid?: StringFieldUpdateOperationsInput | string
@@ -28297,12 +32598,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     node?: NodeUpdateOneRequiredWithoutServersNestedInput
+    plan?: PlanUpdateOneWithoutServersNestedInput
     cluster?: GameClusterUpdateOneWithoutServersNestedInput
     networkAllocations?: NetworkAllocationUpdateManyWithoutServerNestedInput
     subdomains?: SubdomainUpdateManyWithoutServerNestedInput
     backups?: BackupUpdateManyWithoutServerNestedInput
     metrics?: MetricUpdateManyWithoutServerNestedInput
     alerts?: AlertUpdateManyWithoutServerNestedInput
+    orders?: OrderUpdateManyWithoutServerNestedInput
   }
 
   export type GameServerUncheckedUpdateWithoutOwnerInput = {
@@ -28311,6 +32614,7 @@ export namespace Prisma {
     gameType?: EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
     status?: EnumServerStatusFieldUpdateOperationsInput | $Enums.ServerStatus
     nodeId?: StringFieldUpdateOperationsInput | string
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
     startupPriority?: IntFieldUpdateOperationsInput | number
     resources?: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -28322,6 +32626,7 @@ export namespace Prisma {
     backups?: BackupUncheckedUpdateManyWithoutServerNestedInput
     metrics?: MetricUncheckedUpdateManyWithoutServerNestedInput
     alerts?: AlertUncheckedUpdateManyWithoutServerNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutServerNestedInput
   }
 
   export type GameServerUncheckedUpdateManyWithoutOwnerInput = {
@@ -28330,6 +32635,7 @@ export namespace Prisma {
     gameType?: EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
     status?: EnumServerStatusFieldUpdateOperationsInput | $Enums.ServerStatus
     nodeId?: StringFieldUpdateOperationsInput | string
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
     startupPriority?: IntFieldUpdateOperationsInput | number
     resources?: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -28530,12 +32836,61 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type OrderUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    priceSnapshot?: JsonNullValueInput | InputJsonValue
+    totalAmount?: IntFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    plan?: PlanUpdateOneRequiredWithoutOrdersNestedInput
+    server?: GameServerUpdateOneWithoutOrdersNestedInput
+  }
+
+  export type OrderUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    planId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    priceSnapshot?: JsonNullValueInput | InputJsonValue
+    totalAmount?: IntFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    serverId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    planId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    priceSnapshot?: JsonNullValueInput | InputJsonValue
+    totalAmount?: IntFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    serverId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type GameServerCreateManyNodeInput = {
     id?: string
     uuid: string
     gameType: $Enums.GameType
     status?: $Enums.ServerStatus
     ownerId: string
+    planId?: string | null
     startupPriority?: number
     resources: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -28615,12 +32970,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     owner?: UserUpdateOneRequiredWithoutOwnedServersNestedInput
+    plan?: PlanUpdateOneWithoutServersNestedInput
     cluster?: GameClusterUpdateOneWithoutServersNestedInput
     networkAllocations?: NetworkAllocationUpdateManyWithoutServerNestedInput
     subdomains?: SubdomainUpdateManyWithoutServerNestedInput
     backups?: BackupUpdateManyWithoutServerNestedInput
     metrics?: MetricUpdateManyWithoutServerNestedInput
     alerts?: AlertUpdateManyWithoutServerNestedInput
+    orders?: OrderUpdateManyWithoutServerNestedInput
   }
 
   export type GameServerUncheckedUpdateWithoutNodeInput = {
@@ -28629,6 +32986,7 @@ export namespace Prisma {
     gameType?: EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
     status?: EnumServerStatusFieldUpdateOperationsInput | $Enums.ServerStatus
     ownerId?: StringFieldUpdateOperationsInput | string
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
     startupPriority?: IntFieldUpdateOperationsInput | number
     resources?: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -28640,6 +32998,7 @@ export namespace Prisma {
     backups?: BackupUncheckedUpdateManyWithoutServerNestedInput
     metrics?: MetricUncheckedUpdateManyWithoutServerNestedInput
     alerts?: AlertUncheckedUpdateManyWithoutServerNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutServerNestedInput
   }
 
   export type GameServerUncheckedUpdateManyWithoutNodeInput = {
@@ -28648,6 +33007,7 @@ export namespace Prisma {
     gameType?: EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
     status?: EnumServerStatusFieldUpdateOperationsInput | $Enums.ServerStatus
     ownerId?: StringFieldUpdateOperationsInput | string
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
     startupPriority?: IntFieldUpdateOperationsInput | number
     resources?: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -28898,6 +33258,22 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type OrderCreateManyServerInput = {
+    id?: string
+    userId: string
+    planId: string
+    status?: $Enums.OrderStatus
+    priceSnapshot: JsonNullValueInput | InputJsonValue
+    totalAmount: number
+    currency?: string
+    paymentMethod?: string | null
+    paymentId?: string | null
+    paidAt?: Date | string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type NetworkAllocationUpdateWithoutServerInput = {
     id?: StringFieldUpdateOperationsInput | string
     port?: IntFieldUpdateOperationsInput | number
@@ -29078,6 +33454,54 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type OrderUpdateWithoutServerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    priceSnapshot?: JsonNullValueInput | InputJsonValue
+    totalAmount?: IntFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutOrdersNestedInput
+    plan?: PlanUpdateOneRequiredWithoutOrdersNestedInput
+  }
+
+  export type OrderUncheckedUpdateWithoutServerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    planId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    priceSnapshot?: JsonNullValueInput | InputJsonValue
+    totalAmount?: IntFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderUncheckedUpdateManyWithoutServerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    planId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    priceSnapshot?: JsonNullValueInput | InputJsonValue
+    totalAmount?: IntFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type GameServerCreateManyClusterInput = {
     id?: string
     uuid: string
@@ -29085,6 +33509,7 @@ export namespace Prisma {
     status?: $Enums.ServerStatus
     nodeId: string
     ownerId: string
+    planId?: string | null
     startupPriority?: number
     resources: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -29104,11 +33529,13 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     node?: NodeUpdateOneRequiredWithoutServersNestedInput
     owner?: UserUpdateOneRequiredWithoutOwnedServersNestedInput
+    plan?: PlanUpdateOneWithoutServersNestedInput
     networkAllocations?: NetworkAllocationUpdateManyWithoutServerNestedInput
     subdomains?: SubdomainUpdateManyWithoutServerNestedInput
     backups?: BackupUpdateManyWithoutServerNestedInput
     metrics?: MetricUpdateManyWithoutServerNestedInput
     alerts?: AlertUpdateManyWithoutServerNestedInput
+    orders?: OrderUpdateManyWithoutServerNestedInput
   }
 
   export type GameServerUncheckedUpdateWithoutClusterInput = {
@@ -29118,6 +33545,7 @@ export namespace Prisma {
     status?: EnumServerStatusFieldUpdateOperationsInput | $Enums.ServerStatus
     nodeId?: StringFieldUpdateOperationsInput | string
     ownerId?: StringFieldUpdateOperationsInput | string
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
     startupPriority?: IntFieldUpdateOperationsInput | number
     resources?: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
@@ -29128,6 +33556,7 @@ export namespace Prisma {
     backups?: BackupUncheckedUpdateManyWithoutServerNestedInput
     metrics?: MetricUncheckedUpdateManyWithoutServerNestedInput
     alerts?: AlertUncheckedUpdateManyWithoutServerNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutServerNestedInput
   }
 
   export type GameServerUncheckedUpdateManyWithoutClusterInput = {
@@ -29137,9 +33566,146 @@ export namespace Prisma {
     status?: EnumServerStatusFieldUpdateOperationsInput | $Enums.ServerStatus
     nodeId?: StringFieldUpdateOperationsInput | string
     ownerId?: StringFieldUpdateOperationsInput | string
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
     startupPriority?: IntFieldUpdateOperationsInput | number
     resources?: JsonNullValueInput | InputJsonValue
     envVars?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GameServerCreateManyPlanInput = {
+    id?: string
+    uuid: string
+    gameType: $Enums.GameType
+    status?: $Enums.ServerStatus
+    nodeId: string
+    ownerId: string
+    startupPriority?: number
+    resources: JsonNullValueInput | InputJsonValue
+    envVars?: JsonNullValueInput | InputJsonValue
+    clusterId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderCreateManyPlanInput = {
+    id?: string
+    userId: string
+    status?: $Enums.OrderStatus
+    priceSnapshot: JsonNullValueInput | InputJsonValue
+    totalAmount: number
+    currency?: string
+    paymentMethod?: string | null
+    paymentId?: string | null
+    paidAt?: Date | string | null
+    serverId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GameServerUpdateWithoutPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    uuid?: StringFieldUpdateOperationsInput | string
+    gameType?: EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
+    status?: EnumServerStatusFieldUpdateOperationsInput | $Enums.ServerStatus
+    startupPriority?: IntFieldUpdateOperationsInput | number
+    resources?: JsonNullValueInput | InputJsonValue
+    envVars?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    node?: NodeUpdateOneRequiredWithoutServersNestedInput
+    owner?: UserUpdateOneRequiredWithoutOwnedServersNestedInput
+    cluster?: GameClusterUpdateOneWithoutServersNestedInput
+    networkAllocations?: NetworkAllocationUpdateManyWithoutServerNestedInput
+    subdomains?: SubdomainUpdateManyWithoutServerNestedInput
+    backups?: BackupUpdateManyWithoutServerNestedInput
+    metrics?: MetricUpdateManyWithoutServerNestedInput
+    alerts?: AlertUpdateManyWithoutServerNestedInput
+    orders?: OrderUpdateManyWithoutServerNestedInput
+  }
+
+  export type GameServerUncheckedUpdateWithoutPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    uuid?: StringFieldUpdateOperationsInput | string
+    gameType?: EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
+    status?: EnumServerStatusFieldUpdateOperationsInput | $Enums.ServerStatus
+    nodeId?: StringFieldUpdateOperationsInput | string
+    ownerId?: StringFieldUpdateOperationsInput | string
+    startupPriority?: IntFieldUpdateOperationsInput | number
+    resources?: JsonNullValueInput | InputJsonValue
+    envVars?: JsonNullValueInput | InputJsonValue
+    clusterId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    networkAllocations?: NetworkAllocationUncheckedUpdateManyWithoutServerNestedInput
+    subdomains?: SubdomainUncheckedUpdateManyWithoutServerNestedInput
+    backups?: BackupUncheckedUpdateManyWithoutServerNestedInput
+    metrics?: MetricUncheckedUpdateManyWithoutServerNestedInput
+    alerts?: AlertUncheckedUpdateManyWithoutServerNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutServerNestedInput
+  }
+
+  export type GameServerUncheckedUpdateManyWithoutPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    uuid?: StringFieldUpdateOperationsInput | string
+    gameType?: EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
+    status?: EnumServerStatusFieldUpdateOperationsInput | $Enums.ServerStatus
+    nodeId?: StringFieldUpdateOperationsInput | string
+    ownerId?: StringFieldUpdateOperationsInput | string
+    startupPriority?: IntFieldUpdateOperationsInput | number
+    resources?: JsonNullValueInput | InputJsonValue
+    envVars?: JsonNullValueInput | InputJsonValue
+    clusterId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderUpdateWithoutPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    priceSnapshot?: JsonNullValueInput | InputJsonValue
+    totalAmount?: IntFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutOrdersNestedInput
+    server?: GameServerUpdateOneWithoutOrdersNestedInput
+  }
+
+  export type OrderUncheckedUpdateWithoutPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    priceSnapshot?: JsonNullValueInput | InputJsonValue
+    totalAmount?: IntFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    serverId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderUncheckedUpdateManyWithoutPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    priceSnapshot?: JsonNullValueInput | InputJsonValue
+    totalAmount?: IntFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    serverId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -29169,6 +33735,10 @@ export namespace Prisma {
      * @deprecated Use GameClusterCountOutputTypeDefaultArgs instead
      */
     export type GameClusterCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = GameClusterCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PlanCountOutputTypeDefaultArgs instead
+     */
+    export type PlanCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PlanCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use SystemLicenseDefaultArgs instead
      */
@@ -29233,6 +33803,14 @@ export namespace Prisma {
      * @deprecated Use IncidentDefaultArgs instead
      */
     export type IncidentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = IncidentDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PlanDefaultArgs instead
+     */
+    export type PlanArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PlanDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use OrderDefaultArgs instead
+     */
+    export type OrderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = OrderDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

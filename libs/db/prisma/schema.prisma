@@ -74,6 +74,7 @@ model User {
   resourceQuotas  ResourceQuota[]
   apiKeys         ApiKey[]
   assignedIncidents Incident[]     @relation("IncidentAssignee")
+  orders          Order[]
 }
 
 model AuditLog {
@@ -239,6 +240,8 @@ model GameServer {
   node            Node          @relation(fields: [nodeId], references: [id], onDelete: Restrict)
   ownerId         String
   owner           User          @relation("ServerOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  planId          String?       // Optional reference to Plan
+  plan            Plan?         @relation(fields: [planId], references: [id], onDelete: SetNull)
   startupPriority Int           @default(10)
   resources       Json          // { cpuLimit, ramLimit, diskLimit }
   envVars         Json          @default("{}")
@@ -252,6 +255,7 @@ model GameServer {
   backups           Backup[]
   metrics           Metric[]
   alerts            Alert[]
+  orders            Order[]
 }
 
 model GameCluster {
@@ -412,5 +416,94 @@ model Incident {
 
   @@index([severity, status])
   @@index([assignedToId])
+}
+
+// ============================================
+// BILLING & PLANS
+// ============================================
+
+enum PlanStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
+model Plan {
+  id          String     @id @default(uuid())
+  name        String     // "Minecraft Basic", "Rust Premium", etc.
+  slug        String     @unique // "minecraft-basic", "rust-premium"
+  gameType    GameType   // Which game this plan is for
+  status      PlanStatus @default(ACTIVE)
+  
+  // Resources
+  ramMb       Int        // RAM in MB
+  cpuCores    Int        // CPU cores
+  diskGb      Int        // Disk in GB
+  maxSlots    Int?       // Max players/slots (optional)
+  
+  // Pricing
+  monthlyPrice   Int     // Price in smallest currency unit (e.g., Ft * 100 for decimals)
+  hourlyPrice    Int?    // Optional hourly pricing
+  setupFee       Int     @default(0)
+  
+  // Features
+  features    Json?      // Array of feature strings: ["Automatic backups", "DDoS protection"]
+  
+  // Display
+  description String?    @db.Text
+  isPopular   Boolean    @default(false)
+  sortOrder   Int        @default(0)
+  
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  
+  servers     GameServer[]
+  orders      Order[]
+
+  @@index([gameType, status])
+  @@index([slug])
+}
+
+model Order {
+  id          String      @id @default(uuid())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId      String
+  plan        Plan        @relation(fields: [planId], references: [id])
+  
+  status      OrderStatus @default(PENDING)
+  
+  // Pricing snapshot (in case plan changes)
+  priceSnapshot Json      // { monthlyPrice, setupFee, features, resources }
+  
+  totalAmount Int         // Total price
+  currency    String      @default("HUF")
+  
+  // Payment
+  paymentMethod String?   // "stripe", "barion", "manual"
+  paymentId     String?   // External payment reference
+  paidAt        DateTime?
+  
+  // Server details
+  serverId    String?    @unique
+  server      GameServer? @relation(fields: [serverId], references: [uuid])
+  
+  notes       String?    @db.Text
+  
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+enum OrderStatus {
+  PENDING
+  PAYMENT_PENDING
+  PAID
+  PROVISIONING
+  ACTIVE
+  CANCELLED
+  REFUNDED
 }
 
