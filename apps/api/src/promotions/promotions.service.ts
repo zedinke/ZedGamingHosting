@@ -115,7 +115,7 @@ export class PromotionsService {
 
   async getActivePromotions(gameType?: GameType, planId?: string): Promise<PromotionResponse[]> {
     const now = new Date();
-    const scopeFilters = [{ scope: PromotionScope.GLOBAL }];
+    const scopeFilters: any[] = [{ scope: PromotionScope.GLOBAL }];
 
     if (gameType) {
       scopeFilters.push({ scope: PromotionScope.GAME, gameType });

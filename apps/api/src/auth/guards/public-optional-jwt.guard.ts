@@ -32,7 +32,7 @@ export class PublicOptionalJwtGuard extends AuthGuard('jwt') {
     }
   }
 
-  handleRequest(err: any, user: any, info: any) {
+  handleRequest(err: any, user: any) {
     // This is called after JWT strategy validation
     if (err || !user) {
       throw err || new UnauthorizedException();
