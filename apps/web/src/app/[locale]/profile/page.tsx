@@ -133,6 +133,13 @@ export default function ProfilePage() {
                   <Button 
                     variant="outline" 
                     className="w-full"
+                    onClick={() => router.push(`/${locale}/profile/wallet`)}
+                  >
+                    💰 Pénztárca és egyenleg
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
                     onClick={() => router.push(`/${locale}/profile/change-password`)}
                   >
                     Jelszó változtatása

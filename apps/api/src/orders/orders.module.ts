@@ -2,12 +2,14 @@ import { Module } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { OrdersController } from './orders.controller';
 import { PaymentService } from './payment.service';
+import { WalletService } from './wallet.service';
+import { WalletController } from './wallet.controller';
 import { DatabaseModule } from '../database/database.module';
 import { AuditModule } from '../audit/audit.module';
 
 @Module({
   imports: [DatabaseModule, AuditModule],
-  controllers: [OrdersController],
-  providers: [OrdersService, PaymentService],
+  controllers: [OrdersController, WalletController],
+  providers: [OrdersService, PaymentService, WalletService],
 })
 export class OrdersModule {}
