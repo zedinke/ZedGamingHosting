@@ -1,9 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
+import { ProvisioningService } from './provisioning.service';
 
 @Injectable()
 export class PaymentService {
-  constructor(private readonly prisma: PrismaService) {}
+  private readonly logger = new Logger(PaymentService.name);
+
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly provisioning: ProvisioningService,
+  ) {}
 
   /**
    * Mock payment: immediately mark order as PAID
@@ -26,6 +32,14 @@ export class PaymentService {
         paymentId: `mock_${Date.now()}`,
       },
     });
+
+    // Trigger server provisioning asynchronously
+    try {
+      await this.provisioning.provisionServerForOrder(orderId);
+    } catch (error) {
+      this.logger.error(`Failed to provision server for order ${orderId}: ${error}`);
+      // Don't fail payment if provisioning fails - admin can retry
+    }
 
     return updatedOrder;
   }
