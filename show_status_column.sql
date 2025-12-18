@@ -1,0 +1,1 @@
+SHOW COLUMNS FROM Node LIKE 'status';

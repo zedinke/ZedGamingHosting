@@ -1,13 +1,6 @@
 import { IsEnum, IsString, IsOptional, IsObject, IsInt, Min, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-
-enum GameType {
-  ARK = 'ARK',
-  RUST = 'RUST',
-  MINECRAFT = 'MINECRAFT',
-  CS2 = 'CS2',
-  PALWORLD = 'PALWORLD',
-}
+import { GameType } from '@zed-hosting/shared-types';
 
 class ServerResources {
   @IsInt()

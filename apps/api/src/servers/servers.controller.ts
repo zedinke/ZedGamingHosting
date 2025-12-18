@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Put,
   UseGuards,
   Request,
   Query,
@@ -85,27 +86,27 @@ export class ServersController {
    * Update server settings
    * PUT /api/servers/:uuid/settings
    */
-  // @Put(':uuid/settings')
-  // updateSettings(
-  //   @Param('uuid') uuid: string,
-  //   @Body() settings: { cpuLimit?: number; ramLimit?: number; diskLimit?: number; startupPriority?: number },
-  //   @Request() req: any,
-  // ) {
-  //   return this.serversService.updateSettings(uuid, settings, req.user.id);
-  // }
+  @Put(':uuid/settings')
+  updateSettings(
+    @Param('uuid') uuid: string,
+    @Body() settings: { cpuLimit?: number; ramLimit?: number; diskLimit?: number; startupPriority?: number },
+    @Request() req: any,
+  ) {
+    return this.serversService.updateSettings(uuid, settings, req.user.id);
+  }
 
   /**
    * Update server environment variables
    * PUT /api/servers/:uuid/environment
    */
-  // @Put(':uuid/environment')
-  // updateEnvironment(
-  //   @Param('uuid') uuid: string,
-  //   @Body() body: { envVars: Record<string, string> },
-  //   @Request() req: any,
-  // ) {
-  //   return this.serversService.updateEnvironment(uuid, body.envVars, req.user.id);
-  // }
+  @Put(':uuid/environment')
+  updateEnvironment(
+    @Param('uuid') uuid: string,
+    @Body() body: { envVars: Record<string, string> },
+    @Request() req: any,
+  ) {
+    return this.serversService.updateEnvironment(uuid, body.envVars, req.user.id);
+  }
 
   @Post(':uuid/backups')
   async createBackup(

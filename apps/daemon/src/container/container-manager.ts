@@ -208,4 +208,90 @@ export class ContainerManager {
 
     return bindings;
   }
+
+  /**
+   * Updates container resources (CPU/RAM) and optionally restarts to apply changes.
+   * Env vars cannot be changed via Docker update; requires recreate. Here we only log env intent.
+   */
+  async updateContainer(config: {
+    serverUuid: string;
+    resources?: { cpuLimit?: number; ramLimit?: number };
+    envVars?: Record<string, string>;
+    restart?: boolean;
+  }): Promise<void> {
+    const containerName = `zedhosting-${config.serverUuid}`;
+    const container = this.docker.getContainer(containerName);
+
+    let info;
+    try {
+      info = await container.inspect();
+    } catch (error: any) {
+      if (error?.statusCode === 404) {
+        throw new Error(`Container ${containerName} not found for update`);
+      }
+      throw error;
+    }
+
+    // Apply resource updates if provided
+    if (config.resources) {
+      const updatePayload: any = {};
+      if (config.resources.ramLimit !== undefined) {
+        updatePayload.Memory = config.resources.ramLimit * 1024 * 1024; // MB -> bytes
+      }
+      if (config.resources.cpuLimit !== undefined) {
+        updatePayload.CpuShares = config.resources.cpuLimit * 1024;
+      }
+
+      if (Object.keys(updatePayload).length > 0) {
+        await container.update(updatePayload);
+        console.log(`Updated container resources for ${containerName}`, updatePayload);
+      }
+    }
+
+    // Env var changes require recreate; log intent for visibility.
+    if (config.envVars) {
+      console.log(`Env vars update requested for ${containerName} (requires recreate). Skipping in-place.`);
+    }
+
+    if (config.restart) {
+      await container.restart({ t: 30 });
+      console.log(`✅ Container restarted after update: ${containerName}`);
+    }
+  }
+
+  /**
+   * Executes a shell command inside the container.
+   */
+  async execInContainer(serverUuid: string, command: string): Promise<{ output: string }> {
+    const containerName = `zedhosting-${serverUuid}`;
+    const container = this.docker.getContainer(containerName);
+
+    try {
+      await container.inspect();
+    } catch (error: any) {
+      if (error?.statusCode === 404) {
+        throw new Error(`Container ${containerName} not found for exec`);
+      }
+      throw error;
+    }
+
+    const exec = await container.exec({
+      Cmd: ['/bin/sh', '-c', command],
+      AttachStdout: true,
+      AttachStderr: true,
+    });
+
+    return await new Promise((resolve, reject) => {
+      exec.start((err, stream) => {
+        if (err) return reject(err);
+
+        let output = '';
+        stream.on('data', (chunk: Buffer) => {
+          output += chunk.toString();
+        });
+        stream.on('end', () => resolve({ output }));
+        stream.on('error', reject);
+      });
+    });
+  }
 }

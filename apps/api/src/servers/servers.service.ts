@@ -7,6 +7,7 @@ import { EmailService } from '../email/email.service';
 import { UpdateServerDto } from './dto/update-server.dto';
 import { randomUUID } from 'crypto';
 import { Protocol } from '@zed-hosting/shared-types';
+import { getGamePreset } from '@zed-hosting/shared-types';
 
 @Injectable()
 export class ServersService {
@@ -150,18 +151,41 @@ export class ServersService {
 
     // 2. Check if user has quota/resources (TODO: implement quota checking)
 
-    // 3. Generate server UUID
+    // 3. Preset (image + defaults)
+    const preset = getGamePreset(createServerDto.gameType as any);
+
+    // 4. Generate server UUID
     const serverUuid = randomUUID();
 
-    // 4. Allocate ports for the server
-    const portAllocations = await this.portManager.allocatePortBlock({
-      nodeId: createServerDto.nodeId,
-      gameType: createServerDto.gameType as any,
-      protocol: Protocol.BOTH, // Most games need both UDP and TCP
-      serverUuid,
-    });
+    // 5. Merge resources (fallback to preset defaults if not provided)
+    const resources = createServerDto.resources || preset?.defaultResources || {
+      cpuLimit: 2,
+      ramLimit: 4096,
+      diskLimit: 20,
+    };
 
-    // 5. Create server record in database
+    // 6. Merge env vars (preset defaults + user provided)
+    const mergedEnv = {
+      ...(preset?.env || {}),
+      ...(createServerDto.envVars || {}),
+    };
+
+    // 7. Build volumes (always server data; optional cluster share)
+    const volumes: Array<{ source: string; target: string }> = [
+      {
+        source: `/var/lib/zedhosting/servers/${serverUuid}`,
+        target: '/server',
+      },
+    ];
+
+    if (preset?.requiresClusterVolume && createServerDto.clusterId) {
+      volumes.push({
+        source: `/var/lib/zedhosting/clusters/${createServerDto.clusterId}`,
+        target: '/arkcluster',
+      });
+    }
+
+    // 8. Create server record in database FIRST
     const server = await this.prisma.gameServer.create({
       data: {
         uuid: serverUuid,
@@ -170,14 +194,32 @@ export class ServersService {
         nodeId: createServerDto.nodeId,
         ownerId: userId,
         startupPriority: createServerDto.startupPriority || 10,
-        resources: {
-          cpuLimit: createServerDto.resources.cpuLimit,
-          ramLimit: createServerDto.resources.ramLimit,
-          diskLimit: createServerDto.resources.diskLimit,
-        },
-        envVars: createServerDto.envVars || {},
+        resources,
+        envVars: mergedEnv,
         clusterId: createServerDto.clusterId || null,
       },
+      include: {
+        node: {
+          select: {
+            id: true,
+            publicFqdn: true,
+            ipAddress: true,
+          },
+        },
+      },
+    });
+
+    // 9. NOW allocate ports (after server exists in DB)
+    const portAllocations = await this.portManager.allocatePortBlock({
+      nodeId: createServerDto.nodeId,
+      gameType: createServerDto.gameType as any,
+      protocol: Protocol.BOTH, // Most games need both UDP and TCP
+      serverUuid,
+    });
+
+    // 10. Re-fetch server with port allocations
+    const serverWithPorts = await this.prisma.gameServer.findUnique({
+      where: { uuid: serverUuid },
       include: {
         node: {
           select: {
@@ -196,44 +238,40 @@ export class ServersService {
       },
     });
 
-    // 6. Create provisioning task for daemon
+    // 11. Create provisioning task for daemon
     await this.tasksService.createTask(
       createServerDto.nodeId,
       'PROVISION',
       {
         serverUuid,
         gameType: createServerDto.gameType,
-        resources: createServerDto.resources,
-        envVars: createServerDto.envVars || {},
+        image: preset?.image,
+        resources,
+        envVars: mergedEnv,
         ports: portAllocations.map((a: any) => ({
           port: a.port,
           protocol: a.protocol,
           type: a.type,
         })),
-        volumes: [
-          {
-            source: `/var/lib/zedhosting/servers/${serverUuid}`,
-            target: '/server',
-          },
-        ],
+        volumes,
       },
     );
 
     return {
-      id: server.id,
-      uuid: server.uuid,
-      gameType: server.gameType,
-      status: server.status,
-      nodeId: server.nodeId,
-      ownerId: server.ownerId,
-      startupPriority: server.startupPriority,
-      resources: server.resources,
-      envVars: server.envVars,
-      clusterId: server.clusterId,
-      createdAt: server.createdAt,
-      updatedAt: server.updatedAt,
-      node: server.node,
-      ports: server.networkAllocations,
+      id: serverWithPorts!.id,
+      uuid: serverWithPorts!.uuid,
+      gameType: serverWithPorts!.gameType,
+      status: serverWithPorts!.status,
+      nodeId: serverWithPorts!.nodeId,
+      ownerId: serverWithPorts!.ownerId,
+      startupPriority: serverWithPorts!.startupPriority,
+      resources: serverWithPorts!.resources,
+      envVars: serverWithPorts!.envVars,
+      clusterId: serverWithPorts!.clusterId,
+      createdAt: serverWithPorts!.createdAt,
+      updatedAt: serverWithPorts!.updatedAt,
+      node: serverWithPorts!.node,
+      ports: serverWithPorts!.networkAllocations,
     };
   }
 
@@ -325,6 +363,79 @@ export class ServersService {
     }
 
     return updatedServer;
+  }
+
+  /**
+   * Update server settings (resources, priority)
+   */
+  async updateSettings(
+    uuid: string,
+    settings: { cpuLimit?: number; ramLimit?: number; diskLimit?: number; startupPriority?: number },
+    userId: string,
+  ) {
+    const server = await this.prisma.gameServer.findUnique({ where: { uuid } });
+
+    if (!server) {
+      throw new NotFoundException(this.i18n.translate('SERVER_NOT_FOUND'));
+    }
+
+    if (server.ownerId !== userId) {
+      throw new ForbiddenException(this.i18n.translate('SERVER_ACCESS_DENIED'));
+    }
+
+    const mergedResources = {
+      ...(server.resources as any),
+      ...(settings.cpuLimit !== undefined ? { cpuLimit: settings.cpuLimit } : {}),
+      ...(settings.ramLimit !== undefined ? { ramLimit: settings.ramLimit } : {}),
+      ...(settings.diskLimit !== undefined ? { diskLimit: settings.diskLimit } : {}),
+    };
+
+    const updated = await this.prisma.gameServer.update({
+      where: { uuid },
+      data: {
+        resources: mergedResources,
+        ...(settings.startupPriority !== undefined && { startupPriority: settings.startupPriority }),
+      },
+    });
+
+    // Ask daemon to apply new limits (restart container to apply cgroup changes)
+    await this.tasksService.createTask(server.nodeId, 'UPDATE', {
+      serverUuid: uuid,
+      resources: mergedResources,
+      envVars: server.envVars || {},
+      restart: true,
+    });
+
+    return updated;
+  }
+
+  /**
+   * Update server environment variables
+   */
+  async updateEnvironment(uuid: string, envVars: Record<string, string>, userId: string) {
+    const server = await this.prisma.gameServer.findUnique({ where: { uuid } });
+
+    if (!server) {
+      throw new NotFoundException(this.i18n.translate('SERVER_NOT_FOUND'));
+    }
+
+    if (server.ownerId !== userId) {
+      throw new ForbiddenException(this.i18n.translate('SERVER_ACCESS_DENIED'));
+    }
+
+    const updated = await this.prisma.gameServer.update({
+      where: { uuid },
+      data: { envVars },
+    });
+
+    await this.tasksService.createTask(server.nodeId, 'UPDATE', {
+      serverUuid: uuid,
+      envVars,
+      resources: server.resources,
+      restart: true,
+    });
+
+    return updated;
   }
 
   /**

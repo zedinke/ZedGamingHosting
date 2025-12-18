@@ -1,12 +1,5 @@
 import { IsEnum, IsString, IsOptional, IsObject, IsInt, Min } from 'class-validator';
-
-enum GameType {
-  ARK = 'ARK',
-  RUST = 'RUST',
-  MINECRAFT = 'MINECRAFT',
-  CS2 = 'CS2',
-  PALWORLD = 'PALWORLD',
-}
+import { GameType } from '@zed-hosting/shared-types';
 
 export class UpdateServerDto {
   @IsEnum(GameType)

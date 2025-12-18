@@ -52,6 +52,11 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+      DATABASE_URL: "mysql://root:${MYSQL_ROOT_PASSWORD}@mysql:3306/${MYSQL_DATABASE}"
+      LICENSE_SERVER_URL: "https://license.zedhosting.com"
+      LICENSE_KEY: "550e8400-e29b-41d4-a716-446655440000"
+      LICENSE_PUBLIC_KEY: "placeholder_key"
+      TRAEFIK_ACME_EMAIL: "admin@zedhosting.com"
     depends_on:
       mysql:
         condition: service_healthy
@@ -123,7 +128,7 @@ services:
       - .env
     environment:
       NODE_ENV: production
-      BACKEND_URL: http://api:3000
+      BACKEND_URL: http://172.18.0.5:3000
       DOCKER_HOST: unix:///var/run/docker.sock
       TASK_POLL_INTERVAL: 5000
       HEARTBEAT_INTERVAL: 30000

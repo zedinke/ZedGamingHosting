@@ -13,6 +13,7 @@ export * from './nodes/node.interface';
 // Servers
 export * from './servers/server.dto';
 export * from './servers/server.interface';
+export * from './servers/game-presets';
 
 // Networking
 export * from './networking/port-allocation.dto';

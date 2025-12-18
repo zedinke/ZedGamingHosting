@@ -1,0 +1,18 @@
+{
+  "nodeId": "550e8400-e29b-41d4-a716-446655441111",
+  "daemonVersion": "1.0.0",
+  "systemInfo": {
+    "cpu": 50,
+    "memory": {
+      "used": 16000,
+      "total": 32000,
+      "percent": 50
+    },
+    "disk": [],
+    "network": {
+      "in": 0,
+      "out": 0
+    },
+    "containerCount": 0
+  }
+}

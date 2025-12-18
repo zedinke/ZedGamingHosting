@@ -24,7 +24,7 @@ export class AgentService {
       containerCount: number;
     };
   }) {
-    // Find node by ID
+    // Find node by ID - use nodeId from the request body
     const node = await this.prisma.node.findUnique({
       where: { id: data.nodeId },
     });

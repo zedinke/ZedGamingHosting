@@ -6,12 +6,14 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
 import { I18nService } from '../i18n/i18n.service';
+import { TasksService } from '../tasks/tasks.service';
 
 @Injectable()
 export class ConsoleService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly i18n: I18nService,
+    private readonly tasksService: TasksService,
   ) {}
 
   /**
@@ -109,7 +111,7 @@ export class ConsoleService {
   /**
    * Sends a command to the server console
    */
-  async sendCommand(serverUuid: string, _command: string, userId: string) {
+  async sendCommand(serverUuid: string, command: string, userId: string) {
     await this.verifyAccess(serverUuid, userId);
     
     const server = await this.prisma.gameServer.findUnique({
@@ -121,9 +123,7 @@ export class ConsoleService {
       throw new NotFoundException('Server or node not found');
     }
 
-    // Create task for daemon to execute the command
-    // TODO: Implement EXECUTE_COMMAND task type in Prisma schema and daemon
-    /*
+    // Queue EXECUTE_COMMAND task for the daemon. Daemon must handle this type idempotently.
     await this.tasksService.createTask(
       server.nodeId,
       'EXECUTE_COMMAND',
@@ -132,7 +132,6 @@ export class ConsoleService {
         command,
       },
     );
-    */
 
     return {
       success: true,

@@ -53,16 +53,18 @@ export class TaskProcessor {
           result = await this.containerManager.createContainer(task.data as any);
           break;
         case 'START':
-          await this.containerManager.startContainer((task.data as { serverUuid: string }).serverUuid);
-          break;
-        case 'STOP':
-          await this.containerManager.stopContainer((task.data as { serverUuid: string }).serverUuid);
+          // Apply resource/env updates and restart if requested
+          await this.containerManager.updateContainer(task.data as any);
           break;
         case 'RESTART':
           await this.containerManager.restartContainer((task.data as { serverUuid: string }).serverUuid);
           break;
         case 'UPDATE':
           // Queue Steam update
+        case 'EXECUTE_COMMAND':
+          const execData = task.data as { serverUuid: string; command: string };
+          result = await this.containerManager.execInContainer(execData.serverUuid, execData.command);
+          break;
           const updateData = task.data as { serverUuid: string; appId: string; installDir: string; beta?: string; validate?: boolean };
           // Update queue will be handled by UpdateQueueService
           // This is a placeholder - actual implementation would require access to UpdateQueueService

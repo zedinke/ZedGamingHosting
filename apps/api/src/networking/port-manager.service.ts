@@ -7,13 +7,45 @@ import { GameType } from '@zed-hosting/shared-types';
 /**
  * Game-specific port requirements
  */
-const GAME_PORT_REQUIREMENTS: Record<GameType, { count: number; types: PortType[] }> = {
+const DEFAULT_PORT_RULE = { count: 2, types: [PortType.GAME, PortType.QUERY] };
+
+const GAME_PORT_REQUIREMENTS: Partial<Record<GameType, { count: number; types: PortType[] }>> = {
   ARK: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  ARK_SURVIVAL_ASCENDED: { count: 2, types: [PortType.GAME, PortType.QUERY] },
   RUST: { count: 3, types: [PortType.GAME, PortType.RCON, PortType.APP] },
   MINECRAFT: { count: 1, types: [PortType.GAME] },
   CS2: { count: 2, types: [PortType.GAME, PortType.TV] },
   PALWORLD: { count: 2, types: [PortType.GAME, PortType.QUERY] },
   ATLAS: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  SATISFACTORY: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  THE_FOREST: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  SONS_OF_THE_FOREST: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  SEVEN_DAYS_TO_DIE: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  VALHEIM: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  PROJECT_ZOMBOID: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  FACTORIO: { count: 1, types: [PortType.GAME] },
+  TERRARIA: { count: 1, types: [PortType.GAME] },
+  UNTURNED: { count: 2, types: [PortType.GAME, PortType.RCON] },
+  STARBOUND: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  ECO: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  BAROTRAUMA: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  GARRYS_MOD: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  DAYZ: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  ARMA3: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  V_RISING: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  ENSHROUDED: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  MORDHAU: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  INSURGENCY_SANDSTORM: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  STATIONEERS: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  SCUM: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  CONAN_EXILES: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  RAINBOW_SIX_SIEGE: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  HELL_LET_LOOSE: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  FOXHOLE: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  READY_OR_NOT: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  DEEP_ROCK_GALACTIC: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  SPACE_ENGINEERS: { count: 2, types: [PortType.GAME, PortType.QUERY] },
+  STARDEW_VALLEY: { count: 1, types: [PortType.GAME] },
 };
 
 /**
@@ -41,10 +73,7 @@ export class PortManagerService {
    */
   async allocatePortBlock(request: PortAllocationRequestDto) {
     // Get game-specific port requirements
-    const gameRequirements = GAME_PORT_REQUIREMENTS[request.gameType];
-    if (!gameRequirements) {
-      throw new Error(`Unknown game type: ${request.gameType}`);
-    }
+    const gameRequirements = GAME_PORT_REQUIREMENTS[request.gameType] || DEFAULT_PORT_RULE;
 
     const neededPorts = gameRequirements.count;
 
