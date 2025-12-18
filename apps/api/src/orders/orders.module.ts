@@ -1,6 +1,7 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { OrdersController } from './orders.controller';
+import { AdminOrdersController } from './admin-orders.controller';
 import { PaymentService } from './payment.service';
 import { WalletService } from './wallet.service';
 import { WalletController } from './wallet.controller';
@@ -18,7 +19,7 @@ import { PaymentsModule } from '../payments/payments.module';
     EmailModule,
     forwardRef(() => PaymentsModule),
   ],
-  controllers: [OrdersController, WalletController],
+  controllers: [OrdersController, AdminOrdersController, WalletController],
   providers: [OrdersService, PaymentService, WalletService, ProvisioningService, InvoiceService],
   exports: [OrdersService, PaymentService],
 })
