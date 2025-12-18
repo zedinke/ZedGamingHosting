@@ -64,7 +64,7 @@ export default function CreateNodePage() {
     setError(null);
 
     try {
-      const node = await apiClient.post('/nodes', formData);
+      const node = await apiClient.post<{ id: string; apiKey: string }>('/nodes', formData);
       
       notifications.addNotification({
         type: 'success',
