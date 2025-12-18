@@ -53,7 +53,11 @@
     }
   },
   "footer": {
-    "copyright": "© {year} ZedGamingHosting. Minden jog fenntartva."
+    "copyright": "© {year} ZedGamingHosting. Minden jog fenntartva.",
+    "company": "Vállalat",
+    "about": "Rólunk",
+    "contact": "Kapcsolat",
+    "terms": "Felhasználási feltételek"
   },
   "dashboard": {
     "title": "Dashboard",

@@ -53,7 +53,11 @@
     }
   },
   "footer": {
-    "copyright": "© {year} ZedGamingHosting. All rights reserved."
+    "copyright": "© {year} ZedGamingHosting. All rights reserved.",
+    "company": "Company",
+    "about": "About",
+    "contact": "Contact",
+    "terms": "Terms of Service"
   },
   "dashboard": {
     "title": "Dashboard",
