@@ -1,6 +1,7 @@
 import { Body, Controller, Post, Request, UseGuards, Get, Param, Delete } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { PaymentService } from './payment.service';
+import { InvoiceService } from './invoice.service';
 import { BillingCycle, CreateOrderDto } from './dto/create-order.dto';
 import { InitiatePaymentDto } from './dto/payment.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -11,6 +12,7 @@ export class OrdersController {
   constructor(
     private readonly ordersService: OrdersService,
     private readonly paymentService: PaymentService,
+    private readonly invoiceService: InvoiceService,
   ) {}
 
   @Post()
@@ -58,5 +60,12 @@ export class OrdersController {
   @Delete(':id')
   async cancel(@Param('id') orderId: string, @Request() req: any) {
     return this.ordersService.cancelOrder(orderId, req.user?.id);
+  }
+
+  @Get(':id/invoice')
+  async getInvoice(@Param('id') orderId: string, @Request() req: any) {
+    // Verify order belongs to user
+    await this.ordersService.getOrderById(orderId, req.user?.id);
+    return this.invoiceService.getInvoice(orderId);
   }
 }
