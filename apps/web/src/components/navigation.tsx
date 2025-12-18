@@ -9,6 +9,7 @@ import { ThemeToggle } from '../lib/theme';
 import { cn } from '../lib/utils';
 import { NotificationCenter } from './notification-center';
 import { useNotificationContext } from '../context/notification-context';
+import { useEffect, useRef, useState } from 'react';
 
 export function Navigation() {
   const pathname = usePathname();
@@ -16,6 +17,8 @@ export function Navigation() {
   const { user, logout } = useAuthStore();
   const t = useTranslations();
   const notifications = useNotificationContext();
+  const [adminOpen, setAdminOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const locale = pathname.split('/')[1] || 'hu';
 
@@ -23,11 +26,33 @@ export function Navigation() {
   // Prisma schema uses: SUPERADMIN, RESELLER_ADMIN, USER, SUPPORT
   const userRole = user?.role?.toUpperCase();
   const isAdmin = userRole === 'ADMIN' || userRole === 'SUPER_ADMIN' || userRole === 'SUPERADMIN' || userRole === 'RESELLER_ADMIN';
-  
-  const navItems = [
-    { href: `/${locale}/dashboard`, label: t('dashboard.title'), icon: '📊' },
-    ...(isAdmin ? [{ href: `/${locale}/admin`, label: 'Admin', icon: '⚙️' }] : []),
+
+  const adminItems = [
+    { href: `/${locale}/admin`, label: 'Áttekintés' },
+    { href: `/${locale}/admin/plans`, label: 'Csomagok' },
+    { href: `/${locale}/admin/users`, label: 'Felhasználók' },
+    { href: `/${locale}/admin/nodes`, label: 'Node-ok' },
+    { href: `/${locale}/admin/servers`, label: 'Szerverek' },
+    { href: `/${locale}/admin/stats`, label: 'Statisztikák' },
+    { href: `/${locale}/admin/settings`, label: 'Beállítások' },
+    { href: `/${locale}/admin/licensing`, label: 'Licencelés' },
+    { href: `/${locale}/admin/logs`, label: 'Naplók' },
   ];
+
+  const navItems = [
+    { href: `/${locale}/dashboard`, label: t('dashboard.title') },
+  ];
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setAdminOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <nav
@@ -70,6 +95,49 @@ export function Navigation() {
                 </Link>
               );
             })}
+
+            {isAdmin && (
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  type="button"
+                  onClick={() => setAdminOpen((prev) => !prev)}
+                  className={cn(
+                    'px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2',
+                    pathname.startsWith(`/${locale}/admin`)
+                      ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]'
+                      : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] hover:bg-[var(--color-bg-elevated)]'
+                  )}
+                >
+                  ⚙️ Admin
+                  <span className="text-xs" aria-hidden>
+                    {adminOpen ? '▲' : '▼'}
+                  </span>
+                </button>
+                {adminOpen && (
+                  <div
+                    className="absolute right-0 mt-2 w-48 rounded-lg shadow-lg border"
+                    style={{ backgroundColor: 'var(--color-bg-card)', borderColor: 'var(--color-border)' }}
+                  >
+                    <ul className="py-2 text-sm">
+                      {adminItems.map((item) => (
+                        <li key={item.href}>
+                          <Link
+                            href={item.href}
+                            className={cn(
+                              'block px-4 py-2 hover:bg-[var(--color-bg-elevated)] transition-colors',
+                              pathname === item.href ? 'text-[var(--color-primary)]' : 'text-[var(--color-text-muted)]'
+                            )}
+                            onClick={() => setAdminOpen(false)}
+                          >
+                            {item.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* User Menu */}
