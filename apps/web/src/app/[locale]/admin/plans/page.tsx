@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState, FormEvent } from 'react';
 import { Card } from '@zed-hosting/ui-kit';
 import { BackButton } from '../../../../components/back-button';
-import { useRouter } from '../../../../i18n/routing';
 
 const GAME_TYPES = ['MINECRAFT', 'RUST', 'CS2', 'PALWORLD', 'ARK', 'ATLAS'];
 const STATUS_OPTIONS = ['ACTIVE', 'INACTIVE', 'ARCHIVED'];
@@ -48,7 +47,6 @@ interface Plan {
 }
 
 export default function AdminPlansPage() {
-  const router = useRouter();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingPlan, setEditingPlan] = useState<Plan | null>(null);
