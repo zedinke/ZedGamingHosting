@@ -130,10 +130,10 @@ export default function OrdersPage() {
                       <p className="text-xl font-bold text-primary-400">{formatHuf(order.totalAmount)}</p>
                       {order.plan?.slug && (
                         <Link
-                          href={`/${locale}/plans/${order.plan.slug}`}
+                          href={`/${locale}/dashboard/orders/${order.id}`}
                           className="text-sm text-primary-300 hover:text-primary-200"
                         >
-                          Csomag részletei
+                          Rendelés részletei
                         </Link>
                       )}
                     </div>
