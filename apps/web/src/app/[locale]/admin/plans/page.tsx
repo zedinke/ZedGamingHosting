@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Card } from '@zed-hosting/ui-kit';
 
@@ -27,7 +26,6 @@ interface Plan {
 }
 
 export default function AdminPlansPage() {
-  const { data: session, status } = useSession();
   const router = useRouter();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
@@ -35,25 +33,13 @@ export default function AdminPlansPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/login');
-    }
-  }, [status, router]);
-
-  useEffect(() => {
-    if (session) {
-      fetchPlans();
-    }
-  }, [session]);
+    fetchPlans();
+  }, []);
 
   const fetchPlans = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/plans', {
-        headers: {
-          Authorization: `Bearer ${(session as any)?.accessToken}`,
-        },
-      });
+      const res = await fetch('/api/plans');
       if (res.ok) {
         const data = await res.json();
         setPlans(data);
