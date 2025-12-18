@@ -27,8 +27,8 @@ interface Plan {
 export default function AdminPlansPage() {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
-  const [editingPlan, setEditingPlan] = useState<Plan | null>(null);
-  const [showCreateModal, setShowCreateModal] = useState(false);
+  // const [editingPlan, setEditingPlan] = useState<Plan | null>(null);
+  // const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
     fetchPlans();
