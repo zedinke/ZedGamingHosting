@@ -55,9 +55,6 @@ export default function AdminPlansPage() {
     try {
       const res = await fetch(`/api/plans/${id}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${(session as any)?.accessToken}`,
-        },
       });
       if (res.ok) {
         fetchPlans();
@@ -67,7 +64,7 @@ export default function AdminPlansPage() {
     }
   };
 
-  if (status === 'loading' || loading) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-background-default flex items-center justify-center">
         <div className="text-center">
