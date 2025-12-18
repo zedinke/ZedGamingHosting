@@ -2,7 +2,7 @@ http:
   routers:
     # Frontend - Root domain
     web-http:
-      rule: "Host(`zedgaminghosting.hu`) || Host(`www.zedgaminghosting.hu`) || Host(`116.203.226.140`)"
+      rule: "Host(`zedgaminghosting.hu`) || Host(`www.zedgaminghosting.hu`)"
       entryPoints:
         - web
       service: web
@@ -10,7 +10,7 @@ http:
         - redirect-to-https
 
     web-https:
-      rule: "Host(`zedgaminghosting.hu`) || Host(`www.zedgaminghosting.hu`) || Host(`116.203.226.140`)"
+      rule: "Host(`zedgaminghosting.hu`) || Host(`www.zedgaminghosting.hu`)"
       entryPoints:
         - websecure
       service: web
@@ -20,7 +20,7 @@ http:
 
     # API - /api routes
     api-http:
-      rule: "(Host(`zedgaminghosting.hu`) || Host(`www.zedgaminghosting.hu`) || Host(`116.203.226.140`)) && PathPrefix(`/api`)"
+      rule: "(Host(`zedgaminghosting.hu`) || Host(`www.zedgaminghosting.hu`)) && PathPrefix(`/api`)"
       entryPoints:
         - web
       service: api
@@ -28,7 +28,7 @@ http:
         - redirect-to-https
 
     api-https:
-      rule: "(Host(`zedgaminghosting.hu`) || Host(`www.zedgaminghosting.hu`) || Host(`116.203.226.140`)) && PathPrefix(`/api`)"
+      rule: "(Host(`zedgaminghosting.hu`) || Host(`www.zedgaminghosting.hu`)) && PathPrefix(`/api`)"
       entryPoints:
         - websecure
       service: api
@@ -38,7 +38,7 @@ http:
 
     # Adminer - Database Admin
     adminer-http:
-      rule: "(Host(`zedgaminghosting.hu`) || Host(`116.203.226.140`)) && PathPrefix(`/adminer`)"
+      rule: "Host(`zedgaminghosting.hu`) && PathPrefix(`/adminer`)"
       entryPoints:
         - web
       service: adminer
@@ -47,7 +47,7 @@ http:
       priority: 20
 
     adminer-https:
-      rule: "(Host(`zedgaminghosting.hu`) || Host(`116.203.226.140`)) && PathPrefix(`/adminer`)"
+      rule: "Host(`zedgaminghosting.hu`) && PathPrefix(`/adminer`)"
       entryPoints:
         - websecure
       service: adminer
