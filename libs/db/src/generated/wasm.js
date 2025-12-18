@@ -351,6 +351,21 @@ exports.Prisma.PlanScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PromotionScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  scope: 'scope',
+  discountPercent: 'discountPercent',
+  gameType: 'gameType',
+  planId: 'planId',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.OrderScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -506,6 +521,12 @@ exports.PlanStatus = exports.$Enums.PlanStatus = {
   ARCHIVED: 'ARCHIVED'
 };
 
+exports.PromotionScope = exports.$Enums.PromotionScope = {
+  GLOBAL: 'GLOBAL',
+  GAME: 'GAME',
+  PLAN: 'PLAN'
+};
+
 exports.OrderStatus = exports.$Enums.OrderStatus = {
   PENDING: 'PENDING',
   PAYMENT_PENDING: 'PAYMENT_PENDING',
@@ -534,6 +555,7 @@ exports.Prisma.ModelName = {
   ApiKey: 'ApiKey',
   Incident: 'Incident',
   Plan: 'Plan',
+  Promotion: 'Promotion',
   Order: 'Order'
 };
 

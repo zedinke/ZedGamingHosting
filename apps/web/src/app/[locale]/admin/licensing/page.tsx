@@ -90,7 +90,10 @@ export default function AdminLicensingPage() {
   return (
     <div>
       <AdminLayout title="Licencelés">
-        <div>
+          <div>
+            <div className="mb-4 flex justify-end">
+              <BackButton fallbackHref={`/${locale}/admin`} />
+            </div>
           <div className="mb-6">
             <p className="text-text-muted">
               Licenc kezelés és validáció

@@ -9,6 +9,7 @@ import { AdminLayout } from '../../../../components/admin/admin-layout';
 import { Card, Button, Input } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../lib/api-client';
 import { useNotificationContext } from '../../../../context/notification-context';
+import { BackButton } from '../../../../components/back-button';
 
 export default function AdminSettingsPage() {
   const router = useRouter();
@@ -130,6 +131,9 @@ export default function AdminSettingsPage() {
     <div>
       <AdminLayout title="Rendszerbeállítások">
         <div>
+          <div className="mb-4 flex justify-end">
+            <BackButton fallbackHref={`/${locale}/admin`} />
+          </div>
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
               <Card className="p-6">

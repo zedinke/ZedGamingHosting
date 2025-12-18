@@ -12,7 +12,8 @@
     "type-check": "nx run-many --target=type-check --all",
     "dev:api": "nx serve api",
     "dev:web": "nx serve web",
-    "dev:daemon": "nx serve daemon"
+    "dev:daemon": "nx serve daemon",
+    "test:add-node": "node scripts/test_add_node.js"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",

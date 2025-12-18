@@ -428,6 +428,12 @@ enum PlanStatus {
   ARCHIVED
 }
 
+enum PromotionScope {
+  GLOBAL
+  GAME
+  PLAN
+}
+
 model Plan {
   id          String     @id @default(uuid())
   name        String     // "Minecraft Basic", "Rust Premium", etc.
@@ -459,9 +465,32 @@ model Plan {
   
   servers     GameServer[]
   orders      Order[]
+  promotions  Promotion[]
 
   @@index([gameType, status])
   @@index([slug])
+}
+
+model Promotion {
+  id              String          @id @default(uuid())
+  name            String
+  description     String?
+  scope           PromotionScope
+  discountPercent Int
+  gameType        GameType?
+  planId          String?
+  plan            Plan?           @relation(fields: [planId], references: [id], onDelete: SetNull)
+  startDate       DateTime
+  endDate         DateTime?
+  active          Boolean         @default(true)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([scope, active])
+  @@index([gameType, active])
+  @@index([planId, active])
+  @@index([startDate])
+  @@index([endDate])
 }
 
 model Order {

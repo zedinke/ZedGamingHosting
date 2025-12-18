@@ -18,6 +18,8 @@ export class NodesController {
    * POST /api/nodes
    */
   @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN', 'SUPERADMIN', 'SUPER_ADMIN', 'RESELLER_ADMIN')
   async createNode(@Body() dto: CreateNodeDto) {
     return await this.nodesService.createNode(dto);
   }

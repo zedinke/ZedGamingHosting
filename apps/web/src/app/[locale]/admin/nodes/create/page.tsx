@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from '../../../../../i18n/routing';
-import { useParams } from 'next/navigation';
 import { useAuthStore } from '../../../../../stores/auth-store';
 import { Navigation } from '../../../../../components/navigation';
 import { BackButton } from '../../../../../components/back-button';
@@ -12,14 +11,15 @@ import { useNotificationContext } from '../../../../../context/notification-cont
 
 export default function CreateNodePage() {
   const router = useRouter();
-  const params = useParams();
   // const t = useTranslations();
   const { user: currentUser, isAuthenticated, accessToken } = useAuthStore();
   const notifications = useNotificationContext();
-  const locale = (params.locale as string) || 'hu';
   const [isHydrated, setIsHydrated] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [createdNode, setCreatedNode] = useState<{ id: string; apiKey: string } | null>(null);
+  const [managerUrl, setManagerUrl] = useState<string>('');
+  const [copied, setCopied] = useState(false);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -37,20 +37,26 @@ export default function CreateNodePage() {
     if (accessToken) {
       apiClient.setAccessToken(accessToken);
     }
+    if (typeof window !== 'undefined') {
+      try {
+        const origin = window.location.origin;
+        setManagerUrl(origin);
+      } catch {}
+    }
   }, [accessToken]);
 
   useEffect(() => {
     if (isHydrated && !isAuthenticated) {
-      router.push(`/${locale}/login`);
+      router.push('/login');
       return;
     }
 
     const userRole = currentUser?.role?.toUpperCase();
     if (isHydrated && isAuthenticated && userRole !== 'ADMIN' && userRole !== 'SUPER_ADMIN' && userRole !== 'SUPERADMIN' && userRole !== 'RESELLER_ADMIN') {
-      router.push(`/${locale}/dashboard`);
+      router.push('/dashboard');
       return;
     }
-  }, [isAuthenticated, isHydrated, currentUser, router, locale]);
+  }, [isAuthenticated, isHydrated, currentUser, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,15 +64,16 @@ export default function CreateNodePage() {
     setError(null);
 
     try {
-      await apiClient.post('/nodes', formData);
+      const node = await apiClient.post('/nodes', formData);
       
       notifications.addNotification({
         type: 'success',
         title: 'Node létrehozva',
         message: `A node sikeresen létrehozva: ${formData.name}`,
       });
-      
-      router.push(`/${locale}/admin/nodes`);
+      // Show installer command instead of immediate redirect
+      setCreatedNode({ id: node.id, apiKey: node.apiKey });
+      setLoading(false);
     } catch (err: any) {
       const errorMessage = err.message || 'Node létrehozása sikertelen';
       setError(errorMessage);
@@ -96,6 +103,10 @@ export default function CreateNodePage() {
     );
   }
 
+  const installCommand = createdNode && managerUrl
+    ? `curl -fsSL https://raw.githubusercontent.com/zedinke/ZedGamingHosting/main/scripts/install_node.sh | bash -s -- \\\n+  --manager-url ${managerUrl} \\\n+  --node-id ${createdNode.id} \\\n+  --api-key ${createdNode.apiKey} \\\n+  --daemon-port 3001`
+    : '';
+
   return (
     <>
       <Navigation />
@@ -113,8 +124,40 @@ export default function CreateNodePage() {
                 Új szerver node hozzáadása a rendszerhez
               </p>
             </div>
-            <BackButton fallbackHref={`/${locale}/admin/nodes`} />
+            <BackButton fallbackHref={`/admin/nodes`} />
           </header>
+
+          {createdNode && (
+            <Card className="glass elevation-2 p-6 max-w-3xl mx-auto mb-8">
+              <h2 className="text-xl font-semibold mb-2" style={{ color: '#f8fafc' }}>Telepítő parancs (Debian 12)</h2>
+              <p className="text-sm mb-3" style={{ color: '#cbd5e1' }}>
+                SSH-zz be a friss szerverre root-ként, majd futtasd az alábbit. A parancs non-interactive módon telepíti a daemont és regisztrálja a Node-ot.
+              </p>
+              <div className="mb-3 flex gap-2 items-center">
+                <input
+                  readOnly
+                  value={installCommand}
+                  className="w-full px-3 py-2 rounded border text-xs"
+                  style={{ backgroundColor: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)', color: 'var(--color-text-main)' }}
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={async () => { await navigator.clipboard.writeText(installCommand); setCopied(true); setTimeout(() => setCopied(false), 1500); }}
+                >
+                  {copied ? 'Másolva' : 'Másolás'}
+                </Button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm mb-2">
+                <div><span className="text-text-muted">Node ID:</span> <span className="text-text-main">{createdNode.id}</span></div>
+                <div className="truncate"><span className="text-text-muted">API Key:</span> <span className="text-text-main">{createdNode.apiKey}</span></div>
+                <div><span className="text-text-muted">Manager URL:</span> <span className="text-text-main">{managerUrl}</span></div>
+              </div>
+              <div className="flex gap-3 mt-4">
+                <Button variant="primary" onClick={() => router.push('/admin/nodes')}>Kész, tovább a listához</Button>
+              </div>
+            </Card>
+          )}
 
           <Card className="glass elevation-2 p-6 max-w-2xl mx-auto">
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -290,7 +333,7 @@ export default function CreateNodePage() {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => router.push(`/admin/nodes`)}
+                  onClick={() => router.push('/admin/nodes')}
                   disabled={loading}
                 >
                   Mégse

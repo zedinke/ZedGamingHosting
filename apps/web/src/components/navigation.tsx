@@ -28,6 +28,7 @@ export function Navigation() {
   const adminItems = [
     { href: `/admin`, label: 'Áttekintés' },
     { href: `/admin/plans`, label: 'Csomagok' },
+    { href: `/admin/promotions`, label: 'Akciók' },
     { href: `/admin/users`, label: 'Felhasználók' },
     { href: `/admin/nodes`, label: 'Node-ok' },
     { href: `/admin/servers`, label: 'Szerverek' },

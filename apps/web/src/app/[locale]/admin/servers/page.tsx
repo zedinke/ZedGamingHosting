@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from '../../../../i18n/routing';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '../../../../stores/auth-store';
 import { AdminLayout } from '../../../../components/admin/admin-layout';
@@ -12,6 +12,7 @@ import { Search, Download, Trash2, ExternalLink, Eye } from 'lucide-react';
 import { exportToCSV } from '../../../../utils/export';
 import { BulkActions } from '../../../../components/bulk-actions';
 import { Checkbox } from '../../../../components/checkbox';
+import { BackButton } from '../../../../components/back-button';
 
 interface Server {
   uuid: string;
@@ -33,8 +34,6 @@ interface Server {
 
 export default function AdminServersPage() {
   const router = useRouter();
-  const params = useParams();
-  const locale = (params?.locale as string) || 'hu';
   const { user: currentUser, isAuthenticated, accessToken } = useAuthStore();
   const notifications = useNotificationContext();
   const [isHydrated, setIsHydrated] = useState(false);
@@ -158,7 +157,7 @@ export default function AdminServersPage() {
   }
 
   if (!isAuthenticated) {
-    router.push(`/${locale}/login`);
+    router.push('/login');
     return null;
   }
 
@@ -166,7 +165,7 @@ export default function AdminServersPage() {
   const isAdmin = userRole === 'ADMIN' || userRole === 'SUPER_ADMIN' || userRole === 'SUPERADMIN' || userRole === 'RESELLER_ADMIN';
 
   if (!isAdmin) {
-    router.push(`/${locale}/dashboard`);
+    router.push('/dashboard');
     return null;
   }
 
@@ -190,6 +189,9 @@ export default function AdminServersPage() {
     <div className="light">
       <AdminLayout title="Szerverek">
         <div>
+          <div className="mb-4">
+            <BackButton fallbackHref="/admin" />
+          </div>
           <div className="mb-6">
             <p style={{ color: 'var(--color-text-muted)' }}>
               Összes szerver kezelése és monitorozása
@@ -327,14 +329,14 @@ export default function AdminServersPage() {
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => router.push(`/${locale}/dashboard/server/${server.uuid}`)}
+                              onClick={() => router.push(`/dashboard/server/${server.uuid}`)}
                             >
                               <Eye className="h-4 w-4" />
                             </Button>
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => router.push(`/${locale}/dashboard/server/${server.uuid}?view=admin`)}
+                              onClick={() => router.push(`/dashboard/server/${server.uuid}?view=admin`)}
                             >
                               <ExternalLink className="h-4 w-4" />
                             </Button>

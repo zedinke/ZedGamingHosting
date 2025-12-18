@@ -99,6 +99,11 @@ export type Incident = $Result.DefaultSelection<Prisma.$IncidentPayload>
  */
 export type Plan = $Result.DefaultSelection<Prisma.$PlanPayload>
 /**
+ * Model Promotion
+ * 
+ */
+export type Promotion = $Result.DefaultSelection<Prisma.$PromotionPayload>
+/**
  * Model Order
  * 
  */
@@ -270,6 +275,15 @@ export const PlanStatus: {
 export type PlanStatus = (typeof PlanStatus)[keyof typeof PlanStatus]
 
 
+export const PromotionScope: {
+  GLOBAL: 'GLOBAL',
+  GAME: 'GAME',
+  PLAN: 'PLAN'
+};
+
+export type PromotionScope = (typeof PromotionScope)[keyof typeof PromotionScope]
+
+
 export const OrderStatus: {
   PENDING: 'PENDING',
   PAYMENT_PENDING: 'PAYMENT_PENDING',
@@ -347,6 +361,10 @@ export const IncidentStatus: typeof $Enums.IncidentStatus
 export type PlanStatus = $Enums.PlanStatus
 
 export const PlanStatus: typeof $Enums.PlanStatus
+
+export type PromotionScope = $Enums.PromotionScope
+
+export const PromotionScope: typeof $Enums.PromotionScope
 
 export type OrderStatus = $Enums.OrderStatus
 
@@ -644,6 +662,16 @@ export class PrismaClient<
     * ```
     */
   get plan(): Prisma.PlanDelegate<ExtArgs>;
+
+  /**
+   * `prisma.promotion`: Exposes CRUD operations for the **Promotion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Promotions
+    * const promotions = await prisma.promotion.findMany()
+    * ```
+    */
+  get promotion(): Prisma.PromotionDelegate<ExtArgs>;
 
   /**
    * `prisma.order`: Exposes CRUD operations for the **Order** model.
@@ -1112,6 +1140,7 @@ export namespace Prisma {
     ApiKey: 'ApiKey',
     Incident: 'Incident',
     Plan: 'Plan',
+    Promotion: 'Promotion',
     Order: 'Order'
   };
 
@@ -1128,7 +1157,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "systemLicense" | "tenant" | "user" | "auditLog" | "node" | "task" | "networkAllocation" | "subdomain" | "gameServer" | "gameCluster" | "backup" | "metric" | "alert" | "resourceQuota" | "apiKey" | "incident" | "plan" | "order"
+      modelProps: "systemLicense" | "tenant" | "user" | "auditLog" | "node" | "task" | "networkAllocation" | "subdomain" | "gameServer" | "gameCluster" | "backup" | "metric" | "alert" | "resourceQuota" | "apiKey" | "incident" | "plan" | "promotion" | "order"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2254,6 +2283,72 @@ export namespace Prisma {
           }
         }
       }
+      Promotion: {
+        payload: Prisma.$PromotionPayload<ExtArgs>
+        fields: Prisma.PromotionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PromotionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PromotionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PromotionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PromotionPayload>
+          }
+          findFirst: {
+            args: Prisma.PromotionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PromotionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PromotionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PromotionPayload>
+          }
+          findMany: {
+            args: Prisma.PromotionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PromotionPayload>[]
+          }
+          create: {
+            args: Prisma.PromotionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PromotionPayload>
+          }
+          createMany: {
+            args: Prisma.PromotionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.PromotionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PromotionPayload>
+          }
+          update: {
+            args: Prisma.PromotionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PromotionPayload>
+          }
+          deleteMany: {
+            args: Prisma.PromotionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PromotionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PromotionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PromotionPayload>
+          }
+          aggregate: {
+            args: Prisma.PromotionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePromotion>
+          }
+          groupBy: {
+            args: Prisma.PromotionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PromotionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PromotionCountArgs<ExtArgs>
+            result: $Utils.Optional<PromotionCountAggregateOutputType> | number
+          }
+        }
+      }
       Order: {
         payload: Prisma.$OrderPayload<ExtArgs>
         fields: Prisma.OrderFieldRefs
@@ -2791,11 +2886,13 @@ export namespace Prisma {
   export type PlanCountOutputType = {
     servers: number
     orders: number
+    promotions: number
   }
 
   export type PlanCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     servers?: boolean | PlanCountOutputTypeCountServersArgs
     orders?: boolean | PlanCountOutputTypeCountOrdersArgs
+    promotions?: boolean | PlanCountOutputTypeCountPromotionsArgs
   }
 
   // Custom InputTypes
@@ -2821,6 +2918,13 @@ export namespace Prisma {
    */
   export type PlanCountOutputTypeCountOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: OrderWhereInput
+  }
+
+  /**
+   * PlanCountOutputType without action
+   */
+  export type PlanCountOutputTypeCountPromotionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PromotionWhereInput
   }
 
 
@@ -19094,6 +19198,7 @@ export namespace Prisma {
     updatedAt?: boolean
     servers?: boolean | Plan$serversArgs<ExtArgs>
     orders?: boolean | Plan$ordersArgs<ExtArgs>
+    promotions?: boolean | Plan$promotionsArgs<ExtArgs>
     _count?: boolean | PlanCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["plan"]>
 
@@ -19122,6 +19227,7 @@ export namespace Prisma {
   export type PlanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     servers?: boolean | Plan$serversArgs<ExtArgs>
     orders?: boolean | Plan$ordersArgs<ExtArgs>
+    promotions?: boolean | Plan$promotionsArgs<ExtArgs>
     _count?: boolean | PlanCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -19130,6 +19236,7 @@ export namespace Prisma {
     objects: {
       servers: Prisma.$GameServerPayload<ExtArgs>[]
       orders: Prisma.$OrderPayload<ExtArgs>[]
+      promotions: Prisma.$PromotionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -19492,6 +19599,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     servers<T extends Plan$serversArgs<ExtArgs> = {}>(args?: Subset<T, Plan$serversArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GameServerPayload<ExtArgs>, T, "findMany"> | Null>
     orders<T extends Plan$ordersArgs<ExtArgs> = {}>(args?: Subset<T, Plan$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany"> | Null>
+    promotions<T extends Plan$promotionsArgs<ExtArgs> = {}>(args?: Subset<T, Plan$promotionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PromotionPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -19878,6 +19986,26 @@ export namespace Prisma {
   }
 
   /**
+   * Plan.promotions
+   */
+  export type Plan$promotionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Promotion
+     */
+    select?: PromotionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PromotionInclude<ExtArgs> | null
+    where?: PromotionWhereInput
+    orderBy?: PromotionOrderByWithRelationInput | PromotionOrderByWithRelationInput[]
+    cursor?: PromotionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PromotionScalarFieldEnum | PromotionScalarFieldEnum[]
+  }
+
+  /**
    * Plan without action
    */
   export type PlanDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -19889,6 +20017,1011 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: PlanInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Promotion
+   */
+
+  export type AggregatePromotion = {
+    _count: PromotionCountAggregateOutputType | null
+    _avg: PromotionAvgAggregateOutputType | null
+    _sum: PromotionSumAggregateOutputType | null
+    _min: PromotionMinAggregateOutputType | null
+    _max: PromotionMaxAggregateOutputType | null
+  }
+
+  export type PromotionAvgAggregateOutputType = {
+    discountPercent: number | null
+  }
+
+  export type PromotionSumAggregateOutputType = {
+    discountPercent: number | null
+  }
+
+  export type PromotionMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    scope: $Enums.PromotionScope | null
+    discountPercent: number | null
+    gameType: $Enums.GameType | null
+    planId: string | null
+    startDate: Date | null
+    endDate: Date | null
+    active: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PromotionMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    scope: $Enums.PromotionScope | null
+    discountPercent: number | null
+    gameType: $Enums.GameType | null
+    planId: string | null
+    startDate: Date | null
+    endDate: Date | null
+    active: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PromotionCountAggregateOutputType = {
+    id: number
+    name: number
+    description: number
+    scope: number
+    discountPercent: number
+    gameType: number
+    planId: number
+    startDate: number
+    endDate: number
+    active: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PromotionAvgAggregateInputType = {
+    discountPercent?: true
+  }
+
+  export type PromotionSumAggregateInputType = {
+    discountPercent?: true
+  }
+
+  export type PromotionMinAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    scope?: true
+    discountPercent?: true
+    gameType?: true
+    planId?: true
+    startDate?: true
+    endDate?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PromotionMaxAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    scope?: true
+    discountPercent?: true
+    gameType?: true
+    planId?: true
+    startDate?: true
+    endDate?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PromotionCountAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    scope?: true
+    discountPercent?: true
+    gameType?: true
+    planId?: true
+    startDate?: true
+    endDate?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PromotionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Promotion to aggregate.
+     */
+    where?: PromotionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Promotions to fetch.
+     */
+    orderBy?: PromotionOrderByWithRelationInput | PromotionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PromotionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Promotions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Promotions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Promotions
+    **/
+    _count?: true | PromotionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PromotionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PromotionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PromotionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PromotionMaxAggregateInputType
+  }
+
+  export type GetPromotionAggregateType<T extends PromotionAggregateArgs> = {
+        [P in keyof T & keyof AggregatePromotion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePromotion[P]>
+      : GetScalarType<T[P], AggregatePromotion[P]>
+  }
+
+
+
+
+  export type PromotionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PromotionWhereInput
+    orderBy?: PromotionOrderByWithAggregationInput | PromotionOrderByWithAggregationInput[]
+    by: PromotionScalarFieldEnum[] | PromotionScalarFieldEnum
+    having?: PromotionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PromotionCountAggregateInputType | true
+    _avg?: PromotionAvgAggregateInputType
+    _sum?: PromotionSumAggregateInputType
+    _min?: PromotionMinAggregateInputType
+    _max?: PromotionMaxAggregateInputType
+  }
+
+  export type PromotionGroupByOutputType = {
+    id: string
+    name: string
+    description: string | null
+    scope: $Enums.PromotionScope
+    discountPercent: number
+    gameType: $Enums.GameType | null
+    planId: string | null
+    startDate: Date
+    endDate: Date | null
+    active: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: PromotionCountAggregateOutputType | null
+    _avg: PromotionAvgAggregateOutputType | null
+    _sum: PromotionSumAggregateOutputType | null
+    _min: PromotionMinAggregateOutputType | null
+    _max: PromotionMaxAggregateOutputType | null
+  }
+
+  type GetPromotionGroupByPayload<T extends PromotionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PromotionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PromotionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PromotionGroupByOutputType[P]>
+            : GetScalarType<T[P], PromotionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PromotionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    scope?: boolean
+    discountPercent?: boolean
+    gameType?: boolean
+    planId?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    plan?: boolean | Promotion$planArgs<ExtArgs>
+  }, ExtArgs["result"]["promotion"]>
+
+
+  export type PromotionSelectScalar = {
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    scope?: boolean
+    discountPercent?: boolean
+    gameType?: boolean
+    planId?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PromotionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    plan?: boolean | Promotion$planArgs<ExtArgs>
+  }
+
+  export type $PromotionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Promotion"
+    objects: {
+      plan: Prisma.$PlanPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      description: string | null
+      scope: $Enums.PromotionScope
+      discountPercent: number
+      gameType: $Enums.GameType | null
+      planId: string | null
+      startDate: Date
+      endDate: Date | null
+      active: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["promotion"]>
+    composites: {}
+  }
+
+  type PromotionGetPayload<S extends boolean | null | undefined | PromotionDefaultArgs> = $Result.GetResult<Prisma.$PromotionPayload, S>
+
+  type PromotionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PromotionFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PromotionCountAggregateInputType | true
+    }
+
+  export interface PromotionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Promotion'], meta: { name: 'Promotion' } }
+    /**
+     * Find zero or one Promotion that matches the filter.
+     * @param {PromotionFindUniqueArgs} args - Arguments to find a Promotion
+     * @example
+     * // Get one Promotion
+     * const promotion = await prisma.promotion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PromotionFindUniqueArgs>(args: SelectSubset<T, PromotionFindUniqueArgs<ExtArgs>>): Prisma__PromotionClient<$Result.GetResult<Prisma.$PromotionPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Promotion that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PromotionFindUniqueOrThrowArgs} args - Arguments to find a Promotion
+     * @example
+     * // Get one Promotion
+     * const promotion = await prisma.promotion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PromotionFindUniqueOrThrowArgs>(args: SelectSubset<T, PromotionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PromotionClient<$Result.GetResult<Prisma.$PromotionPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Promotion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PromotionFindFirstArgs} args - Arguments to find a Promotion
+     * @example
+     * // Get one Promotion
+     * const promotion = await prisma.promotion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PromotionFindFirstArgs>(args?: SelectSubset<T, PromotionFindFirstArgs<ExtArgs>>): Prisma__PromotionClient<$Result.GetResult<Prisma.$PromotionPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Promotion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PromotionFindFirstOrThrowArgs} args - Arguments to find a Promotion
+     * @example
+     * // Get one Promotion
+     * const promotion = await prisma.promotion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PromotionFindFirstOrThrowArgs>(args?: SelectSubset<T, PromotionFindFirstOrThrowArgs<ExtArgs>>): Prisma__PromotionClient<$Result.GetResult<Prisma.$PromotionPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Promotions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PromotionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Promotions
+     * const promotions = await prisma.promotion.findMany()
+     * 
+     * // Get first 10 Promotions
+     * const promotions = await prisma.promotion.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const promotionWithIdOnly = await prisma.promotion.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PromotionFindManyArgs>(args?: SelectSubset<T, PromotionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PromotionPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Promotion.
+     * @param {PromotionCreateArgs} args - Arguments to create a Promotion.
+     * @example
+     * // Create one Promotion
+     * const Promotion = await prisma.promotion.create({
+     *   data: {
+     *     // ... data to create a Promotion
+     *   }
+     * })
+     * 
+     */
+    create<T extends PromotionCreateArgs>(args: SelectSubset<T, PromotionCreateArgs<ExtArgs>>): Prisma__PromotionClient<$Result.GetResult<Prisma.$PromotionPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Promotions.
+     * @param {PromotionCreateManyArgs} args - Arguments to create many Promotions.
+     * @example
+     * // Create many Promotions
+     * const promotion = await prisma.promotion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PromotionCreateManyArgs>(args?: SelectSubset<T, PromotionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Promotion.
+     * @param {PromotionDeleteArgs} args - Arguments to delete one Promotion.
+     * @example
+     * // Delete one Promotion
+     * const Promotion = await prisma.promotion.delete({
+     *   where: {
+     *     // ... filter to delete one Promotion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PromotionDeleteArgs>(args: SelectSubset<T, PromotionDeleteArgs<ExtArgs>>): Prisma__PromotionClient<$Result.GetResult<Prisma.$PromotionPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Promotion.
+     * @param {PromotionUpdateArgs} args - Arguments to update one Promotion.
+     * @example
+     * // Update one Promotion
+     * const promotion = await prisma.promotion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PromotionUpdateArgs>(args: SelectSubset<T, PromotionUpdateArgs<ExtArgs>>): Prisma__PromotionClient<$Result.GetResult<Prisma.$PromotionPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Promotions.
+     * @param {PromotionDeleteManyArgs} args - Arguments to filter Promotions to delete.
+     * @example
+     * // Delete a few Promotions
+     * const { count } = await prisma.promotion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PromotionDeleteManyArgs>(args?: SelectSubset<T, PromotionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Promotions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PromotionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Promotions
+     * const promotion = await prisma.promotion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PromotionUpdateManyArgs>(args: SelectSubset<T, PromotionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Promotion.
+     * @param {PromotionUpsertArgs} args - Arguments to update or create a Promotion.
+     * @example
+     * // Update or create a Promotion
+     * const promotion = await prisma.promotion.upsert({
+     *   create: {
+     *     // ... data to create a Promotion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Promotion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PromotionUpsertArgs>(args: SelectSubset<T, PromotionUpsertArgs<ExtArgs>>): Prisma__PromotionClient<$Result.GetResult<Prisma.$PromotionPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Promotions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PromotionCountArgs} args - Arguments to filter Promotions to count.
+     * @example
+     * // Count the number of Promotions
+     * const count = await prisma.promotion.count({
+     *   where: {
+     *     // ... the filter for the Promotions we want to count
+     *   }
+     * })
+    **/
+    count<T extends PromotionCountArgs>(
+      args?: Subset<T, PromotionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PromotionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Promotion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PromotionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PromotionAggregateArgs>(args: Subset<T, PromotionAggregateArgs>): Prisma.PrismaPromise<GetPromotionAggregateType<T>>
+
+    /**
+     * Group by Promotion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PromotionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PromotionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PromotionGroupByArgs['orderBy'] }
+        : { orderBy?: PromotionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PromotionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPromotionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Promotion model
+   */
+  readonly fields: PromotionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Promotion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PromotionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    plan<T extends Promotion$planArgs<ExtArgs> = {}>(args?: Subset<T, Promotion$planArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Promotion model
+   */ 
+  interface PromotionFieldRefs {
+    readonly id: FieldRef<"Promotion", 'String'>
+    readonly name: FieldRef<"Promotion", 'String'>
+    readonly description: FieldRef<"Promotion", 'String'>
+    readonly scope: FieldRef<"Promotion", 'PromotionScope'>
+    readonly discountPercent: FieldRef<"Promotion", 'Int'>
+    readonly gameType: FieldRef<"Promotion", 'GameType'>
+    readonly planId: FieldRef<"Promotion", 'String'>
+    readonly startDate: FieldRef<"Promotion", 'DateTime'>
+    readonly endDate: FieldRef<"Promotion", 'DateTime'>
+    readonly active: FieldRef<"Promotion", 'Boolean'>
+    readonly createdAt: FieldRef<"Promotion", 'DateTime'>
+    readonly updatedAt: FieldRef<"Promotion", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Promotion findUnique
+   */
+  export type PromotionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Promotion
+     */
+    select?: PromotionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PromotionInclude<ExtArgs> | null
+    /**
+     * Filter, which Promotion to fetch.
+     */
+    where: PromotionWhereUniqueInput
+  }
+
+  /**
+   * Promotion findUniqueOrThrow
+   */
+  export type PromotionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Promotion
+     */
+    select?: PromotionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PromotionInclude<ExtArgs> | null
+    /**
+     * Filter, which Promotion to fetch.
+     */
+    where: PromotionWhereUniqueInput
+  }
+
+  /**
+   * Promotion findFirst
+   */
+  export type PromotionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Promotion
+     */
+    select?: PromotionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PromotionInclude<ExtArgs> | null
+    /**
+     * Filter, which Promotion to fetch.
+     */
+    where?: PromotionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Promotions to fetch.
+     */
+    orderBy?: PromotionOrderByWithRelationInput | PromotionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Promotions.
+     */
+    cursor?: PromotionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Promotions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Promotions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Promotions.
+     */
+    distinct?: PromotionScalarFieldEnum | PromotionScalarFieldEnum[]
+  }
+
+  /**
+   * Promotion findFirstOrThrow
+   */
+  export type PromotionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Promotion
+     */
+    select?: PromotionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PromotionInclude<ExtArgs> | null
+    /**
+     * Filter, which Promotion to fetch.
+     */
+    where?: PromotionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Promotions to fetch.
+     */
+    orderBy?: PromotionOrderByWithRelationInput | PromotionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Promotions.
+     */
+    cursor?: PromotionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Promotions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Promotions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Promotions.
+     */
+    distinct?: PromotionScalarFieldEnum | PromotionScalarFieldEnum[]
+  }
+
+  /**
+   * Promotion findMany
+   */
+  export type PromotionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Promotion
+     */
+    select?: PromotionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PromotionInclude<ExtArgs> | null
+    /**
+     * Filter, which Promotions to fetch.
+     */
+    where?: PromotionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Promotions to fetch.
+     */
+    orderBy?: PromotionOrderByWithRelationInput | PromotionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Promotions.
+     */
+    cursor?: PromotionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Promotions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Promotions.
+     */
+    skip?: number
+    distinct?: PromotionScalarFieldEnum | PromotionScalarFieldEnum[]
+  }
+
+  /**
+   * Promotion create
+   */
+  export type PromotionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Promotion
+     */
+    select?: PromotionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PromotionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Promotion.
+     */
+    data: XOR<PromotionCreateInput, PromotionUncheckedCreateInput>
+  }
+
+  /**
+   * Promotion createMany
+   */
+  export type PromotionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Promotions.
+     */
+    data: PromotionCreateManyInput | PromotionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Promotion update
+   */
+  export type PromotionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Promotion
+     */
+    select?: PromotionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PromotionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Promotion.
+     */
+    data: XOR<PromotionUpdateInput, PromotionUncheckedUpdateInput>
+    /**
+     * Choose, which Promotion to update.
+     */
+    where: PromotionWhereUniqueInput
+  }
+
+  /**
+   * Promotion updateMany
+   */
+  export type PromotionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Promotions.
+     */
+    data: XOR<PromotionUpdateManyMutationInput, PromotionUncheckedUpdateManyInput>
+    /**
+     * Filter which Promotions to update
+     */
+    where?: PromotionWhereInput
+  }
+
+  /**
+   * Promotion upsert
+   */
+  export type PromotionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Promotion
+     */
+    select?: PromotionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PromotionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Promotion to update in case it exists.
+     */
+    where: PromotionWhereUniqueInput
+    /**
+     * In case the Promotion found by the `where` argument doesn't exist, create a new Promotion with this data.
+     */
+    create: XOR<PromotionCreateInput, PromotionUncheckedCreateInput>
+    /**
+     * In case the Promotion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PromotionUpdateInput, PromotionUncheckedUpdateInput>
+  }
+
+  /**
+   * Promotion delete
+   */
+  export type PromotionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Promotion
+     */
+    select?: PromotionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PromotionInclude<ExtArgs> | null
+    /**
+     * Filter which Promotion to delete.
+     */
+    where: PromotionWhereUniqueInput
+  }
+
+  /**
+   * Promotion deleteMany
+   */
+  export type PromotionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Promotions to delete
+     */
+    where?: PromotionWhereInput
+  }
+
+  /**
+   * Promotion.plan
+   */
+  export type Promotion$planArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+    where?: PlanWhereInput
+  }
+
+  /**
+   * Promotion without action
+   */
+  export type PromotionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Promotion
+     */
+    select?: PromotionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PromotionInclude<ExtArgs> | null
   }
 
 
@@ -21217,6 +22350,24 @@ export namespace Prisma {
   export type PlanScalarFieldEnum = (typeof PlanScalarFieldEnum)[keyof typeof PlanScalarFieldEnum]
 
 
+  export const PromotionScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    description: 'description',
+    scope: 'scope',
+    discountPercent: 'discountPercent',
+    gameType: 'gameType',
+    planId: 'planId',
+    startDate: 'startDate',
+    endDate: 'endDate',
+    active: 'active',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PromotionScalarFieldEnum = (typeof PromotionScalarFieldEnum)[keyof typeof PromotionScalarFieldEnum]
+
+
   export const OrderScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -21440,6 +22591,13 @@ export namespace Prisma {
    * Reference to a field of type 'PlanStatus'
    */
   export type EnumPlanStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PlanStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'PromotionScope'
+   */
+  export type EnumPromotionScopeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PromotionScope'>
     
 
 
@@ -22858,6 +24016,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Plan"> | Date | string
     servers?: GameServerListRelationFilter
     orders?: OrderListRelationFilter
+    promotions?: PromotionListRelationFilter
   }
 
   export type PlanOrderByWithRelationInput = {
@@ -22881,6 +24040,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     servers?: GameServerOrderByRelationAggregateInput
     orders?: OrderOrderByRelationAggregateInput
+    promotions?: PromotionOrderByRelationAggregateInput
   }
 
   export type PlanWhereUniqueInput = Prisma.AtLeast<{
@@ -22907,6 +24067,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Plan"> | Date | string
     servers?: GameServerListRelationFilter
     orders?: OrderListRelationFilter
+    promotions?: PromotionListRelationFilter
   }, "id" | "slug">
 
   export type PlanOrderByWithAggregationInput = {
@@ -22957,6 +24118,98 @@ export namespace Prisma {
     sortOrder?: IntWithAggregatesFilter<"Plan"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Plan"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Plan"> | Date | string
+  }
+
+  export type PromotionWhereInput = {
+    AND?: PromotionWhereInput | PromotionWhereInput[]
+    OR?: PromotionWhereInput[]
+    NOT?: PromotionWhereInput | PromotionWhereInput[]
+    id?: StringFilter<"Promotion"> | string
+    name?: StringFilter<"Promotion"> | string
+    description?: StringNullableFilter<"Promotion"> | string | null
+    scope?: EnumPromotionScopeFilter<"Promotion"> | $Enums.PromotionScope
+    discountPercent?: IntFilter<"Promotion"> | number
+    gameType?: EnumGameTypeNullableFilter<"Promotion"> | $Enums.GameType | null
+    planId?: StringNullableFilter<"Promotion"> | string | null
+    startDate?: DateTimeFilter<"Promotion"> | Date | string
+    endDate?: DateTimeNullableFilter<"Promotion"> | Date | string | null
+    active?: BoolFilter<"Promotion"> | boolean
+    createdAt?: DateTimeFilter<"Promotion"> | Date | string
+    updatedAt?: DateTimeFilter<"Promotion"> | Date | string
+    plan?: XOR<PlanNullableRelationFilter, PlanWhereInput> | null
+  }
+
+  export type PromotionOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    scope?: SortOrder
+    discountPercent?: SortOrder
+    gameType?: SortOrderInput | SortOrder
+    planId?: SortOrderInput | SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrderInput | SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    plan?: PlanOrderByWithRelationInput
+  }
+
+  export type PromotionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PromotionWhereInput | PromotionWhereInput[]
+    OR?: PromotionWhereInput[]
+    NOT?: PromotionWhereInput | PromotionWhereInput[]
+    name?: StringFilter<"Promotion"> | string
+    description?: StringNullableFilter<"Promotion"> | string | null
+    scope?: EnumPromotionScopeFilter<"Promotion"> | $Enums.PromotionScope
+    discountPercent?: IntFilter<"Promotion"> | number
+    gameType?: EnumGameTypeNullableFilter<"Promotion"> | $Enums.GameType | null
+    planId?: StringNullableFilter<"Promotion"> | string | null
+    startDate?: DateTimeFilter<"Promotion"> | Date | string
+    endDate?: DateTimeNullableFilter<"Promotion"> | Date | string | null
+    active?: BoolFilter<"Promotion"> | boolean
+    createdAt?: DateTimeFilter<"Promotion"> | Date | string
+    updatedAt?: DateTimeFilter<"Promotion"> | Date | string
+    plan?: XOR<PlanNullableRelationFilter, PlanWhereInput> | null
+  }, "id">
+
+  export type PromotionOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    scope?: SortOrder
+    discountPercent?: SortOrder
+    gameType?: SortOrderInput | SortOrder
+    planId?: SortOrderInput | SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrderInput | SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PromotionCountOrderByAggregateInput
+    _avg?: PromotionAvgOrderByAggregateInput
+    _max?: PromotionMaxOrderByAggregateInput
+    _min?: PromotionMinOrderByAggregateInput
+    _sum?: PromotionSumOrderByAggregateInput
+  }
+
+  export type PromotionScalarWhereWithAggregatesInput = {
+    AND?: PromotionScalarWhereWithAggregatesInput | PromotionScalarWhereWithAggregatesInput[]
+    OR?: PromotionScalarWhereWithAggregatesInput[]
+    NOT?: PromotionScalarWhereWithAggregatesInput | PromotionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Promotion"> | string
+    name?: StringWithAggregatesFilter<"Promotion"> | string
+    description?: StringNullableWithAggregatesFilter<"Promotion"> | string | null
+    scope?: EnumPromotionScopeWithAggregatesFilter<"Promotion"> | $Enums.PromotionScope
+    discountPercent?: IntWithAggregatesFilter<"Promotion"> | number
+    gameType?: EnumGameTypeNullableWithAggregatesFilter<"Promotion"> | $Enums.GameType | null
+    planId?: StringNullableWithAggregatesFilter<"Promotion"> | string | null
+    startDate?: DateTimeWithAggregatesFilter<"Promotion"> | Date | string
+    endDate?: DateTimeNullableWithAggregatesFilter<"Promotion"> | Date | string | null
+    active?: BoolWithAggregatesFilter<"Promotion"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Promotion"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Promotion"> | Date | string
   }
 
   export type OrderWhereInput = {
@@ -24611,6 +25864,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     servers?: GameServerCreateNestedManyWithoutPlanInput
     orders?: OrderCreateNestedManyWithoutPlanInput
+    promotions?: PromotionCreateNestedManyWithoutPlanInput
   }
 
   export type PlanUncheckedCreateInput = {
@@ -24634,6 +25888,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     servers?: GameServerUncheckedCreateNestedManyWithoutPlanInput
     orders?: OrderUncheckedCreateNestedManyWithoutPlanInput
+    promotions?: PromotionUncheckedCreateNestedManyWithoutPlanInput
   }
 
   export type PlanUpdateInput = {
@@ -24657,6 +25912,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     servers?: GameServerUpdateManyWithoutPlanNestedInput
     orders?: OrderUpdateManyWithoutPlanNestedInput
+    promotions?: PromotionUpdateManyWithoutPlanNestedInput
   }
 
   export type PlanUncheckedUpdateInput = {
@@ -24680,6 +25936,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     servers?: GameServerUncheckedUpdateManyWithoutPlanNestedInput
     orders?: OrderUncheckedUpdateManyWithoutPlanNestedInput
+    promotions?: PromotionUncheckedUpdateManyWithoutPlanNestedInput
   }
 
   export type PlanCreateManyInput = {
@@ -24741,6 +25998,110 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isPopular?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PromotionCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    scope: $Enums.PromotionScope
+    discountPercent: number
+    gameType?: $Enums.GameType | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    plan?: PlanCreateNestedOneWithoutPromotionsInput
+  }
+
+  export type PromotionUncheckedCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    scope: $Enums.PromotionScope
+    discountPercent: number
+    gameType?: $Enums.GameType | null
+    planId?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PromotionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: EnumPromotionScopeFieldUpdateOperationsInput | $Enums.PromotionScope
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    gameType?: NullableEnumGameTypeFieldUpdateOperationsInput | $Enums.GameType | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    plan?: PlanUpdateOneWithoutPromotionsNestedInput
+  }
+
+  export type PromotionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: EnumPromotionScopeFieldUpdateOperationsInput | $Enums.PromotionScope
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    gameType?: NullableEnumGameTypeFieldUpdateOperationsInput | $Enums.GameType | null
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PromotionCreateManyInput = {
+    id?: string
+    name: string
+    description?: string | null
+    scope: $Enums.PromotionScope
+    discountPercent: number
+    gameType?: $Enums.GameType | null
+    planId?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PromotionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: EnumPromotionScopeFieldUpdateOperationsInput | $Enums.PromotionScope
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    gameType?: NullableEnumGameTypeFieldUpdateOperationsInput | $Enums.GameType | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PromotionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: EnumPromotionScopeFieldUpdateOperationsInput | $Enums.PromotionScope
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    gameType?: NullableEnumGameTypeFieldUpdateOperationsInput | $Enums.GameType | null
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -26351,6 +27712,16 @@ export namespace Prisma {
     not?: NestedEnumPlanStatusFilter<$PrismaModel> | $Enums.PlanStatus
   }
 
+  export type PromotionListRelationFilter = {
+    every?: PromotionWhereInput
+    some?: PromotionWhereInput
+    none?: PromotionWhereInput
+  }
+
+  export type PromotionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type PlanCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -26442,6 +27813,93 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPlanStatusFilter<$PrismaModel>
     _max?: NestedEnumPlanStatusFilter<$PrismaModel>
+  }
+
+  export type EnumPromotionScopeFilter<$PrismaModel = never> = {
+    equals?: $Enums.PromotionScope | EnumPromotionScopeFieldRefInput<$PrismaModel>
+    in?: $Enums.PromotionScope[]
+    notIn?: $Enums.PromotionScope[]
+    not?: NestedEnumPromotionScopeFilter<$PrismaModel> | $Enums.PromotionScope
+  }
+
+  export type EnumGameTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.GameType | EnumGameTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.GameType[] | null
+    notIn?: $Enums.GameType[] | null
+    not?: NestedEnumGameTypeNullableFilter<$PrismaModel> | $Enums.GameType | null
+  }
+
+  export type PromotionCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    scope?: SortOrder
+    discountPercent?: SortOrder
+    gameType?: SortOrder
+    planId?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PromotionAvgOrderByAggregateInput = {
+    discountPercent?: SortOrder
+  }
+
+  export type PromotionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    scope?: SortOrder
+    discountPercent?: SortOrder
+    gameType?: SortOrder
+    planId?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PromotionMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    scope?: SortOrder
+    discountPercent?: SortOrder
+    gameType?: SortOrder
+    planId?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PromotionSumOrderByAggregateInput = {
+    discountPercent?: SortOrder
+  }
+
+  export type EnumPromotionScopeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PromotionScope | EnumPromotionScopeFieldRefInput<$PrismaModel>
+    in?: $Enums.PromotionScope[]
+    notIn?: $Enums.PromotionScope[]
+    not?: NestedEnumPromotionScopeWithAggregatesFilter<$PrismaModel> | $Enums.PromotionScope
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPromotionScopeFilter<$PrismaModel>
+    _max?: NestedEnumPromotionScopeFilter<$PrismaModel>
+  }
+
+  export type EnumGameTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GameType | EnumGameTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.GameType[] | null
+    notIn?: $Enums.GameType[] | null
+    not?: NestedEnumGameTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.GameType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumGameTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumGameTypeNullableFilter<$PrismaModel>
   }
 
   export type EnumOrderStatusFilter<$PrismaModel = never> = {
@@ -27889,6 +29347,13 @@ export namespace Prisma {
     connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
   }
 
+  export type PromotionCreateNestedManyWithoutPlanInput = {
+    create?: XOR<PromotionCreateWithoutPlanInput, PromotionUncheckedCreateWithoutPlanInput> | PromotionCreateWithoutPlanInput[] | PromotionUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: PromotionCreateOrConnectWithoutPlanInput | PromotionCreateOrConnectWithoutPlanInput[]
+    createMany?: PromotionCreateManyPlanInputEnvelope
+    connect?: PromotionWhereUniqueInput | PromotionWhereUniqueInput[]
+  }
+
   export type GameServerUncheckedCreateNestedManyWithoutPlanInput = {
     create?: XOR<GameServerCreateWithoutPlanInput, GameServerUncheckedCreateWithoutPlanInput> | GameServerCreateWithoutPlanInput[] | GameServerUncheckedCreateWithoutPlanInput[]
     connectOrCreate?: GameServerCreateOrConnectWithoutPlanInput | GameServerCreateOrConnectWithoutPlanInput[]
@@ -27901,6 +29366,13 @@ export namespace Prisma {
     connectOrCreate?: OrderCreateOrConnectWithoutPlanInput | OrderCreateOrConnectWithoutPlanInput[]
     createMany?: OrderCreateManyPlanInputEnvelope
     connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+  }
+
+  export type PromotionUncheckedCreateNestedManyWithoutPlanInput = {
+    create?: XOR<PromotionCreateWithoutPlanInput, PromotionUncheckedCreateWithoutPlanInput> | PromotionCreateWithoutPlanInput[] | PromotionUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: PromotionCreateOrConnectWithoutPlanInput | PromotionCreateOrConnectWithoutPlanInput[]
+    createMany?: PromotionCreateManyPlanInputEnvelope
+    connect?: PromotionWhereUniqueInput | PromotionWhereUniqueInput[]
   }
 
   export type EnumPlanStatusFieldUpdateOperationsInput = {
@@ -27935,6 +29407,20 @@ export namespace Prisma {
     deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
   }
 
+  export type PromotionUpdateManyWithoutPlanNestedInput = {
+    create?: XOR<PromotionCreateWithoutPlanInput, PromotionUncheckedCreateWithoutPlanInput> | PromotionCreateWithoutPlanInput[] | PromotionUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: PromotionCreateOrConnectWithoutPlanInput | PromotionCreateOrConnectWithoutPlanInput[]
+    upsert?: PromotionUpsertWithWhereUniqueWithoutPlanInput | PromotionUpsertWithWhereUniqueWithoutPlanInput[]
+    createMany?: PromotionCreateManyPlanInputEnvelope
+    set?: PromotionWhereUniqueInput | PromotionWhereUniqueInput[]
+    disconnect?: PromotionWhereUniqueInput | PromotionWhereUniqueInput[]
+    delete?: PromotionWhereUniqueInput | PromotionWhereUniqueInput[]
+    connect?: PromotionWhereUniqueInput | PromotionWhereUniqueInput[]
+    update?: PromotionUpdateWithWhereUniqueWithoutPlanInput | PromotionUpdateWithWhereUniqueWithoutPlanInput[]
+    updateMany?: PromotionUpdateManyWithWhereWithoutPlanInput | PromotionUpdateManyWithWhereWithoutPlanInput[]
+    deleteMany?: PromotionScalarWhereInput | PromotionScalarWhereInput[]
+  }
+
   export type GameServerUncheckedUpdateManyWithoutPlanNestedInput = {
     create?: XOR<GameServerCreateWithoutPlanInput, GameServerUncheckedCreateWithoutPlanInput> | GameServerCreateWithoutPlanInput[] | GameServerUncheckedCreateWithoutPlanInput[]
     connectOrCreate?: GameServerCreateOrConnectWithoutPlanInput | GameServerCreateOrConnectWithoutPlanInput[]
@@ -27961,6 +29447,44 @@ export namespace Prisma {
     update?: OrderUpdateWithWhereUniqueWithoutPlanInput | OrderUpdateWithWhereUniqueWithoutPlanInput[]
     updateMany?: OrderUpdateManyWithWhereWithoutPlanInput | OrderUpdateManyWithWhereWithoutPlanInput[]
     deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
+  }
+
+  export type PromotionUncheckedUpdateManyWithoutPlanNestedInput = {
+    create?: XOR<PromotionCreateWithoutPlanInput, PromotionUncheckedCreateWithoutPlanInput> | PromotionCreateWithoutPlanInput[] | PromotionUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: PromotionCreateOrConnectWithoutPlanInput | PromotionCreateOrConnectWithoutPlanInput[]
+    upsert?: PromotionUpsertWithWhereUniqueWithoutPlanInput | PromotionUpsertWithWhereUniqueWithoutPlanInput[]
+    createMany?: PromotionCreateManyPlanInputEnvelope
+    set?: PromotionWhereUniqueInput | PromotionWhereUniqueInput[]
+    disconnect?: PromotionWhereUniqueInput | PromotionWhereUniqueInput[]
+    delete?: PromotionWhereUniqueInput | PromotionWhereUniqueInput[]
+    connect?: PromotionWhereUniqueInput | PromotionWhereUniqueInput[]
+    update?: PromotionUpdateWithWhereUniqueWithoutPlanInput | PromotionUpdateWithWhereUniqueWithoutPlanInput[]
+    updateMany?: PromotionUpdateManyWithWhereWithoutPlanInput | PromotionUpdateManyWithWhereWithoutPlanInput[]
+    deleteMany?: PromotionScalarWhereInput | PromotionScalarWhereInput[]
+  }
+
+  export type PlanCreateNestedOneWithoutPromotionsInput = {
+    create?: XOR<PlanCreateWithoutPromotionsInput, PlanUncheckedCreateWithoutPromotionsInput>
+    connectOrCreate?: PlanCreateOrConnectWithoutPromotionsInput
+    connect?: PlanWhereUniqueInput
+  }
+
+  export type EnumPromotionScopeFieldUpdateOperationsInput = {
+    set?: $Enums.PromotionScope
+  }
+
+  export type NullableEnumGameTypeFieldUpdateOperationsInput = {
+    set?: $Enums.GameType | null
+  }
+
+  export type PlanUpdateOneWithoutPromotionsNestedInput = {
+    create?: XOR<PlanCreateWithoutPromotionsInput, PlanUncheckedCreateWithoutPromotionsInput>
+    connectOrCreate?: PlanCreateOrConnectWithoutPromotionsInput
+    upsert?: PlanUpsertWithoutPromotionsInput
+    disconnect?: PlanWhereInput | boolean
+    delete?: PlanWhereInput | boolean
+    connect?: PlanWhereUniqueInput
+    update?: XOR<XOR<PlanUpdateToOneWithWhereWithoutPromotionsInput, PlanUpdateWithoutPromotionsInput>, PlanUncheckedUpdateWithoutPromotionsInput>
   }
 
   export type UserCreateNestedOneWithoutOrdersInput = {
@@ -28569,6 +30093,40 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPlanStatusFilter<$PrismaModel>
     _max?: NestedEnumPlanStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumPromotionScopeFilter<$PrismaModel = never> = {
+    equals?: $Enums.PromotionScope | EnumPromotionScopeFieldRefInput<$PrismaModel>
+    in?: $Enums.PromotionScope[]
+    notIn?: $Enums.PromotionScope[]
+    not?: NestedEnumPromotionScopeFilter<$PrismaModel> | $Enums.PromotionScope
+  }
+
+  export type NestedEnumGameTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.GameType | EnumGameTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.GameType[] | null
+    notIn?: $Enums.GameType[] | null
+    not?: NestedEnumGameTypeNullableFilter<$PrismaModel> | $Enums.GameType | null
+  }
+
+  export type NestedEnumPromotionScopeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PromotionScope | EnumPromotionScopeFieldRefInput<$PrismaModel>
+    in?: $Enums.PromotionScope[]
+    notIn?: $Enums.PromotionScope[]
+    not?: NestedEnumPromotionScopeWithAggregatesFilter<$PrismaModel> | $Enums.PromotionScope
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPromotionScopeFilter<$PrismaModel>
+    _max?: NestedEnumPromotionScopeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumGameTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GameType | EnumGameTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.GameType[] | null
+    notIn?: $Enums.GameType[] | null
+    not?: NestedEnumGameTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.GameType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumGameTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumGameTypeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumOrderStatusFilter<$PrismaModel = never> = {
@@ -30280,6 +31838,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     orders?: OrderCreateNestedManyWithoutPlanInput
+    promotions?: PromotionCreateNestedManyWithoutPlanInput
   }
 
   export type PlanUncheckedCreateWithoutServersInput = {
@@ -30302,6 +31861,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     orders?: OrderUncheckedCreateNestedManyWithoutPlanInput
+    promotions?: PromotionUncheckedCreateNestedManyWithoutPlanInput
   }
 
   export type PlanCreateOrConnectWithoutServersInput = {
@@ -30681,6 +32241,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orders?: OrderUpdateManyWithoutPlanNestedInput
+    promotions?: PromotionUpdateManyWithoutPlanNestedInput
   }
 
   export type PlanUncheckedUpdateWithoutServersInput = {
@@ -30703,6 +32264,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orders?: OrderUncheckedUpdateManyWithoutPlanNestedInput
+    promotions?: PromotionUncheckedUpdateManyWithoutPlanNestedInput
   }
 
   export type GameClusterUpsertWithoutServersInput = {
@@ -32058,6 +33620,44 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PromotionCreateWithoutPlanInput = {
+    id?: string
+    name: string
+    description?: string | null
+    scope: $Enums.PromotionScope
+    discountPercent: number
+    gameType?: $Enums.GameType | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PromotionUncheckedCreateWithoutPlanInput = {
+    id?: string
+    name: string
+    description?: string | null
+    scope: $Enums.PromotionScope
+    discountPercent: number
+    gameType?: $Enums.GameType | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PromotionCreateOrConnectWithoutPlanInput = {
+    where: PromotionWhereUniqueInput
+    create: XOR<PromotionCreateWithoutPlanInput, PromotionUncheckedCreateWithoutPlanInput>
+  }
+
+  export type PromotionCreateManyPlanInputEnvelope = {
+    data: PromotionCreateManyPlanInput | PromotionCreateManyPlanInput[]
+    skipDuplicates?: boolean
+  }
+
   export type GameServerUpsertWithWhereUniqueWithoutPlanInput = {
     where: GameServerWhereUniqueInput
     update: XOR<GameServerUpdateWithoutPlanInput, GameServerUncheckedUpdateWithoutPlanInput>
@@ -32088,6 +33688,148 @@ export namespace Prisma {
   export type OrderUpdateManyWithWhereWithoutPlanInput = {
     where: OrderScalarWhereInput
     data: XOR<OrderUpdateManyMutationInput, OrderUncheckedUpdateManyWithoutPlanInput>
+  }
+
+  export type PromotionUpsertWithWhereUniqueWithoutPlanInput = {
+    where: PromotionWhereUniqueInput
+    update: XOR<PromotionUpdateWithoutPlanInput, PromotionUncheckedUpdateWithoutPlanInput>
+    create: XOR<PromotionCreateWithoutPlanInput, PromotionUncheckedCreateWithoutPlanInput>
+  }
+
+  export type PromotionUpdateWithWhereUniqueWithoutPlanInput = {
+    where: PromotionWhereUniqueInput
+    data: XOR<PromotionUpdateWithoutPlanInput, PromotionUncheckedUpdateWithoutPlanInput>
+  }
+
+  export type PromotionUpdateManyWithWhereWithoutPlanInput = {
+    where: PromotionScalarWhereInput
+    data: XOR<PromotionUpdateManyMutationInput, PromotionUncheckedUpdateManyWithoutPlanInput>
+  }
+
+  export type PromotionScalarWhereInput = {
+    AND?: PromotionScalarWhereInput | PromotionScalarWhereInput[]
+    OR?: PromotionScalarWhereInput[]
+    NOT?: PromotionScalarWhereInput | PromotionScalarWhereInput[]
+    id?: StringFilter<"Promotion"> | string
+    name?: StringFilter<"Promotion"> | string
+    description?: StringNullableFilter<"Promotion"> | string | null
+    scope?: EnumPromotionScopeFilter<"Promotion"> | $Enums.PromotionScope
+    discountPercent?: IntFilter<"Promotion"> | number
+    gameType?: EnumGameTypeNullableFilter<"Promotion"> | $Enums.GameType | null
+    planId?: StringNullableFilter<"Promotion"> | string | null
+    startDate?: DateTimeFilter<"Promotion"> | Date | string
+    endDate?: DateTimeNullableFilter<"Promotion"> | Date | string | null
+    active?: BoolFilter<"Promotion"> | boolean
+    createdAt?: DateTimeFilter<"Promotion"> | Date | string
+    updatedAt?: DateTimeFilter<"Promotion"> | Date | string
+  }
+
+  export type PlanCreateWithoutPromotionsInput = {
+    id?: string
+    name: string
+    slug: string
+    gameType: $Enums.GameType
+    status?: $Enums.PlanStatus
+    ramMb: number
+    cpuCores: number
+    diskGb: number
+    maxSlots?: number | null
+    monthlyPrice: number
+    hourlyPrice?: number | null
+    setupFee?: number
+    features?: NullableJsonNullValueInput | InputJsonValue
+    description?: string | null
+    isPopular?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    servers?: GameServerCreateNestedManyWithoutPlanInput
+    orders?: OrderCreateNestedManyWithoutPlanInput
+  }
+
+  export type PlanUncheckedCreateWithoutPromotionsInput = {
+    id?: string
+    name: string
+    slug: string
+    gameType: $Enums.GameType
+    status?: $Enums.PlanStatus
+    ramMb: number
+    cpuCores: number
+    diskGb: number
+    maxSlots?: number | null
+    monthlyPrice: number
+    hourlyPrice?: number | null
+    setupFee?: number
+    features?: NullableJsonNullValueInput | InputJsonValue
+    description?: string | null
+    isPopular?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    servers?: GameServerUncheckedCreateNestedManyWithoutPlanInput
+    orders?: OrderUncheckedCreateNestedManyWithoutPlanInput
+  }
+
+  export type PlanCreateOrConnectWithoutPromotionsInput = {
+    where: PlanWhereUniqueInput
+    create: XOR<PlanCreateWithoutPromotionsInput, PlanUncheckedCreateWithoutPromotionsInput>
+  }
+
+  export type PlanUpsertWithoutPromotionsInput = {
+    update: XOR<PlanUpdateWithoutPromotionsInput, PlanUncheckedUpdateWithoutPromotionsInput>
+    create: XOR<PlanCreateWithoutPromotionsInput, PlanUncheckedCreateWithoutPromotionsInput>
+    where?: PlanWhereInput
+  }
+
+  export type PlanUpdateToOneWithWhereWithoutPromotionsInput = {
+    where?: PlanWhereInput
+    data: XOR<PlanUpdateWithoutPromotionsInput, PlanUncheckedUpdateWithoutPromotionsInput>
+  }
+
+  export type PlanUpdateWithoutPromotionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    gameType?: EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
+    status?: EnumPlanStatusFieldUpdateOperationsInput | $Enums.PlanStatus
+    ramMb?: IntFieldUpdateOperationsInput | number
+    cpuCores?: IntFieldUpdateOperationsInput | number
+    diskGb?: IntFieldUpdateOperationsInput | number
+    maxSlots?: NullableIntFieldUpdateOperationsInput | number | null
+    monthlyPrice?: IntFieldUpdateOperationsInput | number
+    hourlyPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    setupFee?: IntFieldUpdateOperationsInput | number
+    features?: NullableJsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPopular?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    servers?: GameServerUpdateManyWithoutPlanNestedInput
+    orders?: OrderUpdateManyWithoutPlanNestedInput
+  }
+
+  export type PlanUncheckedUpdateWithoutPromotionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    gameType?: EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
+    status?: EnumPlanStatusFieldUpdateOperationsInput | $Enums.PlanStatus
+    ramMb?: IntFieldUpdateOperationsInput | number
+    cpuCores?: IntFieldUpdateOperationsInput | number
+    diskGb?: IntFieldUpdateOperationsInput | number
+    maxSlots?: NullableIntFieldUpdateOperationsInput | number | null
+    monthlyPrice?: IntFieldUpdateOperationsInput | number
+    hourlyPrice?: NullableIntFieldUpdateOperationsInput | number | null
+    setupFee?: IntFieldUpdateOperationsInput | number
+    features?: NullableJsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPopular?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    servers?: GameServerUncheckedUpdateManyWithoutPlanNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutPlanNestedInput
   }
 
   export type UserCreateWithoutOrdersInput = {
@@ -32151,6 +33893,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     servers?: GameServerCreateNestedManyWithoutPlanInput
+    promotions?: PromotionCreateNestedManyWithoutPlanInput
   }
 
   export type PlanUncheckedCreateWithoutOrdersInput = {
@@ -32173,6 +33916,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     servers?: GameServerUncheckedCreateNestedManyWithoutPlanInput
+    promotions?: PromotionUncheckedCreateNestedManyWithoutPlanInput
   }
 
   export type PlanCreateOrConnectWithoutOrdersInput = {
@@ -32305,6 +34049,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     servers?: GameServerUpdateManyWithoutPlanNestedInput
+    promotions?: PromotionUpdateManyWithoutPlanNestedInput
   }
 
   export type PlanUncheckedUpdateWithoutOrdersInput = {
@@ -32327,6 +34072,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     servers?: GameServerUncheckedUpdateManyWithoutPlanNestedInput
+    promotions?: PromotionUncheckedUpdateManyWithoutPlanNestedInput
   }
 
   export type GameServerUpsertWithoutOrdersInput = {
@@ -33605,6 +35351,20 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type PromotionCreateManyPlanInput = {
+    id?: string
+    name: string
+    description?: string | null
+    scope: $Enums.PromotionScope
+    discountPercent: number
+    gameType?: $Enums.GameType | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type GameServerUpdateWithoutPlanInput = {
     id?: StringFieldUpdateOperationsInput | string
     uuid?: StringFieldUpdateOperationsInput | string
@@ -33710,6 +35470,48 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PromotionUpdateWithoutPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: EnumPromotionScopeFieldUpdateOperationsInput | $Enums.PromotionScope
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    gameType?: NullableEnumGameTypeFieldUpdateOperationsInput | $Enums.GameType | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PromotionUncheckedUpdateWithoutPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: EnumPromotionScopeFieldUpdateOperationsInput | $Enums.PromotionScope
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    gameType?: NullableEnumGameTypeFieldUpdateOperationsInput | $Enums.GameType | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PromotionUncheckedUpdateManyWithoutPlanInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    scope?: EnumPromotionScopeFieldUpdateOperationsInput | $Enums.PromotionScope
+    discountPercent?: IntFieldUpdateOperationsInput | number
+    gameType?: NullableEnumGameTypeFieldUpdateOperationsInput | $Enums.GameType | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
 
 
   /**
@@ -33807,6 +35609,10 @@ export namespace Prisma {
      * @deprecated Use PlanDefaultArgs instead
      */
     export type PlanArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PlanDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PromotionDefaultArgs instead
+     */
+    export type PromotionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PromotionDefaultArgs<ExtArgs>
     /**
      * @deprecated Use OrderDefaultArgs instead
      */

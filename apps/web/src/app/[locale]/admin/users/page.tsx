@@ -12,6 +12,7 @@ import { Download, Plus, Search } from 'lucide-react';
 import { exportToCSV, formatDateForFilename } from '../../../../utils/export';
 import { ListSkeleton } from '../../../../components/loading-skeleton';
 import { Pagination } from '../../../../components/pagination';
+import { BackButton } from '../../../../components/back-button';
 
 interface User {
   id: string;
@@ -133,6 +134,9 @@ export default function AdminUsersPage() {
   return (
     <AdminLayout title="Felhasználók" actions={actions}>
       <div>
+        <div className="mb-4 flex justify-end">
+          <BackButton fallbackHref={`/${locale}/admin`} />
+        </div>
         <div className="mb-6">
           <p className="text-text-muted">
             Felhasználók kezelése és jogosultságok beállítása

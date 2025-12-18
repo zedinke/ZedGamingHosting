@@ -14,6 +14,7 @@ import {
   FileText,
   Key,
   BarChart3,
+  Percent,
 } from 'lucide-react';
 
 export default function AdminPage() {
@@ -65,6 +66,14 @@ export default function AdminPage() {
       icon: Settings,
       iconColor: '#0ea5e9',
       bgColor: '#ecfeff',
+    },
+    {
+      title: 'Akciók',
+      description: 'Kedvezmények mindenre, játékokra vagy csomagokra',
+      href: `/${locale}/admin/promotions`,
+      icon: Percent,
+      iconColor: '#f97316',
+      bgColor: '#fff7ed',
     },
     {
       title: 'Felhasználók',

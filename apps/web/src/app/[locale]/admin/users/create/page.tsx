@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAuthStore } from '../../../../../stores/auth-store';
 import { Navigation } from '../../../../../components/navigation';
+import { BackButton } from '../../../../../components/back-button';
 import { Card, Button } from '@zed-hosting/ui-kit';
 import { useNotificationContext } from '../../../../../context/notification-context';
 import { apiClient } from '../../../../../lib/api-client';
@@ -118,11 +119,14 @@ export default function CreateUserPage() {
         minHeight: '100vh'
       }}>
         <div className="container mx-auto px-4 py-8">
-          <header className="mb-8">
-            <h1 className="text-3xl font-bold mb-2" style={{ color: '#f8fafc' }}>Új Felhasználó Létrehozása</h1>
-            <p style={{ color: '#cbd5e1' }}>
-              Új felhasználó hozzáadása a rendszerhez
-            </p>
+          <header className="mb-8 flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold mb-2" style={{ color: '#f8fafc' }}>Új Felhasználó Létrehozása</h1>
+              <p style={{ color: '#cbd5e1' }}>
+                Új felhasználó hozzáadása a rendszerhez
+              </p>
+            </div>
+            <BackButton fallbackHref={`/${locale}/admin/users`} />
           </header>
 
           <Card className="glass elevation-2 p-6 max-w-2xl mx-auto">

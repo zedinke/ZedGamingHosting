@@ -7,6 +7,7 @@ import { AdminLayout } from '../../../../components/admin/admin-layout';
 import { Card } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../lib/api-client';
 import { useQuery } from '@tanstack/react-query';
+import { BackButton } from '../../../../components/back-button';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 
 export default function AdminStatsPage() {
@@ -102,6 +103,9 @@ export default function AdminStatsPage() {
     <div>
       <AdminLayout title="Statisztikák">
         <div>
+          <div className="mb-4 flex justify-end">
+            <BackButton fallbackHref={`/${locale}/admin`} />
+          </div>
           <div className="mb-6">
             <p className="text-text-muted">
               Platform statisztikák és jelentések

@@ -17,6 +17,7 @@ export * from './servers/game-presets';
 
 // Plans & Billing
 export * from './plans/plan.dto';
+export * from './promotions/promotion.dto';
 
 // Networking
 export * from './networking/port-allocation.dto';

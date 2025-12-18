@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from '../../../../../i18n/routing';
+import { useParams } from 'next/navigation';
 import { useAuthStore } from '../../../../../stores/auth-store';
 import { Navigation } from '../../../../../components/navigation';
+import { BackButton } from '../../../../../components/back-button';
 import { Card, Button } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../../lib/api-client';
 import { useQuery } from '@tanstack/react-query';
@@ -25,7 +27,7 @@ interface Node {
 export default function EditNodePage() {
   const router = useRouter();
   const params = useParams();
-  const locale = (params?.locale as string) || 'hu';
+  // const locale = (params?.locale as string) || 'hu';
   const nodeId = params?.id as string;
   const { user: currentUser, isAuthenticated, accessToken } = useAuthStore();
   const notifications = useNotificationContext();
@@ -33,6 +35,7 @@ export default function EditNodePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
+  const [managerUrl, setManagerUrl] = useState('');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -50,26 +53,31 @@ export default function EditNodePage() {
     if (accessToken) {
       apiClient.setAccessToken(accessToken);
     }
+    if (typeof window !== 'undefined') {
+      try {
+        setManagerUrl(window.location.origin);
+      } catch {}
+    }
   }, [accessToken]);
 
   useEffect(() => {
     if (isHydrated && !nodeId) {
-      router.push(`/${locale}/admin/nodes`);
+      router.push('/admin/nodes');
     }
-  }, [isHydrated, nodeId, router, locale]);
+  }, [isHydrated, nodeId, router]);
 
   useEffect(() => {
     if (isHydrated && !isAuthenticated) {
-      router.push(`/${locale}/login`);
+      router.push('/login');
       return;
     }
 
     const userRole = currentUser?.role?.toUpperCase();
     if (isHydrated && isAuthenticated && userRole !== 'ADMIN' && userRole !== 'SUPER_ADMIN' && userRole !== 'SUPERADMIN' && userRole !== 'RESELLER_ADMIN') {
-      router.push(`/${locale}/dashboard`);
+      router.push('/dashboard');
       return;
     }
-  }, [isAuthenticated, isHydrated, currentUser, router, locale]);
+  }, [isAuthenticated, isHydrated, currentUser, router]);
 
   // Fetch node data
   const { data: nodeData, isLoading } = useQuery<Node>({
@@ -95,6 +103,10 @@ export default function EditNodePage() {
       });
     }
   }, [nodeData]);
+
+  const installCommand = nodeData && managerUrl
+    ? `curl -fsSL https://raw.githubusercontent.com/zedinke/ZedGamingHosting/main/scripts/install_node.sh | bash -s -- \\\n+  --manager-url ${managerUrl} \\\n+  --node-id ${nodeData.id} \\\n+  --api-key ${nodeData as any}.apiKey \\\n+  --daemon-port 3001`
+    : '';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -169,11 +181,14 @@ export default function EditNodePage() {
         minHeight: '100vh'
       }}>
         <div className="container mx-auto px-4 py-8">
-          <header className="mb-8">
-            <h1 className="text-3xl font-bold mb-2" style={{ color: '#f8fafc' }}>Node Szerkesztése</h1>
-            <p style={{ color: '#cbd5e1' }}>
-              Node konfiguráció módosítása
-            </p>
+          <header className="mb-8 flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold mb-2" style={{ color: '#f8fafc' }}>Node Szerkesztése</h1>
+              <p style={{ color: '#cbd5e1' }}>
+                Node adatok módosítása
+              </p>
+            </div>
+            <BackButton fallbackHref={'/admin/nodes'} />
           </header>
 
           {isLoading ? (
@@ -181,6 +196,36 @@ export default function EditNodePage() {
               <p style={{ color: '#cbd5e1' }}>Betöltés...</p>
             </div>
           ) : (
+            <>
+            {nodeData && (
+              <Card className="glass elevation-2 p-6 max-w-3xl mx-auto mb-8">
+                <h2 className="text-xl font-semibold mb-2" style={{ color: '#f8fafc' }}>Telepítő parancs (Debian 12)</h2>
+                <p className="text-sm mb-3" style={{ color: '#cbd5e1' }}>
+                  Friss szerverre root-ként belépve futtasd az alábbit a daemon telepítéséhez és regisztrációhoz.
+                </p>
+                <div className="mb-3 flex gap-2 items-center">
+                  <input
+                    readOnly
+                    value={installCommand}
+                    className="w-full px-3 py-2 rounded border text-xs"
+                    style={{ backgroundColor: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)', color: 'var(--color-text-main)' }}
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={async () => { if (installCommand) await navigator.clipboard.writeText(installCommand); }}
+                  >
+                    Másolás
+                  </Button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm mb-2">
+                  <div><span className="text-text-muted">Node ID:</span> <span className="text-text-main">{nodeData.id}</span></div>
+                  <div className="truncate"><span className="text-text-muted">API Key:</span> <span className="text-text-main">{(nodeData as any).apiKey || '***'}</span></div>
+                  <div><span className="text-text-muted">Manager URL:</span> <span className="text-text-main">{managerUrl}</span></div>
+                </div>
+              </Card>
+            )}
+
             <Card className="glass elevation-2 p-6 max-w-2xl mx-auto">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
@@ -353,7 +398,7 @@ export default function EditNodePage() {
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() => router.push(`/${locale}/admin/nodes`)}
+                    onClick={() => router.push('/admin/nodes')}
                     disabled={loading}
                   >
                     Mégse
@@ -373,6 +418,7 @@ export default function EditNodePage() {
                 </div>
               </form>
             </Card>
+            </>
           )}
         </div>
       </main>
