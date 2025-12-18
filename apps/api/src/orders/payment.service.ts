@@ -1,8 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Inject, forwardRef } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
 import { ProvisioningService } from './provisioning.service';
 import { InvoiceService } from './invoice.service';
 import { EmailService } from '../email/email.service';
+import { BarionService } from '../payments/barion.service';
 
 @Injectable()
 export class PaymentService {
@@ -13,6 +14,8 @@ export class PaymentService {
     private readonly provisioning: ProvisioningService,
     private readonly invoiceService: InvoiceService,
     private readonly emailService: EmailService,
+    @Inject(forwardRef(() => BarionService))
+    private readonly barionService: BarionService,
   ) {}
 
   /**
@@ -81,20 +84,52 @@ export class PaymentService {
   }
 
   /**
-   * Barion payment: generate redirect URL (stub)
+   * Barion payment: generate redirect URL
    */
   async generateBarionRedirect(orderId: string, userId: string) {
     const order = await this.prisma.order.findFirst({
       where: { id: orderId, userId },
+      include: { user: true },
     });
 
     if (!order) {
       throw new Error('Order not found');
     }
 
-    // Stub: in production, call Barion API
-    const redirectUrl = `https://payment.sandbox.barion.com/Pay?token=BARION_TOKEN_STUB_${orderId}`;
-    return { redirectUrl };
+    if (!order.user) {
+      throw new Error('Order user not found');
+    }
+
+    try {
+      const result = await this.barionService.startPayment({
+        orderId: order.id,
+        orderNumber: order.id.substring(0, 8).toUpperCase(),
+        amount: order.totalAmount,
+        currency: order.currency,
+        payerEmail: order.user.email,
+        locale: 'hu-HU',
+      });
+
+      // Store Barion payment ID in order
+      await this.prisma.order.update({
+        where: { id: orderId },
+        data: {
+          paymentId: result.paymentId,
+          paymentMethod: 'barion',
+        },
+      });
+
+      this.logger.log(
+        `Barion payment initiated for order ${orderId}: ${result.paymentId}`,
+      );
+
+      return { redirectUrl: result.gatewayUrl, paymentId: result.paymentId };
+    } catch (error) {
+      this.logger.error(
+        `Failed to generate Barion redirect for order ${orderId}: ${error}`,
+      );
+      throw error;
+    }
   }
 
   /**

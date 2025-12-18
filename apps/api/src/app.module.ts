@@ -22,6 +22,7 @@ import { AgentModule } from './agent/agent.module';
 import { PlansModule } from './plans/plans.module';
 import { PromotionsModule } from './promotions/promotions.module';
 import { OrdersModule } from './orders/orders.module';
+import { PaymentsModule } from './payments/payments.module';
 import { MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { TenantMiddleware } from './common/middleware/tenant.middleware';
 import { APP_GUARD } from '@nestjs/core';
@@ -64,6 +65,7 @@ import { PublicOptionalJwtGuard } from './auth/guards/public-optional-jwt.guard'
     PlansModule, // Billing & Plans
     PromotionsModule,
     OrdersModule,
+    PaymentsModule, // Barion/Stripe payment gateways
   ],
   providers: [
     {

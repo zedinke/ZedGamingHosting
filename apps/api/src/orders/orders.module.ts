@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { OrdersController } from './orders.controller';
 import { PaymentService } from './payment.service';
@@ -9,10 +9,17 @@ import { InvoiceService } from './invoice.service';
 import { DatabaseModule } from '../database/database.module';
 import { AuditModule } from '../audit/audit.module';
 import { EmailModule } from '../email/email.module';
+import { PaymentsModule } from '../payments/payments.module';
 
 @Module({
-  imports: [DatabaseModule, AuditModule, EmailModule],
+  imports: [
+    DatabaseModule,
+    AuditModule,
+    EmailModule,
+    forwardRef(() => PaymentsModule),
+  ],
   controllers: [OrdersController, WalletController],
   providers: [OrdersService, PaymentService, WalletService, ProvisioningService, InvoiceService],
+  exports: [OrdersService, PaymentService],
 })
 export class OrdersModule {}
