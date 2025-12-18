@@ -39,6 +39,7 @@ export default function OrderDetailPage() {
   const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState<OrderDetailDto | null>(null);
   const [paymentLoading, setPaymentLoading] = useState(false);
+  const [cancelLoading, setCancelLoading] = useState(false);
 
   useEffect(() => {
     if (accessToken) {
@@ -117,6 +118,30 @@ export default function OrderDetailPage() {
       });
     } finally {
       setPaymentLoading(false);
+    }
+  };
+
+  const handleCancelOrder = async () => {
+    if (!orderId || !confirm('Biztosan törlöd a rendelést? A fizetett összeg visszakerül az egyenlegedre.')) {
+      return;
+    }
+    setCancelLoading(true);
+    try {
+      const result = (await apiClient.delete(`/orders/${orderId}`)) as OrderDetailDto;
+      setOrder(result);
+      notifications.addNotification({
+        type: 'success',
+        title: 'Rendelés törlödve',
+        message: 'A rendelés sikeresen törlödve. A fizetett összeg visszakerült az egyenlegedre.',
+      });
+    } catch (e: any) {
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: e?.message || 'A rendelés törlése sikertelen.',
+      });
+    } finally {
+      setCancelLoading(false);
     }
   };
 
@@ -235,6 +260,14 @@ export default function OrderDetailPage() {
                   >
                     Stripe
                   </Button>
+                  <Button
+                    onClick={handleCancelOrder}
+                    disabled={cancelLoading || paymentLoading}
+                    variant="outline"
+                    className="w-full mt-4 !text-red-400 !border-red-600/30 hover:!bg-red-900/10"
+                  >
+                    {cancelLoading ? 'Törlés...' : '🗑️ Rendelés törlése'}
+                  </Button>
                 </div>
               ) : (
                 <div>
@@ -242,6 +275,17 @@ export default function OrderDetailPage() {
                   <p className="font-semibold">{order.paymentMethod || 'N/A'}</p>
                   <p className="text-sm text-text-secondary mt-4 mb-2">Státusz:</p>
                   <Badge variant={statusVariant(order.status)}>{order.status}</Badge>
+                  
+                  {order.status !== 'CANCELLED' && order.status !== 'REFUNDED' && (
+                    <Button
+                      onClick={handleCancelOrder}
+                      disabled={cancelLoading}
+                      variant="outline"
+                      className="w-full mt-4 !text-red-400 !border-red-600/30 hover:!bg-red-900/10"
+                    >
+                      {cancelLoading ? 'Törlés...' : '🗑️ Rendelés törlése'}
+                    </Button>
+                  )}
                 </div>
               )}
             </Card>
