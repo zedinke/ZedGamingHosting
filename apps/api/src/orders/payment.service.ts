@@ -1,6 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
 import { ProvisioningService } from './provisioning.service';
+import { InvoiceService } from './invoice.service';
+import { EmailService } from '../email/email.service';
 
 @Injectable()
 export class PaymentService {
@@ -9,6 +11,8 @@ export class PaymentService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly provisioning: ProvisioningService,
+    private readonly invoiceService: InvoiceService,
+    private readonly emailService: EmailService,
   ) {}
 
   /**
@@ -17,6 +21,7 @@ export class PaymentService {
   async processMockPayment(orderId: string, userId: string) {
     const order = await this.prisma.order.findFirst({
       where: { id: orderId, userId },
+      include: { user: true, plan: true },
     });
 
     if (!order) {
@@ -31,13 +36,44 @@ export class PaymentService {
         paymentMethod: 'mock',
         paymentId: `mock_${Date.now()}`,
       },
+      include: { user: true, plan: true },
     });
+
+    // Send payment confirmation email
+    if (order.user) {
+      try {
+        await this.emailService.sendPaymentReceivedEmail(
+          order.user.email,
+          order.user.email,
+          orderId,
+          order.totalAmount,
+          order.currency,
+        );
+      } catch (error) {
+        this.logger.warn(
+          `Failed to send payment email for order ${orderId}: ${error}`,
+        );
+      }
+    }
+
+    // Send invoice email
+    if (order.user) {
+      try {
+        await this.invoiceService.sendInvoiceByEmail(orderId);
+      } catch (error) {
+        this.logger.warn(
+          `Failed to send invoice email for order ${orderId}: ${error}`,
+        );
+      }
+    }
 
     // Trigger server provisioning asynchronously
     try {
       await this.provisioning.provisionServerForOrder(orderId);
     } catch (error) {
-      this.logger.error(`Failed to provision server for order ${orderId}: ${error}`);
+      this.logger.error(
+        `Failed to provision server for order ${orderId}: ${error}`,
+      );
       // Don't fail payment if provisioning fails - admin can retry
     }
 

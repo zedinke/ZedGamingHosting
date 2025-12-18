@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
 import PDFDocument from 'pdfkit';
 import { PassThrough } from 'stream';
+import { EmailService } from '../email/email.service';
 
 /**
  * Invoice and receipt generation for orders
@@ -11,7 +12,10 @@ import { PassThrough } from 'stream';
 export class InvoiceService {
   private readonly logger = new Logger(InvoiceService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly emailService: EmailService,
+  ) {}
 
   /**
    * Generate invoice data for a paid order
@@ -240,5 +244,30 @@ export class InvoiceService {
    */
   async getInvoicePDFStream(orderId: string): Promise<PassThrough> {
     return this.generateInvoicePDF(orderId);
+  }
+
+  /**
+   * Send invoice PDF by email
+   */
+  async sendInvoiceByEmail(orderId: string): Promise<boolean> {
+    const invoiceData = await this.generateInvoiceData(orderId);
+    const pdfStream = await this.generateInvoicePDF(orderId);
+
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId },
+      include: { user: true },
+    });
+
+    if (!order || !order.user) {
+      this.logger.error(`Order ${orderId} or user not found for email`);
+      return false;
+    }
+
+    return this.emailService.sendInvoiceEmail(
+      order.user.email,
+      order.user.email,
+      invoiceData.invoiceNumber,
+      pdfStream,
+    );
   }
 }

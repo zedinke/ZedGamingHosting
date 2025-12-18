@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
+import { PassThrough } from 'stream';
 
 export interface EmailOptions {
   to: string;
@@ -215,6 +216,193 @@ export class EmailService {
       .replace(/&gt;/g, '>')
       .replace(/&quot;/g, '"')
       .trim();
+  }
+
+  /**
+   * Send invoice PDF by email
+   */
+  async sendInvoiceEmail(
+    recipientEmail: string,
+    recipientName: string,
+    invoiceNumber: string,
+    pdfStream: PassThrough,
+  ): Promise<boolean> {
+    try {
+      const mailOptions = {
+        from: this.configService.get('SMTP_FROM') || 'billing@zedhosting.com',
+        to: recipientEmail,
+        subject: `Számla ${invoiceNumber} - Zed Gaming Hosting`,
+        html: this.getInvoiceEmailTemplate(recipientName, invoiceNumber),
+        attachments: [
+          {
+            filename: `Szamla-${invoiceNumber}.pdf`,
+            content: pdfStream,
+            contentType: 'application/pdf',
+          },
+        ],
+      };
+
+      if (!this.transporter) {
+        this.logger.warn(
+          `[DEV MODE] Would send invoice email to ${recipientEmail}`,
+        );
+        return true;
+      }
+
+      const info = await this.transporter.sendMail(mailOptions);
+      this.logger.log(
+        `Számla ${invoiceNumber} elküldve ${recipientEmail}-nek (Message ID: ${info.messageId})`,
+      );
+      return true;
+    } catch (error) {
+      this.logger.error(
+        `Hiba a számla ${invoiceNumber} küldésekor ${recipientEmail}-nek: ${error}`,
+      );
+      return false;
+    }
+  }
+
+  /**
+   * Send payment confirmation email
+   */
+  async sendPaymentReceivedEmail(
+    recipientEmail: string,
+    recipientName: string,
+    orderNumber: string,
+    amount: number,
+    currency: string,
+  ): Promise<boolean> {
+    try {
+      const mailOptions = {
+        from: this.configService.get('SMTP_FROM') || 'billing@zedhosting.com',
+        to: recipientEmail,
+        subject: `Fizetés Sikeres - Rendelés ${orderNumber} - Zed Gaming Hosting`,
+        html: this.getPaymentReceivedTemplate(
+          recipientName,
+          orderNumber,
+          amount,
+          currency,
+        ),
+      };
+
+      if (!this.transporter) {
+        this.logger.warn(
+          `[DEV MODE] Would send payment confirmation to ${recipientEmail}`,
+        );
+        return true;
+      }
+
+      const info = await this.transporter.sendMail(mailOptions);
+      this.logger.log(
+        `Fizetés megerősítés elküldve ${recipientEmail}-nek (Message ID: ${info.messageId})`,
+      );
+      return true;
+    } catch (error) {
+      this.logger.error(
+        `Hiba a fizetés megerősítés küldésekor ${recipientEmail}-nek: ${error}`,
+      );
+      return false;
+    }
+  }
+
+  /**
+   * Email template for invoices
+   */
+  private getInvoiceEmailTemplate(
+    recipientName: string,
+    invoiceNumber: string,
+  ): string {
+    const appUrl = this.configService.get('APP_URL') || 'https://zedhosting.com';
+    return `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <style>
+            body { font-family: Arial, sans-serif; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; }
+            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; text-align: center; }
+            .content { padding: 20px; background: #f9f9f9; }
+            .footer { text-align: center; font-size: 12px; color: #999; padding: 20px; }
+            .button { background: #667eea; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>Zed Gaming Hosting</h1>
+              <p>Számla ${invoiceNumber}</p>
+            </div>
+            <div class="content">
+              <p>Szia ${recipientName}!</p>
+              <p>Csatolt a PDF formátumban az Ön számlája: <strong>${invoiceNumber}</strong></p>
+              <p>A számlát az alábbi linkről is letöltheti az ügyfélpanelén:</p>
+              <p><a href="${appUrl}/dashboard/orders" class="button">Ügyfélpanel</a></p>
+              <p>Ha bármilyen kérdése van, kérjük vegye fel velünk a kapcsolatot.</p>
+              <p>
+                <strong>Zed Gaming Hosting</strong><br>
+                ${this.configService.get('SMTP_FROM') || 'billing@zedhosting.com'}
+              </p>
+            </div>
+            <div class="footer">
+              <p>&copy; 2025 Zed Gaming Hosting. Minden jog fenntartva.</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+  }
+
+  /**
+   * Email template for payment confirmations
+   */
+  private getPaymentReceivedTemplate(
+    recipientName: string,
+    orderNumber: string,
+    amount: number,
+    currency: string,
+  ): string {
+    const appUrl = this.configService.get('APP_URL') || 'https://zedhosting.com';
+    return `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <style>
+            body { font-family: Arial, sans-serif; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; }
+            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; text-align: center; }
+            .content { padding: 20px; background: #f9f9f9; }
+            .success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; border-radius: 5px; margin: 15px 0; }
+            .footer { text-align: center; font-size: 12px; color: #999; padding: 20px; }
+            .button { background: #667eea; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>Zed Gaming Hosting</h1>
+              <p>Fizetés Sikeresen Feldolgozva</p>
+            </div>
+            <div class="content">
+              <p>Szia ${recipientName}!</p>
+              <div class="success">
+                <strong>✓ A fizetés sikeresen feldolgozásra került!</strong><br>
+                Rendelés: ${orderNumber}<br>
+                Összeg: ${currency} ${amount}
+              </div>
+              <p>A szerver most kezd el kiépíteni. Néhány percet igényelhet az indítás.</p>
+              <p>Kövesse a rendelés állapotát az ügyfélpanelen:</p>
+              <p><a href="${appUrl}/dashboard/orders/${orderNumber}" class="button">Rendelés megtekintése</a></p>
+              <p>Ha bármilyen kérdése van, kérjük vegye fel velünk a kapcsolatot.</p>
+            </div>
+            <div class="footer">
+              <p>&copy; 2025 Zed Gaming Hosting. Minden jog fenntartva.</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
   }
 }
 

@@ -8,9 +8,10 @@ import { ProvisioningService } from './provisioning.service';
 import { InvoiceService } from './invoice.service';
 import { DatabaseModule } from '../database/database.module';
 import { AuditModule } from '../audit/audit.module';
+import { EmailModule } from '../email/email.module';
 
 @Module({
-  imports: [DatabaseModule, AuditModule],
+  imports: [DatabaseModule, AuditModule, EmailModule],
   controllers: [OrdersController, WalletController],
   providers: [OrdersService, PaymentService, WalletService, ProvisioningService, InvoiceService],
 })
