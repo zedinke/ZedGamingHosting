@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+// import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
@@ -26,7 +26,7 @@ interface Plan {
 const GAME_TYPES = ['MINECRAFT', 'RUST', 'CS2', 'PALWORLD', 'ARK', 'ATLAS'];
 
 export default function PlansPage() {
-  const t = useTranslations();
+  // const t = useTranslations();
   const searchParams = useSearchParams();
   const gameFilter = searchParams.get('game');
 
