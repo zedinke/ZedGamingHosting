@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState, FormEvent } from 'react';
 import { Card } from '@zed-hosting/ui-kit';
+import { BackButton } from '../../../../components/back-button';
+import { useRouter } from '../../../../i18n/routing';
 
 const GAME_TYPES = ['MINECRAFT', 'RUST', 'CS2', 'PALWORLD', 'ARK', 'ATLAS'];
 const STATUS_OPTIONS = ['ACTIVE', 'INACTIVE', 'ARCHIVED'];
@@ -46,6 +48,7 @@ interface Plan {
 }
 
 export default function AdminPlansPage() {
+  const router = useRouter();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingPlan, setEditingPlan] = useState<Plan | null>(null);
@@ -202,7 +205,8 @@ export default function AdminPlansPage() {
       <div className="container max-w-7xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <div>
+          <div className="flex items-center gap-3">
+            <BackButton fallbackHref="/admin" />
             <h1 className="text-4xl font-bold text-text-primary mb-2">
               Csomagok kezelése
             </h1>

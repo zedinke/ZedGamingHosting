@@ -59,6 +59,14 @@ export default function AdminPage() {
 
   const menuItems = [
     {
+      title: 'Csomagok',
+      description: 'Szolgáltatási csomagok kezelése (CRUD)',
+      href: `/${locale}/admin/plans`,
+      icon: Settings,
+      iconColor: '#0ea5e9',
+      bgColor: '#ecfeff',
+    },
+    {
       title: 'Felhasználók',
       description: 'Felhasználók kezelése és jogosultságok beállítása',
       href: `/${locale}/admin/users`,
