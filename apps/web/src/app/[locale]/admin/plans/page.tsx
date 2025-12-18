@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Card } from '@zed-hosting/ui-kit';
 
 interface Plan {
@@ -26,7 +25,6 @@ interface Plan {
 }
 
 export default function AdminPlansPage() {
-  const router = useRouter();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingPlan, setEditingPlan] = useState<Plan | null>(null);
