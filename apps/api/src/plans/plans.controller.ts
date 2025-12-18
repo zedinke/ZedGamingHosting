@@ -51,7 +51,7 @@ export class PlansController {
    */
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.SUPERADMIN)
   async findAll(
     @Query('gameType') gameType?: GameType,
     @Query('status') status?: PlanStatus,
@@ -64,7 +64,7 @@ export class PlansController {
    */
   @Get(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.SUPERADMIN)
   async findOne(@Param('id') id: string) {
     return this.plansService.findOne(id);
   }
@@ -74,7 +74,7 @@ export class PlansController {
    */
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.SUPERADMIN)
   async create(@Body() createPlanDto: CreatePlanDto) {
     return this.plansService.create(createPlanDto);
   }
@@ -84,7 +84,7 @@ export class PlansController {
    */
   @Put(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.SUPERADMIN)
   async update(
     @Param('id') id: string,
     @Body() updatePlanDto: UpdatePlanDto,
@@ -97,7 +97,7 @@ export class PlansController {
    */
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.SUPERADMIN)
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id') id: string) {
     await this.plansService.remove(id);
