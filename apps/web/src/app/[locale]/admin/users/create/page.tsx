@@ -237,6 +237,7 @@ export default function CreateUserPage() {
                 >
                   <option value="USER">USER</option>
                   <option value="SUPPORT">SUPPORT</option>
+                  <option value="SUPPORTER">SUPPORTER</option>
                   <option value="RESELLER_ADMIN">RESELLER_ADMIN</option>
                   {currentUser?.role?.toUpperCase() === 'SUPERADMIN' && (
                     <option value="SUPERADMIN">SUPERADMIN</option>

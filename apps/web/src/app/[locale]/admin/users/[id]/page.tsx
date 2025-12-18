@@ -208,6 +208,7 @@ export default function EditUserPage() {
                   >
                     <option value="USER">USER</option>
                     <option value="SUPPORT">SUPPORT</option>
+                    <option value="SUPPORTER">SUPPORTER</option>
                     <option value="RESELLER_ADMIN">RESELLER_ADMIN</option>
                     <option value="SUPERADMIN">SUPERADMIN</option>
                   </select>

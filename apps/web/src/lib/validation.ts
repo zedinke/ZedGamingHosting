@@ -15,7 +15,7 @@ export const userSchema = z.object({
     .regex(/[a-z]/, 'A jelszónak tartalmaznia kell legalább egy kisbetűt')
     .regex(/[0-9]/, 'A jelszónak tartalmaznia kell legalább egy számot'),
   confirmPassword: z.string().min(1, 'Jelszó megerősítés megadása kötelező'),
-  role: z.enum(['USER', 'SUPPORT', 'RESELLER_ADMIN', 'SUPERADMIN'], {
+  role: z.enum(['USER', 'SUPPORT', 'SUPPORTER', 'RESELLER_ADMIN', 'SUPERADMIN'], {
     errorMap: () => ({ message: 'Érvénytelen szerepkör' }),
   }),
   balance: z.number()

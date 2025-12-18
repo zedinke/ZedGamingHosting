@@ -21,6 +21,7 @@ import { EmailModule } from './email/email.module';
 import { AgentModule } from './agent/agent.module';
 import { PlansModule } from './plans/plans.module';
 import { PromotionsModule } from './promotions/promotions.module';
+import { OrdersModule } from './orders/orders.module';
 import { MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { TenantMiddleware } from './common/middleware/tenant.middleware';
 import { APP_GUARD } from '@nestjs/core';
@@ -62,6 +63,7 @@ import { PublicOptionalJwtGuard } from './auth/guards/public-optional-jwt.guard'
     AgentModule, // Daemon communication
     PlansModule, // Billing & Plans
     PromotionsModule,
+    OrdersModule,
   ],
   providers: [
     {

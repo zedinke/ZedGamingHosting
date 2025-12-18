@@ -186,6 +186,7 @@ export default function AdminSettingsPage() {
                     >
                       <option value="USER">USER</option>
                       <option value="SUPPORT">SUPPORT</option>
+                      <option value="SUPPORTER">SUPPORTER</option>
                       <option value="RESELLER_ADMIN">RESELLER_ADMIN</option>
                     </select>
                   </div>

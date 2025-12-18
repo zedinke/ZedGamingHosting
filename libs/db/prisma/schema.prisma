@@ -54,6 +54,7 @@ enum UserRole {
   RESELLER_ADMIN
   USER
   SUPPORT
+  SUPPORTER
 }
 
 model User {
