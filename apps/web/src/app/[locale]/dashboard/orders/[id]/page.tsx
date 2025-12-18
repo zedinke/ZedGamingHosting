@@ -227,6 +227,19 @@ export default function OrderDetailPage() {
                 <p>Rendelés dátuma: {new Date(order.createdAt).toLocaleString('hu-HU')}</p>
                 {order.paidAt && <p>Fizetés dátuma: {new Date(order.paidAt).toLocaleString('hu-HU')}</p>}
               </div>
+
+              {order.status === 'PAID' && (
+                <div className="mt-6 pt-6 border-t border-white/10">
+                  <p className="text-sm text-text-secondary mb-3">Számla:</p>
+                  <Button
+                    onClick={() => window.open(`/api/orders/${orderId}/invoice`)}
+                    variant="outline"
+                    className="w-full text-green-400 border-green-600/30 hover:bg-green-900/10"
+                  >
+                    📄 Számla letöltése
+                  </Button>
+                </div>
+              )}
             </Card>
 
             {/* Payment Section */}
