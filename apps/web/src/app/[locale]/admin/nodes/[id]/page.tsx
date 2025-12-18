@@ -27,7 +27,7 @@ interface Node {
 export default function EditNodePage() {
   const router = useRouter();
   const params = useParams();
-  // const locale = (params?.locale as string) || 'hu';
+  const locale = (params?.locale as string) || 'hu';
   const nodeId = params?.id as string;
   const { user: currentUser, isAuthenticated, accessToken } = useAuthStore();
   const notifications = useNotificationContext();
