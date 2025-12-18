@@ -26,7 +26,7 @@ export class PlansController {
   /**
    * Public: Get all active plans (optionally filtered by game type)
    */
-    @Public()
+  @Public()
   @Get('public')
   async getPublicPlans(@Query('gameType') gameType?: GameType) {
     return this.plansService.findAll(gameType, PlanStatus.ACTIVE);
@@ -34,8 +34,8 @@ export class PlansController {
 
   /**
    * Public: Get plans for specific game type
-    @Public()
    */
+  @Public()
   @Get('public/game/:gameType')
   async getByGameType(@Param('gameType') gameType: GameType) {
     return this.plansService.getByGameType(gameType);
@@ -43,8 +43,8 @@ export class PlansController {
 
   /**
    * Public: Get single plan by slug
-    @Public()
    */
+  @Public()
   @Get('public/:slug')
   async getPublicPlan(@Param('slug') slug: string) {
     return this.plansService.findOne(slug);
