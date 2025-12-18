@@ -53,22 +53,29 @@ export class TaskProcessor {
           result = await this.containerManager.createContainer(task.data as any);
           break;
         case 'START':
-          // Apply resource/env updates and restart if requested
-          await this.containerManager.updateContainer(task.data as any);
+          // Start the container
+          const startData = task.data as { serverUuid: string };
+          await this.containerManager.startContainer(startData.serverUuid);
+          break;
+        case 'STOP':
+          // Stop the container
+          const stopData = task.data as { serverUuid: string };
+          await this.containerManager.stopContainer(stopData.serverUuid);
           break;
         case 'RESTART':
-          await this.containerManager.restartContainer((task.data as { serverUuid: string }).serverUuid);
+          const restartData = task.data as { serverUuid: string };
+          await this.containerManager.restartContainer(restartData.serverUuid);
           break;
         case 'UPDATE':
           // Queue Steam update
-        case 'EXECUTE_COMMAND':
-          const execData = task.data as { serverUuid: string; command: string };
-          result = await this.containerManager.execInContainer(execData.serverUuid, execData.command);
-          break;
           const updateData = task.data as { serverUuid: string; appId: string; installDir: string; beta?: string; validate?: boolean };
           // Update queue will be handled by UpdateQueueService
           // This is a placeholder - actual implementation would require access to UpdateQueueService
           console.log(`Update task queued for server ${updateData.serverUuid}`);
+          break;
+        case 'EXECUTE_COMMAND':
+          const execData = task.data as { serverUuid: string; command: string };
+          result = await this.containerManager.execInContainer(execData.serverUuid, execData.command);
           break;
         case 'DELETE':
           // Stop container, remove container, and clean up volumes
