@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, ConflictException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
-import { CreatePlanDto, UpdatePlanDto, PlanResponse, PlanStatus } from '@zed-hosting/shared-types';
-import { GameType } from '@zed-hosting/shared-types';
+import { CreatePlanDto, UpdatePlanDto, PlanResponse } from '@zed-hosting/shared-types';
+import { PlanStatus, GameType } from '@prisma/client';
 
 @Injectable()
 export class PlansService {

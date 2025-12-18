@@ -1,11 +1,5 @@
 import { IsString, IsEnum, IsInt, IsOptional, IsBoolean, IsArray, Min } from 'class-validator';
-import { GameType } from '../servers/server.dto';
-
-export enum PlanStatus {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
-  ARCHIVED = 'ARCHIVED',
-}
+import { GameType, PlanStatus } from '@prisma/client';
 
 /**
  * DTO for creating a new plan
