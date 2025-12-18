@@ -11,7 +11,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     super();
   }
 
-  canActivate(context: ExecutionContext) {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     // Check if route is marked as public
     const isPublic = this.reflector.getAllAndOverride<boolean>('isPublic', [
       context.getHandler(),
@@ -22,7 +22,12 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       return true;
     }
 
-    return super.canActivate(context);
+    // Call the parent class canActivate (handles JWT verification)
+    try {
+      return (await super.canActivate(context)) as boolean;
+    } catch (error) {
+      return false;
+    }
   }
 }
 
