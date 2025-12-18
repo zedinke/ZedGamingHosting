@@ -27,6 +27,7 @@
     "@nestjs/throttler": "^6.5.0",
     "@pandacss/dev": "^0.40.0",
     "@pandacss/postcss": "^0.40.0",
+    "@paypal/paypal-server-sdk": "^2.1.0",
     "@prisma/client": "^5.7.1",
     "@tanstack/react-query": "^5.90.12",
     "@tanstack/react-query-devtools": "^5.91.1",

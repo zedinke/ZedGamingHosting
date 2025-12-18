@@ -4,6 +4,8 @@ export enum PaymentMethod {
   MOCK = 'mock',
   BARION = 'barion',
   STRIPE = 'stripe',
+  PAYPAL = 'paypal',
+  UPAY = 'upay',
 }
 
 export class InitiatePaymentDto {

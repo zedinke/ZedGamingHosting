@@ -87,7 +87,7 @@ export default function OrderDetailPage() {
     }
   };
 
-  const handlePayment = async (method: 'mock' | 'barion' | 'stripe') => {
+  const handlePayment = async (method: 'mock' | 'barion' | 'stripe' | 'paypal' | 'upay') => {
     if (!orderId) return;
     setPaymentLoading(true);
     try {
@@ -105,10 +105,10 @@ export default function OrderDetailPage() {
           title: 'Fizetés sikeres',
           message: 'A rendelés sikeresen kifizetésre került.',
         });
-      } else if (method === 'barion' || method === 'stripe') {
+      } else if (method === 'barion' || method === 'stripe' || method === 'paypal' || method === 'upay') {
         // Redirect to payment gateway
-        const resultData = result as { redirectUrl?: string; sessionUrl?: string };
-        window.location.href = resultData.redirectUrl || resultData.sessionUrl || '';
+        const resultData = result as { redirectUrl?: string; sessionUrl?: string; gatewayUrl?: string };
+        window.location.href = resultData.redirectUrl || resultData.sessionUrl || resultData.gatewayUrl || '';
       }
     } catch (e: any) {
       notifications.addNotification({
@@ -263,7 +263,23 @@ export default function OrderDetailPage() {
                     variant="outline"
                     className="w-full"
                   >
-                    Barion
+                    💳 Barion
+                  </Button>
+                  <Button
+                    onClick={() => handlePayment('paypal')}
+                    disabled={paymentLoading}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    🅿️ PayPal
+                  </Button>
+                  <Button
+                    onClick={() => handlePayment('upay')}
+                    disabled={paymentLoading}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    💳 Upay (Bankkártya)
                   </Button>
                   <Button
                     onClick={() => handlePayment('stripe')}
@@ -271,7 +287,7 @@ export default function OrderDetailPage() {
                     variant="outline"
                     className="w-full"
                   >
-                    Stripe
+                    💳 Stripe
                   </Button>
                   <Button
                     onClick={handleCancelOrder}

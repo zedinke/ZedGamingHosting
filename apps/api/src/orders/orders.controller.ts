@@ -51,6 +51,10 @@ export class OrdersController {
       return this.paymentService.processMockPayment(orderId, userId);
     } else if (dto.method === 'barion') {
       return this.paymentService.generateBarionRedirect(orderId, userId);
+    } else if (dto.method === 'paypal') {
+      return this.paymentService.generatePayPalRedirect(orderId, userId);
+    } else if (dto.method === 'upay') {
+      return this.paymentService.generateUpayRedirect(orderId, userId);
     } else if (dto.method === 'stripe') {
       return this.paymentService.generateStripeSession(orderId, userId);
     }
