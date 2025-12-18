@@ -1,13 +1,14 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
 import { AuditService } from '../audit/audit.service';
+import { BillingCycle } from './dto/create-order.dto';
 
 interface CreateOrderInput {
   userId: string;
   userRole?: string;
   planId?: string;
   planSlug?: string;
-  billingCycle: 'monthly' | 'hourly';
+  billingCycle: BillingCycle;
 }
 
 @Injectable()
@@ -37,7 +38,7 @@ export class OrdersService {
       throw new NotFoundException('Plan not found');
     }
 
-    const unitPrice = billingCycle === 'monthly' ? plan.monthlyPrice : (plan.hourlyPrice ?? plan.monthlyPrice);
+    const unitPrice = billingCycle === BillingCycle.MONTHLY ? plan.monthlyPrice : (plan.hourlyPrice ?? plan.monthlyPrice);
     const totalAmount = (unitPrice || 0) + (plan.setupFee || 0);
 
     const priceSnapshot = {
