@@ -23,7 +23,7 @@ import { PlansModule } from './plans/plans.module';
 import { MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { TenantMiddleware } from './common/middleware/tenant.middleware';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { PublicOptionalJwtGuard } from './auth/guards/public-optional-jwt.guard';
 
 /**
  * Root application module
@@ -64,7 +64,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
   providers: [
     {
       provide: APP_GUARD,
-      useClass: JwtAuthGuard,
+      useClass: PublicOptionalJwtGuard,
     },
   ],
 })
