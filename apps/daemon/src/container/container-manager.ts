@@ -241,9 +241,8 @@ export class ContainerManager {
     const containerName = `zedhosting-${config.serverUuid}`;
     const container = this.docker.getContainer(containerName);
 
-    let info;
     try {
-      info = await container.inspect();
+      await container.inspect();
     } catch (error: any) {
       if (error?.statusCode === 404) {
         throw new Error(`Container ${containerName} not found for update`);
@@ -301,7 +300,7 @@ export class ContainerManager {
     });
 
     return await new Promise((resolve, reject) => {
-      exec.start((err, stream) => {
+      exec.start({} as any, (err: Error | null, stream: any) => {
         if (err) return reject(err);
 
         let output = '';
