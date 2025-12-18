@@ -1,6 +1,7 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
 import { AuditService } from '../audit/audit.service';
+import { WalletService } from './wallet.service';
 import { BillingCycle } from './dto/create-order.dto';
 
 interface CreateOrderInput {
@@ -13,9 +14,12 @@ interface CreateOrderInput {
 
 @Injectable()
 export class OrdersService {
+  private readonly logger = new Logger(OrdersService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly auditService: AuditService,
+    private readonly walletService: WalletService,
   ) {}
 
   async createOrder(input: CreateOrderInput) {
@@ -125,5 +129,55 @@ export class OrdersService {
     }
 
     return order;
+  }
+
+  /**
+   * Cancel an order and refund the user if payment was made
+   */
+  async cancelOrder(id: string, userId: string): Promise<any> {
+    const order = await this.getOrderById(id, userId);
+
+    // Check if order can be cancelled
+    if (['CANCELLED', 'REFUNDED'].includes(order.status)) {
+      throw new BadRequestException(`Cannot cancel order with status ${order.status}`);
+    }
+
+    // If order was paid, refund the user
+    let refundAmount = 0;
+    if (order.status === 'PAID' || order.status === 'PROVISIONING' || order.status === 'ACTIVE') {
+      refundAmount = order.totalAmount;
+      
+      // Add refund to user wallet
+      await this.walletService.addBalance({
+        userId,
+        amount: refundAmount,
+        reason: `Refund for cancelled order #${order.id.substring(0, 8)}`,
+        adminId: 'system',
+      });
+    }
+
+    // Update order status
+    const updatedOrder = await this.prisma.order.update({
+      where: { id },
+      data: {
+        status: 'CANCELLED',
+      },
+    });
+
+    // Audit log
+    await this.auditService.createLog({
+      action: 'CANCEL_ORDER',
+      resourceId: id,
+      userId,
+      ipAddress: 'system',
+      details: {
+        previousStatus: order.status,
+        refundAmount,
+      },
+    });
+
+    this.logger.log(`Order ${id} cancelled by user ${userId}, refund: ${refundAmount}`);
+
+    return updatedOrder;
   }
 }

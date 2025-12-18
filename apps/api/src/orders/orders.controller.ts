@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Request, UseGuards, Get, Param } from '@nestjs/common';
+import { Body, Controller, Post, Request, UseGuards, Get, Param, Delete } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { PaymentService } from './payment.service';
 import { BillingCycle, CreateOrderDto } from './dto/create-order.dto';
@@ -53,5 +53,10 @@ export class OrdersController {
     }
 
     throw new Error('Unsupported payment method');
+  }
+
+  @Delete(':id')
+  async cancel(@Param('id') orderId: string, @Request() req: any) {
+    return this.ordersService.cancelOrder(orderId, req.user?.id);
   }
 }
