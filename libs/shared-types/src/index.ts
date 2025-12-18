@@ -15,6 +15,9 @@ export * from './servers/server.dto';
 export * from './servers/server.interface';
 export * from './servers/game-presets';
 
+// Plans & Billing
+export * from './plans/plan.dto';
+
 // Networking
 export * from './networking/port-allocation.dto';
 export * from './networking/network.interface';
