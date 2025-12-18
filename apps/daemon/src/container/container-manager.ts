@@ -62,6 +62,25 @@ export class ContainerManager {
       },
     };
 
+    // Pull image if not present
+    try {
+      await this.docker.getImage(config.image).inspect();
+      console.log(`Image ${config.image} already present`);
+    } catch {
+      console.log(`Pulling image: ${config.image}`);
+      await new Promise<void>((resolve, reject) => {
+        this.docker.pull(config.image, (err: Error | null, stream: NodeJS.ReadableStream) => {
+          if (err) return reject(err);
+          
+          this.docker.modem.followProgress(stream, (err: Error | null) => {
+            if (err) return reject(err);
+            console.log(`✅ Image pulled: ${config.image}`);
+            resolve();
+          });
+        });
+      });
+    }
+
     // Create container
     const container = await this.docker.createContainer({
       Image: config.image,
