@@ -128,7 +128,6 @@ services:
       - .env
     environment:
       NODE_ENV: production
-      BACKEND_URL: http://172.18.0.5:3000
       DOCKER_HOST: unix:///var/run/docker.sock
       TASK_POLL_INTERVAL: 5000
       HEARTBEAT_INTERVAL: 30000
