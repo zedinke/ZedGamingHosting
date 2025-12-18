@@ -2,12 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import Link from 'next/link';
 import { Card, Button, Badge } from '@zed-hosting/ui-kit';
-import { Navigation } from '../../../../../components/navigation';
-import { useAuthStore } from '../../../../../stores/auth-store';
-import { apiClient } from '../../../../../lib/api-client';
-import { useNotificationContext } from '../../../../../context/notification-context';
+import { useAuthStore } from '../../../../stores/auth-store';
+import { AdminLayout } from '../../../../components/admin/admin-layout';
 
 interface Order {
   id: string;
@@ -152,21 +149,16 @@ export default function AdminPaymentsPage() {
   };
 
   return (
-    <>
-      <Navigation />
-      <div className="min-h-screen" style={{ backgroundColor: '#0a0a0a', color: '#f8fafc' }}>
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <Link href={`/${locale}/admin`} className="text-sm text-primary-400 hover:text-primary-300 transition">
-                ← Vissza az admin panelhez
-              </Link>
-              <h1 className="text-3xl font-bold mt-2">Fizetési tranzakciók</h1>
-            </div>
-            <Button onClick={loadOrders} variant="outline" size="sm">
-              🔄 Frissítés
-            </Button>
+    <AdminLayout title="Fizetési Tranzakciók">
+      <div className="space-y-6">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-3xl font-bold text-text-primary">Fizetési tranzakciók</h1>
           </div>
+          <Button onClick={loadOrders} variant="outline" size="sm">
+            🔄 Frissítés
+          </Button>
+        </div>
 
           {/* Statistics Cards */}
           <div className="grid gap-4 md:grid-cols-5 mb-6">
@@ -307,8 +299,7 @@ export default function AdminPaymentsPage() {
               </div>
             </Card>
           )}
-        </div>
       </div>
-    </>
+    </AdminLayout>
   );
 }
