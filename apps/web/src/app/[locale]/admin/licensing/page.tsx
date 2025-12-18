@@ -8,6 +8,7 @@ import { AdminLayout } from '../../../../components/admin/admin-layout';
 import { Card, Badge } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../lib/api-client';
 import { useQuery } from '@tanstack/react-query';
+import { BackButton } from '../../../../components/back-button';
 
 interface LicenseInfo {
   status: string;
