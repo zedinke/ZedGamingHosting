@@ -6,8 +6,13 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
 
-# Copy source
-COPY . .
+# Copy source files
+# Copy root files
+COPY package.json package-lock.json tsconfig.base.json nx.json ./
+# Copy libs
+COPY libs ./libs
+# Copy web app
+COPY apps/web ./apps/web
 
 # Build
 ENV NEXT_TELEMETRY_DISABLED 1
