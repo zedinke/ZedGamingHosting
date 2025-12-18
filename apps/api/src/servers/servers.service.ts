@@ -186,7 +186,7 @@ export class ServersService {
     }
 
     // 8. Create server record in database FIRST
-    const server = await this.prisma.gameServer.create({
+    await this.prisma.gameServer.create({
       data: {
         uuid: serverUuid,
         gameType: createServerDto.gameType as any,
@@ -197,15 +197,6 @@ export class ServersService {
         resources,
         envVars: mergedEnv,
         clusterId: createServerDto.clusterId || null,
-      },
-      include: {
-        node: {
-          select: {
-            id: true,
-            publicFqdn: true,
-            ipAddress: true,
-          },
-        },
       },
     });
 
