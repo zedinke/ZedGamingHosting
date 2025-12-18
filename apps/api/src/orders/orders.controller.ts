@@ -1,4 +1,5 @@
-import { Body, Controller, Post, Request, UseGuards, Get, Param, Delete } from '@nestjs/common';
+import { Body, Controller, Post, Request, UseGuards, Get, Param, Delete, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { OrdersService } from './orders.service';
 import { PaymentService } from './payment.service';
 import { InvoiceService } from './invoice.service';
@@ -68,4 +69,26 @@ export class OrdersController {
     await this.ordersService.getOrderById(orderId, req.user?.id);
     return this.invoiceService.getInvoice(orderId);
   }
-}
+
+  @Get(':id/invoice/pdf')
+  async getInvoicePDF(
+    @Param('id') orderId: string,
+    @Request() req: any,
+    @Res() res: Response,
+  ) {
+    // Verify order belongs to user
+    await this.ordersService.getOrderById(orderId, req.user?.id);
+    const invoiceNumber = (
+      await this.invoiceService.getInvoice(orderId)
+    ).invoiceNumber;
+
+    const pdfStream = await this.invoiceService.getInvoicePDFStream(orderId);
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="Invoice-${invoiceNumber}.pdf"`,
+    );
+
+    pdfStream.pipe(res);
+  }}

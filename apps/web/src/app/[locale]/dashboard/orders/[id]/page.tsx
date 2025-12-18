@@ -232,11 +232,11 @@ export default function OrderDetailPage() {
                 <div className="mt-6 pt-6 border-t border-white/10">
                   <p className="text-sm text-text-secondary mb-3">Számla:</p>
                   <Button
-                    onClick={() => window.open(`/api/orders/${orderId}/invoice`)}
+                    onClick={() => window.open(`/api/orders/${orderId}/invoice/pdf`)}
                     variant="outline"
                     className="w-full text-green-400 border-green-600/30 hover:bg-green-900/10"
                   >
-                    📄 Számla letöltése
+                    📄 Számla letöltése (PDF)
                   </Button>
                 </div>
               )}
