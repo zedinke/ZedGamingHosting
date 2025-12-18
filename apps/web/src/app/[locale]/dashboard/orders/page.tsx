@@ -66,7 +66,7 @@ export default function OrdersPage() {
 
   const formatHuf = (amount: number) => `${(amount / 100).toLocaleString('hu-HU')} Ft`;
 
-  const statusColor = (status: string) => {
+  const statusVariant = (status: string) => {
     switch (status) {
       case 'PAID':
       case 'ACTIVE':
@@ -77,7 +77,7 @@ export default function OrdersPage() {
       case 'PROVISIONING':
         return 'info';
       default:
-        return 'neutral';
+        return 'default';
     }
   };
 
@@ -114,8 +114,8 @@ export default function OrdersPage() {
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <Badge tone={statusColor(order.status)}>{order.status}</Badge>
-                        {order.notes && <Badge tone="neutral">{order.notes}</Badge>}
+                        <Badge variant={statusVariant(order.status)} size="sm">{order.status}</Badge>
+                        {order.notes && <Badge variant="default" size="sm">{order.notes}</Badge>}
                       </div>
                       <p className="text-lg font-semibold">{order.plan?.name || 'Ismeretlen csomag'}</p>
                       <p className="text-sm text-text-secondary uppercase">{order.plan?.gameType}</p>
