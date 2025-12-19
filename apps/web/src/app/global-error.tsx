@@ -9,18 +9,46 @@ export default function GlobalError({
   return (
     <html>
       <body>
-        <div className="min-h-screen flex items-center justify-center bg-background-app px-4">
-          <div className="text-center max-w-md">
-            <h1 className="text-6xl font-bold text-error-500 mb-4">500</h1>
-            <h2 className="text-2xl font-semibold text-text-primary mb-4">
+        <div style={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: '#0f172a',
+          padding: '1rem'
+        }}>
+          <div style={{ textAlign: 'center', maxWidth: '600px' }}>
+            <h1 style={{ 
+              fontSize: '6rem', 
+              fontWeight: 'bold', 
+              color: '#ef4444', 
+              marginBottom: '1rem' 
+            }}>500</h1>
+            <h2 style={{ 
+              fontSize: '2rem', 
+              fontWeight: '600', 
+              color: '#e2e8f0', 
+              marginBottom: '1rem' 
+            }}>
               Szerverhiba
             </h2>
-            <p className="text-text-muted mb-8">
+            <p style={{ 
+              color: '#94a3b8', 
+              marginBottom: '2rem' 
+            }}>
               Váratlan hiba történt a szerveren.
             </p>
             <button
               onClick={reset}
-              className="inline-block px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors"
+              style={{
+                display: 'inline-block',
+                padding: '0.75rem 1.5rem',
+                background: '#3b82f6',
+                color: 'white',
+                border: 'none',
+                borderRadius: '0.5rem',
+                cursor: 'pointer'
+              }}
             >
               Újrapróbálás
             </button>

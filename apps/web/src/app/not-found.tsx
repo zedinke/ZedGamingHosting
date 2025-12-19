@@ -1,23 +1,56 @@
-import Link from 'next/link';
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background-app">
-      <div className="text-center px-4">
-        <h1 className="text-6xl font-bold text-primary-500 mb-4">404</h1>
-        <h2 className="text-2xl font-semibold text-text-primary mb-4">
-          Az oldal nem található
-        </h2>
-        <p className="text-text-muted mb-8">
-          A keresett oldal nem létezik vagy át lett helyezve.
-        </p>
-        <Link
-          href="/"
-          className="inline-block px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors"
-        >
-          Vissza a főoldalra
-        </Link>
-      </div>
-    </div>
+    <html>
+      <body>
+        <div style={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: '#0f172a',
+          padding: '1rem'
+        }}>
+          <div style={{ textAlign: 'center', maxWidth: '600px' }}>
+            <h1 style={{ 
+              fontSize: '6rem', 
+              fontWeight: 'bold', 
+              color: '#3b82f6', 
+              marginBottom: '1rem' 
+            }}>404</h1>
+            <h2 style={{ 
+              fontSize: '2rem', 
+              fontWeight: '600', 
+              color: '#e2e8f0', 
+              marginBottom: '1rem' 
+            }}>
+              Az oldal nem található
+            </h2>
+            <p style={{ 
+              color: '#94a3b8', 
+              marginBottom: '2rem' 
+            }}>
+              A keresett oldal nem létezik vagy át lett helyezve.
+            </p>
+            <a
+              href="/"
+              style={{
+                display: 'inline-block',
+                padding: '0.75rem 1.5rem',
+                background: '#3b82f6',
+                color: 'white',
+                textDecoration: 'none',
+                borderRadius: '0.5rem',
+                transition: 'background 0.2s'
+              }}
+            >
+              Vissza a főoldalra
+            </a>
+          </div>
+        </div>
+      </body>
+    </html>
   );
 }
