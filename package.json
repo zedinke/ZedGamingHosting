@@ -14,7 +14,8 @@
     "dev:web": "nx serve web",
     "dev:daemon": "nx serve daemon",
     "test:add-node": "node scripts/test_add_node.js",
-    "validate:locales": "node scripts/validate-locales.js"
+    "validate:locales": "node scripts/validate-locales.js",
+    "build:web": "npm run validate:locales && nx build web"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
