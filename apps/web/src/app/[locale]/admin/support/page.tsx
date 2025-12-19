@@ -353,10 +353,6 @@ export default function AdminSupportPage() {
           </div>
         </div>
       )}
-            <div className={styles.statLabel}>Átl. Válaszidő</div>
-          </div>
-        </div>
-      )}
 
       <div className={styles.filters}>
         <select
