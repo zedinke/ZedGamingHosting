@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Req, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, Req, HttpCode, HttpStatus } from '@nestjs/common';
 import { Request } from 'express';
 import { LoggingService } from './logging.service';
 

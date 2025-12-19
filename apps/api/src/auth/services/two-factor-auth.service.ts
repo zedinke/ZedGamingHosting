@@ -1,8 +1,8 @@
 import { Injectable, Logger, BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '@zed-hosting/db';
-import * as speakeasy from 'speakeasy';
-import * as QRCode from 'qrcode';
+// import * as speakeasy from 'speakeasy';
+// import * as QRCode from 'qrcode';
 import * as crypto from 'crypto';
 import {
   Setup2FADto,
@@ -12,7 +12,7 @@ import {
   Disable2FADto,
   TwoFASetupResponseDto,
   TwoFAStatusDto,
-} from './dto/two-fa.dto';
+} from '../dto/two-fa.dto';
 
 /**
  * Two-Factor Authentication Service
@@ -26,13 +26,12 @@ export class TwoFactorAuthService {
 
   constructor(
     private readonly prisma: PrismaService,
-    private readonly configService: ConfigService,
   ) {}
 
   /**
    * Setup 2FA - Generate TOTP secret and QR code
    */
-  async setup2FA(userId: string, dto: Setup2FADto): Promise<TwoFASetupResponseDto> {
+  async setup2FA(userId: string): Promise<TwoFASetupResponseDto> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });

@@ -22,12 +22,12 @@ export class Setup2FADto {
  */
 export class Enable2FADto {
   @IsString()
-  secret: string; // TOTP secret from QR code setup
+  secret: string = ''; // TOTP secret from QR code setup
 
   @IsNumber()
   @Min(100000)
   @Max(999999)
-  code: number; // 6-digit verification code
+  code: number = 0; // 6-digit verification code
 }
 
 /**
@@ -37,7 +37,7 @@ export class Verify2FADto {
   @IsNumber()
   @Min(100000)
   @Max(999999)
-  code: number; // 6-digit code from authenticator app
+  code: number = 0; // 6-digit code from authenticator app
 }
 
 /**
@@ -45,7 +45,7 @@ export class Verify2FADto {
  */
 export class VerifyBackupCodeDto {
   @IsString()
-  code: string; // Backup code (format: XXXX-XXXX-XXXX)
+  code: string = ''; // Backup code (format: XXXX-XXXX-XXXX)
 }
 
 /**
@@ -55,26 +55,26 @@ export class Disable2FADto {
   @IsNumber()
   @Min(100000)
   @Max(999999)
-  code: number; // Current 2FA code to confirm disable
+  code: number = 0; // Current 2FA code to confirm disable
 }
 
 /**
  * 2FA Setup Response DTO
  */
 export class TwoFASetupResponseDto {
-  secret: string; // TOTP secret
-  qrCode: string; // QR code as base64 data URL
-  manualEntryKey: string; // Manual entry key for authenticator apps
-  backupCodes: string[]; // Backup codes
+  secret: string = ''; // TOTP secret
+  qrCode: string = ''; // QR code as base64 data URL
+  manualEntryKey: string = ''; // Manual entry key for authenticator apps
+  backupCodes: string[] = []; // Backup codes
 }
 
 /**
  * 2FA Status DTO
  */
 export class TwoFAStatusDto {
-  enabled: boolean;
-  method: 'totp' | 'sms' | null;
-  backupCodesCount: number;
+  enabled: boolean = false;
+  method: 'totp' | 'sms' | null = null;
+  backupCodesCount: number = 0;
   createdAt?: Date;
 }
 
@@ -82,7 +82,7 @@ export class TwoFAStatusDto {
  * Login with 2FA Response
  */
 export class LoginWith2FAResponseDto {
-  requiresTwoFA: boolean;
+  requiresTwoFA: boolean = false;
   sessionToken?: string; // Temporary token for 2FA verification
-  expiresIn: number; // Seconds until session token expires
+  expiresIn: number = 0; // Seconds until session token expires
 }

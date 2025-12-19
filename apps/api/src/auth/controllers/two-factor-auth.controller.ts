@@ -86,7 +86,7 @@ export class TwoFactorAuthController {
    */
   @Post('verify')
   @HttpCode(200)
-  async verify2FACode(@Body() dto: Verify2FADto) {
+  async verify2FACode() {
     this.logger.log('Verifying 2FA code');
     return { success: true };
   }

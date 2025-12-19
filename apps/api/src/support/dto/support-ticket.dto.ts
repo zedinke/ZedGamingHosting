@@ -17,13 +17,13 @@ export enum TicketStatus {
 
 export class CreateSupportTicketDto {
   @IsString()
-  subject: string;
+  subject: string = '';
 
   @IsString()
-  description: string;
+  description: string = '';
 
   @IsEnum(TicketPriority)
-  priority: TicketPriority;
+  priority: TicketPriority = TicketPriority.MEDIUM;
 
   @IsOptional()
   @IsString()
@@ -46,5 +46,5 @@ export class UpdateTicketDto {
 
 export class AddCommentDto {
   @IsString()
-  message: string;
+  message: string = '';
 }

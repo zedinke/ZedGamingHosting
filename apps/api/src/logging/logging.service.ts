@@ -39,7 +39,6 @@ export class LoggingService {
 
   constructor(
     private readonly prisma: PrismaService,
-    private readonly i18n: I18nService,
   ) {
     this.startMonitoring();
   }
