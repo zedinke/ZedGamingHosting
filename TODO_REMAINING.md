@@ -1,7 +1,7 @@
 # KIMARADT FELADATOK - Implementation Plan
 
-**Utolsó frissítés:** 2025-12-11  
-**Jelenlegi állapot:** PHASE 0-4 ✅ | PHASE 5-13 ⏳
+**Utolsó frissítés:** 2025-01-16  
+**Jelenlegi állapot:** PHASE 0-4 ✅ | PHASE 5+ ⏳ | Support System ✅
 
 ---
 
@@ -40,11 +40,33 @@
 - ✅ Health Checker
 - ✅ Heartbeat Client
 
+### PHASE 4.5: User-Facing Features ✅
+- ✅ User Dashboard (Orders, API Keys, Onboarding)
+- ✅ Reseller Admin System
+- ✅ Payment Gateway Integration (Barion, PayPal, Upay)
+- ✅ Invoice Generation & PDF Delivery
+- ✅ Email Notification System (9 email templates)
+- ✅ Error Logging & Monitoring Dashboard
+
+### PHASE 4.6: Support System ✅ (MOST KÉSZ!)
+- ✅ Support Ticketing System (Full Implementation)
+  - ✅ SupportTicket & TicketComment database models
+  - ✅ Support Service (CRUD operations)
+  - ✅ User-facing API endpoints
+  - ✅ Admin support management endpoints
+  - ✅ Email notifications (ticket creation & status changes)
+  - ✅ User dashboard: support tickets list/create/detail/comments
+  - ✅ Admin dashboard: support overview with statistics & filtering
+  - ✅ Ticket priority levels (LOW, MEDIUM, HIGH, CRITICAL)
+  - ✅ Ticket status tracking (OPEN, IN_PROGRESS, WAITING_CUSTOMER, RESOLVED, CLOSED)
+  - ✅ Average response time calculation
+  - ✅ Fully responsive UI components
+
 ### DEVOPS/INFRA ✅
 - ✅ Docker Compose setup
 - ✅ Traefik reverse proxy (statikus konfig)
 - ✅ Adminer database admin tool
-- ✅ MySQL adatbázis létrehozva
+- ✅ MySQL/PostgreSQL adatbázis
 - ✅ Adatbázis migrációk futtatva
 - ✅ Frontend (alap landing page)
 
@@ -95,7 +117,82 @@
 
 ---
 
-### 🔴 PHASE 6: Networking és Subdomains (RÉSZBEN KÉSZ)
+## ⏳ KIMARADT FELADATOK (Priority-based)
+
+### 🟡 PHASE 5.1: Two-Factor Authentication (HIGH PRIORITY)
+- ⏳ **2FA Service Implementation**
+  - Time-based OTP (TOTP) using speakeasy
+  - SMS-based 2FA (optional)
+  - QR code generation for authenticator apps
+  - Backup codes generation and storage
+  - 2FA enforcement per user
+  - Login flow with 2FA verification
+
+- ⏳ **Frontend 2FA Integration**
+  - 2FA setup page in dashboard
+  - QR code display component
+  - Manual key input option
+  - Backup codes display and download
+  - Login with 2FA verification
+  - Disable 2FA option for admin
+
+- ⏳ **API Endpoints**
+  - POST /auth/2fa/setup - Generate TOTP secret
+  - POST /auth/2fa/enable - Enable 2FA with verification
+  - POST /auth/2fa/disable - Disable 2FA
+  - POST /auth/2fa/backup-codes - Generate backup codes
+  - POST /auth/verify-2fa - Verify during login
+  - POST /auth/verify-backup-code - Use backup code
+
+### 🟡 PHASE 5.2: WebSocket Real-Time Updates (HIGH PRIORITY)
+- ⏳ **WebSocket Gateway Setup**
+  - NestJS WebSocket gateway
+  - JWT authentication for WebSocket
+  - Room-based event distribution
+  - User-specific notifications
+  - Typing indicators
+  - Online status tracking
+
+- ⏳ **Support Ticket Real-Time Updates**
+  - Real-time comment notifications
+  - Status change broadcasts
+  - Typing indicator for comments
+  - Admin ticket assignment notifications
+  - Comment count live updates
+
+- ⏳ **Server Status Real-Time**
+  - Server status change broadcasts
+  - Metrics streaming (CPU, RAM, Disk)
+  - Console log streaming
+  - File operation progress
+
+- ⏳ **Frontend WebSocket Integration**
+  - useSocket hook implementation
+  - Event subscription management
+  - Auto-reconnection logic
+  - Message buffering when offline
+  - Visual indicators for connection status
+
+### 🟠 PHASE 5.3: Advanced Support Features
+- ⏳ **Ticket Assignment System**
+  - Support staff assignment
+  - Workload balancing
+  - Priority escalation
+  - SLA tracking and alerts
+  - Ticket transfer between staff
+
+- ⏳ **Knowledge Base Integration**
+  - FAQ creation and management
+  - Auto-suggest solutions
+  - Article linking to tickets
+  - Search functionality
+
+- ⏳ **Ticket Templates**
+  - Template creation for common issues
+  - Quick response templates
+  - Macro functionality
+
+### 🟠 PHASE 6: Networking és Subdomains (RÉSZBEN KÉSZ)
 
 #### 6.1 Subdomain Service (HIÁNYZIK)
 - ⏳ **SubdomainService** - DNS kezelés

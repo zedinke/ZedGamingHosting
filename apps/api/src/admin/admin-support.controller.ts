@@ -8,7 +8,7 @@ import {
   UseGuards,
   Logger,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminGuard } from '../auth/guards/admin.guard';
 import { SupportTicketService } from '../support/support-ticket.service';
 import { UpdateTicketDto } from '../support/dto/support-ticket.dto';

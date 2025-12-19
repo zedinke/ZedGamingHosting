@@ -11,7 +11,7 @@ import {
   HttpCode,
   Logger,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminGuard } from '../auth/guards/admin.guard';
 import { SupportTicketService } from './support-ticket.service';
 import { CreateSupportTicketDto, UpdateTicketDto, AddCommentDto } from './dto/support-ticket.dto';
