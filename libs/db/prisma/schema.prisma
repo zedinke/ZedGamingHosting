@@ -63,6 +63,9 @@ model User {
   passwordHash    String
   role            UserRole
   twoFactorSecret String?
+  twoFactorEnabled Boolean  @default(false)
+  twoFactorMethod String?   // "TOTP" or "SMS"
+  twoFactorBackupCodes String? @db.Text // JSON stringified array of hashed backup codes
   balance         Float     @default(0)
   tenantId        String?
   tenant          Tenant?   @relation(fields: [tenantId], references: [id], onDelete: SetNull)

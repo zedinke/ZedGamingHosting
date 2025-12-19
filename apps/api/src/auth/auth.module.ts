@@ -8,10 +8,12 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { DatabaseModule } from '../database/database.module';
 import { I18nModule } from '../i18n/i18n.module';
+import { TwoFactorAuthService } from './services/two-factor-auth.service';
+import { TwoFactorAuthController } from './controllers/two-factor-auth.controller';
 
 /**
  * Auth Module - Authentication & Authorization
- * Handles login, JWT tokens, password hashing
+ * Handles login, JWT tokens, password hashing, 2FA
  */
 @Module({
   imports: [
@@ -29,9 +31,9 @@ import { I18nModule } from '../i18n/i18n.module';
       }),
     }),
   ],
-  providers: [AuthService, JwtStrategy, LocalStrategy],
-  controllers: [AuthController],
-  exports: [AuthService, JwtModule],
+  providers: [AuthService, JwtStrategy, LocalStrategy, TwoFactorAuthService],
+  controllers: [AuthController, TwoFactorAuthController],
+  exports: [AuthService, TwoFactorAuthService, JwtModule],
 })
 export class AuthModule {}
 
