@@ -411,8 +411,8 @@ export class KnowledgeBaseService {
       where: {
         published: true,
         OR: [
-          { title: { contains: query, mode: 'insensitive' } },
-          { content: { contains: query, mode: 'insensitive' } },
+          { title: { contains: query } },
+          { content: { contains: query } },
         ],
       },
       take: limit,
@@ -446,16 +446,7 @@ export class KnowledgeBaseService {
       where: {
         published: true,
         NOT: { id: articleId },
-        OR: [
-          {
-            categoryId: article.categoryId,
-          },
-          {
-            tags: {
-              hasSome: article.tags,
-            },
-          },
-        ],
+        categoryId: article.categoryId,
       },
       take: limit,
       include: {
