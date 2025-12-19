@@ -3,12 +3,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api-client';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
+import { Card, Badge, Button, Input } from '@zed-hosting/ui-kit';
 import { Download, Filter, RefreshCcw } from 'lucide-react';
 import { formatDistance } from 'date-fns';
 
@@ -101,10 +96,10 @@ export default function AdminInvoicesPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6">
       <div>
         <h1 className="text-3xl font-bold">Számlák</h1>
-        <p className="text-muted-foreground mt-2">
+        <p className="text-gray-400 mt-2">
           Kifizetett rendelések és számlák kezelése
         </p>
       </div>
@@ -112,54 +107,40 @@ export default function AdminInvoicesPage() {
       {/* Statistics Cards */}
       {stats && (
         <div className="grid gap-4 md:grid-cols-3">
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium">Összes számla</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalInvoices}</div>
-            </CardContent>
+          <Card className="p-6">
+            <div className="text-sm font-medium text-gray-400 mb-2">Összes számla</div>
+            <div className="text-2xl font-bold">{stats.totalInvoices}</div>
           </Card>
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium">Összes bevétel</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {formatCurrency(stats.totalRevenue, 'HUF')}
-              </div>
-            </CardContent>
+          <Card className="p-6">
+            <div className="text-sm font-medium text-gray-400 mb-2">Összes bevétel</div>
+            <div className="text-2xl font-bold">
+              {formatCurrency(stats.totalRevenue, 'HUF')}
+            </div>
           </Card>
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium">Legutóbbi hónap</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {stats.revenueByMonth?.[0]
-                  ? formatCurrency(Number(stats.revenueByMonth[0].revenue), 'HUF')
-                  : '0 Ft'}
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                {stats.revenueByMonth?.[0]?.count || 0} számla
-              </p>
-            </CardContent>
+          <Card className="p-6">
+            <div className="text-sm font-medium text-gray-400 mb-2">Legutóbbi hónap</div>
+            <div className="text-2xl font-bold">
+              {stats.revenueByMonth?.[0]
+                ? formatCurrency(Number(stats.revenueByMonth[0].revenue), 'HUF')
+                : '0 Ft'}
+            </div>
+            <p className="text-xs text-gray-400 mt-1">
+              {stats.revenueByMonth?.[0]?.count || 0} számla
+            </p>
           </Card>
         </div>
       )}
 
       {/* Filters */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Filter className="h-5 w-5" />
-            Szűrők
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+      <Card className="p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <Filter className="h-5 w-5" />
+          <h2 className="text-xl font-semibold">Szűrők</h2>
+        </div>
+        <div className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <div>
-              <label className="text-sm font-medium">Dátumtól</label>
+              <label className="text-sm font-medium block mb-1">Dátumtól</label>
               <Input
                 type="date"
                 value={filters.dateFrom}
@@ -167,7 +148,7 @@ export default function AdminInvoicesPage() {
               />
             </div>
             <div>
-              <label className="text-sm font-medium">Dátumig</label>
+              <label className="text-sm font-medium block mb-1">Dátumig</label>
               <Input
                 type="date"
                 value={filters.dateTo}
@@ -175,7 +156,7 @@ export default function AdminInvoicesPage() {
               />
             </div>
             <div>
-              <label className="text-sm font-medium">Min összeg</label>
+              <label className="text-sm font-medium block mb-1">Min összeg</label>
               <Input
                 type="number"
                 placeholder="0"
@@ -184,7 +165,7 @@ export default function AdminInvoicesPage() {
               />
             </div>
             <div>
-              <label className="text-sm font-medium">Max összeg</label>
+              <label className="text-sm font-medium block mb-1">Max összeg</label>
               <Input
                 type="number"
                 placeholder="Nincs limit"
@@ -195,72 +176,62 @@ export default function AdminInvoicesPage() {
           </div>
 
           <div className="flex gap-2">
-            <Select
+            <select
               value={filters.sortBy}
-              onValueChange={(value: any) => setFilters({ ...filters, sortBy: value })}
+              onChange={(e: any) => setFilters({ ...filters, sortBy: e.target.value })}
+              className="px-3 py-2 border border-gray-700 rounded bg-gray-800 text-white"
             >
-              <SelectTrigger className="w-[200px]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="paidAt">Fizetés dátuma</SelectItem>
-                <SelectItem value="createdAt">Létrehozás dátuma</SelectItem>
-                <SelectItem value="totalAmount">Összeg</SelectItem>
-              </SelectContent>
-            </Select>
+              <option value="paidAt">Fizetés dátuma</option>
+              <option value="createdAt">Létrehozás dátuma</option>
+              <option value="totalAmount">Összeg</option>
+            </select>
 
-            <Select
+            <select
               value={filters.sortOrder}
-              onValueChange={(value: any) => setFilters({ ...filters, sortOrder: value })}
+              onChange={(e: any) => setFilters({ ...filters, sortOrder: e.target.value })}
+              className="px-3 py-2 border border-gray-700 rounded bg-gray-800 text-white"
             >
-              <SelectTrigger className="w-[150px]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="desc">Csökkenő</SelectItem>
-                <SelectItem value="asc">Növekvő</SelectItem>
-              </SelectContent>
-            </Select>
+              <option value="desc">Csökkenő</option>
+              <option value="asc">Növekvő</option>
+            </select>
 
             <Button variant="outline" onClick={() => refetch()}>
               <RefreshCcw className="h-4 w-4 mr-2" />
               Frissítés
             </Button>
           </div>
-        </CardContent>
+        </div>
       </Card>
 
       {/* Invoices Table */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Számlák listája</CardTitle>
-          <CardDescription>
-            {invoicesData?.pagination.total || 0} számla összesen
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {isLoading ? (
-            <div className="text-center py-8">Betöltés...</div>
-          ) : (
-            <>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Számla ID</TableHead>
-                    <TableHead>Felhasználó</TableHead>
-                    <TableHead>Csomag</TableHead>
-                    <TableHead>Összeg</TableHead>
-                    <TableHead>Fizetve</TableHead>
-                    <TableHead>Műveletek</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
+      <Card className="p-6">
+        <h2 className="text-xl font-semibold mb-2">Számlák listája</h2>
+        <p className="text-gray-400 mb-4">
+          {invoicesData?.pagination.total || 0} számla összesen
+        </p>
+        {isLoading ? (
+          <div className="text-center py-8">Betöltés...</div>
+        ) : (
+          <>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-gray-700">
+                    <th className="text-left py-3 px-4">Számla ID</th>
+                    <th className="text-left py-3 px-4">Felhasználó</th>
+                    <th className="text-left py-3 px-4">Csomag</th>
+                    <th className="text-left py-3 px-4">Összeg</th>
+                    <th className="text-left py-3 px-4">Fizetve</th>
+                    <th className="text-left py-3 px-4">Műveletek</th>
+                  </tr>
+                </thead>
+                <tbody>
                   {invoicesData?.data.map((invoice) => (
-                    <TableRow key={invoice.id}>
-                      <TableCell className="font-mono text-sm">
+                    <tr key={invoice.id} className="border-b border-gray-700 hover:bg-gray-800">
+                      <td className="py-3 px-4 font-mono text-sm">
                         {invoice.id.substring(0, 8)}...
-                      </TableCell>
-                      <TableCell>
+                      </td>
+                      <td className="py-3 px-4">
                         <div>
                           <div className="font-medium">{invoice.user.email}</div>
                           {invoice.user.tenant && (
@@ -269,22 +240,22 @@ export default function AdminInvoicesPage() {
                             </Badge>
                           )}
                         </div>
-                      </TableCell>
-                      <TableCell>{invoice.plan.name}</TableCell>
-                      <TableCell className="font-semibold">
+                      </td>
+                      <td className="py-3 px-4">{invoice.plan.name}</td>
+                      <td className="py-3 px-4 font-semibold">
                         {formatCurrency(invoice.totalAmount, invoice.currency)}
-                      </TableCell>
-                      <TableCell>
+                      </td>
+                      <td className="py-3 px-4">
                         <div className="text-sm">
                           {new Date(invoice.paidAt).toLocaleDateString('hu-HU')}
-                          <div className="text-xs text-muted-foreground">
+                          <div className="text-xs text-gray-400">
                             {formatDistance(new Date(invoice.paidAt), new Date(), {
                               addSuffix: true,
                             })}
                           </div>
                         </div>
-                      </TableCell>
-                      <TableCell>
+                      </td>
+                      <td className="py-3 px-4">
                         <Button
                           variant="outline"
                           size="sm"
@@ -293,41 +264,41 @@ export default function AdminInvoicesPage() {
                           <Download className="h-4 w-4 mr-1" />
                           Letöltés
                         </Button>
-                      </TableCell>
-                    </TableRow>
+                      </td>
+                    </tr>
                   ))}
-                </TableBody>
-              </Table>
+                </tbody>
+              </table>
+            </div>
 
-              {/* Pagination */}
-              {invoicesData && invoicesData.pagination.totalPages > 1 && (
-                <div className="flex items-center justify-between mt-4">
-                  <div className="text-sm text-muted-foreground">
-                    {filters.page}. oldal / {invoicesData.pagination.totalPages} összesen
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      disabled={filters.page === 1}
-                      onClick={() => setFilters({ ...filters, page: filters.page - 1 })}
-                    >
-                      Előző
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      disabled={filters.page >= invoicesData.pagination.totalPages}
-                      onClick={() => setFilters({ ...filters, page: filters.page + 1 })}
-                    >
-                      Következő
-                    </Button>
-                  </div>
+            {/* Pagination */}
+            {invoicesData && invoicesData.pagination.totalPages > 1 && (
+              <div className="flex items-center justify-between mt-4">
+                <div className="text-sm text-gray-400">
+                  {filters.page}. oldal / {invoicesData.pagination.totalPages} összesen
                 </div>
-              )}
-            </>
-          )}
-        </CardContent>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={filters.page === 1}
+                    onClick={() => setFilters({ ...filters, page: filters.page - 1 })}
+                  >
+                    Előző
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={filters.page >= invoicesData.pagination.totalPages}
+                    onClick={() => setFilters({ ...filters, page: filters.page + 1 })}
+                  >
+                    Következő
+                  </Button>
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </Card>
     </div>
   );
