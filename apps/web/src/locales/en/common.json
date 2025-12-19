@@ -4,7 +4,8 @@
     "titleHighlight": "Game Server",
     "titleSuffix": "Hosting",
     "subtitle": "Enterprise-grade performance for your gaming community. Deploy servers in seconds with our automated cloud platform.",
-    "ctaButton": "Get Started for Free"
+    "ctaButton": "Get Started for Free",
+    "learnMore": "Learn more"
   },
   "games": {
     "title": "Supported Games",
@@ -26,6 +27,11 @@
     "instantDeploy": {
       "title": "Instant Deployment",
       "description": "Your server is ready in seconds. Automated deployment with one click."
+      "cta": {
+        "title": "Start today",
+        "subtitle": "Create your first server in minutes and manage it from a modern dashboard.",
+        "button": "Browse plans"
+      },
     },
     "instantDeployment": {
       "title": "Instant Deployment",

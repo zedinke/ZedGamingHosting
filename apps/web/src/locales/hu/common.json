@@ -4,7 +4,8 @@
     "titleHighlight": "Game Server",
     "titleSuffix": "Hosting",
     "subtitle": "Enterprise szintű teljesítmény a gaming közösséged számára. Telepíts szervereket másodpercek alatt automatizált cloud platformunkkal.",
-    "ctaButton": "Ingyen Kezdj El"
+    "ctaButton": "Ingyen Kezdj El",
+    "learnMore": "Tudj meg többet"
   },
   "games": {
     "title": "Támogatott Játékok",
@@ -51,6 +52,11 @@
       "title": "24/7 Ügyfélszolgálat",
       "description": "Magyar nyelvű támogatás non-stop, hogy mindig segíthessünk amikor szükséged van rá."
     }
+  },
+  "cta": {
+    "title": "Kezdd el még ma",
+    "subtitle": "Hozd létre első szervered percek alatt és irányítsd egy modern vezérlőpultból.",
+    "button": "Tervek megtekintése"
   },
   "footer": {
     "copyright": "© {year} ZedGamingHosting. Minden jog fenntartva.",
@@ -124,8 +130,18 @@
         "settings": "Beállítások",
         "metrics": "Metrikák"
       },
+      "files": {
+        "title": "Fájlkezelő",
+        "description": "Szerver fájlok kezelése"
+      },
+      "console": {
+        "title": "Szerver Konzol",
+        "description": "Szerver konzol kimenet és parancsok küldése",
+        "commandPlaceholder": "Írj be egy parancsot..."
+      },
       "metrics": {
         "title": "Szerver Metrikák",
+        "description": "Szerver teljesítmény és erőforrás használat",
         "loading": "Metrikák betöltése...",
         "noData": "Nincs elérhető metrika adat",
         "cpu": "CPU Használat",

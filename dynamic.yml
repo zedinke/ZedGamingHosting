@@ -14,6 +14,8 @@ http:
       entryPoints:
         - websecure
       service: web
+      middlewares:
+        - security-headers
       tls:
         certResolver: letsencrypt
       priority: 1
@@ -32,6 +34,9 @@ http:
       entryPoints:
         - websecure
       service: api
+      middlewares:
+        - security-headers
+        - api-ratelimit
       tls:
         certResolver: letsencrypt
       priority: 10
@@ -51,6 +56,8 @@ http:
       entryPoints:
         - websecure
       service: adminer
+      middlewares:
+        - security-headers
       tls:
         certResolver: letsencrypt
       priority: 20
@@ -60,6 +67,23 @@ http:
       redirectScheme:
         scheme: https
         permanent: true
+
+    security-headers:
+      headers:
+        stsSeconds: 15552000
+        stsIncludeSubdomains: true
+        stsPreload: true
+        forceSTSHeader: true
+        contentTypeNosniff: true
+        frameDeny: true
+        referrerPolicy: "no-referrer-when-downgrade"
+        permissionsPolicy: "camera=(), microphone=(), geolocation=(), payment=()"
+
+    api-ratelimit:
+      rateLimit:
+        average: 100
+        burst: 200
+        period: 1m
 
   services:
     web:
