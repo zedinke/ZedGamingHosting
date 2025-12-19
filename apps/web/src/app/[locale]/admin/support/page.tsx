@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
+import { useSocketContext } from '../../../../contexts/socket-context';
 import styles from './support.module.css';
 
 interface SupportTicket {
@@ -13,7 +14,21 @@ interface SupportTicket {
   status: 'OPEN' | 'IN_PROGRESS' | 'WAITING_CUSTOMER' | 'RESOLVED' | 'CLOSED';
   user: { email: string };
   createdAt: string;
-  comments: any[];
+  comments: TicketComment[];
+}
+
+interface TicketComment {
+  id: string;
+  message: string;
+  authorId: string;
+  createdAt: string;
+}
+
+interface TicketEvent {
+  ticket: SupportTicket;
+  ticketId: string;
+  comment: TicketComment;
+  newStatus: string;
 }
 
 interface Stats {
@@ -41,6 +56,7 @@ const priorityColors = {
 
 export default function AdminSupportPage() {
   const locale = useLocale();
+  const socket = useSocketContext();
   const [tickets, setTickets] = useState<SupportTicket[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -52,12 +68,9 @@ export default function AdminSupportPage() {
     category: '',
   });
   const [error, setError] = useState('');
+  const [lastUpdate, setLastUpdate] = useState<string>('');
 
-  useEffect(() => {
-    fetchData();
-  }, [page, filters]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -87,11 +100,75 @@ export default function AdminSupportPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, filters]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  // Handle new tickets via WebSocket
+  const handleNewTicket = useCallback((data: TicketEvent) => {
+    setTickets((prevTickets) => {
+      const updated = [data.ticket, ...prevTickets];
+      return updated.slice(0, 10); // Keep first 10
+    });
+    setLastUpdate(new Date().toLocaleTimeString());
+    if (stats) {
+      setStats({ ...stats, total: stats.total + 1 });
+    }
+  }, [stats]);
+
+  // Handle comment updates via WebSocket
+  const handleTicketComment = useCallback((data: TicketEvent) => {
+    setTickets((prevTickets) =>
+      prevTickets.map((ticket) =>
+        ticket.id === data.ticketId
+          ? { ...ticket, comments: [...(ticket.comments || []), data.comment] }
+          : ticket
+      )
+    );
+    setLastUpdate(new Date().toLocaleTimeString());
+  }, []);
+
+  // Handle status changes via WebSocket
+  const handleStatusChanged = useCallback((data: TicketEvent) => {
+    setTickets((prevTickets) =>
+      prevTickets.map((ticket) =>
+        ticket.id === data.ticketId
+          ? { ...ticket, status: data.newStatus as 'OPEN' | 'IN_PROGRESS' | 'WAITING_CUSTOMER' | 'RESOLVED' | 'CLOSED' }
+          : ticket
+      )
+    );
+    setLastUpdate(new Date().toLocaleTimeString());
+  }, []);
+
+  // Subscribe to WebSocket events for admin role
+  useEffect(() => {
+    if (!socket) return;
+
+    // Listen to support events
+    const unsubNew = socket.subscribe('support:newTicket', handleNewTicket);
+    const unsubComment = socket.subscribe('support:newComment', handleTicketComment);
+    const unsubStatus = socket.subscribe('support:statusChanged', handleStatusChanged);
+
+    return () => {
+      unsubNew();
+      unsubComment();
+      unsubStatus();
+    };
+  }, [socket, handleNewTicket, handleTicketComment, handleStatusChanged]);
 
   return (
     <div className={styles.container}>
-      <h1>Támogatási Jegyek Kezelés</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+        <h1>Támogatási Jegyek Kezelés</h1>
+        {lastUpdate && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: '#10b981' }}>
+            <div style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%', animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' }} />
+            <span>Élő frissítések: {lastUpdate}</span>
+          </div>
+        )}
+      </div>
 
       {stats && (
         <div className={styles.statsGrid}>

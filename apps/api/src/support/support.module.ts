@@ -3,9 +3,10 @@ import { SupportTicketService } from './support-ticket.service';
 import { SupportTicketController } from './support-ticket.controller';
 import { DbModule } from '@zed-hosting/db';
 import { EmailModule } from '../email/email.module';
+import { WebSocketModule } from '../websocket/websocket.module';
 
 @Module({
-  imports: [DbModule, EmailModule],
+  imports: [DbModule, EmailModule, WebSocketModule],
   providers: [SupportTicketService],
   controllers: [SupportTicketController],
   exports: [SupportTicketService],

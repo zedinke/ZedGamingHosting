@@ -10,10 +10,12 @@ import {
   Request,
   HttpCode,
   Logger,
+  OnModuleInit,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminGuard } from '../auth/guards/admin.guard';
 import { SupportTicketService } from './support-ticket.service';
+import { WebSocketGateway } from '../websocket/websocket.gateway';
 import { CreateSupportTicketDto, UpdateTicketDto, AddCommentDto } from './dto/support-ticket.dto';
 
 /**
@@ -22,10 +24,20 @@ import { CreateSupportTicketDto, UpdateTicketDto, AddCommentDto } from './dto/su
  */
 @Controller('support/tickets')
 @UseGuards(JwtAuthGuard)
-export class SupportTicketController {
+export class SupportTicketController implements OnModuleInit {
   private readonly logger = new Logger(SupportTicketController.name);
 
-  constructor(private readonly supportTicketService: SupportTicketService) {}
+  constructor(
+    private readonly supportTicketService: SupportTicketService,
+    private readonly webSocketGateway: WebSocketGateway,
+  ) {}
+
+  /**
+   * Inject WebSocket gateway into support service on module initialization
+   */
+  onModuleInit() {
+    this.supportTicketService.setWebSocketGateway(this.webSocketGateway);
+  }
 
   /**
    * Create a new support ticket
