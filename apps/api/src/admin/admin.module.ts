@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { AdminController } from './admin.controller';
 import { AdminStatsController } from './admin-stats.controller';
 import { AdminUsersController } from './admin-users.controller';
-import { AdminSettingsController } from './admin-settings.controller';
 import { AdminSupportController } from './admin-support.controller';
 import { AdminService } from './admin.service';
 import { EmailModule } from '../email/email.module';
@@ -16,7 +15,7 @@ import { SupportModule } from '../support/support.module';
  */
 @Module({
   imports: [AuthModule, DatabaseModule, AuditModule, EmailModule, SupportModule],
-  controllers: [AdminController, AdminStatsController, AdminUsersController, AdminSettingsController, AdminSupportController],
+  controllers: [AdminController, AdminStatsController, AdminUsersController, AdminSupportController],
   providers: [AdminService],
   exports: [AdminService],
 })
