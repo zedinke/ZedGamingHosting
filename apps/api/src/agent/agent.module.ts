@@ -5,12 +5,13 @@ import { DatabaseModule } from '../database/database.module';
 import { NodesModule } from '../nodes/nodes.module';
 import { TasksModule } from '../tasks/tasks.module';
 import { WebSocketModule } from '../websocket/websocket.module';
+import { EmailModule } from '../email/email.module';
 
 /**
  * Agent Module - handles communication with daemon instances
  */
 @Module({
-  imports: [DatabaseModule, NodesModule, TasksModule, WebSocketModule],
+  imports: [DatabaseModule, NodesModule, TasksModule, WebSocketModule, EmailModule],
   controllers: [AgentController],
   providers: [AgentService],
   exports: [AgentService],

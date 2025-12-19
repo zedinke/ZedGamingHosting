@@ -1,6 +1,7 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
 import { AppWebSocketGateway } from '../websocket/websocket.gateway';
+import { EmailService } from '../email/email.service';
 
 /**
  * Agent Service - business logic for daemon communication
@@ -10,7 +11,10 @@ export class AgentService {
   private readonly logger = new Logger(AgentService.name);
   private webSocketGateway: AppWebSocketGateway | null = null;
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly emailService: EmailService,
+  ) {}
 
   /**
    * Sets WebSocket gateway for broadcasting metrics (lazy injection)
@@ -224,6 +228,41 @@ export class AgentService {
           where: { uuid: payload.serverUuid },
           data: { status: 'STOPPED' },
         });
+      }
+    }
+
+    // If this was a DEPROVISION task and it succeeded, mark server as STOPPED and notify user
+    if (task.type === 'DEPROVISION' && data.status === 'COMPLETED') {
+      const payload = task.data as any;
+      if (payload?.serverUuid) {
+        // Mark server as STOPPED (container removed). Data cleanup handled separately.
+        await this.prisma.gameServer.update({
+          where: { uuid: payload.serverUuid },
+          data: { status: 'STOPPED' },
+        });
+
+        // Send deprovision confirmation email (best-effort)
+        try {
+          if (payload?.userId) {
+            const user = await this.prisma.user.findUnique({
+              where: { id: payload.userId },
+              select: { email: true },
+            });
+
+            if (user) {
+              const serverName = `Server ${payload.serverUuid.substring(0, 8)}`;
+              await this.emailService.sendServerDeprovisionEmail(
+                user.email,
+                user.email.split('@')[0],
+                serverName,
+                payload.orderId ?? 'unknown',
+                payload.reason ?? 'USER_REQUEST',
+              );
+            }
+          }
+        } catch (emailError: any) {
+          this.logger.error(`Failed to send deprovision email: ${emailError?.message || 'Unknown error'}`);
+        }
       }
     }
 
