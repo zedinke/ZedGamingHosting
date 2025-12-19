@@ -4,81 +4,58 @@
 
 ### ✅ Ebben a Session-ben Elkészült
 
-#### 1. **WebSocket Real-Time Gateway** (TELJES)
-- **Backend Implementation**
-  - NestJS WebSocket gateway with JWT authentication
-  - Room-based event distribution (user:userId, role:role, ticket:id, server:uuid)
-  - Support for socket.io with WebSocket and polling transports
-  - Event-driven architecture for real-time updates
+#### 1. **Server Real-Time Metrics Streaming** (TELJES)
+- **Backend Integration**
+  - Agent service now broadcasts server metrics to WebSocket gateway
+  - Real-time CPU, RAM, Disk, and Network metrics
+  - Server status propagation through WebSocket
+  - Metrics broadcast to all connected admins
   
-- **Support Ticket Real-Time Events**
-  - `support:newComment` - Broadcast new comments in real-time
-  - `support:statusChanged` - Notify on ticket status updates
-  - `support:userTyping` - Typing indicators for collaborative editing
-  - `support:assigned` - Assignment notifications
+- **Admin Dashboard Enhancement**
+  - Server detail page integrated with WebSocket
+  - Live metrics display with progress bars
+  - Color-coded resource usage (green < 60%, orange 60-80%, red > 80%)
+  - Last update timestamp in server metrics
+  - Smooth metric transitions with CSS animations
   
-- **Server Status Real-Time Events**
-  - `server:statusChanged` - Server status change broadcasts
-  - `server:metricsUpdate` - CPU, RAM, Disk metrics streaming
-  - `server:consoleOutput` - Live console output
-  
-- **Staff Online Status**
-  - `staff:online` - Notify when support staff comes online
-  - `staff:offline` - Notify when support staff goes offline
-  - Support staff room subscriptions
+- **Implementation Details**
+  - Agent.service.ts injection of WebSocketGateway
+  - Metrics broadcasting on every heartbeat (15 seconds)
+  - Server node identification for targeted broadcasting
+  - Fallback to 30-second refetch if WebSocket unavailable
 
-- **Frontend WebSocket Hook**
-  - `useSocket()` hook with auto-reconnection
-  - Message buffering when disconnected
-  - Event subscription management
-  - Connection status tracking ('disconnected', 'connecting', 'connected', 'error')
-  - Periodic heartbeat/ping
-  - Helper methods for support and server subscriptions
+#### 2. **Admin Support Dashboard Real-Time Updates** (TELJES)
+- **WebSocket Integration**
+  - Real-time new ticket notifications
+  - Live comment updates on tickets
+  - Status change broadcasts
+  - Support staff online/offline tracking infrastructure
   
-- **Socket Provider Context**
-  - App-wide WebSocket context for all components
-  - Integrated into app layout
-  - `useSocketContext()` hook for accessing socket anywhere
+- **Frontend Features**
+  - Live update indicator with pulse animation
+  - Last update timestamp display
+  - Automatic ticket list refresh on new events
+  - Statistics update when new tickets arrive
+  - Comment count auto-increment
   
-- **Support Ticket Real-Time Integration**
-  - Support ticket detail page subscribes to real-time updates
-  - New comments appear instantly via WebSocket
-  - Status changes broadcast to all subscribers
-  - Typing indicators show when other users are typing
-  - No need to manually refresh - updates happen live
+- **WebSocket Events**
+  - `support:newTicket` - New ticket creation broadcast
+  - `support:newComment` - New comment on ticket
+  - `support:statusChanged` - Ticket status updates
+  - All events include timestamp
   
-#### 2. **Two-Factor Authentication Login Integration** (TELJES)
-- **Backend API Endpoints**
-  - POST `/auth/verify-2fa` - Verify TOTP code with temp token
-  - POST `/auth/verify-backup-code` - Verify backup code with temp token
-  - Temporary session tokens (5 minute expiry)
-  - TOTP verification with ±2 window tolerance
-  
-- **Authentication Flow**
-  - Login endpoint checks if user has 2FA enabled
-  - If enabled, returns temp token instead of access token
-  - Frontend shows 2FA code input form
-  - User can switch to backup code option
-  - After successful verification, issue full access tokens
-  
-- **Frontend Login Page**
-  - Multi-step login form (credentials, 2FA, backup code)
-  - 6-digit 2FA code input with auto-formatting
-  - Backup code fallback option
-  - "Remember Device" checkbox (for future use)
-  - Smooth transitions between login steps
-  - Error handling and loading states
-  
-- **Backup Code Support**
-  - Users can use backup codes if authenticator is unavailable
-  - Single-use tracking (mark as used after verification)
-  - Clear messaging about regenerating codes after use
+- **Module Wiring**
+  - Support module imports WebSocketModule
+  - Support ticket controller injects WebSocket gateway on init
+  - Support ticket service receives gateway for event broadcasting
+  - Proper lazy injection to avoid circular dependencies
 
 ### ✅ Előző Session-ben Elkészült
 
+- WebSocket Real-Time Gateway (WebSocket, Socket.io, JWT auth)
+- 2FA Login Integration (TOTP, Backup codes, Temp tokens)
 - Support Ticketing System (100% complete)
-- Two-Factor Authentication Backend (100% complete)
-- Two-Factor Authentication Frontend (100% complete)
+- Two-Factor Authentication System (100% complete)
 - User Dashboard & Reseller System
 - Production Monitoring & Error Logging
 - Email Notification System (9 email templates)
@@ -100,7 +77,17 @@
    - Frontend login with 2FA support
    - Temporary session tokens
 
-**Összesen ebben a session-ben**: 14 módosított/új fájl, ~1972 sor
+3. **aff3d87** - Server real-time metrics via WebSocket (5 files, 291 insertions)
+   - Agent service WebSocket integration
+   - Admin server detail page real-time metrics
+   - Metrics broadcasting on heartbeat
+
+4. **f6e1ca6** - Admin support dashboard real-time updates (3 files, 102 insertions)
+   - Support dashboard WebSocket integration
+   - Live ticket update handlers
+   - Real-time event listeners
+
+**Összesen ebben a session-ben**: 22 módosított/új fájl, ~2365 sor
 
 ## 🚀 Maradékok (Next Priority)
 
