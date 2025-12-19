@@ -20,6 +20,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   // Initialize theme from localStorage or system preference
   React.useEffect(() => {
+     if (typeof window === 'undefined') return;
+   
     const stored = localStorage.getItem('theme') as Theme | null;
     const initialTheme = stored || 'dark';
     setThemeState(initialTheme);
@@ -28,6 +30,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   // Apply theme to document
   const applyTheme = React.useCallback((newTheme: Theme) => {
+     if (typeof window === 'undefined') return;
+   
     const root = document.documentElement;
     
     if (newTheme === 'system') {
@@ -46,6 +50,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   // Watch for system theme changes
   React.useEffect(() => {
+     if (typeof window === 'undefined') return;
+   
     if (theme === 'system') {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
       const handleChange = (e: MediaQueryListEvent) => {
@@ -63,7 +69,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   const setTheme = React.useCallback((newTheme: Theme) => {
     setThemeState(newTheme);
-    localStorage.setItem('theme', newTheme);
+     if (typeof window !== 'undefined') {
+       localStorage.setItem('theme', newTheme);
+     }
     applyTheme(newTheme);
   }, [applyTheme]);
 

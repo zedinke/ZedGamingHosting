@@ -9,6 +9,8 @@ import { errorLogger } from '../lib/error-logger';
  */
 export function ErrorLoggerInitializer() {
   useEffect(() => {
+     if (typeof window === 'undefined') return;
+   
     // Initialize error logger
     console.log('✅ Error logger initialized');
 
