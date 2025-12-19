@@ -735,3 +735,28 @@ model ArticleVersion {
   @@unique([articleId, version])
 }
 
+// ============================================
+// INVOICE METADATA - SEQUENTIAL NUMBERING
+// ============================================
+
+model InvoiceMetadata {
+  id              String   @id @default(uuid())
+  
+  // Tenant-specific or global invoice counter
+  tenantId        String?  // null = global counter
+  
+  // Sequential numbering
+  prefix          String   @default("INV") // e.g., "INV", "INVOICE"
+  sequenceNumber  Int      @default(1) // Incremental sequence: 1, 2, 3...
+  lastUsedDate    DateTime @default(now())
+  
+  // Year-based reset (optional)
+  year            Int?     // If set, counter resets each year
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@unique([tenantId, prefix, year])
+  @@index([tenantId])
+}
+

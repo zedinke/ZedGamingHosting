@@ -3,6 +3,7 @@ import { AdminController } from './admin.controller';
 import { AdminStatsController } from './admin-stats.controller';
 import { AdminUsersController } from './admin-users.controller';
 import { AdminSupportController } from './admin-support.controller';
+import { AdminInvoicesController } from './admin-invoices.controller';
 import { AdminService } from './admin.service';
 import { EmailModule } from '../email/email.module';
 import { AuthModule } from '../auth/auth.module';
@@ -15,7 +16,13 @@ import { SupportModule } from '../support/support.module';
  */
 @Module({
   imports: [AuthModule, DatabaseModule, AuditModule, EmailModule, SupportModule],
-  controllers: [AdminController, AdminStatsController, AdminUsersController, AdminSupportController],
+  controllers: [
+    AdminController, 
+    AdminStatsController, 
+    AdminUsersController, 
+    AdminSupportController, 
+    AdminInvoicesController
+  ],
   providers: [AdminService],
   exports: [AdminService],
 })

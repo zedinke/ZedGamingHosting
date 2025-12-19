@@ -30,7 +30,11 @@ export class InvoiceService {
     const order = await this.prisma.order.findUnique({
       where: { id: orderId },
       include: {
-        user: true,
+        user: {
+          include: {
+            tenant: true,
+          },
+        },
         plan: true,
       },
     });
@@ -43,7 +47,10 @@ export class InvoiceService {
       throw new Error(`Order ${orderId} is not paid yet`);
     }
 
-    const invoiceNumber = this.generateInvoiceNumber(order.createdAt, order.id);
+    const invoiceNumber = await this.generateInvoiceNumber(
+      order.createdAt,
+      order.user?.tenant?.id
+    );
     const priceSnapshot = (order.priceSnapshot as any) || {};
     const displayInfo = priceSnapshot.display || {};
 
@@ -261,13 +268,52 @@ export class InvoiceService {
   }
 
   /**
-   * Generate a unique invoice number
+   * Generate a unique invoice number using InvoiceMetadata table
+   * Format: PREFIX-YEAR-NNNNNN (e.g., INV-2025-000001)
    */
-  private generateInvoiceNumber(createdAt: Date, orderId: string): string {
+  private async generateInvoiceNumber(createdAt: Date, tenantId?: string): Promise<string> {
     const year = createdAt.getFullYear();
-    const month = String(createdAt.getMonth() + 1).padStart(2, '0');
-    const orderHash = orderId.substring(0, 6).toUpperCase();
-    return `INV-${year}-${month}-${orderHash}`;
+    const prefix = 'INV';
+
+    // Use transaction to safely increment counter
+    const metadata = await this.prisma.$transaction(async (tx) => {
+      // Find or create invoice metadata for this tenant/year
+      let meta = await tx.invoiceMetadata.findFirst({
+        where: {
+          tenantId: tenantId || null,
+          prefix,
+          year,
+        },
+      });
+
+      if (!meta) {
+        // Create new counter for this year
+        meta = await tx.invoiceMetadata.create({
+          data: {
+            tenantId: tenantId || null,
+            prefix,
+            year,
+            sequenceNumber: 1,
+            lastUsedDate: createdAt,
+          },
+        });
+      } else {
+        // Increment counter
+        meta = await tx.invoiceMetadata.update({
+          where: { id: meta.id },
+          data: {
+            sequenceNumber: { increment: 1 },
+            lastUsedDate: createdAt,
+          },
+        });
+      }
+
+      return meta;
+    });
+
+    // Format: INV-2025-000001
+    const paddedNumber = String(metadata.sequenceNumber).padStart(6, '0');
+    return `${prefix}-${year}-${paddedNumber}`;
   }
 
   /**
