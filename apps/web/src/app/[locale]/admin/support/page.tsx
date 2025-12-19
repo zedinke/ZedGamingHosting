@@ -15,6 +15,12 @@ interface SupportTicket {
   user: { email: string };
   createdAt: string;
   comments: TicketComment[];
+  assignedToId?: string | null;
+  assignedTo?: { id: string; email: string; firstName: string; lastName: string } | null;
+  assignedAt?: string | null;
+  slaResponseDeadline?: string | null;
+  slaResolveDeadline?: string | null;
+  firstResponseAt?: string | null;
 }
 
 interface TicketComment {
@@ -29,6 +35,8 @@ interface TicketEvent {
   ticketId: string;
   comment: TicketComment;
   newStatus: string;
+  assignedToId?: string;
+  assignedTo?: { id: string; email: string; firstName: string; lastName: string };
 }
 
 interface Stats {
@@ -37,6 +45,14 @@ interface Stats {
   inProgress: number;
   resolved: number;
   avgResponseTime: number;
+}
+
+interface SupportStaffMember {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  activeTickets: number;
 }
 
 const statusTexts = {
@@ -69,6 +85,9 @@ export default function AdminSupportPage() {
   });
   const [error, setError] = useState('');
   const [lastUpdate, setLastUpdate] = useState<string>('');
+  const [supportStaff, setSupportStaff] = useState<SupportStaffMember[]>([]);
+  const [assigningTicketId, setAssigningTicketId] = useState<string | null>(null);
+  const [overdueTickets, setOverdueTickets] = useState<SupportTicket[]>([]);
 
   const fetchData = useCallback(async () => {
     try {
@@ -78,6 +97,18 @@ export default function AdminSupportPage() {
       const statsRes = await fetch('/api/admin/support/stats');
       if (statsRes.ok) {
         setStats(await statsRes.json());
+      }
+
+      // Fetch support staff workload
+      const staffRes = await fetch('/api/admin/support/workload');
+      if (staffRes.ok) {
+        setSupportStaff(await staffRes.json());
+      }
+
+      // Fetch overdue SLA tickets
+      const overdueRes = await fetch('/api/admin/support/overdue');
+      if (overdueRes.ok) {
+        setOverdueTickets(await overdueRes.json());
       }
 
       // Fetch tickets
@@ -142,6 +173,93 @@ export default function AdminSupportPage() {
     setLastUpdate(new Date().toLocaleTimeString());
   }, []);
 
+  // Handle ticket assignments via WebSocket
+  const handleTicketAssigned = useCallback((data: TicketEvent) => {
+    setTickets((prevTickets) =>
+      prevTickets.map((ticket) =>
+        ticket.id === data.ticketId
+          ? { 
+              ...ticket, 
+              assignedToId: data.assignedToId, 
+              assignedTo: data.assignedTo,
+              assignedAt: new Date().toISOString()
+            }
+          : ticket
+      )
+    );
+    setLastUpdate(new Date().toLocaleTimeString());
+    // Refresh staff workload
+    fetch('/api/admin/support/workload').then(res => res.json()).then(setSupportStaff);
+  }, []);
+
+  // Assign ticket to specific staff member
+  const assignTicket = async (ticketId: string, assignedToId: string) => {
+    try {
+      const res = await fetch(`/api/admin/support/${ticketId}/assign`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ assignedToId }),
+      });
+
+      if (!res.ok) throw new Error('Failed to assign ticket');
+
+      const updatedTicket = await res.json();
+      setTickets(prevTickets =>
+        prevTickets.map(t => (t.id === ticketId ? updatedTicket : t))
+      );
+      setAssigningTicketId(null);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to assign ticket');
+    }
+  };
+
+  // Auto-assign ticket to least loaded staff
+  const autoAssignTicket = async (ticketId: string) => {
+    try {
+      const res = await fetch(`/api/admin/support/${ticketId}/auto-assign`, {
+        method: 'POST',
+      });
+
+      if (!res.ok) throw new Error('Failed to auto-assign ticket');
+
+      const updatedTicket = await res.json();
+      if (updatedTicket) {
+        setTickets(prevTickets =>
+          prevTickets.map(t => (t.id === ticketId ? updatedTicket : t))
+        );
+      } else {
+        alert('Nincs elérhető támogatási munkatárs');
+      }
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to auto-assign ticket');
+    }
+  };
+
+  // Calculate SLA status
+  const getSlaStatus = (ticket: SupportTicket) => {
+    const now = new Date();
+    
+    if (!ticket.firstResponseAt && ticket.slaResponseDeadline) {
+      const deadline = new Date(ticket.slaResponseDeadline);
+      const hoursLeft = (deadline.getTime() - now.getTime()) / (1000 * 60 * 60);
+      
+      if (hoursLeft < 0) return { color: '#ef4444', text: 'Lejárt válasz határidő' };
+      if (hoursLeft < 1) return { color: '#f59e0b', text: `${Math.round(hoursLeft * 60)}p válaszra` };
+      return { color: '#10b981', text: `${Math.round(hoursLeft)}ó válaszra` };
+    }
+
+    if (ticket.status !== 'RESOLVED' && ticket.status !== 'CLOSED' && ticket.slaResolveDeadline) {
+      const deadline = new Date(ticket.slaResolveDeadline);
+      const hoursLeft = (deadline.getTime() - now.getTime()) / (1000 * 60 * 60);
+      
+      if (hoursLeft < 0) return { color: '#ef4444', text: 'Lejárt megoldás határidő' };
+      if (hoursLeft < 2) return { color: '#f59e0b', text: `${Math.round(hoursLeft * 60)}p megoldásra` };
+      return { color: '#10b981', text: `${Math.round(hoursLeft)}ó megoldásra` };
+    }
+
+    return null;
+  };
+
   // Subscribe to WebSocket events for admin role
   useEffect(() => {
     if (!socket) return;
@@ -150,13 +268,15 @@ export default function AdminSupportPage() {
     const unsubNew = socket.subscribe('support:newTicket', handleNewTicket);
     const unsubComment = socket.subscribe('support:newComment', handleTicketComment);
     const unsubStatus = socket.subscribe('support:statusChanged', handleStatusChanged);
+    const unsubAssigned = socket.subscribe('support:ticketAssigned', handleTicketAssigned);
 
     return () => {
       unsubNew();
       unsubComment();
       unsubStatus();
+      unsubAssigned();
     };
-  }, [socket, handleNewTicket, handleTicketComment, handleStatusChanged]);
+  }, [socket, handleNewTicket, handleTicketComment, handleStatusChanged, handleTicketAssigned]);
 
   return (
     <div className={styles.container}>
@@ -198,6 +318,41 @@ export default function AdminSupportPage() {
             <div className={styles.statValue}>
               {Math.round(stats.avgResponseTime)}m
             </div>
+            <div className={styles.statLabel}>Átl. Válaszidő</div>
+          </div>
+        </div>
+      )}
+
+      {overdueTickets.length > 0 && (
+        <div style={{
+          backgroundColor: '#fef2f2',
+          border: '1px solid #ef4444',
+          borderRadius: '8px',
+          padding: '1rem',
+          marginBottom: '1.5rem'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+            <span style={{ fontSize: '1.25rem' }}>⚠️</span>
+            <h3 style={{ margin: 0, color: '#ef4444' }}>SLA Határidő Túllépés ({overdueTickets.length})</h3>
+          </div>
+          <div style={{ fontSize: '0.875rem' }}>
+            {overdueTickets.slice(0, 3).map(ticket => (
+              <div key={ticket.id} style={{ padding: '0.25rem 0' }}>
+                <Link href={`/${locale}/admin/support/${ticket.id}`} style={{ color: '#dc2626', textDecoration: 'underline' }}>
+                  {ticket.ticketNumber}
+                </Link>
+                {' - '}
+                <span style={{ color: '#991b1b' }}>{ticket.subject}</span>
+              </div>
+            ))}
+            {overdueTickets.length > 3 && (
+              <div style={{ marginTop: '0.5rem', fontStyle: 'italic', color: '#991b1b' }}>
+                ...és még {overdueTickets.length - 3} jegy
+              </div>
+            )}
+          </div>
+        </div>
+      )}
             <div className={styles.statLabel}>Átl. Válaszidő</div>
           </div>
         </div>
@@ -259,45 +414,114 @@ export default function AdminSupportPage() {
                   <th>Ügyfél</th>
                   <th>Prioritás</th>
                   <th>Státusz</th>
+                  <th>Hozzárendelve</th>
+                  <th>SLA</th>
                   <th>Hozzászólások</th>
                   <th>Dátum</th>
                   <th>Műveletek</th>
                 </tr>
               </thead>
               <tbody>
-                {tickets.map((ticket) => (
-                  <tr key={ticket.id}>
-                    <td>
-                      <Link href={`/${locale}/admin/support/${ticket.id}`}>
-                        {ticket.ticketNumber}
-                      </Link>
-                    </td>
-                    <td>{ticket.user.email}</td>
-                    <td>
-                      <span
-                        className={styles.priority}
-                        style={{
-                          backgroundColor: priorityColors[ticket.priority],
-                        }}
-                      >
-                        {ticket.priority}
-                      </span>
-                    </td>
-                    <td>{statusTexts[ticket.status]}</td>
-                    <td>{ticket.comments?.length || 0}</td>
-                    <td>
-                      {new Date(ticket.createdAt).toLocaleDateString(locale)}
-                    </td>
-                    <td>
-                      <Link
-                        href={`/${locale}/admin/support/${ticket.id}`}
-                        className={styles.editLink}
-                      >
-                        Szerkesztés
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
+                {tickets.map((ticket) => {
+                  const slaStatus = getSlaStatus(ticket);
+                  return (
+                    <tr key={ticket.id}>
+                      <td>
+                        <Link href={`/${locale}/admin/support/${ticket.id}`}>
+                          {ticket.ticketNumber}
+                        </Link>
+                      </td>
+                      <td>{ticket.user.email}</td>
+                      <td>
+                        <span
+                          className={styles.priority}
+                          style={{
+                            backgroundColor: priorityColors[ticket.priority],
+                          }}
+                        >
+                          {ticket.priority}
+                        </span>
+                      </td>
+                      <td>{statusTexts[ticket.status]}</td>
+                      <td>
+                        {ticket.assignedTo ? (
+                          <div style={{ fontSize: '0.875rem' }}>
+                            <div style={{ fontWeight: 500 }}>
+                              {ticket.assignedTo.firstName} {ticket.assignedTo.lastName}
+                            </div>
+                            <div style={{ color: '#6b7280', fontSize: '0.75rem' }}>
+                              {ticket.assignedTo.email}
+                            </div>
+                          </div>
+                        ) : assigningTicketId === ticket.id ? (
+                          <select
+                            onChange={(e) => {
+                              if (e.target.value === 'auto') {
+                                autoAssignTicket(ticket.id);
+                              } else if (e.target.value) {
+                                assignTicket(ticket.id, e.target.value);
+                              } else {
+                                setAssigningTicketId(null);
+                              }
+                            }}
+                            autoFocus
+                            onBlur={() => setAssigningTicketId(null)}
+                            style={{ fontSize: '0.875rem', padding: '0.25rem' }}
+                          >
+                            <option value="">Válassz...</option>
+                            <option value="auto">🤖 Auto (legkevesebb jegy)</option>
+                            {supportStaff.map(staff => (
+                              <option key={staff.id} value={staff.id}>
+                                {staff.firstName} {staff.lastName} ({staff.activeTickets} jegy)
+                              </option>
+                            ))}
+                          </select>
+                        ) : (
+                          <button
+                            onClick={() => setAssigningTicketId(ticket.id)}
+                            style={{
+                              fontSize: '0.75rem',
+                              padding: '0.25rem 0.5rem',
+                              backgroundColor: '#3b82f6',
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: '4px',
+                              cursor: 'pointer'
+                            }}
+                          >
+                            Hozzárendel
+                          </button>
+                        )}
+                      </td>
+                      <td>
+                        {slaStatus && (
+                          <span style={{
+                            fontSize: '0.75rem',
+                            padding: '0.25rem 0.5rem',
+                            backgroundColor: slaStatus.color + '20',
+                            color: slaStatus.color,
+                            borderRadius: '4px',
+                            fontWeight: 500
+                          }}>
+                            {slaStatus.text}
+                          </span>
+                        )}
+                      </td>
+                      <td>{ticket.comments?.length || 0}</td>
+                      <td>
+                        {new Date(ticket.createdAt).toLocaleDateString(locale)}
+                      </td>
+                      <td>
+                        <Link
+                          href={`/${locale}/admin/support/${ticket.id}`}
+                          className={styles.editLink}
+                        >
+                          Szerkesztés
+                        </Link>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

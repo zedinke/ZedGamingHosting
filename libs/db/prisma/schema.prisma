@@ -81,6 +81,8 @@ model User {
   orders          Order[]
   supportTickets  SupportTicket[]  @relation("TicketCreator")
   ticketComments  TicketComment[]  @relation("TicketComments")
+  assignedTickets SupportTicket[]  @relation("AssignedTickets")
+  knowledgeBaseArticles KnowledgeBaseArticle[] @relation("KnowledgeBaseArticles")
 }
 
 model AuditLog {
@@ -570,6 +572,16 @@ model SupportTicket {
   category    String?         // e.g., "billing", "technical", "general"
   status      TicketStatus    @default(OPEN)
   
+  // Assignment
+  assignedToId String?
+  assignedTo   User?          @relation("AssignedTickets", fields: [assignedToId], references: [id], onDelete: SetNull)
+  assignedAt   DateTime?
+  
+  // SLA Tracking
+  slaResponseDeadline DateTime?  // When first response is due
+  slaResolveDeadline  DateTime?  // When resolution is due
+  firstResponseAt     DateTime?  // When first staff response was made
+  
   // Relations
   userId      String
   user        User            @relation("TicketCreator", fields: [userId], references: [id], onDelete: Cascade)
@@ -583,9 +595,21 @@ model SupportTicket {
   comments    TicketComment[]
   
   @@index([userId])
+  @@index([assignedToId])
   @@index([status])
   @@index([priority])
   @@index([createdAt])
+  @@index([slaResponseDeadline])
+  @@index([slaResolveDeadline])
+}
+
+model SlaPolicy {
+  id                String          @id @default(uuid())
+  priority          TicketPriority  @unique
+  responseTimeHours Int             // Hours to first response
+  resolveTimeHours  Int             // Hours to resolution
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
 }
 
 model TicketComment {
@@ -603,5 +627,77 @@ model TicketComment {
   
   @@index([ticketId])
   @@index([authorId])
+}
+
+// Knowledge Base System
+model KnowledgeBaseArticle {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  content     String   @db.Text
+  excerpt     String?  @db.Text
+  
+  categoryId  String
+  category    KnowledgeBaseCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  
+  authorId    String
+  author      User     @relation("KnowledgeBaseArticles", fields: [authorId], references: [id])
+  
+  tags        String[] // Array of tag strings
+  
+  published   Boolean  @default(false)
+  views       Int      @default(0)
+  helpful     Int      @default(0)
+  notHelpful  Int      @default(0)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  publishedAt DateTime?
+  
+  versions    ArticleVersion[]
+  
+  @@index([categoryId])
+  @@index([authorId])
+  @@index([published])
+  @@index([slug])
+  @@fulltext([title, content])
+}
+
+model KnowledgeBaseCategory {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?  @db.Text
+  icon        String?  // Optional icon name/emoji
+  order       Int      @default(0) // Display order
+  
+  parentId    String?
+  parent      KnowledgeBaseCategory? @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children    KnowledgeBaseCategory[] @relation("CategoryHierarchy")
+  
+  articles    KnowledgeBaseArticle[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([parentId])
+  @@index([order])
+}
+
+model ArticleVersion {
+  id          String   @id @default(uuid())
+  articleId   String
+  article     KnowledgeBaseArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  
+  version     Int      // Version number
+  title       String
+  content     String   @db.Text
+  excerpt     String?  @db.Text
+  
+  createdBy   String
+  createdAt   DateTime @default(now())
+  
+  @@index([articleId])
+  @@unique([articleId, version])
 }
 

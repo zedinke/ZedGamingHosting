@@ -24,6 +24,7 @@ import { PromotionsModule } from './promotions/promotions.module';
 import { OrdersModule } from './orders/orders.module';
 import { PaymentsModule } from './payments/payments.module';
 import { SupportModule } from './support/support.module';
+import { KnowledgeBaseModule } from './knowledge-base/knowledge-base.module';
 import { WebSocketModule } from './websocket/websocket.module';
 import { MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { TenantMiddleware } from './common/middleware/tenant.middleware';
@@ -69,6 +70,7 @@ import { PublicOptionalJwtGuard } from './auth/guards/public-optional-jwt.guard'
     OrdersModule,
     PaymentsModule, // Barion/Stripe payment gateways
     SupportModule, // Support ticketing system
+    KnowledgeBaseModule, // Knowledge base articles
     WebSocketModule, // Real-time WebSocket gateway
   ],
   providers: [

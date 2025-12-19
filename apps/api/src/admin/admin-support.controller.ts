@@ -1,12 +1,15 @@
 import {
   Controller,
   Get,
+  Post,
   Patch,
   Body,
   Param,
   Query,
   UseGuards,
   Logger,
+  Request,
+  HttpCode,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminGuard } from '../auth/guards/admin.guard';
@@ -81,5 +84,51 @@ export class AdminSupportController {
   async closeTicket(@Param('id') ticketId: string) {
     this.logger.log(`Admin closing support ticket ${ticketId}`);
     return this.supportTicketService.closeTicket(ticketId);
+  }
+
+  /**
+   * Assign ticket to support staff
+   * POST /admin/support/:id/assign
+   */
+  @Post(':id/assign')
+  @HttpCode(200)
+  async assignTicket(
+    @Request() req: any,
+    @Param('id') ticketId: string,
+    @Body() body: { assignedToId: string },
+  ) {
+    this.logger.log(`Admin assigning ticket ${ticketId} to user ${body.assignedToId}`);
+    return this.supportTicketService.assignTicket(ticketId, body.assignedToId, req.user.id);
+  }
+
+  /**
+   * Auto-assign ticket to least loaded support staff
+   * POST /admin/support/:id/auto-assign
+   */
+  @Post(':id/auto-assign')
+  @HttpCode(200)
+  async autoAssignTicket(@Param('id') ticketId: string) {
+    this.logger.log(`Admin auto-assigning ticket ${ticketId}`);
+    return this.supportTicketService.autoAssignTicket(ticketId);
+  }
+
+  /**
+   * Get support staff workload
+   * GET /admin/support/workload
+   */
+  @Get('workload')
+  async getSupportStaffWorkload() {
+    this.logger.log('Admin fetching support staff workload');
+    return this.supportTicketService.getSupportStaffWorkload();
+  }
+
+  /**
+   * Get overdue SLA tickets
+   * GET /admin/support/overdue
+   */
+  @Get('overdue')
+  async getOverdueSlaTickets() {
+    this.logger.log('Admin fetching overdue SLA tickets');
+    return this.supportTicketService.getOverdueSlaTickets();
   }
 }

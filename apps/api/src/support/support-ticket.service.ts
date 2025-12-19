@@ -36,6 +36,9 @@ export class SupportTicketService {
     // Generate ticket number
     const ticketNumber = `ZGH-${Date.now().toString(36).toUpperCase()}`;
 
+    // Calculate SLA deadlines based on priority
+    const slaDeadlines = this.calculateSlaDeadlines(dto.priority);
+
     const ticket = await this.prisma.supportTicket.create({
       data: {
         ticketNumber,
@@ -45,6 +48,8 @@ export class SupportTicketService {
         category: dto.category,
         status: TicketStatus.OPEN,
         userId,
+        slaResponseDeadline: slaDeadlines.responseDeadline,
+        slaResolveDeadline: slaDeadlines.resolveDeadline,
       },
       include: {
         user: true,
@@ -72,10 +77,50 @@ export class SupportTicketService {
         priority: ticket.priority,
         userId: user.id,
         userName: user.email,
+        slaResponseDeadline: ticket.slaResponseDeadline,
+        slaResolveDeadline: ticket.slaResolveDeadline,
       });
     }
 
     return ticket;
+  }
+
+  /**
+   * Calculate SLA deadlines based on ticket priority
+   */
+  private calculateSlaDeadlines(priority: TicketPriority): {
+    responseDeadline: Date;
+    resolveDeadline: Date;
+  } {
+    const now = new Date();
+    let responseHours: number;
+    let resolveHours: number;
+
+    // SLA targets by priority
+    switch (priority) {
+      case TicketPriority.CRITICAL:
+        responseHours = 1; // 1 hour response
+        resolveHours = 4;  // 4 hours resolution
+        break;
+      case TicketPriority.HIGH:
+        responseHours = 2; // 2 hours response
+        resolveHours = 8;  // 8 hours resolution
+        break;
+      case TicketPriority.MEDIUM:
+        responseHours = 4;  // 4 hours response
+        resolveHours = 24;  // 24 hours resolution
+        break;
+      case TicketPriority.LOW:
+      default:
+        responseHours = 8;  // 8 hours response
+        resolveHours = 48;  // 48 hours resolution
+        break;
+    }
+
+    return {
+      responseDeadline: new Date(now.getTime() + responseHours * 60 * 60 * 1000),
+      resolveDeadline: new Date(now.getTime() + resolveHours * 60 * 60 * 1000),
+    };
   }
 
   /**
@@ -404,4 +449,184 @@ export class SupportTicketService {
       </div>
     `;
   }
+
+  /**
+   * Assign ticket to support staff
+   */
+  async assignTicket(ticketId: string, assignedToId: string, assignedBy: string): Promise<any> {
+    // Validate ticket exists
+    const ticket = await this.prisma.supportTicket.findUnique({
+      where: { id: ticketId },
+      include: { user: true },
+    });
+
+    if (!ticket) {
+      throw new NotFoundException('Ticket not found');
+    }
+
+    // Validate assignee is support staff
+    const assignee = await this.prisma.user.findUnique({
+      where: { id: assignedToId },
+    });
+
+    if (!assignee || (assignee.role !== 'ADMIN' && assignee.role !== 'SUPPORT')) {
+      throw new ForbiddenException('Can only assign to support staff');
+    }
+
+    // Update ticket assignment
+    const updatedTicket = await this.prisma.supportTicket.update({
+      where: { id: ticketId },
+      data: {
+        assignedToId,
+        assignedAt: new Date(),
+        status: ticket.status === 'OPEN' ? TicketStatus.IN_PROGRESS : ticket.status,
+      },
+      include: {
+        user: true,
+        assignedTo: true,
+        comments: true,
+      },
+    });
+
+    // Send notification to assignee
+    try {
+      await this.emailService.sendEmail({
+        to: assignee.email,
+        subject: `Jegy Hozzárendelve - ${ticket.ticketNumber}`,
+        html: this.getTicketAssignedTemplate(
+          ticket.ticketNumber,
+          ticket.subject,
+          assignee.email,
+          ticketId,
+        ),
+      });
+    } catch (error) {
+      this.logger.warn(`Failed to send assignment email: ${error}`);
+    }
+
+    // Broadcast assignment via WebSocket
+    if (this.webSocketGateway) {
+      this.webSocketGateway.broadcastToStaff('support:ticketAssigned', {
+        ticketId: ticket.id,
+        assignedToId,
+        assignedTo: {
+          id: assignee.id,
+          email: assignee.email,
+          firstName: assignee.firstName || '',
+          lastName: assignee.lastName || '',
+        },
+        ticket: updatedTicket,
+      });
+
+      // Notify the assigned user directly
+      this.webSocketGateway.sendUserNotification(assignedToId, {
+        type: 'ticket_assigned',
+        ticketId: ticket.id,
+        ticketNumber: ticket.ticketNumber,
+        subject: ticket.subject,
+      });
+    }
+
+    return updatedTicket;
+  }
+
+  /**
+   * Get support staff workload for balancing
+   */
+  async getSupportStaffWorkload(): Promise<any[]> {
+    const supportStaff = await this.prisma.user.findMany({
+      where: {
+        role: { in: ['ADMIN', 'SUPPORT'] },
+      },
+      include: {
+        assignedTickets: {
+          where: {
+            status: { in: ['OPEN', 'IN_PROGRESS'] },
+          },
+        },
+      },
+    });
+
+    return supportStaff.map((staff) => ({
+      userId: staff.id,
+      email: staff.email,
+      role: staff.role,
+      activeTickets: staff.assignedTickets.length,
+    }));
+  }
+
+  /**
+   * Auto-assign ticket to least loaded support staff
+   */
+  async autoAssignTicket(ticketId: string): Promise<any> {
+    const workload = await this.getSupportStaffWorkload();
+    
+    if (workload.length === 0) {
+      this.logger.warn('No support staff available for auto-assignment');
+      return null;
+    }
+
+    // Find staff with least tickets
+    const leastLoaded = workload.reduce((prev, current) => 
+      prev.activeTickets < current.activeTickets ? prev : current
+    );
+
+    return this.assignTicket(ticketId, leastLoaded.userId, 'SYSTEM_AUTO_ASSIGN');
+  }
+
+  /**
+   * Get tickets approaching SLA deadline
+   */
+  async getOverdueSlaTickets(): Promise<any[]> {
+    const now = new Date();
+
+    return this.prisma.supportTicket.findMany({
+      where: {
+        status: { in: ['OPEN', 'IN_PROGRESS'] },
+        OR: [
+          {
+            slaResponseDeadline: { lte: now },
+            firstResponseAt: null,
+          },
+          {
+            slaResolveDeadline: { lte: now },
+            status: { notIn: ['RESOLVED', 'CLOSED'] },
+          },
+        ],
+      },
+      include: {
+        user: true,
+        assignedTo: true,
+      },
+      orderBy: { priority: 'desc' },
+    });
+  }
+
+  /**
+   * Get ticket assigned template
+   */
+  private getTicketAssignedTemplate(
+    ticketNumber: string,
+    subject: string,
+    assigneeEmail: string,
+    ticketId: string,
+  ): string {
+    return `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background-color: #1e293b; color: white; padding: 20px; text-align: center; border-radius: 5px;">
+          <h1>🎯 Új Jegy Hozzárendelve</h1>
+        </div>
+        <div style="padding: 20px; border: 1px solid #e2e8f0; border-top: none;">
+          <p>Kedves ${assigneeEmail}!</p>
+          <p>Egy új támogatási jegy lett hozzád rendelve.</p>
+          <div style="background-color: #f0f9ff; padding: 15px; border-left: 4px solid #3b82f6; margin: 15px 0;">
+            <strong>Jegy szám:</strong> ${ticketNumber}<br>
+            <strong>Tárgy:</strong> ${subject}<br>
+          </div>
+          <p>Kérlek, foglalkozz vele a lehető leghamarabb!</p>
+        </div>
+      </div>
+    `;
+  }
 }
+

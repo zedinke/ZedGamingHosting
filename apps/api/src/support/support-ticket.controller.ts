@@ -145,4 +145,50 @@ export class SupportTicketController implements OnModuleInit {
   async getTicketStats() {
     return this.supportTicketService.getTicketStats();
   }
+
+  /**
+   * Assign ticket to support staff
+   * POST /support/tickets/admin/:id/assign
+   */
+  @Post('admin/:id/assign')
+  @UseGuards(AdminGuard)
+  @HttpCode(200)
+  async assignTicket(
+    @Request() req: any,
+    @Param('id') ticketId: string,
+    @Body() body: { assignedToId: string },
+  ) {
+    return this.supportTicketService.assignTicket(ticketId, body.assignedToId, req.user.id);
+  }
+
+  /**
+   * Auto-assign ticket to least loaded support staff
+   * POST /support/tickets/admin/:id/auto-assign
+   */
+  @Post('admin/:id/auto-assign')
+  @UseGuards(AdminGuard)
+  @HttpCode(200)
+  async autoAssignTicket(@Param('id') ticketId: string) {
+    return this.supportTicketService.autoAssignTicket(ticketId);
+  }
+
+  /**
+   * Get support staff workload
+   * GET /support/tickets/admin/workload
+   */
+  @Get('admin/workload')
+  @UseGuards(AdminGuard)
+  async getSupportStaffWorkload() {
+    return this.supportTicketService.getSupportStaffWorkload();
+  }
+
+  /**
+   * Get overdue SLA tickets
+   * GET /support/tickets/admin/overdue
+   */
+  @Get('admin/overdue')
+  @UseGuards(AdminGuard)
+  async getOverdueSlaTickets() {
+    return this.supportTicketService.getOverdueSlaTickets();
+  }
 }
