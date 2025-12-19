@@ -6,6 +6,8 @@ import { BillingCycle } from './dto/create-order.dto';
 import { BarionService } from '../payments/barion.service';
 import { PayPalService } from '../payments/paypal.service';
 import { UpayService } from '../payments/upay.service';
+import { EmailService } from '../email/email.service';
+
 
 interface CreateOrderInput {
   userId: string;
@@ -26,6 +28,7 @@ export class OrdersService {
     private readonly barion: BarionService,
     private readonly paypal: PayPalService,
     private readonly upay: UpayService,
+    private readonly emailService: EmailService,
   ) {}
 
   async createOrder(input: CreateOrderInput) {
@@ -208,6 +211,27 @@ export class OrdersService {
             },
           });
           this.logger.log(`Created DEPROVISION task for server ${server.uuid}`);
+
+                  // Send deprovision email to user (best effort)
+                  try {
+                    const user = await this.prisma.user.findUnique({
+                      where: { id: server.ownerId },
+                      select: { email: true },
+                    });
+
+                    if (user) {
+                      const serverName = `Server ${server.uuid.substring(0, 8)}`;
+                      await this.emailService.sendServerDeprovisionEmail(
+                        user.email,
+                        user.email.split('@')[0],
+                        serverName,
+                        order.id,
+                        'ORDER_CANCELLED',
+                      );
+                    }
+                  } catch (emailError: any) {
+                    this.logger.error(`Failed to send deprovision email: ${emailError?.message || 'Unknown error'}`);
+                  }
         }
       } catch (error: any) {
         this.logger.error(`Failed to create DEPROVISION task: ${error?.message || 'Unknown error'}`);

@@ -155,6 +155,43 @@ export class EmailService {
   }
 
   /**
+   * Send server deprovision notification
+   */
+  async sendServerDeprovisionEmail(
+    userEmail: string,
+    userName: string,
+    serverName: string,
+    orderId: string,
+    reason: string,
+  ): Promise<void> {
+    const reasonMessages: Record<string, string> = {
+      ORDER_CANCELLED: 'rendelés törlése',
+      PAYMENT_FAILED: 'fizetés sikertelen',
+      USER_REQUEST: 'felhasználói kérés',
+    };
+
+    const reasonMessage = reasonMessages[reason] || reason;
+
+    await this.sendEmail({
+      to: userEmail,
+      subject: `Szerver megszüntetés - ${serverName}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #ef4444;">Szerver megszüntetés értesítés</h2>
+          <p>Kedves ${userName}!</p>
+          <p>Értesítünk, hogy a(z) <strong>${serverName}</strong> szerver sikeresen meg lett szüntetve.</p>
+          <p><strong>Ok:</strong> ${reasonMessage}</p>
+          <p><strong>Rendelés azonosító:</strong> ${orderId}</p>
+          <p>Ha fizetés történt, az összeg automatikusan visszatérítésre került a Zsebbe.</p>
+          <p>Ha kérdésed van, vagy ez tévedés lenne, kérlek vedd fel velünk a kapcsolatot.</p>
+          <p>Üdvözlettel,<br>ZedGamingHosting Csapat</p>
+        </div>
+      `,
+      text: `Szerver megszüntetés - ${serverName}\n\nA szerver sikeresen meg lett szüntetve.\nOk: ${reasonMessage}\nRendelés: ${orderId}`,
+    });
+  }
+
+  /**
    * Send welcome email
    */
   async sendWelcomeEmail(userEmail: string, userName?: string): Promise<void> {
