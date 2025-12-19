@@ -254,7 +254,7 @@ export class WebSocketGateway
 
       this.logger.log(`User ${socket.userId} subscribed to server ${serverUuid}`);
     } catch (error) {
-      socket.emit('error', { message: error.message });
+      socket.emit('error', { message: error instanceof Error ? error.message : 'Unknown error' });
     }
   }
 
