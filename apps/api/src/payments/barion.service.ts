@@ -150,7 +150,7 @@ export class BarionService {
     }
 
     try {
-      const result = await this.barion.getPaymentState(paymentId);
+      const result = await this.retry(async () => await this.barion.getPaymentState(paymentId), 'getPaymentState');
 
       if (result.Errors && result.Errors.length > 0) {
         this.logger.error(
@@ -166,6 +166,21 @@ export class BarionService {
       this.logger.error(`Failed to get Barion payment state: ${error}`);
       throw error;
     }
+  }
+
+  private async retry<T>(fn: () => Promise<T>, label: string, retries = 3, baseMs = 300): Promise<T> {
+    let lastErr: any;
+    for (let i = 0; i < retries; i++) {
+      try {
+        return await fn();
+      } catch (e) {
+        lastErr = e;
+        const wait = baseMs * Math.pow(2, i);
+        this.logger.warn(`[Barion:${label}] attempt ${i + 1}/${retries} failed: ${e?.message || e}. Retrying in ${wait}ms`);
+        await new Promise((r) => setTimeout(r, wait));
+      }
+    }
+    throw lastErr;
   }
 
   /**

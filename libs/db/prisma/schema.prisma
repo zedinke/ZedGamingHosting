@@ -545,6 +545,41 @@ enum OrderStatus {
 }
 
 // ============================================
+// PAYMENTS - EVENTS & IDEMPOTENCY
+// ============================================
+
+enum PaymentProvider {
+  BARION
+  PAYPAL
+  UPAY
+}
+
+enum PaymentEventStatus {
+  RECEIVED
+  PROCESSED
+  FAILED
+}
+
+model PaymentEvent {
+  id          String              @id @default(uuid())
+  provider    PaymentProvider
+  eventType   String              // e.g., "callback", "webhook"
+  eventId     String              // Provider event/token identifier (unique per provider+type)
+  paymentId   String?
+  orderId     String?
+  status      PaymentEventStatus  @default(RECEIVED)
+  payload     Json?
+  error       String?
+  createdAt   DateTime            @default(now())
+  processedAt DateTime?
+  updatedAt   DateTime            @updatedAt
+
+  @@unique([provider, eventType, eventId])
+  @@index([paymentId])
+  @@index([orderId])
+}
+
+// ============================================
 // SUPPORT SYSTEM
 // ============================================
 

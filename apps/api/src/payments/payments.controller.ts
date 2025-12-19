@@ -4,6 +4,7 @@ import { PayPalService } from './paypal.service';
 import { UpayService } from './upay.service';
 import { PrismaService } from '@zed-hosting/db';
 import { Public } from '../auth/decorators/public.decorator';
+import { IdempotencyService } from './idempotency.service';
 
 /**
  * Payment webhooks and callbacks controller
@@ -18,6 +19,7 @@ export class PaymentsController {
     private readonly paypalService: PayPalService,
     private readonly upayService: UpayService,
     private readonly prisma: PrismaService,
+    private readonly idemp: IdempotencyService,
   ) {}
 
   /**
@@ -30,6 +32,15 @@ export class PaymentsController {
     this.logger.log(`Received Barion callback for payment: ${paymentId}`);
 
     try {
+      // Idempotency begin
+      const eventKey = { provider: 'BARION' as const, eventType: 'callback', eventId: paymentId, paymentId };
+      const started = await this.idemp.beginEvent(eventKey);
+      const idRef = started.id;
+      if (started.alreadyProcessed) {
+        this.logger.log(`Duplicate Barion callback ignored for ${paymentId}`);
+        return { success: true, deduped: true };
+      }
+
       const result = await this.barionService.processCallback(paymentId);
 
       if (result.isSuccessful) {
@@ -62,9 +73,16 @@ export class PaymentsController {
         }
       }
 
+      // Mark processed (even if order was already paid, we still mark processed)
+      try { await this.idemp.markProcessed(idRef, (result as any)?.orderId); } catch {}
       return { success: true, orderId: result.orderId };
     } catch (error: any) {
       this.logger.error(`Barion callback processing failed: ${error}`);
+      // Best-effort mark failed
+      try {
+        const ev = await this.idemp.beginEvent({ provider: 'BARION', eventType: 'callback', eventId: paymentId, paymentId });
+        await this.idemp.markFailed(ev.id, error?.message || String(error));
+      } catch {}
       return { success: false, error: error.message };
     }
   }
@@ -97,6 +115,15 @@ export class PaymentsController {
     this.logger.log(`Received PayPal callback for payment: ${token}`);
 
     try {
+      // Idempotency begin
+      const eventKey = { provider: 'PAYPAL' as const, eventType: 'callback', eventId: token, paymentId: token };
+      const started = await this.idemp.beginEvent(eventKey);
+      const idRef = started.id;
+      if (started.alreadyProcessed) {
+        this.logger.log(`Duplicate PayPal callback ignored for ${token}`);
+        return { success: true, deduped: true };
+      }
+
       // Capture the payment
       const captured = await this.paypalService.capturePayment(token);
       
@@ -135,9 +162,14 @@ export class PaymentsController {
         }
       }
 
+      try { await this.idemp.markProcessed(idRef, (result as any)?.orderId); } catch {}
       return { success: true, orderId: result.orderId };
     } catch (error: any) {
       this.logger.error(`PayPal callback processing failed: ${error}`);
+      try {
+        const ev = await this.idemp.beginEvent({ provider: 'PAYPAL', eventType: 'callback', eventId: token, paymentId: token });
+        await this.idemp.markFailed(ev.id, error?.message || String(error));
+      } catch {}
       return { success: false, error: error.message };
     }
   }
@@ -167,6 +199,14 @@ export class PaymentsController {
     this.logger.log(`Received Upay callback for payment: ${paymentId}`);
 
     try {
+      const eventKey = { provider: 'UPAY' as const, eventType: 'callback', eventId: paymentId, paymentId };
+      const started = await this.idemp.beginEvent(eventKey);
+      const idRef = started.id;
+      if (started.alreadyProcessed) {
+        this.logger.log(`Duplicate Upay callback ignored for ${paymentId}`);
+        return { success: true, deduped: true };
+      }
+
       const result = await this.upayService.processCallback(paymentId);
 
       if (result.isSuccessful) {
@@ -197,9 +237,14 @@ export class PaymentsController {
         }
       }
 
+      try { await this.idemp.markProcessed(idRef, (result as any)?.orderId); } catch {}
       return { success: true, orderId: result.orderId };
     } catch (error: any) {
       this.logger.error(`Upay callback processing failed: ${error}`);
+      try {
+        const ev = await this.idemp.beginEvent({ provider: 'UPAY', eventType: 'callback', eventId: paymentId, paymentId });
+        await this.idemp.markFailed(ev.id, error?.message || String(error));
+      } catch {}
       return { success: false, error: error.message };
     }
   }
@@ -224,6 +269,15 @@ export class PaymentsController {
       }
 
       const paymentId = payload.paymentId;
+      const rawEventId = payload?.eventId || `${paymentId}:${payload?.status || 'unknown'}`;
+      const eventKey = { provider: 'UPAY' as const, eventType: 'webhook', eventId: rawEventId, paymentId, payload };
+      const started = await this.idemp.beginEvent(eventKey);
+      const idRef = started.id;
+      if (started.alreadyProcessed) {
+        this.logger.log(`Duplicate Upay webhook ignored for ${rawEventId}`);
+        return { success: true, deduped: true };
+      }
+
       const result = await this.upayService.processCallback(paymentId);
 
       if (result.isSuccessful) {
@@ -253,9 +307,15 @@ export class PaymentsController {
         }
       }
 
+      try { await this.idemp.markProcessed(idRef, (result as any)?.orderId); } catch {}
       return { success: true };
     } catch (error: any) {
       this.logger.error(`Upay webhook processing failed: ${error}`);
+      try {
+        const idKey = payload?.eventId || `${payload?.paymentId || 'unknown'}:${payload?.status || 'unknown'}`;
+        const ev = await this.idemp.beginEvent({ provider: 'UPAY', eventType: 'webhook', eventId: idKey, paymentId: payload?.paymentId, payload });
+        await this.idemp.markFailed(ev.id, error?.message || String(error));
+      } catch {}
       return { success: false, error: error.message };
     }
   }

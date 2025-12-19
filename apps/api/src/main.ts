@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import helmet from '@fastify/helmet';
 import { AppModule } from './app.module';
 import { validateEnv } from '@zed-hosting/utils';
 
@@ -23,6 +24,13 @@ async function bootstrap(): Promise<void> {
       logger: process.env.NODE_ENV === 'development',
     })
   );
+
+  // Biztonsági fejlécek Fastify/Helmet
+  await app.register(helmet, {
+    contentSecurityPolicy: false, // frontend Next saját CSP-je felülírhatja
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+  });
 
   // Global validation pipe
   app.useGlobalPipes(

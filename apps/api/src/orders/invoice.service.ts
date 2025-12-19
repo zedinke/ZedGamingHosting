@@ -2,6 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
 import PDFDocument from 'pdfkit';
 import { PassThrough } from 'stream';
+import * as fs from 'fs';
+import * as path from 'path';
 import { EmailService } from '../email/email.service';
 
 /**
@@ -16,6 +18,10 @@ export class InvoiceService {
     private readonly prisma: PrismaService,
     private readonly emailService: EmailService,
   ) {}
+
+  private getStorageDir() {
+    return process.env.INVOICE_STORAGE_DIR || path.join(process.cwd(), 'storage', 'invoices');
+  }
 
   /**
    * Generate invoice data for a paid order
@@ -223,6 +229,38 @@ export class InvoiceService {
   }
 
   /**
+   * Persist invoice PDF to storage and return absolute file path.
+   */
+  async persistInvoicePDF(orderId: string): Promise<string> {
+    const invoiceData = await this.generateInvoiceData(orderId);
+    const storageRoot = this.getStorageDir();
+    const year = String(invoiceData.orderDate.getFullYear());
+    const targetDir = path.join(storageRoot, year);
+    const filename = `${invoiceData.invoiceNumber}.pdf`;
+    const filePath = path.join(targetDir, filename);
+
+    await fs.promises.mkdir(targetDir, { recursive: true });
+
+    // If already exists, return existing path
+    try {
+      await fs.promises.access(filePath, fs.constants.F_OK);
+      return filePath;
+    } catch {}
+
+    // Generate and write
+    const pdfStream = await this.generateInvoicePDF(orderId);
+    await new Promise<void>((resolve, reject) => {
+      const writeStream = fs.createWriteStream(filePath);
+      pdfStream.pipe(writeStream);
+      writeStream.on('finish', () => resolve());
+      writeStream.on('error', (err) => reject(err));
+    });
+
+    this.logger.log(`Saved invoice ${invoiceData.invoiceNumber} to ${filePath}`);
+    return filePath;
+  }
+
+  /**
    * Generate a unique invoice number
    */
   private generateInvoiceNumber(createdAt: Date, orderId: string): string {
@@ -243,7 +281,24 @@ export class InvoiceService {
    * Get invoice PDF stream for downloading
    */
   async getInvoicePDFStream(orderId: string): Promise<PassThrough> {
-    return this.generateInvoicePDF(orderId);
+    // Try to serve from persisted storage first
+    const invoiceData = await this.generateInvoiceData(orderId);
+    const storageRoot = this.getStorageDir();
+    const year = String(invoiceData.orderDate.getFullYear());
+    const filePath = path.join(storageRoot, year, `${invoiceData.invoiceNumber}.pdf`);
+
+    try {
+      await fs.promises.access(filePath, fs.constants.F_OK);
+      const stream = new PassThrough();
+      fs.createReadStream(filePath).pipe(stream);
+      return stream;
+    } catch {
+      // Not found -> generate and persist
+      await this.persistInvoicePDF(orderId);
+      const stream = new PassThrough();
+      fs.createReadStream(filePath).pipe(stream);
+      return stream;
+    }
   }
 
   /**
@@ -251,7 +306,10 @@ export class InvoiceService {
    */
   async sendInvoiceByEmail(orderId: string): Promise<boolean> {
     const invoiceData = await this.generateInvoiceData(orderId);
-    const pdfStream = await this.generateInvoicePDF(orderId);
+    // Ensure persistent copy exists for audit
+    const filePath = await this.persistInvoicePDF(orderId);
+    const pdfStream = new PassThrough();
+    fs.createReadStream(filePath).pipe(pdfStream);
 
     const order = await this.prisma.order.findUnique({
       where: { id: orderId },

@@ -135,12 +135,28 @@ export class PayPalService {
     }
 
     try {
-      const result = await this.ordersController!.getOrder({ id: paymentId });
+      const result = await this.retry(async () => await this.ordersController!.getOrder({ id: paymentId }), 'getOrder');
       return result.body as any;
     } catch (error: any) {
       this.logger.error(`Failed to get PayPal payment state: ${error.message}`);
       throw error;
     }
+  }
+
+  private async retry<T>(fn: () => Promise<T>, label: string, retries = 3, baseMs = 300): Promise<T> {
+    let lastErr: any;
+    for (let i = 0; i < retries; i++) {
+      try {
+        return await fn();
+      } catch (e: any) {
+        lastErr = e;
+        const status = e?.result?.statusCode || e?.status || 'unknown';
+        const wait = baseMs * Math.pow(2, i);
+        this.logger.warn(`[PayPal:${label}] attempt ${i + 1}/${retries} failed (status ${status}): ${e?.message || e}. Retrying in ${wait}ms`);
+        await new Promise((r) => setTimeout(r, wait));
+      }
+    }
+    throw lastErr;
   }
 
   /**

@@ -1,5 +1,22 @@
+"use client";
+
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
+
+const DEFAULT_WS_PATH = '/ws';
+
+const getDefaultWsUrl = () => {
+  if (process.env.NEXT_PUBLIC_WS_URL) {
+    return process.env.NEXT_PUBLIC_WS_URL;
+  }
+
+  if (typeof window !== 'undefined') {
+    return `${window.location.origin}${DEFAULT_WS_PATH}`;
+  }
+
+  // On the server we don't have a window; return empty to avoid ReferenceErrors
+  return '';
+};
 
 export interface UseSocketOptions {
   url?: string;
@@ -22,14 +39,15 @@ export interface SocketMessage {
  * Handles authentication, reconnection, event subscription
  */
 export function useSocket({
-  url = process.env.NEXT_PUBLIC_WS_URL || `${window?.location?.origin}/ws`,
+  url,
   enabled = true,
   onConnect,
   onDisconnect,
   onError,
   autoReconnect = true,
   reconnectDelay = 5000,
-}: UseSocketOptions) {
+}: UseSocketOptions = {}) {
+  const socketUrl = url || getDefaultWsUrl();
   const socketRef = useRef<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<
@@ -62,7 +80,7 @@ export function useSocket({
       }
 
       // Create socket connection
-      const socket = io(url, {
+      const socket = io(socketUrl, {
         auth: {
           token,
         },
@@ -182,7 +200,7 @@ export function useSocket({
       setConnectionStatus('error');
       onError?.(error);
     }
-  }, [enabled, url, autoReconnect, reconnectDelay, onConnect, onDisconnect, onError]);
+  }, [enabled, socketUrl, autoReconnect, reconnectDelay, onConnect, onDisconnect, onError]);
 
   /**
    * Disconnect from WebSocket server

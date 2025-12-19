@@ -1,9 +1,21 @@
-// Root layout for Next.js App Router
-// The actual HTML structure is in [locale]/layout.tsx
+import './global.css';
+import { geistSans, jetbrainsMono } from '../lib/fonts';
+
+export const metadata = {
+  title: 'ZedGamingHosting',
+  description: 'Premium Game Server Hosting Platform',
+};
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <html lang="hu" className="dark" suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${jetbrainsMono.variable} font-sans`}>
+        {children}
+      </body>
+    </html>
+  );
 }

@@ -124,12 +124,28 @@ export class UpayService {
     }
 
     try {
-      const response = await this.httpClient.get(`/payments/${paymentId}`);
+      const response = await this.retry(async () => await this.httpClient.get(`/payments/${paymentId}`), 'getPayment');
       return response.data;
     } catch (error: any) {
       this.logger.error(`Failed to get Upay payment state: ${error.message}`);
       throw error;
     }
+  }
+
+  private async retry<T>(fn: () => Promise<T>, label: string, retries = 3, baseMs = 300): Promise<T> {
+    let lastErr: any;
+    for (let i = 0; i < retries; i++) {
+      try {
+        return await fn();
+      } catch (e: any) {
+        lastErr = e;
+        const status = e?.response?.status || 'unknown';
+        const wait = baseMs * Math.pow(2, i);
+        this.logger.warn(`[Upay:${label}] attempt ${i + 1}/${retries} failed (status ${status}): ${e?.message || e}. Retrying in ${wait}ms`);
+        await new Promise((r) => setTimeout(r, wait));
+      }
+    }
+    throw lastErr;
   }
 
   /**

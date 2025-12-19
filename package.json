@@ -15,9 +15,10 @@
     "dev:daemon": "nx serve daemon",
     "test:add-node": "node scripts/test_add_node.js",
     "validate:locales": "node scripts/validate-locales.js",
-    "build:web": "npm run validate:locales && nx build web"
+    "build:web": "npm run validate:locales && node scripts/build-web-wrapper.js"
   },
   "dependencies": {
+    "@fastify/helmet": "^11.1.1",
     "@monaco-editor/react": "^4.7.0",
     "@nestjs/common": "^10.3.0",
     "@nestjs/config": "^3.1.1",
@@ -54,7 +55,7 @@
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.468.0",
     "monaco-editor": "^0.55.1",
-    "next": "^14.2.3",
+    "next": "^14.2.18",
     "next-intl": "^4.5.8",
     "node-barion": "^3.2.0",
     "nodemailer": "^7.0.11",
@@ -110,7 +111,7 @@
     "@typescript-eslint/eslint-plugin": "^7.3.0",
     "@typescript-eslint/parser": "^7.3.0",
     "eslint": "~8.57.0",
-    "eslint-config-next": "^14.2.3",
+    "eslint-config-next": "^14.2.18",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "2.27.5",
     "eslint-plugin-jsx-a11y": "6.7.1",

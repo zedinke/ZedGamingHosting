@@ -3,6 +3,9 @@ import { PrismaService } from '@zed-hosting/db';
 import { AuditService } from '../audit/audit.service';
 import { WalletService } from './wallet.service';
 import { BillingCycle } from './dto/create-order.dto';
+import { BarionService } from '../payments/barion.service';
+import { PayPalService } from '../payments/paypal.service';
+import { UpayService } from '../payments/upay.service';
 
 interface CreateOrderInput {
   userId: string;
@@ -20,6 +23,9 @@ export class OrdersService {
     private readonly prisma: PrismaService,
     private readonly auditService: AuditService,
     private readonly walletService: WalletService,
+    private readonly barion: BarionService,
+    private readonly paypal: PayPalService,
+    private readonly upay: UpayService,
   ) {}
 
   async createOrder(input: CreateOrderInput) {
@@ -154,6 +160,20 @@ export class OrdersService {
         reason: `Refund for cancelled order #${order.id.substring(0, 8)}`,
         adminId: 'system',
       });
+
+      // Try external refund where possible (best-effort)
+      try {
+        if (order.paymentMethod === 'barion' && order.paymentId) {
+          await this.barion.refundPayment(order.paymentId, order.totalAmount, order.id);
+        } else if (order.paymentMethod === 'paypal' && order.paymentId) {
+          // NOTE: PayPal refund requires capture ID. Stubbed as success in service.
+          await this.paypal.refundPayment(order.paymentId, order.totalAmount);
+        } else if (order.paymentMethod === 'upay' && order.paymentId) {
+          await this.upay.refundPayment(order.paymentId, order.totalAmount, order.id);
+        }
+      } catch (e) {
+        this.logger.warn(`External refund attempt failed for order ${order.id}: ${e}`);
+      }
     }
 
     // Update order status
@@ -163,6 +183,14 @@ export class OrdersService {
         status: 'CANCELLED',
       },
     });
+
+    // Best-effort deprovision: stop server if exists
+    if (order.serverId) {
+      await this.prisma.gameServer.update({
+        where: { uuid: order.serverId },
+        data: { status: 'STOPPED' as any },
+      }).catch(() => undefined);
+    }
 
     // Audit log
     await this.auditService.createLog({

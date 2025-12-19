@@ -100,6 +100,34 @@ export default function AdminNodesPage() {
     }
   };
 
+  const formatHeartbeat = (iso?: string): { text: string; variant: 'success' | 'warning' | 'danger' | 'default'; title?: string } => {
+    if (!iso) {
+      return { text: 'nincs adat', variant: 'default' };
+    }
+    const date = new Date(iso);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffSec = Math.max(0, Math.floor(diffMs / 1000));
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHour = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHour / 24);
+
+    let text: string;
+    if (diffDay > 0) text = `${diffDay} napja`;
+    else if (diffHour > 0) text = `${diffHour} órája`;
+    else if (diffMin > 0) text = `${diffMin} perce`;
+    else text = `${diffSec} mp`;
+
+    // Heurisztika a jelzés frissességére
+    let variant: 'success' | 'warning' | 'danger' | 'default' = 'default';
+    if (diffMin <= 1) variant = 'success';
+    else if (diffMin <= 10) variant = 'default';
+    else if (diffMin <= 30) variant = 'warning';
+    else variant = 'danger';
+
+    return { text, variant, title: date.toLocaleString() };
+  };
+
   const actions = (
     <Button variant="primary" onClick={() => router.push(`/${locale}/admin/nodes/create`)}>
       <Plus className="h-4 w-4 mr-2 inline" />
@@ -181,6 +209,17 @@ export default function AdminNodesPage() {
                     <div className="flex justify-between">
                       <span className="text-text-muted">Lemez:</span>
                       <span className="text-text-main">{node.diskType}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-text-muted">Utolsó jelzés:</span>
+                      {(() => {
+                        const hb = formatHeartbeat(node.lastHeartbeat);
+                        return (
+                          <span title={hb.title} className="flex items-center gap-2">
+                            <Badge variant={hb.variant} size="sm">{hb.text}</Badge>
+                          </span>
+                        );
+                      })()}
                     </div>
                   </div>
 
