@@ -660,7 +660,6 @@ model KnowledgeBaseArticle {
   @@index([authorId])
   @@index([published])
   @@index([slug])
-  @@fulltext([title, content])
 }
 
 model KnowledgeBaseCategory {
