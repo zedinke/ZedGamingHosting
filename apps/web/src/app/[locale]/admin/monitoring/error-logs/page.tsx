@@ -3,12 +3,12 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
-import { useAuthStore } from '../../../../stores/auth-store';
+import { useAuthStore } from '../../../../../stores/auth-store';
 import { Card, Button, Input } from '@zed-hosting/ui-kit';
-import { apiClient } from '../../../../lib/api-client';
+import { apiClient } from '../../../../../lib/api-client';
 import { useQuery } from '@tanstack/react-query';
-import { useNotificationContext } from '../../../../context/notification-context';
-import { AdminLayout } from '../../../../components/admin/admin-layout';
+import { useNotificationContext } from '../../../../../context/notification-context';
+import { AdminLayout } from '../../../../../components/admin/admin-layout';
 import { AlertTriangle, AlertCircle, AlertOctagon, Info, Download, RefreshCw } from 'lucide-react';
 
 interface ErrorLog {

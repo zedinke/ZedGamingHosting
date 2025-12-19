@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useSocketContext } from '../../../../contexts/socket-context';
+import { useSocketContext } from '../../../../../contexts/socket-context';
 import styles from './detail.module.css';
 
 interface TicketComment {
