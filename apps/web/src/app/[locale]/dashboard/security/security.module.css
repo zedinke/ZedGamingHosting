@@ -1,0 +1,128 @@
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  font-size: 2rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.header p {
+  color: #6b7280;
+  margin: 0;
+}
+
+.settingsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.settingCard {
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  gap: 1rem;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.settingCard:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-color: #3b82f6;
+  transform: translateY(-2px);
+}
+
+.settingIcon {
+  font-size: 2rem;
+  min-width: 50px;
+  text-align: center;
+}
+
+.settingContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.settingContent h3 {
+  font-size: 1rem;
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+}
+
+.settingContent p {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin: 0;
+  flex: 1;
+}
+
+.arrow {
+  align-self: flex-end;
+  color: #3b82f6;
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+
+.tips {
+  background-color: #f0f9ff;
+  border-left: 4px solid #3b82f6;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+}
+
+.tips h2 {
+  font-size: 1.25rem;
+  margin: 0 0 1rem 0;
+}
+
+.tips ul {
+  margin: 0;
+  padding: 0 0 0 1.5rem;
+  list-style: none;
+}
+
+.tips li {
+  margin: 0.75rem 0;
+  color: #1f2937;
+  line-height: 1.6;
+}
+
+.tips strong {
+  color: #3730a3;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .settingsList {
+    grid-template-columns: 1fr;
+  }
+
+  .settingCard {
+    flex-direction: column;
+  }
+
+  .settingIcon {
+    font-size: 1.5rem;
+  }
+
+  .arrow {
+    align-self: flex-start;
+    margin-top: 1rem;
+  }
+}
