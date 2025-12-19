@@ -18,6 +18,7 @@ COPY apps/web ./apps/web
 ENV NEXT_TELEMETRY_DISABLED 1
 # Build Next.js app - must be in the app directory
 WORKDIR /app/apps/web
+RUN node scripts/validate-locales.js
 RUN npx next build --no-lint
 
 # Runner

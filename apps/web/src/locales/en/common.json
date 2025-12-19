@@ -104,7 +104,8 @@
         "settings": "Settings",
         "view": "View",
         "files": "File Manager",
-        "delete": "Delete"
+        "delete": "Delete",
+        "metrics": "Metrics"
       },
       "deleteConfirm": "Are you sure you want to delete this server? This action cannot be undone.",
       "resources": {
@@ -128,7 +129,9 @@
         "console": "Console",
         "files": "Files",
         "settings": "Settings",
-        "metrics": "Metrics"
+        "metrics": "Metrics",
+        "environment": "Environment",
+        "backups": "Backups"
       },
       "files": {
         "title": "File Manager",
@@ -195,6 +198,9 @@
     "back": "Back",
     "backToDashboard": "Back to Dashboard"
   },
+  "loading": "Loading...",
+  "back": "Back",
+  "backToDashboard": "Back to Dashboard",
   "auth": {
     "login": {
       "title": "Login",

@@ -104,7 +104,8 @@
         "settings": "Beállítások",
         "view": "Megtekintés",
         "files": "Fájlkezelő",
-        "delete": "Törlés"
+        "delete": "Törlés",
+        "metrics": "Metrikák"
       },
       "deleteConfirm": "Biztosan törölni szeretnéd ezt a szervert? Ez a művelet nem visszavonható.",
       "resources": {
@@ -128,7 +129,9 @@
         "console": "Konzol",
         "files": "Fájlok",
         "settings": "Beállítások",
-        "metrics": "Metrikák"
+        "metrics": "Metrikák",
+        "environment": "Környezet",
+        "backups": "Mentések"
       },
       "files": {
         "title": "Fájlkezelő",
@@ -195,6 +198,9 @@
     "back": "Vissza",
     "backToDashboard": "Vissza a Dashboard-ra"
   },
+  "loading": "Betöltés...",
+  "back": "Vissza",
+  "backToDashboard": "Vissza a Dashboard-ra",
   "auth": {
     "login": {
       "title": "Bejelentkezés",
