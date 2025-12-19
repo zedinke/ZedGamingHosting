@@ -1,5 +1,6 @@
 import { validateEnv } from '@zed-hosting/utils';
 import https from 'https';
+import http from 'http';
 
 /**
  * Backend Client - handles communication with backend API
@@ -9,27 +10,36 @@ export class BackendClient {
   private readonly apiKey: string;
   private readonly nodeId: string;
   private readonly httpsAgent: https.Agent;
+  private readonly httpAgent: http.Agent;
 
   constructor() {
     const env = validateEnv();
     // Use BACKEND_URL if available (docker), fall back to MANAGER_URL
-    this.managerUrl = process.env.BACKEND_URL || env.MANAGER_URL;
-    this.apiKey = env.API_KEY;
-    this.nodeId = env.NODE_ID;
+    this.managerUrl = (process.env.BACKEND_URL || env.MANAGER_URL) as string;
+    this.apiKey = (env.API_KEY) as string;
+    this.nodeId = (env.NODE_ID) as string;
     
     // Create HTTPS agent that skips certificate verification (for self-signed certs in development)
     this.httpsAgent = new https.Agent({
       rejectUnauthorized: false,
     });
+    
+    // Create HTTP agent with keep-alive
+    this.httpAgent = new http.Agent({
+      keepAlive: true,
+    });
   }
 
   /**
-   * Helper method for fetch calls with HTTPS agent support
+   * Helper method for fetch calls with agent support
    */
   private async fetchWithAgent(url: string, options: any = {}) {
+    const isHttps = url.startsWith('https');
+    const agent = isHttps ? this.httpsAgent : this.httpAgent;
+    
     return fetch(url, {
       ...options,
-      ...(this.managerUrl.startsWith('https') && { dispatcher: this.httpsAgent as any }),
+      agent,
     });
   }
 
