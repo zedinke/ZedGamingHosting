@@ -8,7 +8,6 @@ import { Card } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../lib/api-client';
 import { useQuery } from '@tanstack/react-query';
 import { BackButton } from '../../../../components/back-button';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 
 export default function AdminStatsPage() {
   const router = useRouter();
@@ -38,37 +37,56 @@ export default function AdminStatsPage() {
   }, [isAuthenticated, isHydrated, currentUser, router, locale]);
 
   interface StatsData {
-    totalUsers?: number;
-    totalServers?: number;
-    totalNodes?: number;
-    activeServers?: number;
-    totalRevenue?: number;
-    monthlyRevenue?: Array<{ month: string; revenue: number }>;
-    serverDistribution?: Array<{ game: string; count: number }>;
+    users?: {
+      total: number;
+      active: number;
+      premium: number;
+    };
+    orders?: {
+      total: number;
+      paid: number;
+      pending: number;
+    };
+    servers?: {
+      total: number;
+      active: number;
+    };
+    nodes?: {
+      total: number;
+      healthy: number;
+    };
+    revenue?: {
+      total: number;
+      thisMonth: number;
+      lastMonth: number;
+    };
   }
 
   // Mock data fallback (if API fails)
   const mockStats: StatsData = {
-        totalUsers: 150,
-        totalServers: 45,
-        totalNodes: 5,
-        activeServers: 38,
-        totalRevenue: 12500.50,
-        monthlyRevenue: [
-          { month: 'Jan', revenue: 1200 },
-          { month: 'Feb', revenue: 1500 },
-          { month: 'Mar', revenue: 1800 },
-          { month: 'Apr', revenue: 2100 },
-          { month: 'Máj', revenue: 2400 },
-          { month: 'Jún', revenue: 2700 },
-        ],
-        serverDistribution: [
-          { game: 'Minecraft', count: 20 },
-          { game: 'ARK', count: 10 },
-          { game: 'Rust', count: 8 },
-          { game: 'CS2', count: 5 },
-        { game: 'Palworld', count: 2 },
-      ],
+    users: {
+      total: 150,
+      active: 85,
+      premium: 12
+    },
+    orders: {
+      total: 230,
+      paid: 195,
+      pending: 35
+    },
+    servers: {
+      total: 45,
+      active: 38
+    },
+    nodes: {
+      total: 5,
+      healthy: 4
+    },
+    revenue: {
+      total: 12500.50,
+      thisMonth: 2700,
+      lastMonth: 2400
+    }
   };
 
   const { data: stats, isLoading } = useQuery<StatsData>({
@@ -119,79 +137,92 @@ export default function AdminStatsPage() {
           ) : displayStats ? (
             <>
               {/* Overview Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                 <Card className="p-6">
                   <h3 className="text-sm mb-2 text-text-muted">Összes felhasználó</h3>
                   <p className="text-3xl font-bold text-text-main">
-                    {displayStats.totalUsers}
+                    {displayStats.users?.total || 0}
+                  </p>
+                  <p className="text-sm text-text-muted mt-2">
+                    Aktív: {displayStats.users?.active || 0} | Prémium: {displayStats.users?.premium || 0}
                   </p>
                 </Card>
                 <Card className="p-6">
-                  <h3 className="text-sm mb-2 text-text-muted">Összes szerver</h3>
+                  <h3 className="text-sm mb-2 text-text-muted">Rendelések</h3>
                   <p className="text-3xl font-bold text-text-main">
-                    {displayStats.totalServers}
+                    {displayStats.orders?.total || 0}
+                  </p>
+                  <p className="text-sm text-text-muted mt-2">
+                    Fizetve: {displayStats.orders?.paid || 0} | Függőben: {displayStats.orders?.pending || 0}
                   </p>
                 </Card>
                 <Card className="p-6">
-                  <h3 className="text-sm mb-2 text-text-muted">Aktív szerverek</h3>
-                  <p className="text-3xl font-bold text-success">
-                    {displayStats.activeServers}
+                  <h3 className="text-sm mb-2 text-text-muted">Szerverek</h3>
+                  <p className="text-3xl font-bold text-text-main">
+                    {displayStats.servers?.total || 0}
+                  </p>
+                  <p className="text-sm text-success mt-2">
+                    Aktív: {displayStats.servers?.active || 0}
                   </p>
                 </Card>
+                <Card className="p-6">
+                  <h3 className="text-sm mb-2 text-text-muted">Node-ok</h3>
+                  <p className="text-3xl font-bold text-text-main">
+                    {displayStats.nodes?.total || 0}
+                  </p>
+                  <p className="text-sm text-success mt-2">
+                    Egészséges: {displayStats.nodes?.healthy || 0}
+                  </p>
+                </Card>
+              </div>
+
+              {/* Revenue Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 <Card className="p-6">
                   <h3 className="text-sm mb-2 text-text-muted">Összes bevétel</h3>
                   <p className="text-3xl font-bold text-text-main">
-                    {displayStats.totalRevenue?.toFixed(2) || '0.00'} €
+                    {displayStats.revenue?.total?.toFixed(2) || '0.00'} €
+                  </p>
+                </Card>
+                <Card className="p-6">
+                  <h3 className="text-sm mb-2 text-text-muted">Havi bevétel (aktuális)</h3>
+                  <p className="text-3xl font-bold text-success">
+                    {displayStats.revenue?.thisMonth?.toFixed(2) || '0.00'} €
+                  </p>
+                </Card>
+                <Card className="p-6">
+                  <h3 className="text-sm mb-2 text-text-muted">Havi bevétel (előző)</h3>
+                  <p className="text-3xl font-bold text-text-muted">
+                    {displayStats.revenue?.lastMonth?.toFixed(2) || '0.00'} €
                   </p>
                 </Card>
               </div>
 
-              {/* Charts */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                <Card className="p-6">
-                  <h2 className="text-xl font-semibold mb-4 text-text-main">
-                    Havi bevétel
-                  </h2>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={displayStats.monthlyRevenue || []}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
-                      <XAxis dataKey="month" stroke="var(--color-text-muted)" />
-                      <YAxis stroke="var(--color-text-muted)" />
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: 'var(--color-bg-card)', 
-                          border: '1px solid var(--color-border)',
-                          borderRadius: '8px',
-                          color: 'var(--color-text-main)'
-                        }}
-                      />
-                      <Line type="monotone" dataKey="revenue" stroke="var(--color-primary)" name="Bevétel (€)" />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </Card>
-
-                <Card className="p-6">
-                  <h2 className="text-xl font-semibold mb-4 text-text-main">
-                    Szerver eloszlás játék típus szerint
-                  </h2>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={displayStats.serverDistribution || []}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
-                      <XAxis dataKey="game" stroke="var(--color-text-muted)" />
-                      <YAxis stroke="var(--color-text-muted)" />
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: 'var(--color-bg-card)', 
-                          border: '1px solid var(--color-border)',
-                          borderRadius: '8px',
-                          color: 'var(--color-text-main)'
-                        }}
-                      />
-                      <Bar dataKey="count" fill="var(--color-primary)" name="Szerverek száma" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </Card>
-              </div>
+              {/* Additional Info */}
+              <Card className="p-6">
+                <h2 className="text-xl font-semibold mb-4 text-text-main">
+                  Platform állapot
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <h3 className="text-sm font-medium text-text-muted mb-2">Felhasználók</h3>
+                    <ul className="space-y-1 text-sm">
+                      <li className="text-text-main">Összes: <strong>{displayStats.users?.total || 0}</strong></li>
+                      <li className="text-text-main">Aktív (30 napon belül): <strong>{displayStats.users?.active || 0}</strong></li>
+                      <li className="text-text-main">Prémium (SUPERADMIN): <strong>{displayStats.users?.premium || 0}</strong></li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-text-muted mb-2">Infrastruktúra</h3>
+                    <ul className="space-y-1 text-sm">
+                      <li className="text-text-main">Összes szerver: <strong>{displayStats.servers?.total || 0}</strong></li>
+                      <li className="text-success">Aktív szerverek: <strong>{displayStats.servers?.active || 0}</strong></li>
+                      <li className="text-text-main">Összes node: <strong>{displayStats.nodes?.total || 0}</strong></li>
+                      <li className="text-success">Egészséges node-ok: <strong>{displayStats.nodes?.healthy || 0}</strong></li>
+                    </ul>
+                  </div>
+                </div>
+              </Card>
             </>
           ) : (
             <Card className="p-12 text-center">
