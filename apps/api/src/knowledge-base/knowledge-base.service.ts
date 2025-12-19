@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException, ConflictException, Logger } from '@nestjs/common';
-import { PrismaService } from '@zedgaming/db';
+import { PrismaService } from '@zed-hosting/db';
 
 @Injectable()
 export class KnowledgeBaseService {
@@ -50,9 +50,7 @@ export class KnowledgeBaseService {
           select: {
             id: true,
             email: true,
-            firstName: true,
-            lastName: true,
-          },
+            },
         },
       },
     });
@@ -117,9 +115,7 @@ export class KnowledgeBaseService {
             select: {
               id: true,
               email: true,
-              firstName: true,
-              lastName: true,
-            },
+              },
           },
         },
         orderBy: [
@@ -175,9 +171,7 @@ export class KnowledgeBaseService {
             select: {
               id: true,
               email: true,
-              firstName: true,
-              lastName: true,
-            },
+              },
           },
         },
         orderBy: [
@@ -215,9 +209,7 @@ export class KnowledgeBaseService {
           select: {
             id: true,
             email: true,
-            firstName: true,
-            lastName: true,
-          },
+            },
         },
         versions: {
           orderBy: { version: 'desc' },
@@ -295,9 +287,7 @@ export class KnowledgeBaseService {
           select: {
             id: true,
             email: true,
-            firstName: true,
-            lastName: true,
-          },
+            },
         },
       },
     });
@@ -488,3 +478,4 @@ export class KnowledgeBaseService {
       .replace(/^-+|-+$/g, '');
   }
 }
+

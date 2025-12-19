@@ -108,6 +108,36 @@ export type Promotion = $Result.DefaultSelection<Prisma.$PromotionPayload>
  * 
  */
 export type Order = $Result.DefaultSelection<Prisma.$OrderPayload>
+/**
+ * Model SupportTicket
+ * 
+ */
+export type SupportTicket = $Result.DefaultSelection<Prisma.$SupportTicketPayload>
+/**
+ * Model SlaPolicy
+ * 
+ */
+export type SlaPolicy = $Result.DefaultSelection<Prisma.$SlaPolicyPayload>
+/**
+ * Model TicketComment
+ * 
+ */
+export type TicketComment = $Result.DefaultSelection<Prisma.$TicketCommentPayload>
+/**
+ * Model KnowledgeBaseArticle
+ * 
+ */
+export type KnowledgeBaseArticle = $Result.DefaultSelection<Prisma.$KnowledgeBaseArticlePayload>
+/**
+ * Model KnowledgeBaseCategory
+ * 
+ */
+export type KnowledgeBaseCategory = $Result.DefaultSelection<Prisma.$KnowledgeBaseCategoryPayload>
+/**
+ * Model ArticleVersion
+ * 
+ */
+export type ArticleVersion = $Result.DefaultSelection<Prisma.$ArticleVersionPayload>
 
 /**
  * Enums
@@ -127,7 +157,8 @@ export const UserRole: {
   SUPERADMIN: 'SUPERADMIN',
   RESELLER_ADMIN: 'RESELLER_ADMIN',
   USER: 'USER',
-  SUPPORT: 'SUPPORT'
+  SUPPORT: 'SUPPORT',
+  SUPPORTER: 'SUPPORTER'
 };
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
@@ -296,6 +327,27 @@ export const OrderStatus: {
 
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
 
+
+export const TicketPriority: {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+  CRITICAL: 'CRITICAL'
+};
+
+export type TicketPriority = (typeof TicketPriority)[keyof typeof TicketPriority]
+
+
+export const TicketStatus: {
+  OPEN: 'OPEN',
+  IN_PROGRESS: 'IN_PROGRESS',
+  WAITING_CUSTOMER: 'WAITING_CUSTOMER',
+  RESOLVED: 'RESOLVED',
+  CLOSED: 'CLOSED'
+};
+
+export type TicketStatus = (typeof TicketStatus)[keyof typeof TicketStatus]
+
 }
 
 export type LicenseStatus = $Enums.LicenseStatus
@@ -369,6 +421,14 @@ export const PromotionScope: typeof $Enums.PromotionScope
 export type OrderStatus = $Enums.OrderStatus
 
 export const OrderStatus: typeof $Enums.OrderStatus
+
+export type TicketPriority = $Enums.TicketPriority
+
+export const TicketPriority: typeof $Enums.TicketPriority
+
+export type TicketStatus = $Enums.TicketStatus
+
+export const TicketStatus: typeof $Enums.TicketStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -682,6 +742,66 @@ export class PrismaClient<
     * ```
     */
   get order(): Prisma.OrderDelegate<ExtArgs>;
+
+  /**
+   * `prisma.supportTicket`: Exposes CRUD operations for the **SupportTicket** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SupportTickets
+    * const supportTickets = await prisma.supportTicket.findMany()
+    * ```
+    */
+  get supportTicket(): Prisma.SupportTicketDelegate<ExtArgs>;
+
+  /**
+   * `prisma.slaPolicy`: Exposes CRUD operations for the **SlaPolicy** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SlaPolicies
+    * const slaPolicies = await prisma.slaPolicy.findMany()
+    * ```
+    */
+  get slaPolicy(): Prisma.SlaPolicyDelegate<ExtArgs>;
+
+  /**
+   * `prisma.ticketComment`: Exposes CRUD operations for the **TicketComment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TicketComments
+    * const ticketComments = await prisma.ticketComment.findMany()
+    * ```
+    */
+  get ticketComment(): Prisma.TicketCommentDelegate<ExtArgs>;
+
+  /**
+   * `prisma.knowledgeBaseArticle`: Exposes CRUD operations for the **KnowledgeBaseArticle** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more KnowledgeBaseArticles
+    * const knowledgeBaseArticles = await prisma.knowledgeBaseArticle.findMany()
+    * ```
+    */
+  get knowledgeBaseArticle(): Prisma.KnowledgeBaseArticleDelegate<ExtArgs>;
+
+  /**
+   * `prisma.knowledgeBaseCategory`: Exposes CRUD operations for the **KnowledgeBaseCategory** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more KnowledgeBaseCategories
+    * const knowledgeBaseCategories = await prisma.knowledgeBaseCategory.findMany()
+    * ```
+    */
+  get knowledgeBaseCategory(): Prisma.KnowledgeBaseCategoryDelegate<ExtArgs>;
+
+  /**
+   * `prisma.articleVersion`: Exposes CRUD operations for the **ArticleVersion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ArticleVersions
+    * const articleVersions = await prisma.articleVersion.findMany()
+    * ```
+    */
+  get articleVersion(): Prisma.ArticleVersionDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1141,7 +1261,13 @@ export namespace Prisma {
     Incident: 'Incident',
     Plan: 'Plan',
     Promotion: 'Promotion',
-    Order: 'Order'
+    Order: 'Order',
+    SupportTicket: 'SupportTicket',
+    SlaPolicy: 'SlaPolicy',
+    TicketComment: 'TicketComment',
+    KnowledgeBaseArticle: 'KnowledgeBaseArticle',
+    KnowledgeBaseCategory: 'KnowledgeBaseCategory',
+    ArticleVersion: 'ArticleVersion'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1157,7 +1283,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "systemLicense" | "tenant" | "user" | "auditLog" | "node" | "task" | "networkAllocation" | "subdomain" | "gameServer" | "gameCluster" | "backup" | "metric" | "alert" | "resourceQuota" | "apiKey" | "incident" | "plan" | "promotion" | "order"
+      modelProps: "systemLicense" | "tenant" | "user" | "auditLog" | "node" | "task" | "networkAllocation" | "subdomain" | "gameServer" | "gameCluster" | "backup" | "metric" | "alert" | "resourceQuota" | "apiKey" | "incident" | "plan" | "promotion" | "order" | "supportTicket" | "slaPolicy" | "ticketComment" | "knowledgeBaseArticle" | "knowledgeBaseCategory" | "articleVersion"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1192,6 +1318,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.SystemLicenseCreateManyArgs<ExtArgs>
             result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SystemLicenseCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SystemLicensePayload>[]
           }
           delete: {
             args: Prisma.SystemLicenseDeleteArgs<ExtArgs>
@@ -1259,6 +1389,10 @@ export namespace Prisma {
             args: Prisma.TenantCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.TenantCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload>[]
+          }
           delete: {
             args: Prisma.TenantDeleteArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$TenantPayload>
@@ -1324,6 +1458,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.UserCreateManyArgs<ExtArgs>
             result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UserCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
           }
           delete: {
             args: Prisma.UserDeleteArgs<ExtArgs>
@@ -1391,6 +1529,10 @@ export namespace Prisma {
             args: Prisma.AuditLogCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.AuditLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>[]
+          }
           delete: {
             args: Prisma.AuditLogDeleteArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>
@@ -1456,6 +1598,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.NodeCreateManyArgs<ExtArgs>
             result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NodeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NodePayload>[]
           }
           delete: {
             args: Prisma.NodeDeleteArgs<ExtArgs>
@@ -1523,6 +1669,10 @@ export namespace Prisma {
             args: Prisma.TaskCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.TaskCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TaskPayload>[]
+          }
           delete: {
             args: Prisma.TaskDeleteArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$TaskPayload>
@@ -1588,6 +1738,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.NetworkAllocationCreateManyArgs<ExtArgs>
             result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NetworkAllocationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NetworkAllocationPayload>[]
           }
           delete: {
             args: Prisma.NetworkAllocationDeleteArgs<ExtArgs>
@@ -1655,6 +1809,10 @@ export namespace Prisma {
             args: Prisma.SubdomainCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.SubdomainCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdomainPayload>[]
+          }
           delete: {
             args: Prisma.SubdomainDeleteArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$SubdomainPayload>
@@ -1720,6 +1878,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.GameServerCreateManyArgs<ExtArgs>
             result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GameServerCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GameServerPayload>[]
           }
           delete: {
             args: Prisma.GameServerDeleteArgs<ExtArgs>
@@ -1787,6 +1949,10 @@ export namespace Prisma {
             args: Prisma.GameClusterCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.GameClusterCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GameClusterPayload>[]
+          }
           delete: {
             args: Prisma.GameClusterDeleteArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$GameClusterPayload>
@@ -1852,6 +2018,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.BackupCreateManyArgs<ExtArgs>
             result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BackupCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BackupPayload>[]
           }
           delete: {
             args: Prisma.BackupDeleteArgs<ExtArgs>
@@ -1919,6 +2089,10 @@ export namespace Prisma {
             args: Prisma.MetricCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.MetricCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MetricPayload>[]
+          }
           delete: {
             args: Prisma.MetricDeleteArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$MetricPayload>
@@ -1984,6 +2158,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.AlertCreateManyArgs<ExtArgs>
             result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AlertCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AlertPayload>[]
           }
           delete: {
             args: Prisma.AlertDeleteArgs<ExtArgs>
@@ -2051,6 +2229,10 @@ export namespace Prisma {
             args: Prisma.ResourceQuotaCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.ResourceQuotaCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResourceQuotaPayload>[]
+          }
           delete: {
             args: Prisma.ResourceQuotaDeleteArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$ResourceQuotaPayload>
@@ -2116,6 +2298,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.ApiKeyCreateManyArgs<ExtArgs>
             result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ApiKeyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ApiKeyPayload>[]
           }
           delete: {
             args: Prisma.ApiKeyDeleteArgs<ExtArgs>
@@ -2183,6 +2369,10 @@ export namespace Prisma {
             args: Prisma.IncidentCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.IncidentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IncidentPayload>[]
+          }
           delete: {
             args: Prisma.IncidentDeleteArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$IncidentPayload>
@@ -2248,6 +2438,10 @@ export namespace Prisma {
           createMany: {
             args: Prisma.PlanCreateManyArgs<ExtArgs>
             result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PlanCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanPayload>[]
           }
           delete: {
             args: Prisma.PlanDeleteArgs<ExtArgs>
@@ -2315,6 +2509,10 @@ export namespace Prisma {
             args: Prisma.PromotionCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.PromotionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PromotionPayload>[]
+          }
           delete: {
             args: Prisma.PromotionDeleteArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$PromotionPayload>
@@ -2381,6 +2579,10 @@ export namespace Prisma {
             args: Prisma.OrderCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          createManyAndReturn: {
+            args: Prisma.OrderCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>[]
+          }
           delete: {
             args: Prisma.OrderDeleteArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$OrderPayload>
@@ -2412,6 +2614,426 @@ export namespace Prisma {
           count: {
             args: Prisma.OrderCountArgs<ExtArgs>
             result: $Utils.Optional<OrderCountAggregateOutputType> | number
+          }
+        }
+      }
+      SupportTicket: {
+        payload: Prisma.$SupportTicketPayload<ExtArgs>
+        fields: Prisma.SupportTicketFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SupportTicketFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SupportTicketFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>
+          }
+          findFirst: {
+            args: Prisma.SupportTicketFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SupportTicketFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>
+          }
+          findMany: {
+            args: Prisma.SupportTicketFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>[]
+          }
+          create: {
+            args: Prisma.SupportTicketCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>
+          }
+          createMany: {
+            args: Prisma.SupportTicketCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SupportTicketCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>[]
+          }
+          delete: {
+            args: Prisma.SupportTicketDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>
+          }
+          update: {
+            args: Prisma.SupportTicketUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>
+          }
+          deleteMany: {
+            args: Prisma.SupportTicketDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SupportTicketUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SupportTicketUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>
+          }
+          aggregate: {
+            args: Prisma.SupportTicketAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSupportTicket>
+          }
+          groupBy: {
+            args: Prisma.SupportTicketGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SupportTicketGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SupportTicketCountArgs<ExtArgs>
+            result: $Utils.Optional<SupportTicketCountAggregateOutputType> | number
+          }
+        }
+      }
+      SlaPolicy: {
+        payload: Prisma.$SlaPolicyPayload<ExtArgs>
+        fields: Prisma.SlaPolicyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SlaPolicyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SlaPolicyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SlaPolicyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SlaPolicyPayload>
+          }
+          findFirst: {
+            args: Prisma.SlaPolicyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SlaPolicyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SlaPolicyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SlaPolicyPayload>
+          }
+          findMany: {
+            args: Prisma.SlaPolicyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SlaPolicyPayload>[]
+          }
+          create: {
+            args: Prisma.SlaPolicyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SlaPolicyPayload>
+          }
+          createMany: {
+            args: Prisma.SlaPolicyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SlaPolicyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SlaPolicyPayload>[]
+          }
+          delete: {
+            args: Prisma.SlaPolicyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SlaPolicyPayload>
+          }
+          update: {
+            args: Prisma.SlaPolicyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SlaPolicyPayload>
+          }
+          deleteMany: {
+            args: Prisma.SlaPolicyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SlaPolicyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SlaPolicyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SlaPolicyPayload>
+          }
+          aggregate: {
+            args: Prisma.SlaPolicyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSlaPolicy>
+          }
+          groupBy: {
+            args: Prisma.SlaPolicyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SlaPolicyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SlaPolicyCountArgs<ExtArgs>
+            result: $Utils.Optional<SlaPolicyCountAggregateOutputType> | number
+          }
+        }
+      }
+      TicketComment: {
+        payload: Prisma.$TicketCommentPayload<ExtArgs>
+        fields: Prisma.TicketCommentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TicketCommentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TicketCommentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TicketCommentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TicketCommentPayload>
+          }
+          findFirst: {
+            args: Prisma.TicketCommentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TicketCommentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TicketCommentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TicketCommentPayload>
+          }
+          findMany: {
+            args: Prisma.TicketCommentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TicketCommentPayload>[]
+          }
+          create: {
+            args: Prisma.TicketCommentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TicketCommentPayload>
+          }
+          createMany: {
+            args: Prisma.TicketCommentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TicketCommentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TicketCommentPayload>[]
+          }
+          delete: {
+            args: Prisma.TicketCommentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TicketCommentPayload>
+          }
+          update: {
+            args: Prisma.TicketCommentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TicketCommentPayload>
+          }
+          deleteMany: {
+            args: Prisma.TicketCommentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TicketCommentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.TicketCommentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TicketCommentPayload>
+          }
+          aggregate: {
+            args: Prisma.TicketCommentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTicketComment>
+          }
+          groupBy: {
+            args: Prisma.TicketCommentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TicketCommentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TicketCommentCountArgs<ExtArgs>
+            result: $Utils.Optional<TicketCommentCountAggregateOutputType> | number
+          }
+        }
+      }
+      KnowledgeBaseArticle: {
+        payload: Prisma.$KnowledgeBaseArticlePayload<ExtArgs>
+        fields: Prisma.KnowledgeBaseArticleFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.KnowledgeBaseArticleFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KnowledgeBaseArticlePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.KnowledgeBaseArticleFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KnowledgeBaseArticlePayload>
+          }
+          findFirst: {
+            args: Prisma.KnowledgeBaseArticleFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KnowledgeBaseArticlePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.KnowledgeBaseArticleFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KnowledgeBaseArticlePayload>
+          }
+          findMany: {
+            args: Prisma.KnowledgeBaseArticleFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KnowledgeBaseArticlePayload>[]
+          }
+          create: {
+            args: Prisma.KnowledgeBaseArticleCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KnowledgeBaseArticlePayload>
+          }
+          createMany: {
+            args: Prisma.KnowledgeBaseArticleCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.KnowledgeBaseArticleCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KnowledgeBaseArticlePayload>[]
+          }
+          delete: {
+            args: Prisma.KnowledgeBaseArticleDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KnowledgeBaseArticlePayload>
+          }
+          update: {
+            args: Prisma.KnowledgeBaseArticleUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KnowledgeBaseArticlePayload>
+          }
+          deleteMany: {
+            args: Prisma.KnowledgeBaseArticleDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.KnowledgeBaseArticleUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.KnowledgeBaseArticleUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KnowledgeBaseArticlePayload>
+          }
+          aggregate: {
+            args: Prisma.KnowledgeBaseArticleAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateKnowledgeBaseArticle>
+          }
+          groupBy: {
+            args: Prisma.KnowledgeBaseArticleGroupByArgs<ExtArgs>
+            result: $Utils.Optional<KnowledgeBaseArticleGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.KnowledgeBaseArticleCountArgs<ExtArgs>
+            result: $Utils.Optional<KnowledgeBaseArticleCountAggregateOutputType> | number
+          }
+        }
+      }
+      KnowledgeBaseCategory: {
+        payload: Prisma.$KnowledgeBaseCategoryPayload<ExtArgs>
+        fields: Prisma.KnowledgeBaseCategoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.KnowledgeBaseCategoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KnowledgeBaseCategoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.KnowledgeBaseCategoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KnowledgeBaseCategoryPayload>
+          }
+          findFirst: {
+            args: Prisma.KnowledgeBaseCategoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KnowledgeBaseCategoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.KnowledgeBaseCategoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KnowledgeBaseCategoryPayload>
+          }
+          findMany: {
+            args: Prisma.KnowledgeBaseCategoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KnowledgeBaseCategoryPayload>[]
+          }
+          create: {
+            args: Prisma.KnowledgeBaseCategoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KnowledgeBaseCategoryPayload>
+          }
+          createMany: {
+            args: Prisma.KnowledgeBaseCategoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.KnowledgeBaseCategoryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KnowledgeBaseCategoryPayload>[]
+          }
+          delete: {
+            args: Prisma.KnowledgeBaseCategoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KnowledgeBaseCategoryPayload>
+          }
+          update: {
+            args: Prisma.KnowledgeBaseCategoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KnowledgeBaseCategoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.KnowledgeBaseCategoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.KnowledgeBaseCategoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.KnowledgeBaseCategoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KnowledgeBaseCategoryPayload>
+          }
+          aggregate: {
+            args: Prisma.KnowledgeBaseCategoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateKnowledgeBaseCategory>
+          }
+          groupBy: {
+            args: Prisma.KnowledgeBaseCategoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<KnowledgeBaseCategoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.KnowledgeBaseCategoryCountArgs<ExtArgs>
+            result: $Utils.Optional<KnowledgeBaseCategoryCountAggregateOutputType> | number
+          }
+        }
+      }
+      ArticleVersion: {
+        payload: Prisma.$ArticleVersionPayload<ExtArgs>
+        fields: Prisma.ArticleVersionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ArticleVersionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticleVersionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ArticleVersionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticleVersionPayload>
+          }
+          findFirst: {
+            args: Prisma.ArticleVersionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticleVersionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ArticleVersionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticleVersionPayload>
+          }
+          findMany: {
+            args: Prisma.ArticleVersionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticleVersionPayload>[]
+          }
+          create: {
+            args: Prisma.ArticleVersionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticleVersionPayload>
+          }
+          createMany: {
+            args: Prisma.ArticleVersionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ArticleVersionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticleVersionPayload>[]
+          }
+          delete: {
+            args: Prisma.ArticleVersionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticleVersionPayload>
+          }
+          update: {
+            args: Prisma.ArticleVersionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticleVersionPayload>
+          }
+          deleteMany: {
+            args: Prisma.ArticleVersionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ArticleVersionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ArticleVersionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticleVersionPayload>
+          }
+          aggregate: {
+            args: Prisma.ArticleVersionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateArticleVersion>
+          }
+          groupBy: {
+            args: Prisma.ArticleVersionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ArticleVersionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ArticleVersionCountArgs<ExtArgs>
+            result: $Utils.Optional<ArticleVersionCountAggregateOutputType> | number
           }
         }
       }
@@ -2623,6 +3245,10 @@ export namespace Prisma {
     apiKeys: number
     assignedIncidents: number
     orders: number
+    supportTickets: number
+    ticketComments: number
+    assignedTickets: number
+    knowledgeBaseArticles: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2633,6 +3259,10 @@ export namespace Prisma {
     apiKeys?: boolean | UserCountOutputTypeCountApiKeysArgs
     assignedIncidents?: boolean | UserCountOutputTypeCountAssignedIncidentsArgs
     orders?: boolean | UserCountOutputTypeCountOrdersArgs
+    supportTickets?: boolean | UserCountOutputTypeCountSupportTicketsArgs
+    ticketComments?: boolean | UserCountOutputTypeCountTicketCommentsArgs
+    assignedTickets?: boolean | UserCountOutputTypeCountAssignedTicketsArgs
+    knowledgeBaseArticles?: boolean | UserCountOutputTypeCountKnowledgeBaseArticlesArgs
   }
 
   // Custom InputTypes
@@ -2693,6 +3323,34 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: OrderWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSupportTicketsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupportTicketWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountTicketCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TicketCommentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAssignedTicketsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupportTicketWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountKnowledgeBaseArticlesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: KnowledgeBaseArticleWhereInput
   }
 
 
@@ -2925,6 +3583,108 @@ export namespace Prisma {
    */
   export type PlanCountOutputTypeCountPromotionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PromotionWhereInput
+  }
+
+
+  /**
+   * Count Type SupportTicketCountOutputType
+   */
+
+  export type SupportTicketCountOutputType = {
+    comments: number
+  }
+
+  export type SupportTicketCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    comments?: boolean | SupportTicketCountOutputTypeCountCommentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SupportTicketCountOutputType without action
+   */
+  export type SupportTicketCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicketCountOutputType
+     */
+    select?: SupportTicketCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SupportTicketCountOutputType without action
+   */
+  export type SupportTicketCountOutputTypeCountCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TicketCommentWhereInput
+  }
+
+
+  /**
+   * Count Type KnowledgeBaseArticleCountOutputType
+   */
+
+  export type KnowledgeBaseArticleCountOutputType = {
+    versions: number
+  }
+
+  export type KnowledgeBaseArticleCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    versions?: boolean | KnowledgeBaseArticleCountOutputTypeCountVersionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * KnowledgeBaseArticleCountOutputType without action
+   */
+  export type KnowledgeBaseArticleCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseArticleCountOutputType
+     */
+    select?: KnowledgeBaseArticleCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * KnowledgeBaseArticleCountOutputType without action
+   */
+  export type KnowledgeBaseArticleCountOutputTypeCountVersionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ArticleVersionWhereInput
+  }
+
+
+  /**
+   * Count Type KnowledgeBaseCategoryCountOutputType
+   */
+
+  export type KnowledgeBaseCategoryCountOutputType = {
+    children: number
+    articles: number
+  }
+
+  export type KnowledgeBaseCategoryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    children?: boolean | KnowledgeBaseCategoryCountOutputTypeCountChildrenArgs
+    articles?: boolean | KnowledgeBaseCategoryCountOutputTypeCountArticlesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * KnowledgeBaseCategoryCountOutputType without action
+   */
+  export type KnowledgeBaseCategoryCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseCategoryCountOutputType
+     */
+    select?: KnowledgeBaseCategoryCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * KnowledgeBaseCategoryCountOutputType without action
+   */
+  export type KnowledgeBaseCategoryCountOutputTypeCountChildrenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: KnowledgeBaseCategoryWhereInput
+  }
+
+  /**
+   * KnowledgeBaseCategoryCountOutputType without action
+   */
+  export type KnowledgeBaseCategoryCountOutputTypeCountArticlesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: KnowledgeBaseArticleWhereInput
   }
 
 
@@ -3172,6 +3932,18 @@ export namespace Prisma {
     updatedAt?: boolean
   }, ExtArgs["result"]["systemLicense"]>
 
+  export type SystemLicenseSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    licenseKey?: boolean
+    status?: boolean
+    validUntil?: boolean
+    maxNodesAllowed?: boolean
+    whitelabelEnabled?: boolean
+    signature?: boolean
+    gracePeriodEnds?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["systemLicense"]>
 
   export type SystemLicenseSelectScalar = {
     id?: boolean
@@ -3317,6 +4089,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends SystemLicenseCreateManyArgs>(args?: SelectSubset<T, SystemLicenseCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SystemLicenses and returns the data saved in the database.
+     * @param {SystemLicenseCreateManyAndReturnArgs} args - Arguments to create many SystemLicenses.
+     * @example
+     * // Create many SystemLicenses
+     * const systemLicense = await prisma.systemLicense.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SystemLicenses and only return the `id`
+     * const systemLicenseWithIdOnly = await prisma.systemLicense.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SystemLicenseCreateManyAndReturnArgs>(args?: SelectSubset<T, SystemLicenseCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SystemLicensePayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a SystemLicense.
@@ -3765,6 +4561,21 @@ export namespace Prisma {
   }
 
   /**
+   * SystemLicense createManyAndReturn
+   */
+  export type SystemLicenseCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SystemLicense
+     */
+    select?: SystemLicenseSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SystemLicenses.
+     */
+    data: SystemLicenseCreateManyInput | SystemLicenseCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
    * SystemLicense update
    */
   export type SystemLicenseUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4030,6 +4841,15 @@ export namespace Prisma {
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["tenant"]>
 
+  export type TenantSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    domain?: boolean
+    themeConfig?: boolean
+    smtpConfig?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["tenant"]>
 
   export type TenantSelectScalar = {
     id?: boolean
@@ -4046,6 +4866,7 @@ export namespace Prisma {
     resourceQuotas?: boolean | Tenant$resourceQuotasArgs<ExtArgs>
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>
   }
+  export type TenantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $TenantPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Tenant"
@@ -4177,6 +4998,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends TenantCreateManyArgs>(args?: SelectSubset<T, TenantCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Tenants and returns the data saved in the database.
+     * @param {TenantCreateManyAndReturnArgs} args - Arguments to create many Tenants.
+     * @example
+     * // Create many Tenants
+     * const tenant = await prisma.tenant.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Tenants and only return the `id`
+     * const tenantWithIdOnly = await prisma.tenant.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TenantCreateManyAndReturnArgs>(args?: SelectSubset<T, TenantCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a Tenant.
@@ -4648,6 +5493,21 @@ export namespace Prisma {
   }
 
   /**
+   * Tenant createManyAndReturn
+   */
+  export type TenantCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Tenants.
+     */
+    data: TenantCreateManyInput | TenantCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
    * Tenant update
    */
   export type TenantUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4818,6 +5678,9 @@ export namespace Prisma {
     passwordHash: string | null
     role: $Enums.UserRole | null
     twoFactorSecret: string | null
+    twoFactorEnabled: boolean | null
+    twoFactorMethod: string | null
+    twoFactorBackupCodes: string | null
     balance: number | null
     tenantId: string | null
     createdAt: Date | null
@@ -4830,6 +5693,9 @@ export namespace Prisma {
     passwordHash: string | null
     role: $Enums.UserRole | null
     twoFactorSecret: string | null
+    twoFactorEnabled: boolean | null
+    twoFactorMethod: string | null
+    twoFactorBackupCodes: string | null
     balance: number | null
     tenantId: string | null
     createdAt: Date | null
@@ -4842,6 +5708,9 @@ export namespace Prisma {
     passwordHash: number
     role: number
     twoFactorSecret: number
+    twoFactorEnabled: number
+    twoFactorMethod: number
+    twoFactorBackupCodes: number
     balance: number
     tenantId: number
     createdAt: number
@@ -4864,6 +5733,9 @@ export namespace Prisma {
     passwordHash?: true
     role?: true
     twoFactorSecret?: true
+    twoFactorEnabled?: true
+    twoFactorMethod?: true
+    twoFactorBackupCodes?: true
     balance?: true
     tenantId?: true
     createdAt?: true
@@ -4876,6 +5748,9 @@ export namespace Prisma {
     passwordHash?: true
     role?: true
     twoFactorSecret?: true
+    twoFactorEnabled?: true
+    twoFactorMethod?: true
+    twoFactorBackupCodes?: true
     balance?: true
     tenantId?: true
     createdAt?: true
@@ -4888,6 +5763,9 @@ export namespace Prisma {
     passwordHash?: true
     role?: true
     twoFactorSecret?: true
+    twoFactorEnabled?: true
+    twoFactorMethod?: true
+    twoFactorBackupCodes?: true
     balance?: true
     tenantId?: true
     createdAt?: true
@@ -4987,6 +5865,9 @@ export namespace Prisma {
     passwordHash: string
     role: $Enums.UserRole
     twoFactorSecret: string | null
+    twoFactorEnabled: boolean
+    twoFactorMethod: string | null
+    twoFactorBackupCodes: string | null
     balance: number
     tenantId: string | null
     createdAt: Date
@@ -5018,6 +5899,9 @@ export namespace Prisma {
     passwordHash?: boolean
     role?: boolean
     twoFactorSecret?: boolean
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: boolean
+    twoFactorBackupCodes?: boolean
     balance?: boolean
     tenantId?: boolean
     createdAt?: boolean
@@ -5030,9 +5914,28 @@ export namespace Prisma {
     apiKeys?: boolean | User$apiKeysArgs<ExtArgs>
     assignedIncidents?: boolean | User$assignedIncidentsArgs<ExtArgs>
     orders?: boolean | User$ordersArgs<ExtArgs>
+    supportTickets?: boolean | User$supportTicketsArgs<ExtArgs>
+    ticketComments?: boolean | User$ticketCommentsArgs<ExtArgs>
+    assignedTickets?: boolean | User$assignedTicketsArgs<ExtArgs>
+    knowledgeBaseArticles?: boolean | User$knowledgeBaseArticlesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
+  export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    passwordHash?: boolean
+    role?: boolean
+    twoFactorSecret?: boolean
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: boolean
+    twoFactorBackupCodes?: boolean
+    balance?: boolean
+    tenantId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | User$tenantArgs<ExtArgs>
+  }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
     id?: boolean
@@ -5040,6 +5943,9 @@ export namespace Prisma {
     passwordHash?: boolean
     role?: boolean
     twoFactorSecret?: boolean
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: boolean
+    twoFactorBackupCodes?: boolean
     balance?: boolean
     tenantId?: boolean
     createdAt?: boolean
@@ -5055,7 +5961,14 @@ export namespace Prisma {
     apiKeys?: boolean | User$apiKeysArgs<ExtArgs>
     assignedIncidents?: boolean | User$assignedIncidentsArgs<ExtArgs>
     orders?: boolean | User$ordersArgs<ExtArgs>
+    supportTickets?: boolean | User$supportTicketsArgs<ExtArgs>
+    ticketComments?: boolean | User$ticketCommentsArgs<ExtArgs>
+    assignedTickets?: boolean | User$assignedTicketsArgs<ExtArgs>
+    knowledgeBaseArticles?: boolean | User$knowledgeBaseArticlesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | User$tenantArgs<ExtArgs>
   }
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5069,6 +5982,10 @@ export namespace Prisma {
       apiKeys: Prisma.$ApiKeyPayload<ExtArgs>[]
       assignedIncidents: Prisma.$IncidentPayload<ExtArgs>[]
       orders: Prisma.$OrderPayload<ExtArgs>[]
+      supportTickets: Prisma.$SupportTicketPayload<ExtArgs>[]
+      ticketComments: Prisma.$TicketCommentPayload<ExtArgs>[]
+      assignedTickets: Prisma.$SupportTicketPayload<ExtArgs>[]
+      knowledgeBaseArticles: Prisma.$KnowledgeBaseArticlePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5076,6 +5993,9 @@ export namespace Prisma {
       passwordHash: string
       role: $Enums.UserRole
       twoFactorSecret: string | null
+      twoFactorEnabled: boolean
+      twoFactorMethod: string | null
+      twoFactorBackupCodes: string | null
       balance: number
       tenantId: string | null
       createdAt: Date
@@ -5196,6 +6116,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends UserCreateManyArgs>(args?: SelectSubset<T, UserCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Users and returns the data saved in the database.
+     * @param {UserCreateManyAndReturnArgs} args - Arguments to create many Users.
+     * @example
+     * // Create many Users
+     * const user = await prisma.user.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Users and only return the `id`
+     * const userWithIdOnly = await prisma.user.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserCreateManyAndReturnArgs>(args?: SelectSubset<T, UserCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a User.
@@ -5428,6 +6372,10 @@ export namespace Prisma {
     apiKeys<T extends User$apiKeysArgs<ExtArgs> = {}>(args?: Subset<T, User$apiKeysArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findMany"> | Null>
     assignedIncidents<T extends User$assignedIncidentsArgs<ExtArgs> = {}>(args?: Subset<T, User$assignedIncidentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IncidentPayload<ExtArgs>, T, "findMany"> | Null>
     orders<T extends User$ordersArgs<ExtArgs> = {}>(args?: Subset<T, User$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany"> | Null>
+    supportTickets<T extends User$supportTicketsArgs<ExtArgs> = {}>(args?: Subset<T, User$supportTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany"> | Null>
+    ticketComments<T extends User$ticketCommentsArgs<ExtArgs> = {}>(args?: Subset<T, User$ticketCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TicketCommentPayload<ExtArgs>, T, "findMany"> | Null>
+    assignedTickets<T extends User$assignedTicketsArgs<ExtArgs> = {}>(args?: Subset<T, User$assignedTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany"> | Null>
+    knowledgeBaseArticles<T extends User$knowledgeBaseArticlesArgs<ExtArgs> = {}>(args?: Subset<T, User$knowledgeBaseArticlesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KnowledgeBaseArticlePayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5462,6 +6410,9 @@ export namespace Prisma {
     readonly passwordHash: FieldRef<"User", 'String'>
     readonly role: FieldRef<"User", 'UserRole'>
     readonly twoFactorSecret: FieldRef<"User", 'String'>
+    readonly twoFactorEnabled: FieldRef<"User", 'Boolean'>
+    readonly twoFactorMethod: FieldRef<"User", 'String'>
+    readonly twoFactorBackupCodes: FieldRef<"User", 'String'>
     readonly balance: FieldRef<"User", 'Float'>
     readonly tenantId: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
@@ -5672,6 +6623,25 @@ export namespace Prisma {
      */
     data: UserCreateManyInput | UserCreateManyInput[]
     skipDuplicates?: boolean
+  }
+
+  /**
+   * User createManyAndReturn
+   */
+  export type UserCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Users.
+     */
+    data: UserCreateManyInput | UserCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -5920,6 +6890,86 @@ export namespace Prisma {
   }
 
   /**
+   * User.supportTickets
+   */
+  export type User$supportTicketsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    where?: SupportTicketWhereInput
+    orderBy?: SupportTicketOrderByWithRelationInput | SupportTicketOrderByWithRelationInput[]
+    cursor?: SupportTicketWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SupportTicketScalarFieldEnum | SupportTicketScalarFieldEnum[]
+  }
+
+  /**
+   * User.ticketComments
+   */
+  export type User$ticketCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketComment
+     */
+    select?: TicketCommentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketCommentInclude<ExtArgs> | null
+    where?: TicketCommentWhereInput
+    orderBy?: TicketCommentOrderByWithRelationInput | TicketCommentOrderByWithRelationInput[]
+    cursor?: TicketCommentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TicketCommentScalarFieldEnum | TicketCommentScalarFieldEnum[]
+  }
+
+  /**
+   * User.assignedTickets
+   */
+  export type User$assignedTicketsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    where?: SupportTicketWhereInput
+    orderBy?: SupportTicketOrderByWithRelationInput | SupportTicketOrderByWithRelationInput[]
+    cursor?: SupportTicketWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SupportTicketScalarFieldEnum | SupportTicketScalarFieldEnum[]
+  }
+
+  /**
+   * User.knowledgeBaseArticles
+   */
+  export type User$knowledgeBaseArticlesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseArticle
+     */
+    select?: KnowledgeBaseArticleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseArticleInclude<ExtArgs> | null
+    where?: KnowledgeBaseArticleWhereInput
+    orderBy?: KnowledgeBaseArticleOrderByWithRelationInput | KnowledgeBaseArticleOrderByWithRelationInput[]
+    cursor?: KnowledgeBaseArticleWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: KnowledgeBaseArticleScalarFieldEnum | KnowledgeBaseArticleScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6113,6 +7163,16 @@ export namespace Prisma {
     user?: boolean | AuditLog$userArgs<ExtArgs>
   }, ExtArgs["result"]["auditLog"]>
 
+  export type AuditLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    action?: boolean
+    resourceId?: boolean
+    ipAddress?: boolean
+    details?: boolean
+    createdAt?: boolean
+    user?: boolean | AuditLog$userArgs<ExtArgs>
+  }, ExtArgs["result"]["auditLog"]>
 
   export type AuditLogSelectScalar = {
     id?: boolean
@@ -6125,6 +7185,9 @@ export namespace Prisma {
   }
 
   export type AuditLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | AuditLog$userArgs<ExtArgs>
+  }
+  export type AuditLogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | AuditLog$userArgs<ExtArgs>
   }
 
@@ -6257,6 +7320,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends AuditLogCreateManyArgs>(args?: SelectSubset<T, AuditLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AuditLogs and returns the data saved in the database.
+     * @param {AuditLogCreateManyAndReturnArgs} args - Arguments to create many AuditLogs.
+     * @example
+     * // Create many AuditLogs
+     * const auditLog = await prisma.auditLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AuditLogs and only return the `id`
+     * const auditLogWithIdOnly = await prisma.auditLog.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AuditLogCreateManyAndReturnArgs>(args?: SelectSubset<T, AuditLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a AuditLog.
@@ -6727,6 +7814,25 @@ export namespace Prisma {
   }
 
   /**
+   * AuditLog createManyAndReturn
+   */
+  export type AuditLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many AuditLogs.
+     */
+    data: AuditLogCreateManyInput | AuditLogCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * AuditLog update
    */
   export type AuditLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7141,6 +8247,23 @@ export namespace Prisma {
     _count?: boolean | NodeCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["node"]>
 
+  export type NodeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    apiKey?: boolean
+    ipAddress?: boolean
+    publicFqdn?: boolean
+    totalRam?: boolean
+    totalCpu?: boolean
+    diskType?: boolean
+    isClusterStorage?: boolean
+    maintenanceMode?: boolean
+    maxConcurrentUpdates?: boolean
+    status?: boolean
+    lastHeartbeat?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["node"]>
 
   export type NodeSelectScalar = {
     id?: boolean
@@ -7169,6 +8292,7 @@ export namespace Prisma {
     tasks?: boolean | Node$tasksArgs<ExtArgs>
     _count?: boolean | NodeCountOutputTypeDefaultArgs<ExtArgs>
   }
+  export type NodeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $NodePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Node"
@@ -7312,6 +8436,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends NodeCreateManyArgs>(args?: SelectSubset<T, NodeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Nodes and returns the data saved in the database.
+     * @param {NodeCreateManyAndReturnArgs} args - Arguments to create many Nodes.
+     * @example
+     * // Create many Nodes
+     * const node = await prisma.node.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Nodes and only return the `id`
+     * const nodeWithIdOnly = await prisma.node.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NodeCreateManyAndReturnArgs>(args?: SelectSubset<T, NodeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NodePayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a Node.
@@ -7795,6 +8943,21 @@ export namespace Prisma {
   }
 
   /**
+   * Node createManyAndReturn
+   */
+  export type NodeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Node
+     */
+    select?: NodeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Nodes.
+     */
+    data: NodeCreateManyInput | NodeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
    * Node update
    */
   export type NodeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8214,6 +9377,18 @@ export namespace Prisma {
     node?: boolean | NodeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["task"]>
 
+  export type TaskSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nodeId?: boolean
+    type?: boolean
+    status?: boolean
+    data?: boolean
+    error?: boolean
+    completedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    node?: boolean | NodeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["task"]>
 
   export type TaskSelectScalar = {
     id?: boolean
@@ -8228,6 +9403,9 @@ export namespace Prisma {
   }
 
   export type TaskInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    node?: boolean | NodeDefaultArgs<ExtArgs>
+  }
+  export type TaskIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     node?: boolean | NodeDefaultArgs<ExtArgs>
   }
 
@@ -8362,6 +9540,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends TaskCreateManyArgs>(args?: SelectSubset<T, TaskCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Tasks and returns the data saved in the database.
+     * @param {TaskCreateManyAndReturnArgs} args - Arguments to create many Tasks.
+     * @example
+     * // Create many Tasks
+     * const task = await prisma.task.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Tasks and only return the `id`
+     * const taskWithIdOnly = await prisma.task.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TaskCreateManyAndReturnArgs>(args?: SelectSubset<T, TaskCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a Task.
@@ -8834,6 +10036,25 @@ export namespace Prisma {
   }
 
   /**
+   * Task createManyAndReturn
+   */
+  export type TaskCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Task
+     */
+    select?: TaskSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Tasks.
+     */
+    data: TaskCreateManyInput | TaskCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TaskIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * Task update
    */
   export type TaskUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9164,6 +10385,18 @@ export namespace Prisma {
     server?: boolean | NetworkAllocation$serverArgs<ExtArgs>
   }, ExtArgs["result"]["networkAllocation"]>
 
+  export type NetworkAllocationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nodeId?: boolean
+    port?: boolean
+    protocol?: boolean
+    type?: boolean
+    serverUuid?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    node?: boolean | NodeDefaultArgs<ExtArgs>
+    server?: boolean | NetworkAllocation$serverArgs<ExtArgs>
+  }, ExtArgs["result"]["networkAllocation"]>
 
   export type NetworkAllocationSelectScalar = {
     id?: boolean
@@ -9177,6 +10410,10 @@ export namespace Prisma {
   }
 
   export type NetworkAllocationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    node?: boolean | NodeDefaultArgs<ExtArgs>
+    server?: boolean | NetworkAllocation$serverArgs<ExtArgs>
+  }
+  export type NetworkAllocationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     node?: boolean | NodeDefaultArgs<ExtArgs>
     server?: boolean | NetworkAllocation$serverArgs<ExtArgs>
   }
@@ -9312,6 +10549,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends NetworkAllocationCreateManyArgs>(args?: SelectSubset<T, NetworkAllocationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many NetworkAllocations and returns the data saved in the database.
+     * @param {NetworkAllocationCreateManyAndReturnArgs} args - Arguments to create many NetworkAllocations.
+     * @example
+     * // Create many NetworkAllocations
+     * const networkAllocation = await prisma.networkAllocation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many NetworkAllocations and only return the `id`
+     * const networkAllocationWithIdOnly = await prisma.networkAllocation.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NetworkAllocationCreateManyAndReturnArgs>(args?: SelectSubset<T, NetworkAllocationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NetworkAllocationPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a NetworkAllocation.
@@ -9784,6 +11045,25 @@ export namespace Prisma {
   }
 
   /**
+   * NetworkAllocation createManyAndReturn
+   */
+  export type NetworkAllocationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NetworkAllocation
+     */
+    select?: NetworkAllocationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many NetworkAllocations.
+     */
+    data: NetworkAllocationCreateManyInput | NetworkAllocationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NetworkAllocationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * NetworkAllocation update
    */
   export type NetworkAllocationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10094,6 +11374,17 @@ export namespace Prisma {
     server?: boolean | GameServerDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["subdomain"]>
 
+  export type SubdomainSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    subdomain?: boolean
+    domain?: boolean
+    serverUuid?: boolean
+    cloudflareId?: boolean
+    targetIP?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    server?: boolean | GameServerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["subdomain"]>
 
   export type SubdomainSelectScalar = {
     id?: boolean
@@ -10107,6 +11398,9 @@ export namespace Prisma {
   }
 
   export type SubdomainInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    server?: boolean | GameServerDefaultArgs<ExtArgs>
+  }
+  export type SubdomainIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     server?: boolean | GameServerDefaultArgs<ExtArgs>
   }
 
@@ -10240,6 +11534,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends SubdomainCreateManyArgs>(args?: SelectSubset<T, SubdomainCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Subdomains and returns the data saved in the database.
+     * @param {SubdomainCreateManyAndReturnArgs} args - Arguments to create many Subdomains.
+     * @example
+     * // Create many Subdomains
+     * const subdomain = await prisma.subdomain.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Subdomains and only return the `id`
+     * const subdomainWithIdOnly = await prisma.subdomain.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SubdomainCreateManyAndReturnArgs>(args?: SelectSubset<T, SubdomainCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubdomainPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a Subdomain.
@@ -10711,6 +12029,25 @@ export namespace Prisma {
   }
 
   /**
+   * Subdomain createManyAndReturn
+   */
+  export type SubdomainCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Subdomain
+     */
+    select?: SubdomainSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Subdomains.
+     */
+    data: SubdomainCreateManyInput | SubdomainCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubdomainIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * Subdomain update
    */
   export type SubdomainUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11082,6 +12419,25 @@ export namespace Prisma {
     _count?: boolean | GameServerCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["gameServer"]>
 
+  export type GameServerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    gameType?: boolean
+    status?: boolean
+    nodeId?: boolean
+    ownerId?: boolean
+    planId?: boolean
+    startupPriority?: boolean
+    resources?: boolean
+    envVars?: boolean
+    clusterId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    node?: boolean | NodeDefaultArgs<ExtArgs>
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+    plan?: boolean | GameServer$planArgs<ExtArgs>
+    cluster?: boolean | GameServer$clusterArgs<ExtArgs>
+  }, ExtArgs["result"]["gameServer"]>
 
   export type GameServerSelectScalar = {
     id?: boolean
@@ -11111,6 +12467,12 @@ export namespace Prisma {
     alerts?: boolean | GameServer$alertsArgs<ExtArgs>
     orders?: boolean | GameServer$ordersArgs<ExtArgs>
     _count?: boolean | GameServerCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type GameServerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    node?: boolean | NodeDefaultArgs<ExtArgs>
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+    plan?: boolean | GameServer$planArgs<ExtArgs>
+    cluster?: boolean | GameServer$clusterArgs<ExtArgs>
   }
 
   export type $GameServerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11257,6 +12619,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends GameServerCreateManyArgs>(args?: SelectSubset<T, GameServerCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GameServers and returns the data saved in the database.
+     * @param {GameServerCreateManyAndReturnArgs} args - Arguments to create many GameServers.
+     * @example
+     * // Create many GameServers
+     * const gameServer = await prisma.gameServer.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GameServers and only return the `id`
+     * const gameServerWithIdOnly = await prisma.gameServer.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GameServerCreateManyAndReturnArgs>(args?: SelectSubset<T, GameServerCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GameServerPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a GameServer.
@@ -11742,6 +13128,25 @@ export namespace Prisma {
   }
 
   /**
+   * GameServer createManyAndReturn
+   */
+  export type GameServerCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GameServer
+     */
+    select?: GameServerSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many GameServers.
+     */
+    data: GameServerCreateManyInput | GameServerCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GameServerIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * GameServer update
    */
   export type GameServerUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12181,6 +13586,16 @@ export namespace Prisma {
     _count?: boolean | GameClusterCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["gameCluster"]>
 
+  export type GameClusterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    gameType?: boolean
+    sharedSecret?: boolean
+    storageNodeId?: boolean
+    mountPath?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    storageNode?: boolean | NodeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["gameCluster"]>
 
   export type GameClusterSelectScalar = {
     id?: boolean
@@ -12196,6 +13611,9 @@ export namespace Prisma {
     storageNode?: boolean | NodeDefaultArgs<ExtArgs>
     servers?: boolean | GameCluster$serversArgs<ExtArgs>
     _count?: boolean | GameClusterCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type GameClusterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    storageNode?: boolean | NodeDefaultArgs<ExtArgs>
   }
 
   export type $GameClusterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12328,6 +13746,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends GameClusterCreateManyArgs>(args?: SelectSubset<T, GameClusterCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GameClusters and returns the data saved in the database.
+     * @param {GameClusterCreateManyAndReturnArgs} args - Arguments to create many GameClusters.
+     * @example
+     * // Create many GameClusters
+     * const gameCluster = await prisma.gameCluster.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GameClusters and only return the `id`
+     * const gameClusterWithIdOnly = await prisma.gameCluster.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GameClusterCreateManyAndReturnArgs>(args?: SelectSubset<T, GameClusterCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GameClusterPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a GameCluster.
@@ -12799,6 +14241,25 @@ export namespace Prisma {
   }
 
   /**
+   * GameCluster createManyAndReturn
+   */
+  export type GameClusterCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GameCluster
+     */
+    select?: GameClusterSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many GameClusters.
+     */
+    data: GameClusterCreateManyInput | GameClusterCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GameClusterIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * GameCluster update
    */
   export type GameClusterUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13148,6 +14609,17 @@ export namespace Prisma {
     server?: boolean | GameServerDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["backup"]>
 
+  export type BackupSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    serverUuid?: boolean
+    snapshotId?: boolean
+    sizeBytes?: boolean
+    location?: boolean
+    lastRestoredAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    server?: boolean | GameServerDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["backup"]>
 
   export type BackupSelectScalar = {
     id?: boolean
@@ -13161,6 +14633,9 @@ export namespace Prisma {
   }
 
   export type BackupInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    server?: boolean | GameServerDefaultArgs<ExtArgs>
+  }
+  export type BackupIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     server?: boolean | GameServerDefaultArgs<ExtArgs>
   }
 
@@ -13294,6 +14769,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends BackupCreateManyArgs>(args?: SelectSubset<T, BackupCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Backups and returns the data saved in the database.
+     * @param {BackupCreateManyAndReturnArgs} args - Arguments to create many Backups.
+     * @example
+     * // Create many Backups
+     * const backup = await prisma.backup.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Backups and only return the `id`
+     * const backupWithIdOnly = await prisma.backup.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BackupCreateManyAndReturnArgs>(args?: SelectSubset<T, BackupCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BackupPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a Backup.
@@ -13765,6 +15264,25 @@ export namespace Prisma {
   }
 
   /**
+   * Backup createManyAndReturn
+   */
+  export type BackupCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Backup
+     */
+    select?: BackupSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Backups.
+     */
+    data: BackupCreateManyInput | BackupCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BackupIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * Backup update
    */
   export type BackupUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14155,6 +15673,22 @@ export namespace Prisma {
     server?: boolean | Metric$serverArgs<ExtArgs>
   }, ExtArgs["result"]["metric"]>
 
+  export type MetricSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nodeId?: boolean
+    serverUuid?: boolean
+    timestamp?: boolean
+    cpuUsage?: boolean
+    ramUsage?: boolean
+    ramUsagePercent?: boolean
+    diskUsage?: boolean
+    diskUsagePercent?: boolean
+    networkIn?: boolean
+    networkOut?: boolean
+    uptime?: boolean
+    node?: boolean | NodeDefaultArgs<ExtArgs>
+    server?: boolean | Metric$serverArgs<ExtArgs>
+  }, ExtArgs["result"]["metric"]>
 
   export type MetricSelectScalar = {
     id?: boolean
@@ -14172,6 +15706,10 @@ export namespace Prisma {
   }
 
   export type MetricInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    node?: boolean | NodeDefaultArgs<ExtArgs>
+    server?: boolean | Metric$serverArgs<ExtArgs>
+  }
+  export type MetricIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     node?: boolean | NodeDefaultArgs<ExtArgs>
     server?: boolean | Metric$serverArgs<ExtArgs>
   }
@@ -14311,6 +15849,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends MetricCreateManyArgs>(args?: SelectSubset<T, MetricCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Metrics and returns the data saved in the database.
+     * @param {MetricCreateManyAndReturnArgs} args - Arguments to create many Metrics.
+     * @example
+     * // Create many Metrics
+     * const metric = await prisma.metric.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Metrics and only return the `id`
+     * const metricWithIdOnly = await prisma.metric.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MetricCreateManyAndReturnArgs>(args?: SelectSubset<T, MetricCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MetricPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a Metric.
@@ -14787,6 +16349,25 @@ export namespace Prisma {
   }
 
   /**
+   * Metric createManyAndReturn
+   */
+  export type MetricCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Metric
+     */
+    select?: MetricSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Metrics.
+     */
+    data: MetricCreateManyInput | MetricCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MetricIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * Metric update
    */
   export type MetricUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15143,6 +16724,25 @@ export namespace Prisma {
     server?: boolean | Alert$serverArgs<ExtArgs>
   }, ExtArgs["result"]["alert"]>
 
+  export type AlertSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    severity?: boolean
+    type?: boolean
+    message?: boolean
+    resourceId?: boolean
+    resourceType?: boolean
+    resolved?: boolean
+    resolvedAt?: boolean
+    resolvedById?: boolean
+    metadata?: boolean
+    nodeId?: boolean
+    serverUuid?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    resolvedBy?: boolean | Alert$resolvedByArgs<ExtArgs>
+    node?: boolean | Alert$nodeArgs<ExtArgs>
+    server?: boolean | Alert$serverArgs<ExtArgs>
+  }, ExtArgs["result"]["alert"]>
 
   export type AlertSelectScalar = {
     id?: boolean
@@ -15162,6 +16762,11 @@ export namespace Prisma {
   }
 
   export type AlertInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    resolvedBy?: boolean | Alert$resolvedByArgs<ExtArgs>
+    node?: boolean | Alert$nodeArgs<ExtArgs>
+    server?: boolean | Alert$serverArgs<ExtArgs>
+  }
+  export type AlertIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     resolvedBy?: boolean | Alert$resolvedByArgs<ExtArgs>
     node?: boolean | Alert$nodeArgs<ExtArgs>
     server?: boolean | Alert$serverArgs<ExtArgs>
@@ -15305,6 +16910,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends AlertCreateManyArgs>(args?: SelectSubset<T, AlertCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Alerts and returns the data saved in the database.
+     * @param {AlertCreateManyAndReturnArgs} args - Arguments to create many Alerts.
+     * @example
+     * // Create many Alerts
+     * const alert = await prisma.alert.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Alerts and only return the `id`
+     * const alertWithIdOnly = await prisma.alert.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AlertCreateManyAndReturnArgs>(args?: SelectSubset<T, AlertCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AlertPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a Alert.
@@ -15784,6 +17413,25 @@ export namespace Prisma {
   }
 
   /**
+   * Alert createManyAndReturn
+   */
+  export type AlertCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Alert
+     */
+    select?: AlertSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Alerts.
+     */
+    data: AlertCreateManyInput | AlertCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AlertIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * Alert update
    */
   export type AlertUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -16191,6 +17839,21 @@ export namespace Prisma {
     tenant?: boolean | ResourceQuota$tenantArgs<ExtArgs>
   }, ExtArgs["result"]["resourceQuota"]>
 
+  export type ResourceQuotaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    tenantId?: boolean
+    maxServers?: boolean
+    maxRam?: boolean
+    maxDisk?: boolean
+    maxCpu?: boolean
+    currentUsage?: boolean
+    enforced?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    tenant?: boolean | ResourceQuota$tenantArgs<ExtArgs>
+  }, ExtArgs["result"]["resourceQuota"]>
 
   export type ResourceQuotaSelectScalar = {
     id?: boolean
@@ -16207,6 +17870,10 @@ export namespace Prisma {
   }
 
   export type ResourceQuotaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    tenant?: boolean | ResourceQuota$tenantArgs<ExtArgs>
+  }
+  export type ResourceQuotaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     tenant?: boolean | ResourceQuota$tenantArgs<ExtArgs>
   }
@@ -16345,6 +18012,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends ResourceQuotaCreateManyArgs>(args?: SelectSubset<T, ResourceQuotaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ResourceQuotas and returns the data saved in the database.
+     * @param {ResourceQuotaCreateManyAndReturnArgs} args - Arguments to create many ResourceQuotas.
+     * @example
+     * // Create many ResourceQuotas
+     * const resourceQuota = await prisma.resourceQuota.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ResourceQuotas and only return the `id`
+     * const resourceQuotaWithIdOnly = await prisma.resourceQuota.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ResourceQuotaCreateManyAndReturnArgs>(args?: SelectSubset<T, ResourceQuotaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ResourceQuotaPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a ResourceQuota.
@@ -16820,6 +18511,25 @@ export namespace Prisma {
   }
 
   /**
+   * ResourceQuota createManyAndReturn
+   */
+  export type ResourceQuotaCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResourceQuota
+     */
+    select?: ResourceQuotaSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ResourceQuotas.
+     */
+    data: ResourceQuotaCreateManyInput | ResourceQuotaCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ResourceQuotaIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * ResourceQuota update
    */
   export type ResourceQuotaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -17176,6 +18886,19 @@ export namespace Prisma {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["apiKey"]>
 
+  export type ApiKeySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    keyHash?: boolean
+    name?: boolean
+    lastUsedAt?: boolean
+    expiresAt?: boolean
+    permissions?: boolean
+    rateLimit?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["apiKey"]>
 
   export type ApiKeySelectScalar = {
     id?: boolean
@@ -17191,6 +18914,9 @@ export namespace Prisma {
   }
 
   export type ApiKeyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ApiKeyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
 
@@ -17326,6 +19052,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends ApiKeyCreateManyArgs>(args?: SelectSubset<T, ApiKeyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ApiKeys and returns the data saved in the database.
+     * @param {ApiKeyCreateManyAndReturnArgs} args - Arguments to create many ApiKeys.
+     * @example
+     * // Create many ApiKeys
+     * const apiKey = await prisma.apiKey.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ApiKeys and only return the `id`
+     * const apiKeyWithIdOnly = await prisma.apiKey.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ApiKeyCreateManyAndReturnArgs>(args?: SelectSubset<T, ApiKeyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a ApiKey.
@@ -17799,6 +19549,25 @@ export namespace Prisma {
   }
 
   /**
+   * ApiKey createManyAndReturn
+   */
+  export type ApiKeyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApiKey
+     */
+    select?: ApiKeySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ApiKeys.
+     */
+    data: ApiKeyCreateManyInput | ApiKeyCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApiKeyIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * ApiKey update
    */
   export type ApiKeyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18122,6 +19891,21 @@ export namespace Prisma {
     assignedTo?: boolean | Incident$assignedToArgs<ExtArgs>
   }, ExtArgs["result"]["incident"]>
 
+  export type IncidentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    severity?: boolean
+    status?: boolean
+    assignedToId?: boolean
+    resolvedAt?: boolean
+    rootCause?: boolean
+    resolution?: boolean
+    affectedResources?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    assignedTo?: boolean | Incident$assignedToArgs<ExtArgs>
+  }, ExtArgs["result"]["incident"]>
 
   export type IncidentSelectScalar = {
     id?: boolean
@@ -18139,6 +19923,9 @@ export namespace Prisma {
   }
 
   export type IncidentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    assignedTo?: boolean | Incident$assignedToArgs<ExtArgs>
+  }
+  export type IncidentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     assignedTo?: boolean | Incident$assignedToArgs<ExtArgs>
   }
 
@@ -18276,6 +20063,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends IncidentCreateManyArgs>(args?: SelectSubset<T, IncidentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Incidents and returns the data saved in the database.
+     * @param {IncidentCreateManyAndReturnArgs} args - Arguments to create many Incidents.
+     * @example
+     * // Create many Incidents
+     * const incident = await prisma.incident.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Incidents and only return the `id`
+     * const incidentWithIdOnly = await prisma.incident.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends IncidentCreateManyAndReturnArgs>(args?: SelectSubset<T, IncidentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IncidentPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a Incident.
@@ -18751,6 +20562,25 @@ export namespace Prisma {
   }
 
   /**
+   * Incident createManyAndReturn
+   */
+  export type IncidentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Incident
+     */
+    select?: IncidentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Incidents.
+     */
+    data: IncidentCreateManyInput | IncidentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IncidentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * Incident update
    */
   export type IncidentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -19202,6 +21032,26 @@ export namespace Prisma {
     _count?: boolean | PlanCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["plan"]>
 
+  export type PlanSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    gameType?: boolean
+    status?: boolean
+    ramMb?: boolean
+    cpuCores?: boolean
+    diskGb?: boolean
+    maxSlots?: boolean
+    monthlyPrice?: boolean
+    hourlyPrice?: boolean
+    setupFee?: boolean
+    features?: boolean
+    description?: boolean
+    isPopular?: boolean
+    sortOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["plan"]>
 
   export type PlanSelectScalar = {
     id?: boolean
@@ -19230,6 +21080,7 @@ export namespace Prisma {
     promotions?: boolean | Plan$promotionsArgs<ExtArgs>
     _count?: boolean | PlanCountOutputTypeDefaultArgs<ExtArgs>
   }
+  export type PlanIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $PlanPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Plan"
@@ -19373,6 +21224,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends PlanCreateManyArgs>(args?: SelectSubset<T, PlanCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Plans and returns the data saved in the database.
+     * @param {PlanCreateManyAndReturnArgs} args - Arguments to create many Plans.
+     * @example
+     * // Create many Plans
+     * const plan = await prisma.plan.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Plans and only return the `id`
+     * const planWithIdOnly = await prisma.plan.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PlanCreateManyAndReturnArgs>(args?: SelectSubset<T, PlanCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a Plan.
@@ -19856,6 +21731,21 @@ export namespace Prisma {
   }
 
   /**
+   * Plan createManyAndReturn
+   */
+  export type PlanCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Plans.
+     */
+    data: PlanCreateManyInput | PlanCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
    * Plan update
    */
   export type PlanUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -20277,6 +22167,21 @@ export namespace Prisma {
     plan?: boolean | Promotion$planArgs<ExtArgs>
   }, ExtArgs["result"]["promotion"]>
 
+  export type PromotionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    scope?: boolean
+    discountPercent?: boolean
+    gameType?: boolean
+    planId?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    plan?: boolean | Promotion$planArgs<ExtArgs>
+  }, ExtArgs["result"]["promotion"]>
 
   export type PromotionSelectScalar = {
     id?: boolean
@@ -20294,6 +22199,9 @@ export namespace Prisma {
   }
 
   export type PromotionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    plan?: boolean | Promotion$planArgs<ExtArgs>
+  }
+  export type PromotionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     plan?: boolean | Promotion$planArgs<ExtArgs>
   }
 
@@ -20431,6 +22339,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends PromotionCreateManyArgs>(args?: SelectSubset<T, PromotionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Promotions and returns the data saved in the database.
+     * @param {PromotionCreateManyAndReturnArgs} args - Arguments to create many Promotions.
+     * @example
+     * // Create many Promotions
+     * const promotion = await prisma.promotion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Promotions and only return the `id`
+     * const promotionWithIdOnly = await prisma.promotion.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PromotionCreateManyAndReturnArgs>(args?: SelectSubset<T, PromotionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PromotionPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a Promotion.
@@ -20906,6 +22838,25 @@ export namespace Prisma {
   }
 
   /**
+   * Promotion createManyAndReturn
+   */
+  export type PromotionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Promotion
+     */
+    select?: PromotionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Promotions.
+     */
+    data: PromotionCreateManyInput | PromotionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PromotionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * Promotion update
    */
   export type PromotionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -21296,6 +23247,25 @@ export namespace Prisma {
     server?: boolean | Order$serverArgs<ExtArgs>
   }, ExtArgs["result"]["order"]>
 
+  export type OrderSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    planId?: boolean
+    status?: boolean
+    priceSnapshot?: boolean
+    totalAmount?: boolean
+    currency?: boolean
+    paymentMethod?: boolean
+    paymentId?: boolean
+    paidAt?: boolean
+    serverId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    plan?: boolean | PlanDefaultArgs<ExtArgs>
+    server?: boolean | Order$serverArgs<ExtArgs>
+  }, ExtArgs["result"]["order"]>
 
   export type OrderSelectScalar = {
     id?: boolean
@@ -21315,6 +23285,11 @@ export namespace Prisma {
   }
 
   export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    plan?: boolean | PlanDefaultArgs<ExtArgs>
+    server?: boolean | Order$serverArgs<ExtArgs>
+  }
+  export type OrderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     plan?: boolean | PlanDefaultArgs<ExtArgs>
     server?: boolean | Order$serverArgs<ExtArgs>
@@ -21458,6 +23433,30 @@ export namespace Prisma {
      *     
      */
     createMany<T extends OrderCreateManyArgs>(args?: SelectSubset<T, OrderCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Orders and returns the data saved in the database.
+     * @param {OrderCreateManyAndReturnArgs} args - Arguments to create many Orders.
+     * @example
+     * // Create many Orders
+     * const order = await prisma.order.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Orders and only return the `id`
+     * const orderWithIdOnly = await prisma.order.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OrderCreateManyAndReturnArgs>(args?: SelectSubset<T, OrderCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "createManyAndReturn">>
 
     /**
      * Delete a Order.
@@ -21937,6 +23936,25 @@ export namespace Prisma {
   }
 
   /**
+   * Order createManyAndReturn
+   */
+  export type OrderCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Orders.
+     */
+    data: OrderCreateManyInput | OrderCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * Order update
    */
   export type OrderUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -22057,6 +24075,6203 @@ export namespace Prisma {
 
 
   /**
+   * Model SupportTicket
+   */
+
+  export type AggregateSupportTicket = {
+    _count: SupportTicketCountAggregateOutputType | null
+    _min: SupportTicketMinAggregateOutputType | null
+    _max: SupportTicketMaxAggregateOutputType | null
+  }
+
+  export type SupportTicketMinAggregateOutputType = {
+    id: string | null
+    ticketNumber: string | null
+    subject: string | null
+    description: string | null
+    priority: $Enums.TicketPriority | null
+    category: string | null
+    status: $Enums.TicketStatus | null
+    assignedToId: string | null
+    assignedAt: Date | null
+    slaResponseDeadline: Date | null
+    slaResolveDeadline: Date | null
+    firstResponseAt: Date | null
+    userId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    closedAt: Date | null
+  }
+
+  export type SupportTicketMaxAggregateOutputType = {
+    id: string | null
+    ticketNumber: string | null
+    subject: string | null
+    description: string | null
+    priority: $Enums.TicketPriority | null
+    category: string | null
+    status: $Enums.TicketStatus | null
+    assignedToId: string | null
+    assignedAt: Date | null
+    slaResponseDeadline: Date | null
+    slaResolveDeadline: Date | null
+    firstResponseAt: Date | null
+    userId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    closedAt: Date | null
+  }
+
+  export type SupportTicketCountAggregateOutputType = {
+    id: number
+    ticketNumber: number
+    subject: number
+    description: number
+    priority: number
+    category: number
+    status: number
+    assignedToId: number
+    assignedAt: number
+    slaResponseDeadline: number
+    slaResolveDeadline: number
+    firstResponseAt: number
+    userId: number
+    createdAt: number
+    updatedAt: number
+    closedAt: number
+    _all: number
+  }
+
+
+  export type SupportTicketMinAggregateInputType = {
+    id?: true
+    ticketNumber?: true
+    subject?: true
+    description?: true
+    priority?: true
+    category?: true
+    status?: true
+    assignedToId?: true
+    assignedAt?: true
+    slaResponseDeadline?: true
+    slaResolveDeadline?: true
+    firstResponseAt?: true
+    userId?: true
+    createdAt?: true
+    updatedAt?: true
+    closedAt?: true
+  }
+
+  export type SupportTicketMaxAggregateInputType = {
+    id?: true
+    ticketNumber?: true
+    subject?: true
+    description?: true
+    priority?: true
+    category?: true
+    status?: true
+    assignedToId?: true
+    assignedAt?: true
+    slaResponseDeadline?: true
+    slaResolveDeadline?: true
+    firstResponseAt?: true
+    userId?: true
+    createdAt?: true
+    updatedAt?: true
+    closedAt?: true
+  }
+
+  export type SupportTicketCountAggregateInputType = {
+    id?: true
+    ticketNumber?: true
+    subject?: true
+    description?: true
+    priority?: true
+    category?: true
+    status?: true
+    assignedToId?: true
+    assignedAt?: true
+    slaResponseDeadline?: true
+    slaResolveDeadline?: true
+    firstResponseAt?: true
+    userId?: true
+    createdAt?: true
+    updatedAt?: true
+    closedAt?: true
+    _all?: true
+  }
+
+  export type SupportTicketAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupportTicket to aggregate.
+     */
+    where?: SupportTicketWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportTickets to fetch.
+     */
+    orderBy?: SupportTicketOrderByWithRelationInput | SupportTicketOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SupportTicketWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportTickets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportTickets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SupportTickets
+    **/
+    _count?: true | SupportTicketCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SupportTicketMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SupportTicketMaxAggregateInputType
+  }
+
+  export type GetSupportTicketAggregateType<T extends SupportTicketAggregateArgs> = {
+        [P in keyof T & keyof AggregateSupportTicket]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSupportTicket[P]>
+      : GetScalarType<T[P], AggregateSupportTicket[P]>
+  }
+
+
+
+
+  export type SupportTicketGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupportTicketWhereInput
+    orderBy?: SupportTicketOrderByWithAggregationInput | SupportTicketOrderByWithAggregationInput[]
+    by: SupportTicketScalarFieldEnum[] | SupportTicketScalarFieldEnum
+    having?: SupportTicketScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SupportTicketCountAggregateInputType | true
+    _min?: SupportTicketMinAggregateInputType
+    _max?: SupportTicketMaxAggregateInputType
+  }
+
+  export type SupportTicketGroupByOutputType = {
+    id: string
+    ticketNumber: string
+    subject: string
+    description: string
+    priority: $Enums.TicketPriority
+    category: string | null
+    status: $Enums.TicketStatus
+    assignedToId: string | null
+    assignedAt: Date | null
+    slaResponseDeadline: Date | null
+    slaResolveDeadline: Date | null
+    firstResponseAt: Date | null
+    userId: string
+    createdAt: Date
+    updatedAt: Date
+    closedAt: Date | null
+    _count: SupportTicketCountAggregateOutputType | null
+    _min: SupportTicketMinAggregateOutputType | null
+    _max: SupportTicketMaxAggregateOutputType | null
+  }
+
+  type GetSupportTicketGroupByPayload<T extends SupportTicketGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SupportTicketGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SupportTicketGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SupportTicketGroupByOutputType[P]>
+            : GetScalarType<T[P], SupportTicketGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SupportTicketSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    ticketNumber?: boolean
+    subject?: boolean
+    description?: boolean
+    priority?: boolean
+    category?: boolean
+    status?: boolean
+    assignedToId?: boolean
+    assignedAt?: boolean
+    slaResponseDeadline?: boolean
+    slaResolveDeadline?: boolean
+    firstResponseAt?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    closedAt?: boolean
+    assignedTo?: boolean | SupportTicket$assignedToArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    comments?: boolean | SupportTicket$commentsArgs<ExtArgs>
+    _count?: boolean | SupportTicketCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["supportTicket"]>
+
+  export type SupportTicketSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    ticketNumber?: boolean
+    subject?: boolean
+    description?: boolean
+    priority?: boolean
+    category?: boolean
+    status?: boolean
+    assignedToId?: boolean
+    assignedAt?: boolean
+    slaResponseDeadline?: boolean
+    slaResolveDeadline?: boolean
+    firstResponseAt?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    closedAt?: boolean
+    assignedTo?: boolean | SupportTicket$assignedToArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["supportTicket"]>
+
+  export type SupportTicketSelectScalar = {
+    id?: boolean
+    ticketNumber?: boolean
+    subject?: boolean
+    description?: boolean
+    priority?: boolean
+    category?: boolean
+    status?: boolean
+    assignedToId?: boolean
+    assignedAt?: boolean
+    slaResponseDeadline?: boolean
+    slaResolveDeadline?: boolean
+    firstResponseAt?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    closedAt?: boolean
+  }
+
+  export type SupportTicketInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    assignedTo?: boolean | SupportTicket$assignedToArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    comments?: boolean | SupportTicket$commentsArgs<ExtArgs>
+    _count?: boolean | SupportTicketCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type SupportTicketIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    assignedTo?: boolean | SupportTicket$assignedToArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $SupportTicketPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SupportTicket"
+    objects: {
+      assignedTo: Prisma.$UserPayload<ExtArgs> | null
+      user: Prisma.$UserPayload<ExtArgs>
+      comments: Prisma.$TicketCommentPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      ticketNumber: string
+      subject: string
+      description: string
+      priority: $Enums.TicketPriority
+      category: string | null
+      status: $Enums.TicketStatus
+      assignedToId: string | null
+      assignedAt: Date | null
+      slaResponseDeadline: Date | null
+      slaResolveDeadline: Date | null
+      firstResponseAt: Date | null
+      userId: string
+      createdAt: Date
+      updatedAt: Date
+      closedAt: Date | null
+    }, ExtArgs["result"]["supportTicket"]>
+    composites: {}
+  }
+
+  type SupportTicketGetPayload<S extends boolean | null | undefined | SupportTicketDefaultArgs> = $Result.GetResult<Prisma.$SupportTicketPayload, S>
+
+  type SupportTicketCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SupportTicketFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SupportTicketCountAggregateInputType | true
+    }
+
+  export interface SupportTicketDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SupportTicket'], meta: { name: 'SupportTicket' } }
+    /**
+     * Find zero or one SupportTicket that matches the filter.
+     * @param {SupportTicketFindUniqueArgs} args - Arguments to find a SupportTicket
+     * @example
+     * // Get one SupportTicket
+     * const supportTicket = await prisma.supportTicket.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SupportTicketFindUniqueArgs>(args: SelectSubset<T, SupportTicketFindUniqueArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SupportTicket that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SupportTicketFindUniqueOrThrowArgs} args - Arguments to find a SupportTicket
+     * @example
+     * // Get one SupportTicket
+     * const supportTicket = await prisma.supportTicket.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SupportTicketFindUniqueOrThrowArgs>(args: SelectSubset<T, SupportTicketFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SupportTicket that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportTicketFindFirstArgs} args - Arguments to find a SupportTicket
+     * @example
+     * // Get one SupportTicket
+     * const supportTicket = await prisma.supportTicket.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SupportTicketFindFirstArgs>(args?: SelectSubset<T, SupportTicketFindFirstArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SupportTicket that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportTicketFindFirstOrThrowArgs} args - Arguments to find a SupportTicket
+     * @example
+     * // Get one SupportTicket
+     * const supportTicket = await prisma.supportTicket.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SupportTicketFindFirstOrThrowArgs>(args?: SelectSubset<T, SupportTicketFindFirstOrThrowArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SupportTickets that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportTicketFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SupportTickets
+     * const supportTickets = await prisma.supportTicket.findMany()
+     * 
+     * // Get first 10 SupportTickets
+     * const supportTickets = await prisma.supportTicket.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const supportTicketWithIdOnly = await prisma.supportTicket.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SupportTicketFindManyArgs>(args?: SelectSubset<T, SupportTicketFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SupportTicket.
+     * @param {SupportTicketCreateArgs} args - Arguments to create a SupportTicket.
+     * @example
+     * // Create one SupportTicket
+     * const SupportTicket = await prisma.supportTicket.create({
+     *   data: {
+     *     // ... data to create a SupportTicket
+     *   }
+     * })
+     * 
+     */
+    create<T extends SupportTicketCreateArgs>(args: SelectSubset<T, SupportTicketCreateArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SupportTickets.
+     * @param {SupportTicketCreateManyArgs} args - Arguments to create many SupportTickets.
+     * @example
+     * // Create many SupportTickets
+     * const supportTicket = await prisma.supportTicket.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SupportTicketCreateManyArgs>(args?: SelectSubset<T, SupportTicketCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SupportTickets and returns the data saved in the database.
+     * @param {SupportTicketCreateManyAndReturnArgs} args - Arguments to create many SupportTickets.
+     * @example
+     * // Create many SupportTickets
+     * const supportTicket = await prisma.supportTicket.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SupportTickets and only return the `id`
+     * const supportTicketWithIdOnly = await prisma.supportTicket.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SupportTicketCreateManyAndReturnArgs>(args?: SelectSubset<T, SupportTicketCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SupportTicket.
+     * @param {SupportTicketDeleteArgs} args - Arguments to delete one SupportTicket.
+     * @example
+     * // Delete one SupportTicket
+     * const SupportTicket = await prisma.supportTicket.delete({
+     *   where: {
+     *     // ... filter to delete one SupportTicket
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SupportTicketDeleteArgs>(args: SelectSubset<T, SupportTicketDeleteArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SupportTicket.
+     * @param {SupportTicketUpdateArgs} args - Arguments to update one SupportTicket.
+     * @example
+     * // Update one SupportTicket
+     * const supportTicket = await prisma.supportTicket.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SupportTicketUpdateArgs>(args: SelectSubset<T, SupportTicketUpdateArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SupportTickets.
+     * @param {SupportTicketDeleteManyArgs} args - Arguments to filter SupportTickets to delete.
+     * @example
+     * // Delete a few SupportTickets
+     * const { count } = await prisma.supportTicket.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SupportTicketDeleteManyArgs>(args?: SelectSubset<T, SupportTicketDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SupportTickets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportTicketUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SupportTickets
+     * const supportTicket = await prisma.supportTicket.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SupportTicketUpdateManyArgs>(args: SelectSubset<T, SupportTicketUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SupportTicket.
+     * @param {SupportTicketUpsertArgs} args - Arguments to update or create a SupportTicket.
+     * @example
+     * // Update or create a SupportTicket
+     * const supportTicket = await prisma.supportTicket.upsert({
+     *   create: {
+     *     // ... data to create a SupportTicket
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SupportTicket we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SupportTicketUpsertArgs>(args: SelectSubset<T, SupportTicketUpsertArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SupportTickets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportTicketCountArgs} args - Arguments to filter SupportTickets to count.
+     * @example
+     * // Count the number of SupportTickets
+     * const count = await prisma.supportTicket.count({
+     *   where: {
+     *     // ... the filter for the SupportTickets we want to count
+     *   }
+     * })
+    **/
+    count<T extends SupportTicketCountArgs>(
+      args?: Subset<T, SupportTicketCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SupportTicketCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SupportTicket.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportTicketAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SupportTicketAggregateArgs>(args: Subset<T, SupportTicketAggregateArgs>): Prisma.PrismaPromise<GetSupportTicketAggregateType<T>>
+
+    /**
+     * Group by SupportTicket.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportTicketGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SupportTicketGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SupportTicketGroupByArgs['orderBy'] }
+        : { orderBy?: SupportTicketGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SupportTicketGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSupportTicketGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SupportTicket model
+   */
+  readonly fields: SupportTicketFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SupportTicket.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SupportTicketClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    assignedTo<T extends SupportTicket$assignedToArgs<ExtArgs> = {}>(args?: Subset<T, SupportTicket$assignedToArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    comments<T extends SupportTicket$commentsArgs<ExtArgs> = {}>(args?: Subset<T, SupportTicket$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TicketCommentPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SupportTicket model
+   */ 
+  interface SupportTicketFieldRefs {
+    readonly id: FieldRef<"SupportTicket", 'String'>
+    readonly ticketNumber: FieldRef<"SupportTicket", 'String'>
+    readonly subject: FieldRef<"SupportTicket", 'String'>
+    readonly description: FieldRef<"SupportTicket", 'String'>
+    readonly priority: FieldRef<"SupportTicket", 'TicketPriority'>
+    readonly category: FieldRef<"SupportTicket", 'String'>
+    readonly status: FieldRef<"SupportTicket", 'TicketStatus'>
+    readonly assignedToId: FieldRef<"SupportTicket", 'String'>
+    readonly assignedAt: FieldRef<"SupportTicket", 'DateTime'>
+    readonly slaResponseDeadline: FieldRef<"SupportTicket", 'DateTime'>
+    readonly slaResolveDeadline: FieldRef<"SupportTicket", 'DateTime'>
+    readonly firstResponseAt: FieldRef<"SupportTicket", 'DateTime'>
+    readonly userId: FieldRef<"SupportTicket", 'String'>
+    readonly createdAt: FieldRef<"SupportTicket", 'DateTime'>
+    readonly updatedAt: FieldRef<"SupportTicket", 'DateTime'>
+    readonly closedAt: FieldRef<"SupportTicket", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SupportTicket findUnique
+   */
+  export type SupportTicketFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportTicket to fetch.
+     */
+    where: SupportTicketWhereUniqueInput
+  }
+
+  /**
+   * SupportTicket findUniqueOrThrow
+   */
+  export type SupportTicketFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportTicket to fetch.
+     */
+    where: SupportTicketWhereUniqueInput
+  }
+
+  /**
+   * SupportTicket findFirst
+   */
+  export type SupportTicketFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportTicket to fetch.
+     */
+    where?: SupportTicketWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportTickets to fetch.
+     */
+    orderBy?: SupportTicketOrderByWithRelationInput | SupportTicketOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupportTickets.
+     */
+    cursor?: SupportTicketWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportTickets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportTickets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupportTickets.
+     */
+    distinct?: SupportTicketScalarFieldEnum | SupportTicketScalarFieldEnum[]
+  }
+
+  /**
+   * SupportTicket findFirstOrThrow
+   */
+  export type SupportTicketFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportTicket to fetch.
+     */
+    where?: SupportTicketWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportTickets to fetch.
+     */
+    orderBy?: SupportTicketOrderByWithRelationInput | SupportTicketOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupportTickets.
+     */
+    cursor?: SupportTicketWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportTickets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportTickets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupportTickets.
+     */
+    distinct?: SupportTicketScalarFieldEnum | SupportTicketScalarFieldEnum[]
+  }
+
+  /**
+   * SupportTicket findMany
+   */
+  export type SupportTicketFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportTickets to fetch.
+     */
+    where?: SupportTicketWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportTickets to fetch.
+     */
+    orderBy?: SupportTicketOrderByWithRelationInput | SupportTicketOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SupportTickets.
+     */
+    cursor?: SupportTicketWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportTickets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportTickets.
+     */
+    skip?: number
+    distinct?: SupportTicketScalarFieldEnum | SupportTicketScalarFieldEnum[]
+  }
+
+  /**
+   * SupportTicket create
+   */
+  export type SupportTicketCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SupportTicket.
+     */
+    data: XOR<SupportTicketCreateInput, SupportTicketUncheckedCreateInput>
+  }
+
+  /**
+   * SupportTicket createMany
+   */
+  export type SupportTicketCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SupportTickets.
+     */
+    data: SupportTicketCreateManyInput | SupportTicketCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SupportTicket createManyAndReturn
+   */
+  export type SupportTicketCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SupportTickets.
+     */
+    data: SupportTicketCreateManyInput | SupportTicketCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SupportTicket update
+   */
+  export type SupportTicketUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SupportTicket.
+     */
+    data: XOR<SupportTicketUpdateInput, SupportTicketUncheckedUpdateInput>
+    /**
+     * Choose, which SupportTicket to update.
+     */
+    where: SupportTicketWhereUniqueInput
+  }
+
+  /**
+   * SupportTicket updateMany
+   */
+  export type SupportTicketUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SupportTickets.
+     */
+    data: XOR<SupportTicketUpdateManyMutationInput, SupportTicketUncheckedUpdateManyInput>
+    /**
+     * Filter which SupportTickets to update
+     */
+    where?: SupportTicketWhereInput
+  }
+
+  /**
+   * SupportTicket upsert
+   */
+  export type SupportTicketUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SupportTicket to update in case it exists.
+     */
+    where: SupportTicketWhereUniqueInput
+    /**
+     * In case the SupportTicket found by the `where` argument doesn't exist, create a new SupportTicket with this data.
+     */
+    create: XOR<SupportTicketCreateInput, SupportTicketUncheckedCreateInput>
+    /**
+     * In case the SupportTicket was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SupportTicketUpdateInput, SupportTicketUncheckedUpdateInput>
+  }
+
+  /**
+   * SupportTicket delete
+   */
+  export type SupportTicketDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * Filter which SupportTicket to delete.
+     */
+    where: SupportTicketWhereUniqueInput
+  }
+
+  /**
+   * SupportTicket deleteMany
+   */
+  export type SupportTicketDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupportTickets to delete
+     */
+    where?: SupportTicketWhereInput
+  }
+
+  /**
+   * SupportTicket.assignedTo
+   */
+  export type SupportTicket$assignedToArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * SupportTicket.comments
+   */
+  export type SupportTicket$commentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketComment
+     */
+    select?: TicketCommentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketCommentInclude<ExtArgs> | null
+    where?: TicketCommentWhereInput
+    orderBy?: TicketCommentOrderByWithRelationInput | TicketCommentOrderByWithRelationInput[]
+    cursor?: TicketCommentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TicketCommentScalarFieldEnum | TicketCommentScalarFieldEnum[]
+  }
+
+  /**
+   * SupportTicket without action
+   */
+  export type SupportTicketDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SlaPolicy
+   */
+
+  export type AggregateSlaPolicy = {
+    _count: SlaPolicyCountAggregateOutputType | null
+    _avg: SlaPolicyAvgAggregateOutputType | null
+    _sum: SlaPolicySumAggregateOutputType | null
+    _min: SlaPolicyMinAggregateOutputType | null
+    _max: SlaPolicyMaxAggregateOutputType | null
+  }
+
+  export type SlaPolicyAvgAggregateOutputType = {
+    responseTimeHours: number | null
+    resolveTimeHours: number | null
+  }
+
+  export type SlaPolicySumAggregateOutputType = {
+    responseTimeHours: number | null
+    resolveTimeHours: number | null
+  }
+
+  export type SlaPolicyMinAggregateOutputType = {
+    id: string | null
+    priority: $Enums.TicketPriority | null
+    responseTimeHours: number | null
+    resolveTimeHours: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SlaPolicyMaxAggregateOutputType = {
+    id: string | null
+    priority: $Enums.TicketPriority | null
+    responseTimeHours: number | null
+    resolveTimeHours: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SlaPolicyCountAggregateOutputType = {
+    id: number
+    priority: number
+    responseTimeHours: number
+    resolveTimeHours: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SlaPolicyAvgAggregateInputType = {
+    responseTimeHours?: true
+    resolveTimeHours?: true
+  }
+
+  export type SlaPolicySumAggregateInputType = {
+    responseTimeHours?: true
+    resolveTimeHours?: true
+  }
+
+  export type SlaPolicyMinAggregateInputType = {
+    id?: true
+    priority?: true
+    responseTimeHours?: true
+    resolveTimeHours?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SlaPolicyMaxAggregateInputType = {
+    id?: true
+    priority?: true
+    responseTimeHours?: true
+    resolveTimeHours?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SlaPolicyCountAggregateInputType = {
+    id?: true
+    priority?: true
+    responseTimeHours?: true
+    resolveTimeHours?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SlaPolicyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SlaPolicy to aggregate.
+     */
+    where?: SlaPolicyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SlaPolicies to fetch.
+     */
+    orderBy?: SlaPolicyOrderByWithRelationInput | SlaPolicyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SlaPolicyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SlaPolicies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SlaPolicies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SlaPolicies
+    **/
+    _count?: true | SlaPolicyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SlaPolicyAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SlaPolicySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SlaPolicyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SlaPolicyMaxAggregateInputType
+  }
+
+  export type GetSlaPolicyAggregateType<T extends SlaPolicyAggregateArgs> = {
+        [P in keyof T & keyof AggregateSlaPolicy]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSlaPolicy[P]>
+      : GetScalarType<T[P], AggregateSlaPolicy[P]>
+  }
+
+
+
+
+  export type SlaPolicyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SlaPolicyWhereInput
+    orderBy?: SlaPolicyOrderByWithAggregationInput | SlaPolicyOrderByWithAggregationInput[]
+    by: SlaPolicyScalarFieldEnum[] | SlaPolicyScalarFieldEnum
+    having?: SlaPolicyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SlaPolicyCountAggregateInputType | true
+    _avg?: SlaPolicyAvgAggregateInputType
+    _sum?: SlaPolicySumAggregateInputType
+    _min?: SlaPolicyMinAggregateInputType
+    _max?: SlaPolicyMaxAggregateInputType
+  }
+
+  export type SlaPolicyGroupByOutputType = {
+    id: string
+    priority: $Enums.TicketPriority
+    responseTimeHours: number
+    resolveTimeHours: number
+    createdAt: Date
+    updatedAt: Date
+    _count: SlaPolicyCountAggregateOutputType | null
+    _avg: SlaPolicyAvgAggregateOutputType | null
+    _sum: SlaPolicySumAggregateOutputType | null
+    _min: SlaPolicyMinAggregateOutputType | null
+    _max: SlaPolicyMaxAggregateOutputType | null
+  }
+
+  type GetSlaPolicyGroupByPayload<T extends SlaPolicyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SlaPolicyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SlaPolicyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SlaPolicyGroupByOutputType[P]>
+            : GetScalarType<T[P], SlaPolicyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SlaPolicySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    priority?: boolean
+    responseTimeHours?: boolean
+    resolveTimeHours?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["slaPolicy"]>
+
+  export type SlaPolicySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    priority?: boolean
+    responseTimeHours?: boolean
+    resolveTimeHours?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["slaPolicy"]>
+
+  export type SlaPolicySelectScalar = {
+    id?: boolean
+    priority?: boolean
+    responseTimeHours?: boolean
+    resolveTimeHours?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $SlaPolicyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SlaPolicy"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      priority: $Enums.TicketPriority
+      responseTimeHours: number
+      resolveTimeHours: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["slaPolicy"]>
+    composites: {}
+  }
+
+  type SlaPolicyGetPayload<S extends boolean | null | undefined | SlaPolicyDefaultArgs> = $Result.GetResult<Prisma.$SlaPolicyPayload, S>
+
+  type SlaPolicyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SlaPolicyFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SlaPolicyCountAggregateInputType | true
+    }
+
+  export interface SlaPolicyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SlaPolicy'], meta: { name: 'SlaPolicy' } }
+    /**
+     * Find zero or one SlaPolicy that matches the filter.
+     * @param {SlaPolicyFindUniqueArgs} args - Arguments to find a SlaPolicy
+     * @example
+     * // Get one SlaPolicy
+     * const slaPolicy = await prisma.slaPolicy.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SlaPolicyFindUniqueArgs>(args: SelectSubset<T, SlaPolicyFindUniqueArgs<ExtArgs>>): Prisma__SlaPolicyClient<$Result.GetResult<Prisma.$SlaPolicyPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SlaPolicy that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SlaPolicyFindUniqueOrThrowArgs} args - Arguments to find a SlaPolicy
+     * @example
+     * // Get one SlaPolicy
+     * const slaPolicy = await prisma.slaPolicy.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SlaPolicyFindUniqueOrThrowArgs>(args: SelectSubset<T, SlaPolicyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SlaPolicyClient<$Result.GetResult<Prisma.$SlaPolicyPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SlaPolicy that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SlaPolicyFindFirstArgs} args - Arguments to find a SlaPolicy
+     * @example
+     * // Get one SlaPolicy
+     * const slaPolicy = await prisma.slaPolicy.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SlaPolicyFindFirstArgs>(args?: SelectSubset<T, SlaPolicyFindFirstArgs<ExtArgs>>): Prisma__SlaPolicyClient<$Result.GetResult<Prisma.$SlaPolicyPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SlaPolicy that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SlaPolicyFindFirstOrThrowArgs} args - Arguments to find a SlaPolicy
+     * @example
+     * // Get one SlaPolicy
+     * const slaPolicy = await prisma.slaPolicy.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SlaPolicyFindFirstOrThrowArgs>(args?: SelectSubset<T, SlaPolicyFindFirstOrThrowArgs<ExtArgs>>): Prisma__SlaPolicyClient<$Result.GetResult<Prisma.$SlaPolicyPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SlaPolicies that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SlaPolicyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SlaPolicies
+     * const slaPolicies = await prisma.slaPolicy.findMany()
+     * 
+     * // Get first 10 SlaPolicies
+     * const slaPolicies = await prisma.slaPolicy.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const slaPolicyWithIdOnly = await prisma.slaPolicy.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SlaPolicyFindManyArgs>(args?: SelectSubset<T, SlaPolicyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SlaPolicyPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SlaPolicy.
+     * @param {SlaPolicyCreateArgs} args - Arguments to create a SlaPolicy.
+     * @example
+     * // Create one SlaPolicy
+     * const SlaPolicy = await prisma.slaPolicy.create({
+     *   data: {
+     *     // ... data to create a SlaPolicy
+     *   }
+     * })
+     * 
+     */
+    create<T extends SlaPolicyCreateArgs>(args: SelectSubset<T, SlaPolicyCreateArgs<ExtArgs>>): Prisma__SlaPolicyClient<$Result.GetResult<Prisma.$SlaPolicyPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SlaPolicies.
+     * @param {SlaPolicyCreateManyArgs} args - Arguments to create many SlaPolicies.
+     * @example
+     * // Create many SlaPolicies
+     * const slaPolicy = await prisma.slaPolicy.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SlaPolicyCreateManyArgs>(args?: SelectSubset<T, SlaPolicyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SlaPolicies and returns the data saved in the database.
+     * @param {SlaPolicyCreateManyAndReturnArgs} args - Arguments to create many SlaPolicies.
+     * @example
+     * // Create many SlaPolicies
+     * const slaPolicy = await prisma.slaPolicy.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SlaPolicies and only return the `id`
+     * const slaPolicyWithIdOnly = await prisma.slaPolicy.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SlaPolicyCreateManyAndReturnArgs>(args?: SelectSubset<T, SlaPolicyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SlaPolicyPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SlaPolicy.
+     * @param {SlaPolicyDeleteArgs} args - Arguments to delete one SlaPolicy.
+     * @example
+     * // Delete one SlaPolicy
+     * const SlaPolicy = await prisma.slaPolicy.delete({
+     *   where: {
+     *     // ... filter to delete one SlaPolicy
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SlaPolicyDeleteArgs>(args: SelectSubset<T, SlaPolicyDeleteArgs<ExtArgs>>): Prisma__SlaPolicyClient<$Result.GetResult<Prisma.$SlaPolicyPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SlaPolicy.
+     * @param {SlaPolicyUpdateArgs} args - Arguments to update one SlaPolicy.
+     * @example
+     * // Update one SlaPolicy
+     * const slaPolicy = await prisma.slaPolicy.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SlaPolicyUpdateArgs>(args: SelectSubset<T, SlaPolicyUpdateArgs<ExtArgs>>): Prisma__SlaPolicyClient<$Result.GetResult<Prisma.$SlaPolicyPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SlaPolicies.
+     * @param {SlaPolicyDeleteManyArgs} args - Arguments to filter SlaPolicies to delete.
+     * @example
+     * // Delete a few SlaPolicies
+     * const { count } = await prisma.slaPolicy.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SlaPolicyDeleteManyArgs>(args?: SelectSubset<T, SlaPolicyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SlaPolicies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SlaPolicyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SlaPolicies
+     * const slaPolicy = await prisma.slaPolicy.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SlaPolicyUpdateManyArgs>(args: SelectSubset<T, SlaPolicyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SlaPolicy.
+     * @param {SlaPolicyUpsertArgs} args - Arguments to update or create a SlaPolicy.
+     * @example
+     * // Update or create a SlaPolicy
+     * const slaPolicy = await prisma.slaPolicy.upsert({
+     *   create: {
+     *     // ... data to create a SlaPolicy
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SlaPolicy we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SlaPolicyUpsertArgs>(args: SelectSubset<T, SlaPolicyUpsertArgs<ExtArgs>>): Prisma__SlaPolicyClient<$Result.GetResult<Prisma.$SlaPolicyPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SlaPolicies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SlaPolicyCountArgs} args - Arguments to filter SlaPolicies to count.
+     * @example
+     * // Count the number of SlaPolicies
+     * const count = await prisma.slaPolicy.count({
+     *   where: {
+     *     // ... the filter for the SlaPolicies we want to count
+     *   }
+     * })
+    **/
+    count<T extends SlaPolicyCountArgs>(
+      args?: Subset<T, SlaPolicyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SlaPolicyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SlaPolicy.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SlaPolicyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SlaPolicyAggregateArgs>(args: Subset<T, SlaPolicyAggregateArgs>): Prisma.PrismaPromise<GetSlaPolicyAggregateType<T>>
+
+    /**
+     * Group by SlaPolicy.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SlaPolicyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SlaPolicyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SlaPolicyGroupByArgs['orderBy'] }
+        : { orderBy?: SlaPolicyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SlaPolicyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSlaPolicyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SlaPolicy model
+   */
+  readonly fields: SlaPolicyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SlaPolicy.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SlaPolicyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SlaPolicy model
+   */ 
+  interface SlaPolicyFieldRefs {
+    readonly id: FieldRef<"SlaPolicy", 'String'>
+    readonly priority: FieldRef<"SlaPolicy", 'TicketPriority'>
+    readonly responseTimeHours: FieldRef<"SlaPolicy", 'Int'>
+    readonly resolveTimeHours: FieldRef<"SlaPolicy", 'Int'>
+    readonly createdAt: FieldRef<"SlaPolicy", 'DateTime'>
+    readonly updatedAt: FieldRef<"SlaPolicy", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SlaPolicy findUnique
+   */
+  export type SlaPolicyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SlaPolicy
+     */
+    select?: SlaPolicySelect<ExtArgs> | null
+    /**
+     * Filter, which SlaPolicy to fetch.
+     */
+    where: SlaPolicyWhereUniqueInput
+  }
+
+  /**
+   * SlaPolicy findUniqueOrThrow
+   */
+  export type SlaPolicyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SlaPolicy
+     */
+    select?: SlaPolicySelect<ExtArgs> | null
+    /**
+     * Filter, which SlaPolicy to fetch.
+     */
+    where: SlaPolicyWhereUniqueInput
+  }
+
+  /**
+   * SlaPolicy findFirst
+   */
+  export type SlaPolicyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SlaPolicy
+     */
+    select?: SlaPolicySelect<ExtArgs> | null
+    /**
+     * Filter, which SlaPolicy to fetch.
+     */
+    where?: SlaPolicyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SlaPolicies to fetch.
+     */
+    orderBy?: SlaPolicyOrderByWithRelationInput | SlaPolicyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SlaPolicies.
+     */
+    cursor?: SlaPolicyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SlaPolicies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SlaPolicies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SlaPolicies.
+     */
+    distinct?: SlaPolicyScalarFieldEnum | SlaPolicyScalarFieldEnum[]
+  }
+
+  /**
+   * SlaPolicy findFirstOrThrow
+   */
+  export type SlaPolicyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SlaPolicy
+     */
+    select?: SlaPolicySelect<ExtArgs> | null
+    /**
+     * Filter, which SlaPolicy to fetch.
+     */
+    where?: SlaPolicyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SlaPolicies to fetch.
+     */
+    orderBy?: SlaPolicyOrderByWithRelationInput | SlaPolicyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SlaPolicies.
+     */
+    cursor?: SlaPolicyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SlaPolicies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SlaPolicies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SlaPolicies.
+     */
+    distinct?: SlaPolicyScalarFieldEnum | SlaPolicyScalarFieldEnum[]
+  }
+
+  /**
+   * SlaPolicy findMany
+   */
+  export type SlaPolicyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SlaPolicy
+     */
+    select?: SlaPolicySelect<ExtArgs> | null
+    /**
+     * Filter, which SlaPolicies to fetch.
+     */
+    where?: SlaPolicyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SlaPolicies to fetch.
+     */
+    orderBy?: SlaPolicyOrderByWithRelationInput | SlaPolicyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SlaPolicies.
+     */
+    cursor?: SlaPolicyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SlaPolicies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SlaPolicies.
+     */
+    skip?: number
+    distinct?: SlaPolicyScalarFieldEnum | SlaPolicyScalarFieldEnum[]
+  }
+
+  /**
+   * SlaPolicy create
+   */
+  export type SlaPolicyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SlaPolicy
+     */
+    select?: SlaPolicySelect<ExtArgs> | null
+    /**
+     * The data needed to create a SlaPolicy.
+     */
+    data: XOR<SlaPolicyCreateInput, SlaPolicyUncheckedCreateInput>
+  }
+
+  /**
+   * SlaPolicy createMany
+   */
+  export type SlaPolicyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SlaPolicies.
+     */
+    data: SlaPolicyCreateManyInput | SlaPolicyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SlaPolicy createManyAndReturn
+   */
+  export type SlaPolicyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SlaPolicy
+     */
+    select?: SlaPolicySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SlaPolicies.
+     */
+    data: SlaPolicyCreateManyInput | SlaPolicyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SlaPolicy update
+   */
+  export type SlaPolicyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SlaPolicy
+     */
+    select?: SlaPolicySelect<ExtArgs> | null
+    /**
+     * The data needed to update a SlaPolicy.
+     */
+    data: XOR<SlaPolicyUpdateInput, SlaPolicyUncheckedUpdateInput>
+    /**
+     * Choose, which SlaPolicy to update.
+     */
+    where: SlaPolicyWhereUniqueInput
+  }
+
+  /**
+   * SlaPolicy updateMany
+   */
+  export type SlaPolicyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SlaPolicies.
+     */
+    data: XOR<SlaPolicyUpdateManyMutationInput, SlaPolicyUncheckedUpdateManyInput>
+    /**
+     * Filter which SlaPolicies to update
+     */
+    where?: SlaPolicyWhereInput
+  }
+
+  /**
+   * SlaPolicy upsert
+   */
+  export type SlaPolicyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SlaPolicy
+     */
+    select?: SlaPolicySelect<ExtArgs> | null
+    /**
+     * The filter to search for the SlaPolicy to update in case it exists.
+     */
+    where: SlaPolicyWhereUniqueInput
+    /**
+     * In case the SlaPolicy found by the `where` argument doesn't exist, create a new SlaPolicy with this data.
+     */
+    create: XOR<SlaPolicyCreateInput, SlaPolicyUncheckedCreateInput>
+    /**
+     * In case the SlaPolicy was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SlaPolicyUpdateInput, SlaPolicyUncheckedUpdateInput>
+  }
+
+  /**
+   * SlaPolicy delete
+   */
+  export type SlaPolicyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SlaPolicy
+     */
+    select?: SlaPolicySelect<ExtArgs> | null
+    /**
+     * Filter which SlaPolicy to delete.
+     */
+    where: SlaPolicyWhereUniqueInput
+  }
+
+  /**
+   * SlaPolicy deleteMany
+   */
+  export type SlaPolicyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SlaPolicies to delete
+     */
+    where?: SlaPolicyWhereInput
+  }
+
+  /**
+   * SlaPolicy without action
+   */
+  export type SlaPolicyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SlaPolicy
+     */
+    select?: SlaPolicySelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model TicketComment
+   */
+
+  export type AggregateTicketComment = {
+    _count: TicketCommentCountAggregateOutputType | null
+    _min: TicketCommentMinAggregateOutputType | null
+    _max: TicketCommentMaxAggregateOutputType | null
+  }
+
+  export type TicketCommentMinAggregateOutputType = {
+    id: string | null
+    ticketId: string | null
+    authorId: string | null
+    message: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TicketCommentMaxAggregateOutputType = {
+    id: string | null
+    ticketId: string | null
+    authorId: string | null
+    message: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TicketCommentCountAggregateOutputType = {
+    id: number
+    ticketId: number
+    authorId: number
+    message: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TicketCommentMinAggregateInputType = {
+    id?: true
+    ticketId?: true
+    authorId?: true
+    message?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TicketCommentMaxAggregateInputType = {
+    id?: true
+    ticketId?: true
+    authorId?: true
+    message?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TicketCommentCountAggregateInputType = {
+    id?: true
+    ticketId?: true
+    authorId?: true
+    message?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TicketCommentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TicketComment to aggregate.
+     */
+    where?: TicketCommentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TicketComments to fetch.
+     */
+    orderBy?: TicketCommentOrderByWithRelationInput | TicketCommentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TicketCommentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TicketComments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TicketComments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TicketComments
+    **/
+    _count?: true | TicketCommentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TicketCommentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TicketCommentMaxAggregateInputType
+  }
+
+  export type GetTicketCommentAggregateType<T extends TicketCommentAggregateArgs> = {
+        [P in keyof T & keyof AggregateTicketComment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTicketComment[P]>
+      : GetScalarType<T[P], AggregateTicketComment[P]>
+  }
+
+
+
+
+  export type TicketCommentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TicketCommentWhereInput
+    orderBy?: TicketCommentOrderByWithAggregationInput | TicketCommentOrderByWithAggregationInput[]
+    by: TicketCommentScalarFieldEnum[] | TicketCommentScalarFieldEnum
+    having?: TicketCommentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TicketCommentCountAggregateInputType | true
+    _min?: TicketCommentMinAggregateInputType
+    _max?: TicketCommentMaxAggregateInputType
+  }
+
+  export type TicketCommentGroupByOutputType = {
+    id: string
+    ticketId: string
+    authorId: string
+    message: string
+    createdAt: Date
+    updatedAt: Date
+    _count: TicketCommentCountAggregateOutputType | null
+    _min: TicketCommentMinAggregateOutputType | null
+    _max: TicketCommentMaxAggregateOutputType | null
+  }
+
+  type GetTicketCommentGroupByPayload<T extends TicketCommentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TicketCommentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TicketCommentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TicketCommentGroupByOutputType[P]>
+            : GetScalarType<T[P], TicketCommentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TicketCommentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    ticketId?: boolean
+    authorId?: boolean
+    message?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    ticket?: boolean | SupportTicketDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["ticketComment"]>
+
+  export type TicketCommentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    ticketId?: boolean
+    authorId?: boolean
+    message?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    ticket?: boolean | SupportTicketDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["ticketComment"]>
+
+  export type TicketCommentSelectScalar = {
+    id?: boolean
+    ticketId?: boolean
+    authorId?: boolean
+    message?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TicketCommentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ticket?: boolean | SupportTicketDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type TicketCommentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ticket?: boolean | SupportTicketDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $TicketCommentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TicketComment"
+    objects: {
+      ticket: Prisma.$SupportTicketPayload<ExtArgs>
+      author: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      ticketId: string
+      authorId: string
+      message: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["ticketComment"]>
+    composites: {}
+  }
+
+  type TicketCommentGetPayload<S extends boolean | null | undefined | TicketCommentDefaultArgs> = $Result.GetResult<Prisma.$TicketCommentPayload, S>
+
+  type TicketCommentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<TicketCommentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: TicketCommentCountAggregateInputType | true
+    }
+
+  export interface TicketCommentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TicketComment'], meta: { name: 'TicketComment' } }
+    /**
+     * Find zero or one TicketComment that matches the filter.
+     * @param {TicketCommentFindUniqueArgs} args - Arguments to find a TicketComment
+     * @example
+     * // Get one TicketComment
+     * const ticketComment = await prisma.ticketComment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TicketCommentFindUniqueArgs>(args: SelectSubset<T, TicketCommentFindUniqueArgs<ExtArgs>>): Prisma__TicketCommentClient<$Result.GetResult<Prisma.$TicketCommentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one TicketComment that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {TicketCommentFindUniqueOrThrowArgs} args - Arguments to find a TicketComment
+     * @example
+     * // Get one TicketComment
+     * const ticketComment = await prisma.ticketComment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TicketCommentFindUniqueOrThrowArgs>(args: SelectSubset<T, TicketCommentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TicketCommentClient<$Result.GetResult<Prisma.$TicketCommentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first TicketComment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TicketCommentFindFirstArgs} args - Arguments to find a TicketComment
+     * @example
+     * // Get one TicketComment
+     * const ticketComment = await prisma.ticketComment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TicketCommentFindFirstArgs>(args?: SelectSubset<T, TicketCommentFindFirstArgs<ExtArgs>>): Prisma__TicketCommentClient<$Result.GetResult<Prisma.$TicketCommentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first TicketComment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TicketCommentFindFirstOrThrowArgs} args - Arguments to find a TicketComment
+     * @example
+     * // Get one TicketComment
+     * const ticketComment = await prisma.ticketComment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TicketCommentFindFirstOrThrowArgs>(args?: SelectSubset<T, TicketCommentFindFirstOrThrowArgs<ExtArgs>>): Prisma__TicketCommentClient<$Result.GetResult<Prisma.$TicketCommentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more TicketComments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TicketCommentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TicketComments
+     * const ticketComments = await prisma.ticketComment.findMany()
+     * 
+     * // Get first 10 TicketComments
+     * const ticketComments = await prisma.ticketComment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const ticketCommentWithIdOnly = await prisma.ticketComment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TicketCommentFindManyArgs>(args?: SelectSubset<T, TicketCommentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TicketCommentPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a TicketComment.
+     * @param {TicketCommentCreateArgs} args - Arguments to create a TicketComment.
+     * @example
+     * // Create one TicketComment
+     * const TicketComment = await prisma.ticketComment.create({
+     *   data: {
+     *     // ... data to create a TicketComment
+     *   }
+     * })
+     * 
+     */
+    create<T extends TicketCommentCreateArgs>(args: SelectSubset<T, TicketCommentCreateArgs<ExtArgs>>): Prisma__TicketCommentClient<$Result.GetResult<Prisma.$TicketCommentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many TicketComments.
+     * @param {TicketCommentCreateManyArgs} args - Arguments to create many TicketComments.
+     * @example
+     * // Create many TicketComments
+     * const ticketComment = await prisma.ticketComment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TicketCommentCreateManyArgs>(args?: SelectSubset<T, TicketCommentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TicketComments and returns the data saved in the database.
+     * @param {TicketCommentCreateManyAndReturnArgs} args - Arguments to create many TicketComments.
+     * @example
+     * // Create many TicketComments
+     * const ticketComment = await prisma.ticketComment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TicketComments and only return the `id`
+     * const ticketCommentWithIdOnly = await prisma.ticketComment.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TicketCommentCreateManyAndReturnArgs>(args?: SelectSubset<T, TicketCommentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TicketCommentPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a TicketComment.
+     * @param {TicketCommentDeleteArgs} args - Arguments to delete one TicketComment.
+     * @example
+     * // Delete one TicketComment
+     * const TicketComment = await prisma.ticketComment.delete({
+     *   where: {
+     *     // ... filter to delete one TicketComment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TicketCommentDeleteArgs>(args: SelectSubset<T, TicketCommentDeleteArgs<ExtArgs>>): Prisma__TicketCommentClient<$Result.GetResult<Prisma.$TicketCommentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one TicketComment.
+     * @param {TicketCommentUpdateArgs} args - Arguments to update one TicketComment.
+     * @example
+     * // Update one TicketComment
+     * const ticketComment = await prisma.ticketComment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TicketCommentUpdateArgs>(args: SelectSubset<T, TicketCommentUpdateArgs<ExtArgs>>): Prisma__TicketCommentClient<$Result.GetResult<Prisma.$TicketCommentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more TicketComments.
+     * @param {TicketCommentDeleteManyArgs} args - Arguments to filter TicketComments to delete.
+     * @example
+     * // Delete a few TicketComments
+     * const { count } = await prisma.ticketComment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TicketCommentDeleteManyArgs>(args?: SelectSubset<T, TicketCommentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TicketComments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TicketCommentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TicketComments
+     * const ticketComment = await prisma.ticketComment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TicketCommentUpdateManyArgs>(args: SelectSubset<T, TicketCommentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one TicketComment.
+     * @param {TicketCommentUpsertArgs} args - Arguments to update or create a TicketComment.
+     * @example
+     * // Update or create a TicketComment
+     * const ticketComment = await prisma.ticketComment.upsert({
+     *   create: {
+     *     // ... data to create a TicketComment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TicketComment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TicketCommentUpsertArgs>(args: SelectSubset<T, TicketCommentUpsertArgs<ExtArgs>>): Prisma__TicketCommentClient<$Result.GetResult<Prisma.$TicketCommentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of TicketComments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TicketCommentCountArgs} args - Arguments to filter TicketComments to count.
+     * @example
+     * // Count the number of TicketComments
+     * const count = await prisma.ticketComment.count({
+     *   where: {
+     *     // ... the filter for the TicketComments we want to count
+     *   }
+     * })
+    **/
+    count<T extends TicketCommentCountArgs>(
+      args?: Subset<T, TicketCommentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TicketCommentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TicketComment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TicketCommentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TicketCommentAggregateArgs>(args: Subset<T, TicketCommentAggregateArgs>): Prisma.PrismaPromise<GetTicketCommentAggregateType<T>>
+
+    /**
+     * Group by TicketComment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TicketCommentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TicketCommentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TicketCommentGroupByArgs['orderBy'] }
+        : { orderBy?: TicketCommentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TicketCommentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTicketCommentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TicketComment model
+   */
+  readonly fields: TicketCommentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TicketComment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TicketCommentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    ticket<T extends SupportTicketDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SupportTicketDefaultArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    author<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TicketComment model
+   */ 
+  interface TicketCommentFieldRefs {
+    readonly id: FieldRef<"TicketComment", 'String'>
+    readonly ticketId: FieldRef<"TicketComment", 'String'>
+    readonly authorId: FieldRef<"TicketComment", 'String'>
+    readonly message: FieldRef<"TicketComment", 'String'>
+    readonly createdAt: FieldRef<"TicketComment", 'DateTime'>
+    readonly updatedAt: FieldRef<"TicketComment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TicketComment findUnique
+   */
+  export type TicketCommentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketComment
+     */
+    select?: TicketCommentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which TicketComment to fetch.
+     */
+    where: TicketCommentWhereUniqueInput
+  }
+
+  /**
+   * TicketComment findUniqueOrThrow
+   */
+  export type TicketCommentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketComment
+     */
+    select?: TicketCommentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which TicketComment to fetch.
+     */
+    where: TicketCommentWhereUniqueInput
+  }
+
+  /**
+   * TicketComment findFirst
+   */
+  export type TicketCommentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketComment
+     */
+    select?: TicketCommentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which TicketComment to fetch.
+     */
+    where?: TicketCommentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TicketComments to fetch.
+     */
+    orderBy?: TicketCommentOrderByWithRelationInput | TicketCommentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TicketComments.
+     */
+    cursor?: TicketCommentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TicketComments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TicketComments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TicketComments.
+     */
+    distinct?: TicketCommentScalarFieldEnum | TicketCommentScalarFieldEnum[]
+  }
+
+  /**
+   * TicketComment findFirstOrThrow
+   */
+  export type TicketCommentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketComment
+     */
+    select?: TicketCommentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which TicketComment to fetch.
+     */
+    where?: TicketCommentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TicketComments to fetch.
+     */
+    orderBy?: TicketCommentOrderByWithRelationInput | TicketCommentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TicketComments.
+     */
+    cursor?: TicketCommentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TicketComments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TicketComments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TicketComments.
+     */
+    distinct?: TicketCommentScalarFieldEnum | TicketCommentScalarFieldEnum[]
+  }
+
+  /**
+   * TicketComment findMany
+   */
+  export type TicketCommentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketComment
+     */
+    select?: TicketCommentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which TicketComments to fetch.
+     */
+    where?: TicketCommentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TicketComments to fetch.
+     */
+    orderBy?: TicketCommentOrderByWithRelationInput | TicketCommentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TicketComments.
+     */
+    cursor?: TicketCommentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TicketComments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TicketComments.
+     */
+    skip?: number
+    distinct?: TicketCommentScalarFieldEnum | TicketCommentScalarFieldEnum[]
+  }
+
+  /**
+   * TicketComment create
+   */
+  export type TicketCommentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketComment
+     */
+    select?: TicketCommentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketCommentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TicketComment.
+     */
+    data: XOR<TicketCommentCreateInput, TicketCommentUncheckedCreateInput>
+  }
+
+  /**
+   * TicketComment createMany
+   */
+  export type TicketCommentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TicketComments.
+     */
+    data: TicketCommentCreateManyInput | TicketCommentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TicketComment createManyAndReturn
+   */
+  export type TicketCommentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketComment
+     */
+    select?: TicketCommentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many TicketComments.
+     */
+    data: TicketCommentCreateManyInput | TicketCommentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketCommentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TicketComment update
+   */
+  export type TicketCommentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketComment
+     */
+    select?: TicketCommentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketCommentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TicketComment.
+     */
+    data: XOR<TicketCommentUpdateInput, TicketCommentUncheckedUpdateInput>
+    /**
+     * Choose, which TicketComment to update.
+     */
+    where: TicketCommentWhereUniqueInput
+  }
+
+  /**
+   * TicketComment updateMany
+   */
+  export type TicketCommentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TicketComments.
+     */
+    data: XOR<TicketCommentUpdateManyMutationInput, TicketCommentUncheckedUpdateManyInput>
+    /**
+     * Filter which TicketComments to update
+     */
+    where?: TicketCommentWhereInput
+  }
+
+  /**
+   * TicketComment upsert
+   */
+  export type TicketCommentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketComment
+     */
+    select?: TicketCommentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketCommentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TicketComment to update in case it exists.
+     */
+    where: TicketCommentWhereUniqueInput
+    /**
+     * In case the TicketComment found by the `where` argument doesn't exist, create a new TicketComment with this data.
+     */
+    create: XOR<TicketCommentCreateInput, TicketCommentUncheckedCreateInput>
+    /**
+     * In case the TicketComment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TicketCommentUpdateInput, TicketCommentUncheckedUpdateInput>
+  }
+
+  /**
+   * TicketComment delete
+   */
+  export type TicketCommentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketComment
+     */
+    select?: TicketCommentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketCommentInclude<ExtArgs> | null
+    /**
+     * Filter which TicketComment to delete.
+     */
+    where: TicketCommentWhereUniqueInput
+  }
+
+  /**
+   * TicketComment deleteMany
+   */
+  export type TicketCommentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TicketComments to delete
+     */
+    where?: TicketCommentWhereInput
+  }
+
+  /**
+   * TicketComment without action
+   */
+  export type TicketCommentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketComment
+     */
+    select?: TicketCommentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketCommentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model KnowledgeBaseArticle
+   */
+
+  export type AggregateKnowledgeBaseArticle = {
+    _count: KnowledgeBaseArticleCountAggregateOutputType | null
+    _avg: KnowledgeBaseArticleAvgAggregateOutputType | null
+    _sum: KnowledgeBaseArticleSumAggregateOutputType | null
+    _min: KnowledgeBaseArticleMinAggregateOutputType | null
+    _max: KnowledgeBaseArticleMaxAggregateOutputType | null
+  }
+
+  export type KnowledgeBaseArticleAvgAggregateOutputType = {
+    views: number | null
+    helpful: number | null
+    notHelpful: number | null
+  }
+
+  export type KnowledgeBaseArticleSumAggregateOutputType = {
+    views: number | null
+    helpful: number | null
+    notHelpful: number | null
+  }
+
+  export type KnowledgeBaseArticleMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    slug: string | null
+    content: string | null
+    excerpt: string | null
+    categoryId: string | null
+    authorId: string | null
+    published: boolean | null
+    views: number | null
+    helpful: number | null
+    notHelpful: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    publishedAt: Date | null
+  }
+
+  export type KnowledgeBaseArticleMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    slug: string | null
+    content: string | null
+    excerpt: string | null
+    categoryId: string | null
+    authorId: string | null
+    published: boolean | null
+    views: number | null
+    helpful: number | null
+    notHelpful: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    publishedAt: Date | null
+  }
+
+  export type KnowledgeBaseArticleCountAggregateOutputType = {
+    id: number
+    title: number
+    slug: number
+    content: number
+    excerpt: number
+    categoryId: number
+    authorId: number
+    tags: number
+    published: number
+    views: number
+    helpful: number
+    notHelpful: number
+    createdAt: number
+    updatedAt: number
+    publishedAt: number
+    _all: number
+  }
+
+
+  export type KnowledgeBaseArticleAvgAggregateInputType = {
+    views?: true
+    helpful?: true
+    notHelpful?: true
+  }
+
+  export type KnowledgeBaseArticleSumAggregateInputType = {
+    views?: true
+    helpful?: true
+    notHelpful?: true
+  }
+
+  export type KnowledgeBaseArticleMinAggregateInputType = {
+    id?: true
+    title?: true
+    slug?: true
+    content?: true
+    excerpt?: true
+    categoryId?: true
+    authorId?: true
+    published?: true
+    views?: true
+    helpful?: true
+    notHelpful?: true
+    createdAt?: true
+    updatedAt?: true
+    publishedAt?: true
+  }
+
+  export type KnowledgeBaseArticleMaxAggregateInputType = {
+    id?: true
+    title?: true
+    slug?: true
+    content?: true
+    excerpt?: true
+    categoryId?: true
+    authorId?: true
+    published?: true
+    views?: true
+    helpful?: true
+    notHelpful?: true
+    createdAt?: true
+    updatedAt?: true
+    publishedAt?: true
+  }
+
+  export type KnowledgeBaseArticleCountAggregateInputType = {
+    id?: true
+    title?: true
+    slug?: true
+    content?: true
+    excerpt?: true
+    categoryId?: true
+    authorId?: true
+    tags?: true
+    published?: true
+    views?: true
+    helpful?: true
+    notHelpful?: true
+    createdAt?: true
+    updatedAt?: true
+    publishedAt?: true
+    _all?: true
+  }
+
+  export type KnowledgeBaseArticleAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which KnowledgeBaseArticle to aggregate.
+     */
+    where?: KnowledgeBaseArticleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KnowledgeBaseArticles to fetch.
+     */
+    orderBy?: KnowledgeBaseArticleOrderByWithRelationInput | KnowledgeBaseArticleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: KnowledgeBaseArticleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KnowledgeBaseArticles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KnowledgeBaseArticles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned KnowledgeBaseArticles
+    **/
+    _count?: true | KnowledgeBaseArticleCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: KnowledgeBaseArticleAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: KnowledgeBaseArticleSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: KnowledgeBaseArticleMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: KnowledgeBaseArticleMaxAggregateInputType
+  }
+
+  export type GetKnowledgeBaseArticleAggregateType<T extends KnowledgeBaseArticleAggregateArgs> = {
+        [P in keyof T & keyof AggregateKnowledgeBaseArticle]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateKnowledgeBaseArticle[P]>
+      : GetScalarType<T[P], AggregateKnowledgeBaseArticle[P]>
+  }
+
+
+
+
+  export type KnowledgeBaseArticleGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: KnowledgeBaseArticleWhereInput
+    orderBy?: KnowledgeBaseArticleOrderByWithAggregationInput | KnowledgeBaseArticleOrderByWithAggregationInput[]
+    by: KnowledgeBaseArticleScalarFieldEnum[] | KnowledgeBaseArticleScalarFieldEnum
+    having?: KnowledgeBaseArticleScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: KnowledgeBaseArticleCountAggregateInputType | true
+    _avg?: KnowledgeBaseArticleAvgAggregateInputType
+    _sum?: KnowledgeBaseArticleSumAggregateInputType
+    _min?: KnowledgeBaseArticleMinAggregateInputType
+    _max?: KnowledgeBaseArticleMaxAggregateInputType
+  }
+
+  export type KnowledgeBaseArticleGroupByOutputType = {
+    id: string
+    title: string
+    slug: string
+    content: string
+    excerpt: string | null
+    categoryId: string
+    authorId: string
+    tags: string[]
+    published: boolean
+    views: number
+    helpful: number
+    notHelpful: number
+    createdAt: Date
+    updatedAt: Date
+    publishedAt: Date | null
+    _count: KnowledgeBaseArticleCountAggregateOutputType | null
+    _avg: KnowledgeBaseArticleAvgAggregateOutputType | null
+    _sum: KnowledgeBaseArticleSumAggregateOutputType | null
+    _min: KnowledgeBaseArticleMinAggregateOutputType | null
+    _max: KnowledgeBaseArticleMaxAggregateOutputType | null
+  }
+
+  type GetKnowledgeBaseArticleGroupByPayload<T extends KnowledgeBaseArticleGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<KnowledgeBaseArticleGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof KnowledgeBaseArticleGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], KnowledgeBaseArticleGroupByOutputType[P]>
+            : GetScalarType<T[P], KnowledgeBaseArticleGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type KnowledgeBaseArticleSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    slug?: boolean
+    content?: boolean
+    excerpt?: boolean
+    categoryId?: boolean
+    authorId?: boolean
+    tags?: boolean
+    published?: boolean
+    views?: boolean
+    helpful?: boolean
+    notHelpful?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    publishedAt?: boolean
+    category?: boolean | KnowledgeBaseCategoryDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+    versions?: boolean | KnowledgeBaseArticle$versionsArgs<ExtArgs>
+    _count?: boolean | KnowledgeBaseArticleCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["knowledgeBaseArticle"]>
+
+  export type KnowledgeBaseArticleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    slug?: boolean
+    content?: boolean
+    excerpt?: boolean
+    categoryId?: boolean
+    authorId?: boolean
+    tags?: boolean
+    published?: boolean
+    views?: boolean
+    helpful?: boolean
+    notHelpful?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    publishedAt?: boolean
+    category?: boolean | KnowledgeBaseCategoryDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["knowledgeBaseArticle"]>
+
+  export type KnowledgeBaseArticleSelectScalar = {
+    id?: boolean
+    title?: boolean
+    slug?: boolean
+    content?: boolean
+    excerpt?: boolean
+    categoryId?: boolean
+    authorId?: boolean
+    tags?: boolean
+    published?: boolean
+    views?: boolean
+    helpful?: boolean
+    notHelpful?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    publishedAt?: boolean
+  }
+
+  export type KnowledgeBaseArticleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    category?: boolean | KnowledgeBaseCategoryDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+    versions?: boolean | KnowledgeBaseArticle$versionsArgs<ExtArgs>
+    _count?: boolean | KnowledgeBaseArticleCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type KnowledgeBaseArticleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    category?: boolean | KnowledgeBaseCategoryDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $KnowledgeBaseArticlePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "KnowledgeBaseArticle"
+    objects: {
+      category: Prisma.$KnowledgeBaseCategoryPayload<ExtArgs>
+      author: Prisma.$UserPayload<ExtArgs>
+      versions: Prisma.$ArticleVersionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      slug: string
+      content: string
+      excerpt: string | null
+      categoryId: string
+      authorId: string
+      tags: string[]
+      published: boolean
+      views: number
+      helpful: number
+      notHelpful: number
+      createdAt: Date
+      updatedAt: Date
+      publishedAt: Date | null
+    }, ExtArgs["result"]["knowledgeBaseArticle"]>
+    composites: {}
+  }
+
+  type KnowledgeBaseArticleGetPayload<S extends boolean | null | undefined | KnowledgeBaseArticleDefaultArgs> = $Result.GetResult<Prisma.$KnowledgeBaseArticlePayload, S>
+
+  type KnowledgeBaseArticleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<KnowledgeBaseArticleFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: KnowledgeBaseArticleCountAggregateInputType | true
+    }
+
+  export interface KnowledgeBaseArticleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['KnowledgeBaseArticle'], meta: { name: 'KnowledgeBaseArticle' } }
+    /**
+     * Find zero or one KnowledgeBaseArticle that matches the filter.
+     * @param {KnowledgeBaseArticleFindUniqueArgs} args - Arguments to find a KnowledgeBaseArticle
+     * @example
+     * // Get one KnowledgeBaseArticle
+     * const knowledgeBaseArticle = await prisma.knowledgeBaseArticle.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends KnowledgeBaseArticleFindUniqueArgs>(args: SelectSubset<T, KnowledgeBaseArticleFindUniqueArgs<ExtArgs>>): Prisma__KnowledgeBaseArticleClient<$Result.GetResult<Prisma.$KnowledgeBaseArticlePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one KnowledgeBaseArticle that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {KnowledgeBaseArticleFindUniqueOrThrowArgs} args - Arguments to find a KnowledgeBaseArticle
+     * @example
+     * // Get one KnowledgeBaseArticle
+     * const knowledgeBaseArticle = await prisma.knowledgeBaseArticle.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends KnowledgeBaseArticleFindUniqueOrThrowArgs>(args: SelectSubset<T, KnowledgeBaseArticleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__KnowledgeBaseArticleClient<$Result.GetResult<Prisma.$KnowledgeBaseArticlePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first KnowledgeBaseArticle that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KnowledgeBaseArticleFindFirstArgs} args - Arguments to find a KnowledgeBaseArticle
+     * @example
+     * // Get one KnowledgeBaseArticle
+     * const knowledgeBaseArticle = await prisma.knowledgeBaseArticle.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends KnowledgeBaseArticleFindFirstArgs>(args?: SelectSubset<T, KnowledgeBaseArticleFindFirstArgs<ExtArgs>>): Prisma__KnowledgeBaseArticleClient<$Result.GetResult<Prisma.$KnowledgeBaseArticlePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first KnowledgeBaseArticle that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KnowledgeBaseArticleFindFirstOrThrowArgs} args - Arguments to find a KnowledgeBaseArticle
+     * @example
+     * // Get one KnowledgeBaseArticle
+     * const knowledgeBaseArticle = await prisma.knowledgeBaseArticle.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends KnowledgeBaseArticleFindFirstOrThrowArgs>(args?: SelectSubset<T, KnowledgeBaseArticleFindFirstOrThrowArgs<ExtArgs>>): Prisma__KnowledgeBaseArticleClient<$Result.GetResult<Prisma.$KnowledgeBaseArticlePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more KnowledgeBaseArticles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KnowledgeBaseArticleFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all KnowledgeBaseArticles
+     * const knowledgeBaseArticles = await prisma.knowledgeBaseArticle.findMany()
+     * 
+     * // Get first 10 KnowledgeBaseArticles
+     * const knowledgeBaseArticles = await prisma.knowledgeBaseArticle.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const knowledgeBaseArticleWithIdOnly = await prisma.knowledgeBaseArticle.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends KnowledgeBaseArticleFindManyArgs>(args?: SelectSubset<T, KnowledgeBaseArticleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KnowledgeBaseArticlePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a KnowledgeBaseArticle.
+     * @param {KnowledgeBaseArticleCreateArgs} args - Arguments to create a KnowledgeBaseArticle.
+     * @example
+     * // Create one KnowledgeBaseArticle
+     * const KnowledgeBaseArticle = await prisma.knowledgeBaseArticle.create({
+     *   data: {
+     *     // ... data to create a KnowledgeBaseArticle
+     *   }
+     * })
+     * 
+     */
+    create<T extends KnowledgeBaseArticleCreateArgs>(args: SelectSubset<T, KnowledgeBaseArticleCreateArgs<ExtArgs>>): Prisma__KnowledgeBaseArticleClient<$Result.GetResult<Prisma.$KnowledgeBaseArticlePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many KnowledgeBaseArticles.
+     * @param {KnowledgeBaseArticleCreateManyArgs} args - Arguments to create many KnowledgeBaseArticles.
+     * @example
+     * // Create many KnowledgeBaseArticles
+     * const knowledgeBaseArticle = await prisma.knowledgeBaseArticle.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends KnowledgeBaseArticleCreateManyArgs>(args?: SelectSubset<T, KnowledgeBaseArticleCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many KnowledgeBaseArticles and returns the data saved in the database.
+     * @param {KnowledgeBaseArticleCreateManyAndReturnArgs} args - Arguments to create many KnowledgeBaseArticles.
+     * @example
+     * // Create many KnowledgeBaseArticles
+     * const knowledgeBaseArticle = await prisma.knowledgeBaseArticle.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many KnowledgeBaseArticles and only return the `id`
+     * const knowledgeBaseArticleWithIdOnly = await prisma.knowledgeBaseArticle.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends KnowledgeBaseArticleCreateManyAndReturnArgs>(args?: SelectSubset<T, KnowledgeBaseArticleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KnowledgeBaseArticlePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a KnowledgeBaseArticle.
+     * @param {KnowledgeBaseArticleDeleteArgs} args - Arguments to delete one KnowledgeBaseArticle.
+     * @example
+     * // Delete one KnowledgeBaseArticle
+     * const KnowledgeBaseArticle = await prisma.knowledgeBaseArticle.delete({
+     *   where: {
+     *     // ... filter to delete one KnowledgeBaseArticle
+     *   }
+     * })
+     * 
+     */
+    delete<T extends KnowledgeBaseArticleDeleteArgs>(args: SelectSubset<T, KnowledgeBaseArticleDeleteArgs<ExtArgs>>): Prisma__KnowledgeBaseArticleClient<$Result.GetResult<Prisma.$KnowledgeBaseArticlePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one KnowledgeBaseArticle.
+     * @param {KnowledgeBaseArticleUpdateArgs} args - Arguments to update one KnowledgeBaseArticle.
+     * @example
+     * // Update one KnowledgeBaseArticle
+     * const knowledgeBaseArticle = await prisma.knowledgeBaseArticle.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends KnowledgeBaseArticleUpdateArgs>(args: SelectSubset<T, KnowledgeBaseArticleUpdateArgs<ExtArgs>>): Prisma__KnowledgeBaseArticleClient<$Result.GetResult<Prisma.$KnowledgeBaseArticlePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more KnowledgeBaseArticles.
+     * @param {KnowledgeBaseArticleDeleteManyArgs} args - Arguments to filter KnowledgeBaseArticles to delete.
+     * @example
+     * // Delete a few KnowledgeBaseArticles
+     * const { count } = await prisma.knowledgeBaseArticle.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends KnowledgeBaseArticleDeleteManyArgs>(args?: SelectSubset<T, KnowledgeBaseArticleDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more KnowledgeBaseArticles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KnowledgeBaseArticleUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many KnowledgeBaseArticles
+     * const knowledgeBaseArticle = await prisma.knowledgeBaseArticle.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends KnowledgeBaseArticleUpdateManyArgs>(args: SelectSubset<T, KnowledgeBaseArticleUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one KnowledgeBaseArticle.
+     * @param {KnowledgeBaseArticleUpsertArgs} args - Arguments to update or create a KnowledgeBaseArticle.
+     * @example
+     * // Update or create a KnowledgeBaseArticle
+     * const knowledgeBaseArticle = await prisma.knowledgeBaseArticle.upsert({
+     *   create: {
+     *     // ... data to create a KnowledgeBaseArticle
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the KnowledgeBaseArticle we want to update
+     *   }
+     * })
+     */
+    upsert<T extends KnowledgeBaseArticleUpsertArgs>(args: SelectSubset<T, KnowledgeBaseArticleUpsertArgs<ExtArgs>>): Prisma__KnowledgeBaseArticleClient<$Result.GetResult<Prisma.$KnowledgeBaseArticlePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of KnowledgeBaseArticles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KnowledgeBaseArticleCountArgs} args - Arguments to filter KnowledgeBaseArticles to count.
+     * @example
+     * // Count the number of KnowledgeBaseArticles
+     * const count = await prisma.knowledgeBaseArticle.count({
+     *   where: {
+     *     // ... the filter for the KnowledgeBaseArticles we want to count
+     *   }
+     * })
+    **/
+    count<T extends KnowledgeBaseArticleCountArgs>(
+      args?: Subset<T, KnowledgeBaseArticleCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], KnowledgeBaseArticleCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a KnowledgeBaseArticle.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KnowledgeBaseArticleAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends KnowledgeBaseArticleAggregateArgs>(args: Subset<T, KnowledgeBaseArticleAggregateArgs>): Prisma.PrismaPromise<GetKnowledgeBaseArticleAggregateType<T>>
+
+    /**
+     * Group by KnowledgeBaseArticle.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KnowledgeBaseArticleGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends KnowledgeBaseArticleGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: KnowledgeBaseArticleGroupByArgs['orderBy'] }
+        : { orderBy?: KnowledgeBaseArticleGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, KnowledgeBaseArticleGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetKnowledgeBaseArticleGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the KnowledgeBaseArticle model
+   */
+  readonly fields: KnowledgeBaseArticleFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for KnowledgeBaseArticle.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__KnowledgeBaseArticleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    category<T extends KnowledgeBaseCategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, KnowledgeBaseCategoryDefaultArgs<ExtArgs>>): Prisma__KnowledgeBaseCategoryClient<$Result.GetResult<Prisma.$KnowledgeBaseCategoryPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    author<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    versions<T extends KnowledgeBaseArticle$versionsArgs<ExtArgs> = {}>(args?: Subset<T, KnowledgeBaseArticle$versionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArticleVersionPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the KnowledgeBaseArticle model
+   */ 
+  interface KnowledgeBaseArticleFieldRefs {
+    readonly id: FieldRef<"KnowledgeBaseArticle", 'String'>
+    readonly title: FieldRef<"KnowledgeBaseArticle", 'String'>
+    readonly slug: FieldRef<"KnowledgeBaseArticle", 'String'>
+    readonly content: FieldRef<"KnowledgeBaseArticle", 'String'>
+    readonly excerpt: FieldRef<"KnowledgeBaseArticle", 'String'>
+    readonly categoryId: FieldRef<"KnowledgeBaseArticle", 'String'>
+    readonly authorId: FieldRef<"KnowledgeBaseArticle", 'String'>
+    readonly tags: FieldRef<"KnowledgeBaseArticle", 'String[]'>
+    readonly published: FieldRef<"KnowledgeBaseArticle", 'Boolean'>
+    readonly views: FieldRef<"KnowledgeBaseArticle", 'Int'>
+    readonly helpful: FieldRef<"KnowledgeBaseArticle", 'Int'>
+    readonly notHelpful: FieldRef<"KnowledgeBaseArticle", 'Int'>
+    readonly createdAt: FieldRef<"KnowledgeBaseArticle", 'DateTime'>
+    readonly updatedAt: FieldRef<"KnowledgeBaseArticle", 'DateTime'>
+    readonly publishedAt: FieldRef<"KnowledgeBaseArticle", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * KnowledgeBaseArticle findUnique
+   */
+  export type KnowledgeBaseArticleFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseArticle
+     */
+    select?: KnowledgeBaseArticleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseArticleInclude<ExtArgs> | null
+    /**
+     * Filter, which KnowledgeBaseArticle to fetch.
+     */
+    where: KnowledgeBaseArticleWhereUniqueInput
+  }
+
+  /**
+   * KnowledgeBaseArticle findUniqueOrThrow
+   */
+  export type KnowledgeBaseArticleFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseArticle
+     */
+    select?: KnowledgeBaseArticleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseArticleInclude<ExtArgs> | null
+    /**
+     * Filter, which KnowledgeBaseArticle to fetch.
+     */
+    where: KnowledgeBaseArticleWhereUniqueInput
+  }
+
+  /**
+   * KnowledgeBaseArticle findFirst
+   */
+  export type KnowledgeBaseArticleFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseArticle
+     */
+    select?: KnowledgeBaseArticleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseArticleInclude<ExtArgs> | null
+    /**
+     * Filter, which KnowledgeBaseArticle to fetch.
+     */
+    where?: KnowledgeBaseArticleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KnowledgeBaseArticles to fetch.
+     */
+    orderBy?: KnowledgeBaseArticleOrderByWithRelationInput | KnowledgeBaseArticleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for KnowledgeBaseArticles.
+     */
+    cursor?: KnowledgeBaseArticleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KnowledgeBaseArticles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KnowledgeBaseArticles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of KnowledgeBaseArticles.
+     */
+    distinct?: KnowledgeBaseArticleScalarFieldEnum | KnowledgeBaseArticleScalarFieldEnum[]
+  }
+
+  /**
+   * KnowledgeBaseArticle findFirstOrThrow
+   */
+  export type KnowledgeBaseArticleFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseArticle
+     */
+    select?: KnowledgeBaseArticleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseArticleInclude<ExtArgs> | null
+    /**
+     * Filter, which KnowledgeBaseArticle to fetch.
+     */
+    where?: KnowledgeBaseArticleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KnowledgeBaseArticles to fetch.
+     */
+    orderBy?: KnowledgeBaseArticleOrderByWithRelationInput | KnowledgeBaseArticleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for KnowledgeBaseArticles.
+     */
+    cursor?: KnowledgeBaseArticleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KnowledgeBaseArticles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KnowledgeBaseArticles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of KnowledgeBaseArticles.
+     */
+    distinct?: KnowledgeBaseArticleScalarFieldEnum | KnowledgeBaseArticleScalarFieldEnum[]
+  }
+
+  /**
+   * KnowledgeBaseArticle findMany
+   */
+  export type KnowledgeBaseArticleFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseArticle
+     */
+    select?: KnowledgeBaseArticleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseArticleInclude<ExtArgs> | null
+    /**
+     * Filter, which KnowledgeBaseArticles to fetch.
+     */
+    where?: KnowledgeBaseArticleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KnowledgeBaseArticles to fetch.
+     */
+    orderBy?: KnowledgeBaseArticleOrderByWithRelationInput | KnowledgeBaseArticleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing KnowledgeBaseArticles.
+     */
+    cursor?: KnowledgeBaseArticleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KnowledgeBaseArticles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KnowledgeBaseArticles.
+     */
+    skip?: number
+    distinct?: KnowledgeBaseArticleScalarFieldEnum | KnowledgeBaseArticleScalarFieldEnum[]
+  }
+
+  /**
+   * KnowledgeBaseArticle create
+   */
+  export type KnowledgeBaseArticleCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseArticle
+     */
+    select?: KnowledgeBaseArticleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseArticleInclude<ExtArgs> | null
+    /**
+     * The data needed to create a KnowledgeBaseArticle.
+     */
+    data: XOR<KnowledgeBaseArticleCreateInput, KnowledgeBaseArticleUncheckedCreateInput>
+  }
+
+  /**
+   * KnowledgeBaseArticle createMany
+   */
+  export type KnowledgeBaseArticleCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many KnowledgeBaseArticles.
+     */
+    data: KnowledgeBaseArticleCreateManyInput | KnowledgeBaseArticleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * KnowledgeBaseArticle createManyAndReturn
+   */
+  export type KnowledgeBaseArticleCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseArticle
+     */
+    select?: KnowledgeBaseArticleSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many KnowledgeBaseArticles.
+     */
+    data: KnowledgeBaseArticleCreateManyInput | KnowledgeBaseArticleCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseArticleIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * KnowledgeBaseArticle update
+   */
+  export type KnowledgeBaseArticleUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseArticle
+     */
+    select?: KnowledgeBaseArticleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseArticleInclude<ExtArgs> | null
+    /**
+     * The data needed to update a KnowledgeBaseArticle.
+     */
+    data: XOR<KnowledgeBaseArticleUpdateInput, KnowledgeBaseArticleUncheckedUpdateInput>
+    /**
+     * Choose, which KnowledgeBaseArticle to update.
+     */
+    where: KnowledgeBaseArticleWhereUniqueInput
+  }
+
+  /**
+   * KnowledgeBaseArticle updateMany
+   */
+  export type KnowledgeBaseArticleUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update KnowledgeBaseArticles.
+     */
+    data: XOR<KnowledgeBaseArticleUpdateManyMutationInput, KnowledgeBaseArticleUncheckedUpdateManyInput>
+    /**
+     * Filter which KnowledgeBaseArticles to update
+     */
+    where?: KnowledgeBaseArticleWhereInput
+  }
+
+  /**
+   * KnowledgeBaseArticle upsert
+   */
+  export type KnowledgeBaseArticleUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseArticle
+     */
+    select?: KnowledgeBaseArticleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseArticleInclude<ExtArgs> | null
+    /**
+     * The filter to search for the KnowledgeBaseArticle to update in case it exists.
+     */
+    where: KnowledgeBaseArticleWhereUniqueInput
+    /**
+     * In case the KnowledgeBaseArticle found by the `where` argument doesn't exist, create a new KnowledgeBaseArticle with this data.
+     */
+    create: XOR<KnowledgeBaseArticleCreateInput, KnowledgeBaseArticleUncheckedCreateInput>
+    /**
+     * In case the KnowledgeBaseArticle was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<KnowledgeBaseArticleUpdateInput, KnowledgeBaseArticleUncheckedUpdateInput>
+  }
+
+  /**
+   * KnowledgeBaseArticle delete
+   */
+  export type KnowledgeBaseArticleDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseArticle
+     */
+    select?: KnowledgeBaseArticleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseArticleInclude<ExtArgs> | null
+    /**
+     * Filter which KnowledgeBaseArticle to delete.
+     */
+    where: KnowledgeBaseArticleWhereUniqueInput
+  }
+
+  /**
+   * KnowledgeBaseArticle deleteMany
+   */
+  export type KnowledgeBaseArticleDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which KnowledgeBaseArticles to delete
+     */
+    where?: KnowledgeBaseArticleWhereInput
+  }
+
+  /**
+   * KnowledgeBaseArticle.versions
+   */
+  export type KnowledgeBaseArticle$versionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleVersion
+     */
+    select?: ArticleVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleVersionInclude<ExtArgs> | null
+    where?: ArticleVersionWhereInput
+    orderBy?: ArticleVersionOrderByWithRelationInput | ArticleVersionOrderByWithRelationInput[]
+    cursor?: ArticleVersionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ArticleVersionScalarFieldEnum | ArticleVersionScalarFieldEnum[]
+  }
+
+  /**
+   * KnowledgeBaseArticle without action
+   */
+  export type KnowledgeBaseArticleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseArticle
+     */
+    select?: KnowledgeBaseArticleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseArticleInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model KnowledgeBaseCategory
+   */
+
+  export type AggregateKnowledgeBaseCategory = {
+    _count: KnowledgeBaseCategoryCountAggregateOutputType | null
+    _avg: KnowledgeBaseCategoryAvgAggregateOutputType | null
+    _sum: KnowledgeBaseCategorySumAggregateOutputType | null
+    _min: KnowledgeBaseCategoryMinAggregateOutputType | null
+    _max: KnowledgeBaseCategoryMaxAggregateOutputType | null
+  }
+
+  export type KnowledgeBaseCategoryAvgAggregateOutputType = {
+    order: number | null
+  }
+
+  export type KnowledgeBaseCategorySumAggregateOutputType = {
+    order: number | null
+  }
+
+  export type KnowledgeBaseCategoryMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    slug: string | null
+    description: string | null
+    icon: string | null
+    order: number | null
+    parentId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type KnowledgeBaseCategoryMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    slug: string | null
+    description: string | null
+    icon: string | null
+    order: number | null
+    parentId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type KnowledgeBaseCategoryCountAggregateOutputType = {
+    id: number
+    name: number
+    slug: number
+    description: number
+    icon: number
+    order: number
+    parentId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type KnowledgeBaseCategoryAvgAggregateInputType = {
+    order?: true
+  }
+
+  export type KnowledgeBaseCategorySumAggregateInputType = {
+    order?: true
+  }
+
+  export type KnowledgeBaseCategoryMinAggregateInputType = {
+    id?: true
+    name?: true
+    slug?: true
+    description?: true
+    icon?: true
+    order?: true
+    parentId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type KnowledgeBaseCategoryMaxAggregateInputType = {
+    id?: true
+    name?: true
+    slug?: true
+    description?: true
+    icon?: true
+    order?: true
+    parentId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type KnowledgeBaseCategoryCountAggregateInputType = {
+    id?: true
+    name?: true
+    slug?: true
+    description?: true
+    icon?: true
+    order?: true
+    parentId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type KnowledgeBaseCategoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which KnowledgeBaseCategory to aggregate.
+     */
+    where?: KnowledgeBaseCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KnowledgeBaseCategories to fetch.
+     */
+    orderBy?: KnowledgeBaseCategoryOrderByWithRelationInput | KnowledgeBaseCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: KnowledgeBaseCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KnowledgeBaseCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KnowledgeBaseCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned KnowledgeBaseCategories
+    **/
+    _count?: true | KnowledgeBaseCategoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: KnowledgeBaseCategoryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: KnowledgeBaseCategorySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: KnowledgeBaseCategoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: KnowledgeBaseCategoryMaxAggregateInputType
+  }
+
+  export type GetKnowledgeBaseCategoryAggregateType<T extends KnowledgeBaseCategoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateKnowledgeBaseCategory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateKnowledgeBaseCategory[P]>
+      : GetScalarType<T[P], AggregateKnowledgeBaseCategory[P]>
+  }
+
+
+
+
+  export type KnowledgeBaseCategoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: KnowledgeBaseCategoryWhereInput
+    orderBy?: KnowledgeBaseCategoryOrderByWithAggregationInput | KnowledgeBaseCategoryOrderByWithAggregationInput[]
+    by: KnowledgeBaseCategoryScalarFieldEnum[] | KnowledgeBaseCategoryScalarFieldEnum
+    having?: KnowledgeBaseCategoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: KnowledgeBaseCategoryCountAggregateInputType | true
+    _avg?: KnowledgeBaseCategoryAvgAggregateInputType
+    _sum?: KnowledgeBaseCategorySumAggregateInputType
+    _min?: KnowledgeBaseCategoryMinAggregateInputType
+    _max?: KnowledgeBaseCategoryMaxAggregateInputType
+  }
+
+  export type KnowledgeBaseCategoryGroupByOutputType = {
+    id: string
+    name: string
+    slug: string
+    description: string | null
+    icon: string | null
+    order: number
+    parentId: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: KnowledgeBaseCategoryCountAggregateOutputType | null
+    _avg: KnowledgeBaseCategoryAvgAggregateOutputType | null
+    _sum: KnowledgeBaseCategorySumAggregateOutputType | null
+    _min: KnowledgeBaseCategoryMinAggregateOutputType | null
+    _max: KnowledgeBaseCategoryMaxAggregateOutputType | null
+  }
+
+  type GetKnowledgeBaseCategoryGroupByPayload<T extends KnowledgeBaseCategoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<KnowledgeBaseCategoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof KnowledgeBaseCategoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], KnowledgeBaseCategoryGroupByOutputType[P]>
+            : GetScalarType<T[P], KnowledgeBaseCategoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type KnowledgeBaseCategorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    description?: boolean
+    icon?: boolean
+    order?: boolean
+    parentId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    parent?: boolean | KnowledgeBaseCategory$parentArgs<ExtArgs>
+    children?: boolean | KnowledgeBaseCategory$childrenArgs<ExtArgs>
+    articles?: boolean | KnowledgeBaseCategory$articlesArgs<ExtArgs>
+    _count?: boolean | KnowledgeBaseCategoryCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["knowledgeBaseCategory"]>
+
+  export type KnowledgeBaseCategorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    description?: boolean
+    icon?: boolean
+    order?: boolean
+    parentId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    parent?: boolean | KnowledgeBaseCategory$parentArgs<ExtArgs>
+  }, ExtArgs["result"]["knowledgeBaseCategory"]>
+
+  export type KnowledgeBaseCategorySelectScalar = {
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    description?: boolean
+    icon?: boolean
+    order?: boolean
+    parentId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type KnowledgeBaseCategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    parent?: boolean | KnowledgeBaseCategory$parentArgs<ExtArgs>
+    children?: boolean | KnowledgeBaseCategory$childrenArgs<ExtArgs>
+    articles?: boolean | KnowledgeBaseCategory$articlesArgs<ExtArgs>
+    _count?: boolean | KnowledgeBaseCategoryCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type KnowledgeBaseCategoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    parent?: boolean | KnowledgeBaseCategory$parentArgs<ExtArgs>
+  }
+
+  export type $KnowledgeBaseCategoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "KnowledgeBaseCategory"
+    objects: {
+      parent: Prisma.$KnowledgeBaseCategoryPayload<ExtArgs> | null
+      children: Prisma.$KnowledgeBaseCategoryPayload<ExtArgs>[]
+      articles: Prisma.$KnowledgeBaseArticlePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      slug: string
+      description: string | null
+      icon: string | null
+      order: number
+      parentId: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["knowledgeBaseCategory"]>
+    composites: {}
+  }
+
+  type KnowledgeBaseCategoryGetPayload<S extends boolean | null | undefined | KnowledgeBaseCategoryDefaultArgs> = $Result.GetResult<Prisma.$KnowledgeBaseCategoryPayload, S>
+
+  type KnowledgeBaseCategoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<KnowledgeBaseCategoryFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: KnowledgeBaseCategoryCountAggregateInputType | true
+    }
+
+  export interface KnowledgeBaseCategoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['KnowledgeBaseCategory'], meta: { name: 'KnowledgeBaseCategory' } }
+    /**
+     * Find zero or one KnowledgeBaseCategory that matches the filter.
+     * @param {KnowledgeBaseCategoryFindUniqueArgs} args - Arguments to find a KnowledgeBaseCategory
+     * @example
+     * // Get one KnowledgeBaseCategory
+     * const knowledgeBaseCategory = await prisma.knowledgeBaseCategory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends KnowledgeBaseCategoryFindUniqueArgs>(args: SelectSubset<T, KnowledgeBaseCategoryFindUniqueArgs<ExtArgs>>): Prisma__KnowledgeBaseCategoryClient<$Result.GetResult<Prisma.$KnowledgeBaseCategoryPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one KnowledgeBaseCategory that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {KnowledgeBaseCategoryFindUniqueOrThrowArgs} args - Arguments to find a KnowledgeBaseCategory
+     * @example
+     * // Get one KnowledgeBaseCategory
+     * const knowledgeBaseCategory = await prisma.knowledgeBaseCategory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends KnowledgeBaseCategoryFindUniqueOrThrowArgs>(args: SelectSubset<T, KnowledgeBaseCategoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__KnowledgeBaseCategoryClient<$Result.GetResult<Prisma.$KnowledgeBaseCategoryPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first KnowledgeBaseCategory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KnowledgeBaseCategoryFindFirstArgs} args - Arguments to find a KnowledgeBaseCategory
+     * @example
+     * // Get one KnowledgeBaseCategory
+     * const knowledgeBaseCategory = await prisma.knowledgeBaseCategory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends KnowledgeBaseCategoryFindFirstArgs>(args?: SelectSubset<T, KnowledgeBaseCategoryFindFirstArgs<ExtArgs>>): Prisma__KnowledgeBaseCategoryClient<$Result.GetResult<Prisma.$KnowledgeBaseCategoryPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first KnowledgeBaseCategory that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KnowledgeBaseCategoryFindFirstOrThrowArgs} args - Arguments to find a KnowledgeBaseCategory
+     * @example
+     * // Get one KnowledgeBaseCategory
+     * const knowledgeBaseCategory = await prisma.knowledgeBaseCategory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends KnowledgeBaseCategoryFindFirstOrThrowArgs>(args?: SelectSubset<T, KnowledgeBaseCategoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__KnowledgeBaseCategoryClient<$Result.GetResult<Prisma.$KnowledgeBaseCategoryPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more KnowledgeBaseCategories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KnowledgeBaseCategoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all KnowledgeBaseCategories
+     * const knowledgeBaseCategories = await prisma.knowledgeBaseCategory.findMany()
+     * 
+     * // Get first 10 KnowledgeBaseCategories
+     * const knowledgeBaseCategories = await prisma.knowledgeBaseCategory.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const knowledgeBaseCategoryWithIdOnly = await prisma.knowledgeBaseCategory.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends KnowledgeBaseCategoryFindManyArgs>(args?: SelectSubset<T, KnowledgeBaseCategoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KnowledgeBaseCategoryPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a KnowledgeBaseCategory.
+     * @param {KnowledgeBaseCategoryCreateArgs} args - Arguments to create a KnowledgeBaseCategory.
+     * @example
+     * // Create one KnowledgeBaseCategory
+     * const KnowledgeBaseCategory = await prisma.knowledgeBaseCategory.create({
+     *   data: {
+     *     // ... data to create a KnowledgeBaseCategory
+     *   }
+     * })
+     * 
+     */
+    create<T extends KnowledgeBaseCategoryCreateArgs>(args: SelectSubset<T, KnowledgeBaseCategoryCreateArgs<ExtArgs>>): Prisma__KnowledgeBaseCategoryClient<$Result.GetResult<Prisma.$KnowledgeBaseCategoryPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many KnowledgeBaseCategories.
+     * @param {KnowledgeBaseCategoryCreateManyArgs} args - Arguments to create many KnowledgeBaseCategories.
+     * @example
+     * // Create many KnowledgeBaseCategories
+     * const knowledgeBaseCategory = await prisma.knowledgeBaseCategory.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends KnowledgeBaseCategoryCreateManyArgs>(args?: SelectSubset<T, KnowledgeBaseCategoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many KnowledgeBaseCategories and returns the data saved in the database.
+     * @param {KnowledgeBaseCategoryCreateManyAndReturnArgs} args - Arguments to create many KnowledgeBaseCategories.
+     * @example
+     * // Create many KnowledgeBaseCategories
+     * const knowledgeBaseCategory = await prisma.knowledgeBaseCategory.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many KnowledgeBaseCategories and only return the `id`
+     * const knowledgeBaseCategoryWithIdOnly = await prisma.knowledgeBaseCategory.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends KnowledgeBaseCategoryCreateManyAndReturnArgs>(args?: SelectSubset<T, KnowledgeBaseCategoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KnowledgeBaseCategoryPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a KnowledgeBaseCategory.
+     * @param {KnowledgeBaseCategoryDeleteArgs} args - Arguments to delete one KnowledgeBaseCategory.
+     * @example
+     * // Delete one KnowledgeBaseCategory
+     * const KnowledgeBaseCategory = await prisma.knowledgeBaseCategory.delete({
+     *   where: {
+     *     // ... filter to delete one KnowledgeBaseCategory
+     *   }
+     * })
+     * 
+     */
+    delete<T extends KnowledgeBaseCategoryDeleteArgs>(args: SelectSubset<T, KnowledgeBaseCategoryDeleteArgs<ExtArgs>>): Prisma__KnowledgeBaseCategoryClient<$Result.GetResult<Prisma.$KnowledgeBaseCategoryPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one KnowledgeBaseCategory.
+     * @param {KnowledgeBaseCategoryUpdateArgs} args - Arguments to update one KnowledgeBaseCategory.
+     * @example
+     * // Update one KnowledgeBaseCategory
+     * const knowledgeBaseCategory = await prisma.knowledgeBaseCategory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends KnowledgeBaseCategoryUpdateArgs>(args: SelectSubset<T, KnowledgeBaseCategoryUpdateArgs<ExtArgs>>): Prisma__KnowledgeBaseCategoryClient<$Result.GetResult<Prisma.$KnowledgeBaseCategoryPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more KnowledgeBaseCategories.
+     * @param {KnowledgeBaseCategoryDeleteManyArgs} args - Arguments to filter KnowledgeBaseCategories to delete.
+     * @example
+     * // Delete a few KnowledgeBaseCategories
+     * const { count } = await prisma.knowledgeBaseCategory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends KnowledgeBaseCategoryDeleteManyArgs>(args?: SelectSubset<T, KnowledgeBaseCategoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more KnowledgeBaseCategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KnowledgeBaseCategoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many KnowledgeBaseCategories
+     * const knowledgeBaseCategory = await prisma.knowledgeBaseCategory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends KnowledgeBaseCategoryUpdateManyArgs>(args: SelectSubset<T, KnowledgeBaseCategoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one KnowledgeBaseCategory.
+     * @param {KnowledgeBaseCategoryUpsertArgs} args - Arguments to update or create a KnowledgeBaseCategory.
+     * @example
+     * // Update or create a KnowledgeBaseCategory
+     * const knowledgeBaseCategory = await prisma.knowledgeBaseCategory.upsert({
+     *   create: {
+     *     // ... data to create a KnowledgeBaseCategory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the KnowledgeBaseCategory we want to update
+     *   }
+     * })
+     */
+    upsert<T extends KnowledgeBaseCategoryUpsertArgs>(args: SelectSubset<T, KnowledgeBaseCategoryUpsertArgs<ExtArgs>>): Prisma__KnowledgeBaseCategoryClient<$Result.GetResult<Prisma.$KnowledgeBaseCategoryPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of KnowledgeBaseCategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KnowledgeBaseCategoryCountArgs} args - Arguments to filter KnowledgeBaseCategories to count.
+     * @example
+     * // Count the number of KnowledgeBaseCategories
+     * const count = await prisma.knowledgeBaseCategory.count({
+     *   where: {
+     *     // ... the filter for the KnowledgeBaseCategories we want to count
+     *   }
+     * })
+    **/
+    count<T extends KnowledgeBaseCategoryCountArgs>(
+      args?: Subset<T, KnowledgeBaseCategoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], KnowledgeBaseCategoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a KnowledgeBaseCategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KnowledgeBaseCategoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends KnowledgeBaseCategoryAggregateArgs>(args: Subset<T, KnowledgeBaseCategoryAggregateArgs>): Prisma.PrismaPromise<GetKnowledgeBaseCategoryAggregateType<T>>
+
+    /**
+     * Group by KnowledgeBaseCategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KnowledgeBaseCategoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends KnowledgeBaseCategoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: KnowledgeBaseCategoryGroupByArgs['orderBy'] }
+        : { orderBy?: KnowledgeBaseCategoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, KnowledgeBaseCategoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetKnowledgeBaseCategoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the KnowledgeBaseCategory model
+   */
+  readonly fields: KnowledgeBaseCategoryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for KnowledgeBaseCategory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__KnowledgeBaseCategoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    parent<T extends KnowledgeBaseCategory$parentArgs<ExtArgs> = {}>(args?: Subset<T, KnowledgeBaseCategory$parentArgs<ExtArgs>>): Prisma__KnowledgeBaseCategoryClient<$Result.GetResult<Prisma.$KnowledgeBaseCategoryPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    children<T extends KnowledgeBaseCategory$childrenArgs<ExtArgs> = {}>(args?: Subset<T, KnowledgeBaseCategory$childrenArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KnowledgeBaseCategoryPayload<ExtArgs>, T, "findMany"> | Null>
+    articles<T extends KnowledgeBaseCategory$articlesArgs<ExtArgs> = {}>(args?: Subset<T, KnowledgeBaseCategory$articlesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KnowledgeBaseArticlePayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the KnowledgeBaseCategory model
+   */ 
+  interface KnowledgeBaseCategoryFieldRefs {
+    readonly id: FieldRef<"KnowledgeBaseCategory", 'String'>
+    readonly name: FieldRef<"KnowledgeBaseCategory", 'String'>
+    readonly slug: FieldRef<"KnowledgeBaseCategory", 'String'>
+    readonly description: FieldRef<"KnowledgeBaseCategory", 'String'>
+    readonly icon: FieldRef<"KnowledgeBaseCategory", 'String'>
+    readonly order: FieldRef<"KnowledgeBaseCategory", 'Int'>
+    readonly parentId: FieldRef<"KnowledgeBaseCategory", 'String'>
+    readonly createdAt: FieldRef<"KnowledgeBaseCategory", 'DateTime'>
+    readonly updatedAt: FieldRef<"KnowledgeBaseCategory", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * KnowledgeBaseCategory findUnique
+   */
+  export type KnowledgeBaseCategoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseCategory
+     */
+    select?: KnowledgeBaseCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which KnowledgeBaseCategory to fetch.
+     */
+    where: KnowledgeBaseCategoryWhereUniqueInput
+  }
+
+  /**
+   * KnowledgeBaseCategory findUniqueOrThrow
+   */
+  export type KnowledgeBaseCategoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseCategory
+     */
+    select?: KnowledgeBaseCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which KnowledgeBaseCategory to fetch.
+     */
+    where: KnowledgeBaseCategoryWhereUniqueInput
+  }
+
+  /**
+   * KnowledgeBaseCategory findFirst
+   */
+  export type KnowledgeBaseCategoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseCategory
+     */
+    select?: KnowledgeBaseCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which KnowledgeBaseCategory to fetch.
+     */
+    where?: KnowledgeBaseCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KnowledgeBaseCategories to fetch.
+     */
+    orderBy?: KnowledgeBaseCategoryOrderByWithRelationInput | KnowledgeBaseCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for KnowledgeBaseCategories.
+     */
+    cursor?: KnowledgeBaseCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KnowledgeBaseCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KnowledgeBaseCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of KnowledgeBaseCategories.
+     */
+    distinct?: KnowledgeBaseCategoryScalarFieldEnum | KnowledgeBaseCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * KnowledgeBaseCategory findFirstOrThrow
+   */
+  export type KnowledgeBaseCategoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseCategory
+     */
+    select?: KnowledgeBaseCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which KnowledgeBaseCategory to fetch.
+     */
+    where?: KnowledgeBaseCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KnowledgeBaseCategories to fetch.
+     */
+    orderBy?: KnowledgeBaseCategoryOrderByWithRelationInput | KnowledgeBaseCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for KnowledgeBaseCategories.
+     */
+    cursor?: KnowledgeBaseCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KnowledgeBaseCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KnowledgeBaseCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of KnowledgeBaseCategories.
+     */
+    distinct?: KnowledgeBaseCategoryScalarFieldEnum | KnowledgeBaseCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * KnowledgeBaseCategory findMany
+   */
+  export type KnowledgeBaseCategoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseCategory
+     */
+    select?: KnowledgeBaseCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which KnowledgeBaseCategories to fetch.
+     */
+    where?: KnowledgeBaseCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KnowledgeBaseCategories to fetch.
+     */
+    orderBy?: KnowledgeBaseCategoryOrderByWithRelationInput | KnowledgeBaseCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing KnowledgeBaseCategories.
+     */
+    cursor?: KnowledgeBaseCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KnowledgeBaseCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KnowledgeBaseCategories.
+     */
+    skip?: number
+    distinct?: KnowledgeBaseCategoryScalarFieldEnum | KnowledgeBaseCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * KnowledgeBaseCategory create
+   */
+  export type KnowledgeBaseCategoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseCategory
+     */
+    select?: KnowledgeBaseCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseCategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a KnowledgeBaseCategory.
+     */
+    data: XOR<KnowledgeBaseCategoryCreateInput, KnowledgeBaseCategoryUncheckedCreateInput>
+  }
+
+  /**
+   * KnowledgeBaseCategory createMany
+   */
+  export type KnowledgeBaseCategoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many KnowledgeBaseCategories.
+     */
+    data: KnowledgeBaseCategoryCreateManyInput | KnowledgeBaseCategoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * KnowledgeBaseCategory createManyAndReturn
+   */
+  export type KnowledgeBaseCategoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseCategory
+     */
+    select?: KnowledgeBaseCategorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many KnowledgeBaseCategories.
+     */
+    data: KnowledgeBaseCategoryCreateManyInput | KnowledgeBaseCategoryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseCategoryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * KnowledgeBaseCategory update
+   */
+  export type KnowledgeBaseCategoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseCategory
+     */
+    select?: KnowledgeBaseCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseCategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a KnowledgeBaseCategory.
+     */
+    data: XOR<KnowledgeBaseCategoryUpdateInput, KnowledgeBaseCategoryUncheckedUpdateInput>
+    /**
+     * Choose, which KnowledgeBaseCategory to update.
+     */
+    where: KnowledgeBaseCategoryWhereUniqueInput
+  }
+
+  /**
+   * KnowledgeBaseCategory updateMany
+   */
+  export type KnowledgeBaseCategoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update KnowledgeBaseCategories.
+     */
+    data: XOR<KnowledgeBaseCategoryUpdateManyMutationInput, KnowledgeBaseCategoryUncheckedUpdateManyInput>
+    /**
+     * Filter which KnowledgeBaseCategories to update
+     */
+    where?: KnowledgeBaseCategoryWhereInput
+  }
+
+  /**
+   * KnowledgeBaseCategory upsert
+   */
+  export type KnowledgeBaseCategoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseCategory
+     */
+    select?: KnowledgeBaseCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseCategoryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the KnowledgeBaseCategory to update in case it exists.
+     */
+    where: KnowledgeBaseCategoryWhereUniqueInput
+    /**
+     * In case the KnowledgeBaseCategory found by the `where` argument doesn't exist, create a new KnowledgeBaseCategory with this data.
+     */
+    create: XOR<KnowledgeBaseCategoryCreateInput, KnowledgeBaseCategoryUncheckedCreateInput>
+    /**
+     * In case the KnowledgeBaseCategory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<KnowledgeBaseCategoryUpdateInput, KnowledgeBaseCategoryUncheckedUpdateInput>
+  }
+
+  /**
+   * KnowledgeBaseCategory delete
+   */
+  export type KnowledgeBaseCategoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseCategory
+     */
+    select?: KnowledgeBaseCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseCategoryInclude<ExtArgs> | null
+    /**
+     * Filter which KnowledgeBaseCategory to delete.
+     */
+    where: KnowledgeBaseCategoryWhereUniqueInput
+  }
+
+  /**
+   * KnowledgeBaseCategory deleteMany
+   */
+  export type KnowledgeBaseCategoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which KnowledgeBaseCategories to delete
+     */
+    where?: KnowledgeBaseCategoryWhereInput
+  }
+
+  /**
+   * KnowledgeBaseCategory.parent
+   */
+  export type KnowledgeBaseCategory$parentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseCategory
+     */
+    select?: KnowledgeBaseCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseCategoryInclude<ExtArgs> | null
+    where?: KnowledgeBaseCategoryWhereInput
+  }
+
+  /**
+   * KnowledgeBaseCategory.children
+   */
+  export type KnowledgeBaseCategory$childrenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseCategory
+     */
+    select?: KnowledgeBaseCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseCategoryInclude<ExtArgs> | null
+    where?: KnowledgeBaseCategoryWhereInput
+    orderBy?: KnowledgeBaseCategoryOrderByWithRelationInput | KnowledgeBaseCategoryOrderByWithRelationInput[]
+    cursor?: KnowledgeBaseCategoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: KnowledgeBaseCategoryScalarFieldEnum | KnowledgeBaseCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * KnowledgeBaseCategory.articles
+   */
+  export type KnowledgeBaseCategory$articlesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseArticle
+     */
+    select?: KnowledgeBaseArticleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseArticleInclude<ExtArgs> | null
+    where?: KnowledgeBaseArticleWhereInput
+    orderBy?: KnowledgeBaseArticleOrderByWithRelationInput | KnowledgeBaseArticleOrderByWithRelationInput[]
+    cursor?: KnowledgeBaseArticleWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: KnowledgeBaseArticleScalarFieldEnum | KnowledgeBaseArticleScalarFieldEnum[]
+  }
+
+  /**
+   * KnowledgeBaseCategory without action
+   */
+  export type KnowledgeBaseCategoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KnowledgeBaseCategory
+     */
+    select?: KnowledgeBaseCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KnowledgeBaseCategoryInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ArticleVersion
+   */
+
+  export type AggregateArticleVersion = {
+    _count: ArticleVersionCountAggregateOutputType | null
+    _avg: ArticleVersionAvgAggregateOutputType | null
+    _sum: ArticleVersionSumAggregateOutputType | null
+    _min: ArticleVersionMinAggregateOutputType | null
+    _max: ArticleVersionMaxAggregateOutputType | null
+  }
+
+  export type ArticleVersionAvgAggregateOutputType = {
+    version: number | null
+  }
+
+  export type ArticleVersionSumAggregateOutputType = {
+    version: number | null
+  }
+
+  export type ArticleVersionMinAggregateOutputType = {
+    id: string | null
+    articleId: string | null
+    version: number | null
+    title: string | null
+    content: string | null
+    excerpt: string | null
+    createdBy: string | null
+    createdAt: Date | null
+  }
+
+  export type ArticleVersionMaxAggregateOutputType = {
+    id: string | null
+    articleId: string | null
+    version: number | null
+    title: string | null
+    content: string | null
+    excerpt: string | null
+    createdBy: string | null
+    createdAt: Date | null
+  }
+
+  export type ArticleVersionCountAggregateOutputType = {
+    id: number
+    articleId: number
+    version: number
+    title: number
+    content: number
+    excerpt: number
+    createdBy: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ArticleVersionAvgAggregateInputType = {
+    version?: true
+  }
+
+  export type ArticleVersionSumAggregateInputType = {
+    version?: true
+  }
+
+  export type ArticleVersionMinAggregateInputType = {
+    id?: true
+    articleId?: true
+    version?: true
+    title?: true
+    content?: true
+    excerpt?: true
+    createdBy?: true
+    createdAt?: true
+  }
+
+  export type ArticleVersionMaxAggregateInputType = {
+    id?: true
+    articleId?: true
+    version?: true
+    title?: true
+    content?: true
+    excerpt?: true
+    createdBy?: true
+    createdAt?: true
+  }
+
+  export type ArticleVersionCountAggregateInputType = {
+    id?: true
+    articleId?: true
+    version?: true
+    title?: true
+    content?: true
+    excerpt?: true
+    createdBy?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ArticleVersionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ArticleVersion to aggregate.
+     */
+    where?: ArticleVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ArticleVersions to fetch.
+     */
+    orderBy?: ArticleVersionOrderByWithRelationInput | ArticleVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ArticleVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ArticleVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ArticleVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ArticleVersions
+    **/
+    _count?: true | ArticleVersionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ArticleVersionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ArticleVersionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ArticleVersionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ArticleVersionMaxAggregateInputType
+  }
+
+  export type GetArticleVersionAggregateType<T extends ArticleVersionAggregateArgs> = {
+        [P in keyof T & keyof AggregateArticleVersion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateArticleVersion[P]>
+      : GetScalarType<T[P], AggregateArticleVersion[P]>
+  }
+
+
+
+
+  export type ArticleVersionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ArticleVersionWhereInput
+    orderBy?: ArticleVersionOrderByWithAggregationInput | ArticleVersionOrderByWithAggregationInput[]
+    by: ArticleVersionScalarFieldEnum[] | ArticleVersionScalarFieldEnum
+    having?: ArticleVersionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ArticleVersionCountAggregateInputType | true
+    _avg?: ArticleVersionAvgAggregateInputType
+    _sum?: ArticleVersionSumAggregateInputType
+    _min?: ArticleVersionMinAggregateInputType
+    _max?: ArticleVersionMaxAggregateInputType
+  }
+
+  export type ArticleVersionGroupByOutputType = {
+    id: string
+    articleId: string
+    version: number
+    title: string
+    content: string
+    excerpt: string | null
+    createdBy: string
+    createdAt: Date
+    _count: ArticleVersionCountAggregateOutputType | null
+    _avg: ArticleVersionAvgAggregateOutputType | null
+    _sum: ArticleVersionSumAggregateOutputType | null
+    _min: ArticleVersionMinAggregateOutputType | null
+    _max: ArticleVersionMaxAggregateOutputType | null
+  }
+
+  type GetArticleVersionGroupByPayload<T extends ArticleVersionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ArticleVersionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ArticleVersionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ArticleVersionGroupByOutputType[P]>
+            : GetScalarType<T[P], ArticleVersionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ArticleVersionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    articleId?: boolean
+    version?: boolean
+    title?: boolean
+    content?: boolean
+    excerpt?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    article?: boolean | KnowledgeBaseArticleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["articleVersion"]>
+
+  export type ArticleVersionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    articleId?: boolean
+    version?: boolean
+    title?: boolean
+    content?: boolean
+    excerpt?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    article?: boolean | KnowledgeBaseArticleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["articleVersion"]>
+
+  export type ArticleVersionSelectScalar = {
+    id?: boolean
+    articleId?: boolean
+    version?: boolean
+    title?: boolean
+    content?: boolean
+    excerpt?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+  }
+
+  export type ArticleVersionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    article?: boolean | KnowledgeBaseArticleDefaultArgs<ExtArgs>
+  }
+  export type ArticleVersionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    article?: boolean | KnowledgeBaseArticleDefaultArgs<ExtArgs>
+  }
+
+  export type $ArticleVersionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ArticleVersion"
+    objects: {
+      article: Prisma.$KnowledgeBaseArticlePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      articleId: string
+      version: number
+      title: string
+      content: string
+      excerpt: string | null
+      createdBy: string
+      createdAt: Date
+    }, ExtArgs["result"]["articleVersion"]>
+    composites: {}
+  }
+
+  type ArticleVersionGetPayload<S extends boolean | null | undefined | ArticleVersionDefaultArgs> = $Result.GetResult<Prisma.$ArticleVersionPayload, S>
+
+  type ArticleVersionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ArticleVersionFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ArticleVersionCountAggregateInputType | true
+    }
+
+  export interface ArticleVersionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ArticleVersion'], meta: { name: 'ArticleVersion' } }
+    /**
+     * Find zero or one ArticleVersion that matches the filter.
+     * @param {ArticleVersionFindUniqueArgs} args - Arguments to find a ArticleVersion
+     * @example
+     * // Get one ArticleVersion
+     * const articleVersion = await prisma.articleVersion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ArticleVersionFindUniqueArgs>(args: SelectSubset<T, ArticleVersionFindUniqueArgs<ExtArgs>>): Prisma__ArticleVersionClient<$Result.GetResult<Prisma.$ArticleVersionPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ArticleVersion that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ArticleVersionFindUniqueOrThrowArgs} args - Arguments to find a ArticleVersion
+     * @example
+     * // Get one ArticleVersion
+     * const articleVersion = await prisma.articleVersion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ArticleVersionFindUniqueOrThrowArgs>(args: SelectSubset<T, ArticleVersionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ArticleVersionClient<$Result.GetResult<Prisma.$ArticleVersionPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ArticleVersion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArticleVersionFindFirstArgs} args - Arguments to find a ArticleVersion
+     * @example
+     * // Get one ArticleVersion
+     * const articleVersion = await prisma.articleVersion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ArticleVersionFindFirstArgs>(args?: SelectSubset<T, ArticleVersionFindFirstArgs<ExtArgs>>): Prisma__ArticleVersionClient<$Result.GetResult<Prisma.$ArticleVersionPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ArticleVersion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArticleVersionFindFirstOrThrowArgs} args - Arguments to find a ArticleVersion
+     * @example
+     * // Get one ArticleVersion
+     * const articleVersion = await prisma.articleVersion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ArticleVersionFindFirstOrThrowArgs>(args?: SelectSubset<T, ArticleVersionFindFirstOrThrowArgs<ExtArgs>>): Prisma__ArticleVersionClient<$Result.GetResult<Prisma.$ArticleVersionPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ArticleVersions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArticleVersionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ArticleVersions
+     * const articleVersions = await prisma.articleVersion.findMany()
+     * 
+     * // Get first 10 ArticleVersions
+     * const articleVersions = await prisma.articleVersion.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const articleVersionWithIdOnly = await prisma.articleVersion.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ArticleVersionFindManyArgs>(args?: SelectSubset<T, ArticleVersionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArticleVersionPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ArticleVersion.
+     * @param {ArticleVersionCreateArgs} args - Arguments to create a ArticleVersion.
+     * @example
+     * // Create one ArticleVersion
+     * const ArticleVersion = await prisma.articleVersion.create({
+     *   data: {
+     *     // ... data to create a ArticleVersion
+     *   }
+     * })
+     * 
+     */
+    create<T extends ArticleVersionCreateArgs>(args: SelectSubset<T, ArticleVersionCreateArgs<ExtArgs>>): Prisma__ArticleVersionClient<$Result.GetResult<Prisma.$ArticleVersionPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ArticleVersions.
+     * @param {ArticleVersionCreateManyArgs} args - Arguments to create many ArticleVersions.
+     * @example
+     * // Create many ArticleVersions
+     * const articleVersion = await prisma.articleVersion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ArticleVersionCreateManyArgs>(args?: SelectSubset<T, ArticleVersionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ArticleVersions and returns the data saved in the database.
+     * @param {ArticleVersionCreateManyAndReturnArgs} args - Arguments to create many ArticleVersions.
+     * @example
+     * // Create many ArticleVersions
+     * const articleVersion = await prisma.articleVersion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ArticleVersions and only return the `id`
+     * const articleVersionWithIdOnly = await prisma.articleVersion.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ArticleVersionCreateManyAndReturnArgs>(args?: SelectSubset<T, ArticleVersionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArticleVersionPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ArticleVersion.
+     * @param {ArticleVersionDeleteArgs} args - Arguments to delete one ArticleVersion.
+     * @example
+     * // Delete one ArticleVersion
+     * const ArticleVersion = await prisma.articleVersion.delete({
+     *   where: {
+     *     // ... filter to delete one ArticleVersion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ArticleVersionDeleteArgs>(args: SelectSubset<T, ArticleVersionDeleteArgs<ExtArgs>>): Prisma__ArticleVersionClient<$Result.GetResult<Prisma.$ArticleVersionPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ArticleVersion.
+     * @param {ArticleVersionUpdateArgs} args - Arguments to update one ArticleVersion.
+     * @example
+     * // Update one ArticleVersion
+     * const articleVersion = await prisma.articleVersion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ArticleVersionUpdateArgs>(args: SelectSubset<T, ArticleVersionUpdateArgs<ExtArgs>>): Prisma__ArticleVersionClient<$Result.GetResult<Prisma.$ArticleVersionPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ArticleVersions.
+     * @param {ArticleVersionDeleteManyArgs} args - Arguments to filter ArticleVersions to delete.
+     * @example
+     * // Delete a few ArticleVersions
+     * const { count } = await prisma.articleVersion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ArticleVersionDeleteManyArgs>(args?: SelectSubset<T, ArticleVersionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ArticleVersions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArticleVersionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ArticleVersions
+     * const articleVersion = await prisma.articleVersion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ArticleVersionUpdateManyArgs>(args: SelectSubset<T, ArticleVersionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ArticleVersion.
+     * @param {ArticleVersionUpsertArgs} args - Arguments to update or create a ArticleVersion.
+     * @example
+     * // Update or create a ArticleVersion
+     * const articleVersion = await prisma.articleVersion.upsert({
+     *   create: {
+     *     // ... data to create a ArticleVersion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ArticleVersion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ArticleVersionUpsertArgs>(args: SelectSubset<T, ArticleVersionUpsertArgs<ExtArgs>>): Prisma__ArticleVersionClient<$Result.GetResult<Prisma.$ArticleVersionPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ArticleVersions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArticleVersionCountArgs} args - Arguments to filter ArticleVersions to count.
+     * @example
+     * // Count the number of ArticleVersions
+     * const count = await prisma.articleVersion.count({
+     *   where: {
+     *     // ... the filter for the ArticleVersions we want to count
+     *   }
+     * })
+    **/
+    count<T extends ArticleVersionCountArgs>(
+      args?: Subset<T, ArticleVersionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ArticleVersionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ArticleVersion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArticleVersionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ArticleVersionAggregateArgs>(args: Subset<T, ArticleVersionAggregateArgs>): Prisma.PrismaPromise<GetArticleVersionAggregateType<T>>
+
+    /**
+     * Group by ArticleVersion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArticleVersionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ArticleVersionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ArticleVersionGroupByArgs['orderBy'] }
+        : { orderBy?: ArticleVersionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ArticleVersionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetArticleVersionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ArticleVersion model
+   */
+  readonly fields: ArticleVersionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ArticleVersion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ArticleVersionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    article<T extends KnowledgeBaseArticleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, KnowledgeBaseArticleDefaultArgs<ExtArgs>>): Prisma__KnowledgeBaseArticleClient<$Result.GetResult<Prisma.$KnowledgeBaseArticlePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ArticleVersion model
+   */ 
+  interface ArticleVersionFieldRefs {
+    readonly id: FieldRef<"ArticleVersion", 'String'>
+    readonly articleId: FieldRef<"ArticleVersion", 'String'>
+    readonly version: FieldRef<"ArticleVersion", 'Int'>
+    readonly title: FieldRef<"ArticleVersion", 'String'>
+    readonly content: FieldRef<"ArticleVersion", 'String'>
+    readonly excerpt: FieldRef<"ArticleVersion", 'String'>
+    readonly createdBy: FieldRef<"ArticleVersion", 'String'>
+    readonly createdAt: FieldRef<"ArticleVersion", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ArticleVersion findUnique
+   */
+  export type ArticleVersionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleVersion
+     */
+    select?: ArticleVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which ArticleVersion to fetch.
+     */
+    where: ArticleVersionWhereUniqueInput
+  }
+
+  /**
+   * ArticleVersion findUniqueOrThrow
+   */
+  export type ArticleVersionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleVersion
+     */
+    select?: ArticleVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which ArticleVersion to fetch.
+     */
+    where: ArticleVersionWhereUniqueInput
+  }
+
+  /**
+   * ArticleVersion findFirst
+   */
+  export type ArticleVersionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleVersion
+     */
+    select?: ArticleVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which ArticleVersion to fetch.
+     */
+    where?: ArticleVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ArticleVersions to fetch.
+     */
+    orderBy?: ArticleVersionOrderByWithRelationInput | ArticleVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ArticleVersions.
+     */
+    cursor?: ArticleVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ArticleVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ArticleVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ArticleVersions.
+     */
+    distinct?: ArticleVersionScalarFieldEnum | ArticleVersionScalarFieldEnum[]
+  }
+
+  /**
+   * ArticleVersion findFirstOrThrow
+   */
+  export type ArticleVersionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleVersion
+     */
+    select?: ArticleVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which ArticleVersion to fetch.
+     */
+    where?: ArticleVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ArticleVersions to fetch.
+     */
+    orderBy?: ArticleVersionOrderByWithRelationInput | ArticleVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ArticleVersions.
+     */
+    cursor?: ArticleVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ArticleVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ArticleVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ArticleVersions.
+     */
+    distinct?: ArticleVersionScalarFieldEnum | ArticleVersionScalarFieldEnum[]
+  }
+
+  /**
+   * ArticleVersion findMany
+   */
+  export type ArticleVersionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleVersion
+     */
+    select?: ArticleVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleVersionInclude<ExtArgs> | null
+    /**
+     * Filter, which ArticleVersions to fetch.
+     */
+    where?: ArticleVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ArticleVersions to fetch.
+     */
+    orderBy?: ArticleVersionOrderByWithRelationInput | ArticleVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ArticleVersions.
+     */
+    cursor?: ArticleVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ArticleVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ArticleVersions.
+     */
+    skip?: number
+    distinct?: ArticleVersionScalarFieldEnum | ArticleVersionScalarFieldEnum[]
+  }
+
+  /**
+   * ArticleVersion create
+   */
+  export type ArticleVersionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleVersion
+     */
+    select?: ArticleVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleVersionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ArticleVersion.
+     */
+    data: XOR<ArticleVersionCreateInput, ArticleVersionUncheckedCreateInput>
+  }
+
+  /**
+   * ArticleVersion createMany
+   */
+  export type ArticleVersionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ArticleVersions.
+     */
+    data: ArticleVersionCreateManyInput | ArticleVersionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ArticleVersion createManyAndReturn
+   */
+  export type ArticleVersionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleVersion
+     */
+    select?: ArticleVersionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ArticleVersions.
+     */
+    data: ArticleVersionCreateManyInput | ArticleVersionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleVersionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ArticleVersion update
+   */
+  export type ArticleVersionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleVersion
+     */
+    select?: ArticleVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleVersionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ArticleVersion.
+     */
+    data: XOR<ArticleVersionUpdateInput, ArticleVersionUncheckedUpdateInput>
+    /**
+     * Choose, which ArticleVersion to update.
+     */
+    where: ArticleVersionWhereUniqueInput
+  }
+
+  /**
+   * ArticleVersion updateMany
+   */
+  export type ArticleVersionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ArticleVersions.
+     */
+    data: XOR<ArticleVersionUpdateManyMutationInput, ArticleVersionUncheckedUpdateManyInput>
+    /**
+     * Filter which ArticleVersions to update
+     */
+    where?: ArticleVersionWhereInput
+  }
+
+  /**
+   * ArticleVersion upsert
+   */
+  export type ArticleVersionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleVersion
+     */
+    select?: ArticleVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleVersionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ArticleVersion to update in case it exists.
+     */
+    where: ArticleVersionWhereUniqueInput
+    /**
+     * In case the ArticleVersion found by the `where` argument doesn't exist, create a new ArticleVersion with this data.
+     */
+    create: XOR<ArticleVersionCreateInput, ArticleVersionUncheckedCreateInput>
+    /**
+     * In case the ArticleVersion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ArticleVersionUpdateInput, ArticleVersionUncheckedUpdateInput>
+  }
+
+  /**
+   * ArticleVersion delete
+   */
+  export type ArticleVersionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleVersion
+     */
+    select?: ArticleVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleVersionInclude<ExtArgs> | null
+    /**
+     * Filter which ArticleVersion to delete.
+     */
+    where: ArticleVersionWhereUniqueInput
+  }
+
+  /**
+   * ArticleVersion deleteMany
+   */
+  export type ArticleVersionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ArticleVersions to delete
+     */
+    where?: ArticleVersionWhereInput
+  }
+
+  /**
+   * ArticleVersion without action
+   */
+  export type ArticleVersionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleVersion
+     */
+    select?: ArticleVersionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleVersionInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -22105,6 +30320,9 @@ export namespace Prisma {
     passwordHash: 'passwordHash',
     role: 'role',
     twoFactorSecret: 'twoFactorSecret',
+    twoFactorEnabled: 'twoFactorEnabled',
+    twoFactorMethod: 'twoFactorMethod',
+    twoFactorBackupCodes: 'twoFactorBackupCodes',
     balance: 'balance',
     tenantId: 'tenantId',
     createdAt: 'createdAt',
@@ -22388,6 +30606,102 @@ export namespace Prisma {
   export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
 
 
+  export const SupportTicketScalarFieldEnum: {
+    id: 'id',
+    ticketNumber: 'ticketNumber',
+    subject: 'subject',
+    description: 'description',
+    priority: 'priority',
+    category: 'category',
+    status: 'status',
+    assignedToId: 'assignedToId',
+    assignedAt: 'assignedAt',
+    slaResponseDeadline: 'slaResponseDeadline',
+    slaResolveDeadline: 'slaResolveDeadline',
+    firstResponseAt: 'firstResponseAt',
+    userId: 'userId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    closedAt: 'closedAt'
+  };
+
+  export type SupportTicketScalarFieldEnum = (typeof SupportTicketScalarFieldEnum)[keyof typeof SupportTicketScalarFieldEnum]
+
+
+  export const SlaPolicyScalarFieldEnum: {
+    id: 'id',
+    priority: 'priority',
+    responseTimeHours: 'responseTimeHours',
+    resolveTimeHours: 'resolveTimeHours',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SlaPolicyScalarFieldEnum = (typeof SlaPolicyScalarFieldEnum)[keyof typeof SlaPolicyScalarFieldEnum]
+
+
+  export const TicketCommentScalarFieldEnum: {
+    id: 'id',
+    ticketId: 'ticketId',
+    authorId: 'authorId',
+    message: 'message',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TicketCommentScalarFieldEnum = (typeof TicketCommentScalarFieldEnum)[keyof typeof TicketCommentScalarFieldEnum]
+
+
+  export const KnowledgeBaseArticleScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    slug: 'slug',
+    content: 'content',
+    excerpt: 'excerpt',
+    categoryId: 'categoryId',
+    authorId: 'authorId',
+    tags: 'tags',
+    published: 'published',
+    views: 'views',
+    helpful: 'helpful',
+    notHelpful: 'notHelpful',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    publishedAt: 'publishedAt'
+  };
+
+  export type KnowledgeBaseArticleScalarFieldEnum = (typeof KnowledgeBaseArticleScalarFieldEnum)[keyof typeof KnowledgeBaseArticleScalarFieldEnum]
+
+
+  export const KnowledgeBaseCategoryScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    slug: 'slug',
+    description: 'description',
+    icon: 'icon',
+    order: 'order',
+    parentId: 'parentId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type KnowledgeBaseCategoryScalarFieldEnum = (typeof KnowledgeBaseCategoryScalarFieldEnum)[keyof typeof KnowledgeBaseCategoryScalarFieldEnum]
+
+
+  export const ArticleVersionScalarFieldEnum: {
+    id: 'id',
+    articleId: 'articleId',
+    version: 'version',
+    title: 'title',
+    content: 'content',
+    excerpt: 'excerpt',
+    createdBy: 'createdBy',
+    createdAt: 'createdAt'
+  };
+
+  export type ArticleVersionScalarFieldEnum = (typeof ArticleVersionScalarFieldEnum)[keyof typeof ArticleVersionScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -22409,6 +30723,14 @@ export namespace Prisma {
   };
 
   export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+  export const QueryMode: {
+    default: 'default',
+    insensitive: 'insensitive'
+  };
+
+  export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
   export const NullsOrder: {
@@ -22441,9 +30763,23 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'String[]'
+   */
+  export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
+    
+
+
+  /**
    * Reference to a field of type 'LicenseStatus'
    */
   export type EnumLicenseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LicenseStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'LicenseStatus[]'
+   */
+  export type ListEnumLicenseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LicenseStatus[]'>
     
 
 
@@ -22455,9 +30791,23 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'DateTime[]'
+   */
+  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -22483,9 +30833,23 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'UserRole[]'
+   */
+  export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 
@@ -22497,9 +30861,23 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'DiskType[]'
+   */
+  export type ListEnumDiskTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DiskType[]'>
+    
+
+
+  /**
    * Reference to a field of type 'NodeStatus'
    */
   export type EnumNodeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NodeStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'NodeStatus[]'
+   */
+  export type ListEnumNodeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NodeStatus[]'>
     
 
 
@@ -22511,9 +30889,23 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'TaskType[]'
+   */
+  export type ListEnumTaskTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskType[]'>
+    
+
+
+  /**
    * Reference to a field of type 'TaskStatus'
    */
   export type EnumTaskStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'TaskStatus[]'
+   */
+  export type ListEnumTaskStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskStatus[]'>
     
 
 
@@ -22525,9 +30917,23 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Protocol[]'
+   */
+  export type ListEnumProtocolFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Protocol[]'>
+    
+
+
+  /**
    * Reference to a field of type 'PortType'
    */
   export type EnumPortTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PortType'>
+    
+
+
+  /**
+   * Reference to a field of type 'PortType[]'
+   */
+  export type ListEnumPortTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PortType[]'>
     
 
 
@@ -22539,9 +30945,23 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'GameType[]'
+   */
+  export type ListEnumGameTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GameType[]'>
+    
+
+
+  /**
    * Reference to a field of type 'ServerStatus'
    */
   export type EnumServerStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ServerStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ServerStatus[]'
+   */
+  export type ListEnumServerStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ServerStatus[]'>
     
 
 
@@ -22553,9 +30973,23 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'BigInt[]'
+   */
+  export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
+    
+
+
+  /**
    * Reference to a field of type 'BackupLocation'
    */
   export type EnumBackupLocationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BackupLocation'>
+    
+
+
+  /**
+   * Reference to a field of type 'BackupLocation[]'
+   */
+  export type ListEnumBackupLocationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BackupLocation[]'>
     
 
 
@@ -22567,9 +31001,23 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'AlertSeverity[]'
+   */
+  export type ListEnumAlertSeverityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AlertSeverity[]'>
+    
+
+
+  /**
    * Reference to a field of type 'ResourceType'
    */
   export type EnumResourceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResourceType'>
+    
+
+
+  /**
+   * Reference to a field of type 'ResourceType[]'
+   */
+  export type ListEnumResourceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResourceType[]'>
     
 
 
@@ -22581,9 +31029,23 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'IncidentSeverity[]'
+   */
+  export type ListEnumIncidentSeverityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IncidentSeverity[]'>
+    
+
+
+  /**
    * Reference to a field of type 'IncidentStatus'
    */
   export type EnumIncidentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IncidentStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'IncidentStatus[]'
+   */
+  export type ListEnumIncidentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IncidentStatus[]'>
     
 
 
@@ -22595,6 +31057,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'PlanStatus[]'
+   */
+  export type ListEnumPlanStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PlanStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'PromotionScope'
    */
   export type EnumPromotionScopeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PromotionScope'>
@@ -22602,9 +31071,51 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'PromotionScope[]'
+   */
+  export type ListEnumPromotionScopeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PromotionScope[]'>
+    
+
+
+  /**
    * Reference to a field of type 'OrderStatus'
    */
   export type EnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'OrderStatus[]'
+   */
+  export type ListEnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'TicketPriority'
+   */
+  export type EnumTicketPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TicketPriority'>
+    
+
+
+  /**
+   * Reference to a field of type 'TicketPriority[]'
+   */
+  export type ListEnumTicketPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TicketPriority[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'TicketStatus'
+   */
+  export type EnumTicketStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TicketStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'TicketStatus[]'
+   */
+  export type ListEnumTicketStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TicketStatus[]'>
     
   /**
    * Deep Input Types
@@ -22767,6 +31278,9 @@ export namespace Prisma {
     passwordHash?: StringFilter<"User"> | string
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
     twoFactorSecret?: StringNullableFilter<"User"> | string | null
+    twoFactorEnabled?: BoolFilter<"User"> | boolean
+    twoFactorMethod?: StringNullableFilter<"User"> | string | null
+    twoFactorBackupCodes?: StringNullableFilter<"User"> | string | null
     balance?: FloatFilter<"User"> | number
     tenantId?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -22779,6 +31293,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyListRelationFilter
     assignedIncidents?: IncidentListRelationFilter
     orders?: OrderListRelationFilter
+    supportTickets?: SupportTicketListRelationFilter
+    ticketComments?: TicketCommentListRelationFilter
+    assignedTickets?: SupportTicketListRelationFilter
+    knowledgeBaseArticles?: KnowledgeBaseArticleListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -22787,6 +31305,9 @@ export namespace Prisma {
     passwordHash?: SortOrder
     role?: SortOrder
     twoFactorSecret?: SortOrderInput | SortOrder
+    twoFactorEnabled?: SortOrder
+    twoFactorMethod?: SortOrderInput | SortOrder
+    twoFactorBackupCodes?: SortOrderInput | SortOrder
     balance?: SortOrder
     tenantId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -22799,6 +31320,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyOrderByRelationAggregateInput
     assignedIncidents?: IncidentOrderByRelationAggregateInput
     orders?: OrderOrderByRelationAggregateInput
+    supportTickets?: SupportTicketOrderByRelationAggregateInput
+    ticketComments?: TicketCommentOrderByRelationAggregateInput
+    assignedTickets?: SupportTicketOrderByRelationAggregateInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -22810,6 +31335,9 @@ export namespace Prisma {
     passwordHash?: StringFilter<"User"> | string
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
     twoFactorSecret?: StringNullableFilter<"User"> | string | null
+    twoFactorEnabled?: BoolFilter<"User"> | boolean
+    twoFactorMethod?: StringNullableFilter<"User"> | string | null
+    twoFactorBackupCodes?: StringNullableFilter<"User"> | string | null
     balance?: FloatFilter<"User"> | number
     tenantId?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -22822,6 +31350,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyListRelationFilter
     assignedIncidents?: IncidentListRelationFilter
     orders?: OrderListRelationFilter
+    supportTickets?: SupportTicketListRelationFilter
+    ticketComments?: TicketCommentListRelationFilter
+    assignedTickets?: SupportTicketListRelationFilter
+    knowledgeBaseArticles?: KnowledgeBaseArticleListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -22830,6 +31362,9 @@ export namespace Prisma {
     passwordHash?: SortOrder
     role?: SortOrder
     twoFactorSecret?: SortOrderInput | SortOrder
+    twoFactorEnabled?: SortOrder
+    twoFactorMethod?: SortOrderInput | SortOrder
+    twoFactorBackupCodes?: SortOrderInput | SortOrder
     balance?: SortOrder
     tenantId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -22850,6 +31385,9 @@ export namespace Prisma {
     passwordHash?: StringWithAggregatesFilter<"User"> | string
     role?: EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
     twoFactorSecret?: StringNullableWithAggregatesFilter<"User"> | string | null
+    twoFactorEnabled?: BoolWithAggregatesFilter<"User"> | boolean
+    twoFactorMethod?: StringNullableWithAggregatesFilter<"User"> | string | null
+    twoFactorBackupCodes?: StringNullableWithAggregatesFilter<"User"> | string | null
     balance?: FloatWithAggregatesFilter<"User"> | number
     tenantId?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -24320,6 +32858,513 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
   }
 
+  export type SupportTicketWhereInput = {
+    AND?: SupportTicketWhereInput | SupportTicketWhereInput[]
+    OR?: SupportTicketWhereInput[]
+    NOT?: SupportTicketWhereInput | SupportTicketWhereInput[]
+    id?: StringFilter<"SupportTicket"> | string
+    ticketNumber?: StringFilter<"SupportTicket"> | string
+    subject?: StringFilter<"SupportTicket"> | string
+    description?: StringFilter<"SupportTicket"> | string
+    priority?: EnumTicketPriorityFilter<"SupportTicket"> | $Enums.TicketPriority
+    category?: StringNullableFilter<"SupportTicket"> | string | null
+    status?: EnumTicketStatusFilter<"SupportTicket"> | $Enums.TicketStatus
+    assignedToId?: StringNullableFilter<"SupportTicket"> | string | null
+    assignedAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    slaResponseDeadline?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    slaResolveDeadline?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    firstResponseAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    userId?: StringFilter<"SupportTicket"> | string
+    createdAt?: DateTimeFilter<"SupportTicket"> | Date | string
+    updatedAt?: DateTimeFilter<"SupportTicket"> | Date | string
+    closedAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    assignedTo?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    user?: XOR<UserRelationFilter, UserWhereInput>
+    comments?: TicketCommentListRelationFilter
+  }
+
+  export type SupportTicketOrderByWithRelationInput = {
+    id?: SortOrder
+    ticketNumber?: SortOrder
+    subject?: SortOrder
+    description?: SortOrder
+    priority?: SortOrder
+    category?: SortOrderInput | SortOrder
+    status?: SortOrder
+    assignedToId?: SortOrderInput | SortOrder
+    assignedAt?: SortOrderInput | SortOrder
+    slaResponseDeadline?: SortOrderInput | SortOrder
+    slaResolveDeadline?: SortOrderInput | SortOrder
+    firstResponseAt?: SortOrderInput | SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    closedAt?: SortOrderInput | SortOrder
+    assignedTo?: UserOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+    comments?: TicketCommentOrderByRelationAggregateInput
+  }
+
+  export type SupportTicketWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    ticketNumber?: string
+    AND?: SupportTicketWhereInput | SupportTicketWhereInput[]
+    OR?: SupportTicketWhereInput[]
+    NOT?: SupportTicketWhereInput | SupportTicketWhereInput[]
+    subject?: StringFilter<"SupportTicket"> | string
+    description?: StringFilter<"SupportTicket"> | string
+    priority?: EnumTicketPriorityFilter<"SupportTicket"> | $Enums.TicketPriority
+    category?: StringNullableFilter<"SupportTicket"> | string | null
+    status?: EnumTicketStatusFilter<"SupportTicket"> | $Enums.TicketStatus
+    assignedToId?: StringNullableFilter<"SupportTicket"> | string | null
+    assignedAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    slaResponseDeadline?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    slaResolveDeadline?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    firstResponseAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    userId?: StringFilter<"SupportTicket"> | string
+    createdAt?: DateTimeFilter<"SupportTicket"> | Date | string
+    updatedAt?: DateTimeFilter<"SupportTicket"> | Date | string
+    closedAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    assignedTo?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    user?: XOR<UserRelationFilter, UserWhereInput>
+    comments?: TicketCommentListRelationFilter
+  }, "id" | "ticketNumber">
+
+  export type SupportTicketOrderByWithAggregationInput = {
+    id?: SortOrder
+    ticketNumber?: SortOrder
+    subject?: SortOrder
+    description?: SortOrder
+    priority?: SortOrder
+    category?: SortOrderInput | SortOrder
+    status?: SortOrder
+    assignedToId?: SortOrderInput | SortOrder
+    assignedAt?: SortOrderInput | SortOrder
+    slaResponseDeadline?: SortOrderInput | SortOrder
+    slaResolveDeadline?: SortOrderInput | SortOrder
+    firstResponseAt?: SortOrderInput | SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    closedAt?: SortOrderInput | SortOrder
+    _count?: SupportTicketCountOrderByAggregateInput
+    _max?: SupportTicketMaxOrderByAggregateInput
+    _min?: SupportTicketMinOrderByAggregateInput
+  }
+
+  export type SupportTicketScalarWhereWithAggregatesInput = {
+    AND?: SupportTicketScalarWhereWithAggregatesInput | SupportTicketScalarWhereWithAggregatesInput[]
+    OR?: SupportTicketScalarWhereWithAggregatesInput[]
+    NOT?: SupportTicketScalarWhereWithAggregatesInput | SupportTicketScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SupportTicket"> | string
+    ticketNumber?: StringWithAggregatesFilter<"SupportTicket"> | string
+    subject?: StringWithAggregatesFilter<"SupportTicket"> | string
+    description?: StringWithAggregatesFilter<"SupportTicket"> | string
+    priority?: EnumTicketPriorityWithAggregatesFilter<"SupportTicket"> | $Enums.TicketPriority
+    category?: StringNullableWithAggregatesFilter<"SupportTicket"> | string | null
+    status?: EnumTicketStatusWithAggregatesFilter<"SupportTicket"> | $Enums.TicketStatus
+    assignedToId?: StringNullableWithAggregatesFilter<"SupportTicket"> | string | null
+    assignedAt?: DateTimeNullableWithAggregatesFilter<"SupportTicket"> | Date | string | null
+    slaResponseDeadline?: DateTimeNullableWithAggregatesFilter<"SupportTicket"> | Date | string | null
+    slaResolveDeadline?: DateTimeNullableWithAggregatesFilter<"SupportTicket"> | Date | string | null
+    firstResponseAt?: DateTimeNullableWithAggregatesFilter<"SupportTicket"> | Date | string | null
+    userId?: StringWithAggregatesFilter<"SupportTicket"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"SupportTicket"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SupportTicket"> | Date | string
+    closedAt?: DateTimeNullableWithAggregatesFilter<"SupportTicket"> | Date | string | null
+  }
+
+  export type SlaPolicyWhereInput = {
+    AND?: SlaPolicyWhereInput | SlaPolicyWhereInput[]
+    OR?: SlaPolicyWhereInput[]
+    NOT?: SlaPolicyWhereInput | SlaPolicyWhereInput[]
+    id?: StringFilter<"SlaPolicy"> | string
+    priority?: EnumTicketPriorityFilter<"SlaPolicy"> | $Enums.TicketPriority
+    responseTimeHours?: IntFilter<"SlaPolicy"> | number
+    resolveTimeHours?: IntFilter<"SlaPolicy"> | number
+    createdAt?: DateTimeFilter<"SlaPolicy"> | Date | string
+    updatedAt?: DateTimeFilter<"SlaPolicy"> | Date | string
+  }
+
+  export type SlaPolicyOrderByWithRelationInput = {
+    id?: SortOrder
+    priority?: SortOrder
+    responseTimeHours?: SortOrder
+    resolveTimeHours?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SlaPolicyWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    priority?: $Enums.TicketPriority
+    AND?: SlaPolicyWhereInput | SlaPolicyWhereInput[]
+    OR?: SlaPolicyWhereInput[]
+    NOT?: SlaPolicyWhereInput | SlaPolicyWhereInput[]
+    responseTimeHours?: IntFilter<"SlaPolicy"> | number
+    resolveTimeHours?: IntFilter<"SlaPolicy"> | number
+    createdAt?: DateTimeFilter<"SlaPolicy"> | Date | string
+    updatedAt?: DateTimeFilter<"SlaPolicy"> | Date | string
+  }, "id" | "priority">
+
+  export type SlaPolicyOrderByWithAggregationInput = {
+    id?: SortOrder
+    priority?: SortOrder
+    responseTimeHours?: SortOrder
+    resolveTimeHours?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SlaPolicyCountOrderByAggregateInput
+    _avg?: SlaPolicyAvgOrderByAggregateInput
+    _max?: SlaPolicyMaxOrderByAggregateInput
+    _min?: SlaPolicyMinOrderByAggregateInput
+    _sum?: SlaPolicySumOrderByAggregateInput
+  }
+
+  export type SlaPolicyScalarWhereWithAggregatesInput = {
+    AND?: SlaPolicyScalarWhereWithAggregatesInput | SlaPolicyScalarWhereWithAggregatesInput[]
+    OR?: SlaPolicyScalarWhereWithAggregatesInput[]
+    NOT?: SlaPolicyScalarWhereWithAggregatesInput | SlaPolicyScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SlaPolicy"> | string
+    priority?: EnumTicketPriorityWithAggregatesFilter<"SlaPolicy"> | $Enums.TicketPriority
+    responseTimeHours?: IntWithAggregatesFilter<"SlaPolicy"> | number
+    resolveTimeHours?: IntWithAggregatesFilter<"SlaPolicy"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"SlaPolicy"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SlaPolicy"> | Date | string
+  }
+
+  export type TicketCommentWhereInput = {
+    AND?: TicketCommentWhereInput | TicketCommentWhereInput[]
+    OR?: TicketCommentWhereInput[]
+    NOT?: TicketCommentWhereInput | TicketCommentWhereInput[]
+    id?: StringFilter<"TicketComment"> | string
+    ticketId?: StringFilter<"TicketComment"> | string
+    authorId?: StringFilter<"TicketComment"> | string
+    message?: StringFilter<"TicketComment"> | string
+    createdAt?: DateTimeFilter<"TicketComment"> | Date | string
+    updatedAt?: DateTimeFilter<"TicketComment"> | Date | string
+    ticket?: XOR<SupportTicketRelationFilter, SupportTicketWhereInput>
+    author?: XOR<UserRelationFilter, UserWhereInput>
+  }
+
+  export type TicketCommentOrderByWithRelationInput = {
+    id?: SortOrder
+    ticketId?: SortOrder
+    authorId?: SortOrder
+    message?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    ticket?: SupportTicketOrderByWithRelationInput
+    author?: UserOrderByWithRelationInput
+  }
+
+  export type TicketCommentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TicketCommentWhereInput | TicketCommentWhereInput[]
+    OR?: TicketCommentWhereInput[]
+    NOT?: TicketCommentWhereInput | TicketCommentWhereInput[]
+    ticketId?: StringFilter<"TicketComment"> | string
+    authorId?: StringFilter<"TicketComment"> | string
+    message?: StringFilter<"TicketComment"> | string
+    createdAt?: DateTimeFilter<"TicketComment"> | Date | string
+    updatedAt?: DateTimeFilter<"TicketComment"> | Date | string
+    ticket?: XOR<SupportTicketRelationFilter, SupportTicketWhereInput>
+    author?: XOR<UserRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type TicketCommentOrderByWithAggregationInput = {
+    id?: SortOrder
+    ticketId?: SortOrder
+    authorId?: SortOrder
+    message?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TicketCommentCountOrderByAggregateInput
+    _max?: TicketCommentMaxOrderByAggregateInput
+    _min?: TicketCommentMinOrderByAggregateInput
+  }
+
+  export type TicketCommentScalarWhereWithAggregatesInput = {
+    AND?: TicketCommentScalarWhereWithAggregatesInput | TicketCommentScalarWhereWithAggregatesInput[]
+    OR?: TicketCommentScalarWhereWithAggregatesInput[]
+    NOT?: TicketCommentScalarWhereWithAggregatesInput | TicketCommentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TicketComment"> | string
+    ticketId?: StringWithAggregatesFilter<"TicketComment"> | string
+    authorId?: StringWithAggregatesFilter<"TicketComment"> | string
+    message?: StringWithAggregatesFilter<"TicketComment"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"TicketComment"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"TicketComment"> | Date | string
+  }
+
+  export type KnowledgeBaseArticleWhereInput = {
+    AND?: KnowledgeBaseArticleWhereInput | KnowledgeBaseArticleWhereInput[]
+    OR?: KnowledgeBaseArticleWhereInput[]
+    NOT?: KnowledgeBaseArticleWhereInput | KnowledgeBaseArticleWhereInput[]
+    id?: StringFilter<"KnowledgeBaseArticle"> | string
+    title?: StringFilter<"KnowledgeBaseArticle"> | string
+    slug?: StringFilter<"KnowledgeBaseArticle"> | string
+    content?: StringFilter<"KnowledgeBaseArticle"> | string
+    excerpt?: StringNullableFilter<"KnowledgeBaseArticle"> | string | null
+    categoryId?: StringFilter<"KnowledgeBaseArticle"> | string
+    authorId?: StringFilter<"KnowledgeBaseArticle"> | string
+    tags?: StringNullableListFilter<"KnowledgeBaseArticle">
+    published?: BoolFilter<"KnowledgeBaseArticle"> | boolean
+    views?: IntFilter<"KnowledgeBaseArticle"> | number
+    helpful?: IntFilter<"KnowledgeBaseArticle"> | number
+    notHelpful?: IntFilter<"KnowledgeBaseArticle"> | number
+    createdAt?: DateTimeFilter<"KnowledgeBaseArticle"> | Date | string
+    updatedAt?: DateTimeFilter<"KnowledgeBaseArticle"> | Date | string
+    publishedAt?: DateTimeNullableFilter<"KnowledgeBaseArticle"> | Date | string | null
+    category?: XOR<KnowledgeBaseCategoryRelationFilter, KnowledgeBaseCategoryWhereInput>
+    author?: XOR<UserRelationFilter, UserWhereInput>
+    versions?: ArticleVersionListRelationFilter
+  }
+
+  export type KnowledgeBaseArticleOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    slug?: SortOrder
+    content?: SortOrder
+    excerpt?: SortOrderInput | SortOrder
+    categoryId?: SortOrder
+    authorId?: SortOrder
+    tags?: SortOrder
+    published?: SortOrder
+    views?: SortOrder
+    helpful?: SortOrder
+    notHelpful?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    publishedAt?: SortOrderInput | SortOrder
+    category?: KnowledgeBaseCategoryOrderByWithRelationInput
+    author?: UserOrderByWithRelationInput
+    versions?: ArticleVersionOrderByRelationAggregateInput
+  }
+
+  export type KnowledgeBaseArticleWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    slug?: string
+    AND?: KnowledgeBaseArticleWhereInput | KnowledgeBaseArticleWhereInput[]
+    OR?: KnowledgeBaseArticleWhereInput[]
+    NOT?: KnowledgeBaseArticleWhereInput | KnowledgeBaseArticleWhereInput[]
+    title?: StringFilter<"KnowledgeBaseArticle"> | string
+    content?: StringFilter<"KnowledgeBaseArticle"> | string
+    excerpt?: StringNullableFilter<"KnowledgeBaseArticle"> | string | null
+    categoryId?: StringFilter<"KnowledgeBaseArticle"> | string
+    authorId?: StringFilter<"KnowledgeBaseArticle"> | string
+    tags?: StringNullableListFilter<"KnowledgeBaseArticle">
+    published?: BoolFilter<"KnowledgeBaseArticle"> | boolean
+    views?: IntFilter<"KnowledgeBaseArticle"> | number
+    helpful?: IntFilter<"KnowledgeBaseArticle"> | number
+    notHelpful?: IntFilter<"KnowledgeBaseArticle"> | number
+    createdAt?: DateTimeFilter<"KnowledgeBaseArticle"> | Date | string
+    updatedAt?: DateTimeFilter<"KnowledgeBaseArticle"> | Date | string
+    publishedAt?: DateTimeNullableFilter<"KnowledgeBaseArticle"> | Date | string | null
+    category?: XOR<KnowledgeBaseCategoryRelationFilter, KnowledgeBaseCategoryWhereInput>
+    author?: XOR<UserRelationFilter, UserWhereInput>
+    versions?: ArticleVersionListRelationFilter
+  }, "id" | "slug">
+
+  export type KnowledgeBaseArticleOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    slug?: SortOrder
+    content?: SortOrder
+    excerpt?: SortOrderInput | SortOrder
+    categoryId?: SortOrder
+    authorId?: SortOrder
+    tags?: SortOrder
+    published?: SortOrder
+    views?: SortOrder
+    helpful?: SortOrder
+    notHelpful?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    publishedAt?: SortOrderInput | SortOrder
+    _count?: KnowledgeBaseArticleCountOrderByAggregateInput
+    _avg?: KnowledgeBaseArticleAvgOrderByAggregateInput
+    _max?: KnowledgeBaseArticleMaxOrderByAggregateInput
+    _min?: KnowledgeBaseArticleMinOrderByAggregateInput
+    _sum?: KnowledgeBaseArticleSumOrderByAggregateInput
+  }
+
+  export type KnowledgeBaseArticleScalarWhereWithAggregatesInput = {
+    AND?: KnowledgeBaseArticleScalarWhereWithAggregatesInput | KnowledgeBaseArticleScalarWhereWithAggregatesInput[]
+    OR?: KnowledgeBaseArticleScalarWhereWithAggregatesInput[]
+    NOT?: KnowledgeBaseArticleScalarWhereWithAggregatesInput | KnowledgeBaseArticleScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"KnowledgeBaseArticle"> | string
+    title?: StringWithAggregatesFilter<"KnowledgeBaseArticle"> | string
+    slug?: StringWithAggregatesFilter<"KnowledgeBaseArticle"> | string
+    content?: StringWithAggregatesFilter<"KnowledgeBaseArticle"> | string
+    excerpt?: StringNullableWithAggregatesFilter<"KnowledgeBaseArticle"> | string | null
+    categoryId?: StringWithAggregatesFilter<"KnowledgeBaseArticle"> | string
+    authorId?: StringWithAggregatesFilter<"KnowledgeBaseArticle"> | string
+    tags?: StringNullableListFilter<"KnowledgeBaseArticle">
+    published?: BoolWithAggregatesFilter<"KnowledgeBaseArticle"> | boolean
+    views?: IntWithAggregatesFilter<"KnowledgeBaseArticle"> | number
+    helpful?: IntWithAggregatesFilter<"KnowledgeBaseArticle"> | number
+    notHelpful?: IntWithAggregatesFilter<"KnowledgeBaseArticle"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"KnowledgeBaseArticle"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"KnowledgeBaseArticle"> | Date | string
+    publishedAt?: DateTimeNullableWithAggregatesFilter<"KnowledgeBaseArticle"> | Date | string | null
+  }
+
+  export type KnowledgeBaseCategoryWhereInput = {
+    AND?: KnowledgeBaseCategoryWhereInput | KnowledgeBaseCategoryWhereInput[]
+    OR?: KnowledgeBaseCategoryWhereInput[]
+    NOT?: KnowledgeBaseCategoryWhereInput | KnowledgeBaseCategoryWhereInput[]
+    id?: StringFilter<"KnowledgeBaseCategory"> | string
+    name?: StringFilter<"KnowledgeBaseCategory"> | string
+    slug?: StringFilter<"KnowledgeBaseCategory"> | string
+    description?: StringNullableFilter<"KnowledgeBaseCategory"> | string | null
+    icon?: StringNullableFilter<"KnowledgeBaseCategory"> | string | null
+    order?: IntFilter<"KnowledgeBaseCategory"> | number
+    parentId?: StringNullableFilter<"KnowledgeBaseCategory"> | string | null
+    createdAt?: DateTimeFilter<"KnowledgeBaseCategory"> | Date | string
+    updatedAt?: DateTimeFilter<"KnowledgeBaseCategory"> | Date | string
+    parent?: XOR<KnowledgeBaseCategoryNullableRelationFilter, KnowledgeBaseCategoryWhereInput> | null
+    children?: KnowledgeBaseCategoryListRelationFilter
+    articles?: KnowledgeBaseArticleListRelationFilter
+  }
+
+  export type KnowledgeBaseCategoryOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    description?: SortOrderInput | SortOrder
+    icon?: SortOrderInput | SortOrder
+    order?: SortOrder
+    parentId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    parent?: KnowledgeBaseCategoryOrderByWithRelationInput
+    children?: KnowledgeBaseCategoryOrderByRelationAggregateInput
+    articles?: KnowledgeBaseArticleOrderByRelationAggregateInput
+  }
+
+  export type KnowledgeBaseCategoryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    name?: string
+    slug?: string
+    AND?: KnowledgeBaseCategoryWhereInput | KnowledgeBaseCategoryWhereInput[]
+    OR?: KnowledgeBaseCategoryWhereInput[]
+    NOT?: KnowledgeBaseCategoryWhereInput | KnowledgeBaseCategoryWhereInput[]
+    description?: StringNullableFilter<"KnowledgeBaseCategory"> | string | null
+    icon?: StringNullableFilter<"KnowledgeBaseCategory"> | string | null
+    order?: IntFilter<"KnowledgeBaseCategory"> | number
+    parentId?: StringNullableFilter<"KnowledgeBaseCategory"> | string | null
+    createdAt?: DateTimeFilter<"KnowledgeBaseCategory"> | Date | string
+    updatedAt?: DateTimeFilter<"KnowledgeBaseCategory"> | Date | string
+    parent?: XOR<KnowledgeBaseCategoryNullableRelationFilter, KnowledgeBaseCategoryWhereInput> | null
+    children?: KnowledgeBaseCategoryListRelationFilter
+    articles?: KnowledgeBaseArticleListRelationFilter
+  }, "id" | "name" | "slug">
+
+  export type KnowledgeBaseCategoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    description?: SortOrderInput | SortOrder
+    icon?: SortOrderInput | SortOrder
+    order?: SortOrder
+    parentId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: KnowledgeBaseCategoryCountOrderByAggregateInput
+    _avg?: KnowledgeBaseCategoryAvgOrderByAggregateInput
+    _max?: KnowledgeBaseCategoryMaxOrderByAggregateInput
+    _min?: KnowledgeBaseCategoryMinOrderByAggregateInput
+    _sum?: KnowledgeBaseCategorySumOrderByAggregateInput
+  }
+
+  export type KnowledgeBaseCategoryScalarWhereWithAggregatesInput = {
+    AND?: KnowledgeBaseCategoryScalarWhereWithAggregatesInput | KnowledgeBaseCategoryScalarWhereWithAggregatesInput[]
+    OR?: KnowledgeBaseCategoryScalarWhereWithAggregatesInput[]
+    NOT?: KnowledgeBaseCategoryScalarWhereWithAggregatesInput | KnowledgeBaseCategoryScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"KnowledgeBaseCategory"> | string
+    name?: StringWithAggregatesFilter<"KnowledgeBaseCategory"> | string
+    slug?: StringWithAggregatesFilter<"KnowledgeBaseCategory"> | string
+    description?: StringNullableWithAggregatesFilter<"KnowledgeBaseCategory"> | string | null
+    icon?: StringNullableWithAggregatesFilter<"KnowledgeBaseCategory"> | string | null
+    order?: IntWithAggregatesFilter<"KnowledgeBaseCategory"> | number
+    parentId?: StringNullableWithAggregatesFilter<"KnowledgeBaseCategory"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"KnowledgeBaseCategory"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"KnowledgeBaseCategory"> | Date | string
+  }
+
+  export type ArticleVersionWhereInput = {
+    AND?: ArticleVersionWhereInput | ArticleVersionWhereInput[]
+    OR?: ArticleVersionWhereInput[]
+    NOT?: ArticleVersionWhereInput | ArticleVersionWhereInput[]
+    id?: StringFilter<"ArticleVersion"> | string
+    articleId?: StringFilter<"ArticleVersion"> | string
+    version?: IntFilter<"ArticleVersion"> | number
+    title?: StringFilter<"ArticleVersion"> | string
+    content?: StringFilter<"ArticleVersion"> | string
+    excerpt?: StringNullableFilter<"ArticleVersion"> | string | null
+    createdBy?: StringFilter<"ArticleVersion"> | string
+    createdAt?: DateTimeFilter<"ArticleVersion"> | Date | string
+    article?: XOR<KnowledgeBaseArticleRelationFilter, KnowledgeBaseArticleWhereInput>
+  }
+
+  export type ArticleVersionOrderByWithRelationInput = {
+    id?: SortOrder
+    articleId?: SortOrder
+    version?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    excerpt?: SortOrderInput | SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    article?: KnowledgeBaseArticleOrderByWithRelationInput
+  }
+
+  export type ArticleVersionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    articleId_version?: ArticleVersionArticleIdVersionCompoundUniqueInput
+    AND?: ArticleVersionWhereInput | ArticleVersionWhereInput[]
+    OR?: ArticleVersionWhereInput[]
+    NOT?: ArticleVersionWhereInput | ArticleVersionWhereInput[]
+    articleId?: StringFilter<"ArticleVersion"> | string
+    version?: IntFilter<"ArticleVersion"> | number
+    title?: StringFilter<"ArticleVersion"> | string
+    content?: StringFilter<"ArticleVersion"> | string
+    excerpt?: StringNullableFilter<"ArticleVersion"> | string | null
+    createdBy?: StringFilter<"ArticleVersion"> | string
+    createdAt?: DateTimeFilter<"ArticleVersion"> | Date | string
+    article?: XOR<KnowledgeBaseArticleRelationFilter, KnowledgeBaseArticleWhereInput>
+  }, "id" | "articleId_version">
+
+  export type ArticleVersionOrderByWithAggregationInput = {
+    id?: SortOrder
+    articleId?: SortOrder
+    version?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    excerpt?: SortOrderInput | SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    _count?: ArticleVersionCountOrderByAggregateInput
+    _avg?: ArticleVersionAvgOrderByAggregateInput
+    _max?: ArticleVersionMaxOrderByAggregateInput
+    _min?: ArticleVersionMinOrderByAggregateInput
+    _sum?: ArticleVersionSumOrderByAggregateInput
+  }
+
+  export type ArticleVersionScalarWhereWithAggregatesInput = {
+    AND?: ArticleVersionScalarWhereWithAggregatesInput | ArticleVersionScalarWhereWithAggregatesInput[]
+    OR?: ArticleVersionScalarWhereWithAggregatesInput[]
+    NOT?: ArticleVersionScalarWhereWithAggregatesInput | ArticleVersionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ArticleVersion"> | string
+    articleId?: StringWithAggregatesFilter<"ArticleVersion"> | string
+    version?: IntWithAggregatesFilter<"ArticleVersion"> | number
+    title?: StringWithAggregatesFilter<"ArticleVersion"> | string
+    content?: StringWithAggregatesFilter<"ArticleVersion"> | string
+    excerpt?: StringNullableWithAggregatesFilter<"ArticleVersion"> | string | null
+    createdBy?: StringWithAggregatesFilter<"ArticleVersion"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ArticleVersion"> | Date | string
+  }
+
   export type SystemLicenseCreateInput = {
     id?: string
     licenseKey: string
@@ -24495,6 +33540,9 @@ export namespace Prisma {
     passwordHash: string
     role: $Enums.UserRole
     twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -24506,6 +33554,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentCreateNestedManyWithoutAssignedToInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -24514,6 +33566,9 @@ export namespace Prisma {
     passwordHash: string
     role: $Enums.UserRole
     twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -24525,6 +33580,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentUncheckedCreateNestedManyWithoutAssignedToInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUpdateInput = {
@@ -24533,6 +33592,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -24544,6 +33606,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUpdateManyWithoutAssignedToNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -24552,6 +33618,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -24563,6 +33632,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUncheckedUpdateManyWithoutAssignedToNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -24571,6 +33644,9 @@ export namespace Prisma {
     passwordHash: string
     role: $Enums.UserRole
     twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -24583,6 +33659,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -24594,6 +33673,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -26222,10 +35304,564 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SupportTicketCreateInput = {
+    id?: string
+    ticketNumber: string
+    subject: string
+    description: string
+    priority?: $Enums.TicketPriority
+    category?: string | null
+    status?: $Enums.TicketStatus
+    assignedAt?: Date | string | null
+    slaResponseDeadline?: Date | string | null
+    slaResolveDeadline?: Date | string | null
+    firstResponseAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    closedAt?: Date | string | null
+    assignedTo?: UserCreateNestedOneWithoutAssignedTicketsInput
+    user: UserCreateNestedOneWithoutSupportTicketsInput
+    comments?: TicketCommentCreateNestedManyWithoutTicketInput
+  }
+
+  export type SupportTicketUncheckedCreateInput = {
+    id?: string
+    ticketNumber: string
+    subject: string
+    description: string
+    priority?: $Enums.TicketPriority
+    category?: string | null
+    status?: $Enums.TicketStatus
+    assignedToId?: string | null
+    assignedAt?: Date | string | null
+    slaResponseDeadline?: Date | string | null
+    slaResolveDeadline?: Date | string | null
+    firstResponseAt?: Date | string | null
+    userId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    closedAt?: Date | string | null
+    comments?: TicketCommentUncheckedCreateNestedManyWithoutTicketInput
+  }
+
+  export type SupportTicketUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketNumber?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    assignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResponseDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResolveDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstResponseAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    assignedTo?: UserUpdateOneWithoutAssignedTicketsNestedInput
+    user?: UserUpdateOneRequiredWithoutSupportTicketsNestedInput
+    comments?: TicketCommentUpdateManyWithoutTicketNestedInput
+  }
+
+  export type SupportTicketUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketNumber?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    assignedToId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResponseDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResolveDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstResponseAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    comments?: TicketCommentUncheckedUpdateManyWithoutTicketNestedInput
+  }
+
+  export type SupportTicketCreateManyInput = {
+    id?: string
+    ticketNumber: string
+    subject: string
+    description: string
+    priority?: $Enums.TicketPriority
+    category?: string | null
+    status?: $Enums.TicketStatus
+    assignedToId?: string | null
+    assignedAt?: Date | string | null
+    slaResponseDeadline?: Date | string | null
+    slaResolveDeadline?: Date | string | null
+    firstResponseAt?: Date | string | null
+    userId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    closedAt?: Date | string | null
+  }
+
+  export type SupportTicketUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketNumber?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    assignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResponseDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResolveDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstResponseAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SupportTicketUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketNumber?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    assignedToId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResponseDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResolveDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstResponseAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SlaPolicyCreateInput = {
+    id?: string
+    priority: $Enums.TicketPriority
+    responseTimeHours: number
+    resolveTimeHours: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SlaPolicyUncheckedCreateInput = {
+    id?: string
+    priority: $Enums.TicketPriority
+    responseTimeHours: number
+    resolveTimeHours: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SlaPolicyUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    responseTimeHours?: IntFieldUpdateOperationsInput | number
+    resolveTimeHours?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SlaPolicyUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    responseTimeHours?: IntFieldUpdateOperationsInput | number
+    resolveTimeHours?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SlaPolicyCreateManyInput = {
+    id?: string
+    priority: $Enums.TicketPriority
+    responseTimeHours: number
+    resolveTimeHours: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SlaPolicyUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    responseTimeHours?: IntFieldUpdateOperationsInput | number
+    resolveTimeHours?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SlaPolicyUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    responseTimeHours?: IntFieldUpdateOperationsInput | number
+    resolveTimeHours?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TicketCommentCreateInput = {
+    id?: string
+    message: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ticket: SupportTicketCreateNestedOneWithoutCommentsInput
+    author: UserCreateNestedOneWithoutTicketCommentsInput
+  }
+
+  export type TicketCommentUncheckedCreateInput = {
+    id?: string
+    ticketId: string
+    authorId: string
+    message: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TicketCommentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ticket?: SupportTicketUpdateOneRequiredWithoutCommentsNestedInput
+    author?: UserUpdateOneRequiredWithoutTicketCommentsNestedInput
+  }
+
+  export type TicketCommentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketId?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TicketCommentCreateManyInput = {
+    id?: string
+    ticketId: string
+    authorId: string
+    message: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TicketCommentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TicketCommentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketId?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KnowledgeBaseArticleCreateInput = {
+    id?: string
+    title: string
+    slug: string
+    content: string
+    excerpt?: string | null
+    tags?: KnowledgeBaseArticleCreatetagsInput | string[]
+    published?: boolean
+    views?: number
+    helpful?: number
+    notHelpful?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    category: KnowledgeBaseCategoryCreateNestedOneWithoutArticlesInput
+    author: UserCreateNestedOneWithoutKnowledgeBaseArticlesInput
+    versions?: ArticleVersionCreateNestedManyWithoutArticleInput
+  }
+
+  export type KnowledgeBaseArticleUncheckedCreateInput = {
+    id?: string
+    title: string
+    slug: string
+    content: string
+    excerpt?: string | null
+    categoryId: string
+    authorId: string
+    tags?: KnowledgeBaseArticleCreatetagsInput | string[]
+    published?: boolean
+    views?: number
+    helpful?: number
+    notHelpful?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    versions?: ArticleVersionUncheckedCreateNestedManyWithoutArticleInput
+  }
+
+  export type KnowledgeBaseArticleUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: KnowledgeBaseArticleUpdatetagsInput | string[]
+    published?: BoolFieldUpdateOperationsInput | boolean
+    views?: IntFieldUpdateOperationsInput | number
+    helpful?: IntFieldUpdateOperationsInput | number
+    notHelpful?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    category?: KnowledgeBaseCategoryUpdateOneRequiredWithoutArticlesNestedInput
+    author?: UserUpdateOneRequiredWithoutKnowledgeBaseArticlesNestedInput
+    versions?: ArticleVersionUpdateManyWithoutArticleNestedInput
+  }
+
+  export type KnowledgeBaseArticleUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    categoryId?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    tags?: KnowledgeBaseArticleUpdatetagsInput | string[]
+    published?: BoolFieldUpdateOperationsInput | boolean
+    views?: IntFieldUpdateOperationsInput | number
+    helpful?: IntFieldUpdateOperationsInput | number
+    notHelpful?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    versions?: ArticleVersionUncheckedUpdateManyWithoutArticleNestedInput
+  }
+
+  export type KnowledgeBaseArticleCreateManyInput = {
+    id?: string
+    title: string
+    slug: string
+    content: string
+    excerpt?: string | null
+    categoryId: string
+    authorId: string
+    tags?: KnowledgeBaseArticleCreatetagsInput | string[]
+    published?: boolean
+    views?: number
+    helpful?: number
+    notHelpful?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+  }
+
+  export type KnowledgeBaseArticleUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: KnowledgeBaseArticleUpdatetagsInput | string[]
+    published?: BoolFieldUpdateOperationsInput | boolean
+    views?: IntFieldUpdateOperationsInput | number
+    helpful?: IntFieldUpdateOperationsInput | number
+    notHelpful?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type KnowledgeBaseArticleUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    categoryId?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    tags?: KnowledgeBaseArticleUpdatetagsInput | string[]
+    published?: BoolFieldUpdateOperationsInput | boolean
+    views?: IntFieldUpdateOperationsInput | number
+    helpful?: IntFieldUpdateOperationsInput | number
+    notHelpful?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type KnowledgeBaseCategoryCreateInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    icon?: string | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parent?: KnowledgeBaseCategoryCreateNestedOneWithoutChildrenInput
+    children?: KnowledgeBaseCategoryCreateNestedManyWithoutParentInput
+    articles?: KnowledgeBaseArticleCreateNestedManyWithoutCategoryInput
+  }
+
+  export type KnowledgeBaseCategoryUncheckedCreateInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    icon?: string | null
+    order?: number
+    parentId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    children?: KnowledgeBaseCategoryUncheckedCreateNestedManyWithoutParentInput
+    articles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutCategoryInput
+  }
+
+  export type KnowledgeBaseCategoryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: KnowledgeBaseCategoryUpdateOneWithoutChildrenNestedInput
+    children?: KnowledgeBaseCategoryUpdateManyWithoutParentNestedInput
+    articles?: KnowledgeBaseArticleUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type KnowledgeBaseCategoryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: KnowledgeBaseCategoryUncheckedUpdateManyWithoutParentNestedInput
+    articles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type KnowledgeBaseCategoryCreateManyInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    icon?: string | null
+    order?: number
+    parentId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type KnowledgeBaseCategoryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KnowledgeBaseCategoryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArticleVersionCreateInput = {
+    id?: string
+    version: number
+    title: string
+    content: string
+    excerpt?: string | null
+    createdBy: string
+    createdAt?: Date | string
+    article: KnowledgeBaseArticleCreateNestedOneWithoutVersionsInput
+  }
+
+  export type ArticleVersionUncheckedCreateInput = {
+    id?: string
+    articleId: string
+    version: number
+    title: string
+    content: string
+    excerpt?: string | null
+    createdBy: string
+    createdAt?: Date | string
+  }
+
+  export type ArticleVersionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    article?: KnowledgeBaseArticleUpdateOneRequiredWithoutVersionsNestedInput
+  }
+
+  export type ArticleVersionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    articleId?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArticleVersionCreateManyInput = {
+    id?: string
+    articleId: string
+    version: number
+    title: string
+    content: string
+    excerpt?: string | null
+    createdBy: string
+    createdAt?: Date | string
+  }
+
+  export type ArticleVersionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArticleVersionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    articleId?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[]
-    notIn?: string[]
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -26233,20 +35869,21 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
   export type EnumLicenseStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.LicenseStatus | EnumLicenseStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.LicenseStatus[]
-    notIn?: $Enums.LicenseStatus[]
+    in?: $Enums.LicenseStatus[] | ListEnumLicenseStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LicenseStatus[] | ListEnumLicenseStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumLicenseStatusFilter<$PrismaModel> | $Enums.LicenseStatus
   }
 
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -26256,8 +35893,8 @@ export namespace Prisma {
 
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -26272,8 +35909,8 @@ export namespace Prisma {
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | null
-    notIn?: Date[] | string[] | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -26335,8 +35972,8 @@ export namespace Prisma {
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[]
-    notIn?: string[]
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -26344,6 +35981,7 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
     not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
@@ -26352,8 +35990,8 @@ export namespace Prisma {
 
   export type EnumLicenseStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.LicenseStatus | EnumLicenseStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.LicenseStatus[]
-    notIn?: $Enums.LicenseStatus[]
+    in?: $Enums.LicenseStatus[] | ListEnumLicenseStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LicenseStatus[] | ListEnumLicenseStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumLicenseStatusWithAggregatesFilter<$PrismaModel> | $Enums.LicenseStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumLicenseStatusFilter<$PrismaModel>
@@ -26362,8 +36000,8 @@ export namespace Prisma {
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -26376,8 +36014,8 @@ export namespace Prisma {
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -26400,8 +36038,8 @@ export namespace Prisma {
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | null
-    notIn?: Date[] | string[] | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -26420,17 +36058,17 @@ export namespace Prisma {
 
   export type JsonNullableFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string
+    path?: string[]
     string_contains?: string | StringFieldRefInput<$PrismaModel>
     string_starts_with?: string | StringFieldRefInput<$PrismaModel>
     string_ends_with?: string | StringFieldRefInput<$PrismaModel>
     array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue
-    lte?: InputJsonValue
-    gt?: InputJsonValue
-    gte?: InputJsonValue
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
@@ -26488,17 +36126,17 @@ export namespace Prisma {
 
   export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string
+    path?: string[]
     string_contains?: string | StringFieldRefInput<$PrismaModel>
     string_starts_with?: string | StringFieldRefInput<$PrismaModel>
     string_ends_with?: string | StringFieldRefInput<$PrismaModel>
     array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue
-    lte?: InputJsonValue
-    gt?: InputJsonValue
-    gte?: InputJsonValue
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedJsonNullableFilter<$PrismaModel>
@@ -26507,15 +36145,15 @@ export namespace Prisma {
 
   export type EnumUserRoleFilter<$PrismaModel = never> = {
     equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[]
-    notIn?: $Enums.UserRole[]
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
     not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
   }
 
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -26523,13 +36161,14 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type FloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
@@ -26578,6 +36217,24 @@ export namespace Prisma {
     none?: OrderWhereInput
   }
 
+  export type SupportTicketListRelationFilter = {
+    every?: SupportTicketWhereInput
+    some?: SupportTicketWhereInput
+    none?: SupportTicketWhereInput
+  }
+
+  export type TicketCommentListRelationFilter = {
+    every?: TicketCommentWhereInput
+    some?: TicketCommentWhereInput
+    none?: TicketCommentWhereInput
+  }
+
+  export type KnowledgeBaseArticleListRelationFilter = {
+    every?: KnowledgeBaseArticleWhereInput
+    some?: KnowledgeBaseArticleWhereInput
+    none?: KnowledgeBaseArticleWhereInput
+  }
+
   export type GameServerOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -26602,12 +36259,27 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type SupportTicketOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TicketCommentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type KnowledgeBaseArticleOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     email?: SortOrder
     passwordHash?: SortOrder
     role?: SortOrder
     twoFactorSecret?: SortOrder
+    twoFactorEnabled?: SortOrder
+    twoFactorMethod?: SortOrder
+    twoFactorBackupCodes?: SortOrder
     balance?: SortOrder
     tenantId?: SortOrder
     createdAt?: SortOrder
@@ -26624,6 +36296,9 @@ export namespace Prisma {
     passwordHash?: SortOrder
     role?: SortOrder
     twoFactorSecret?: SortOrder
+    twoFactorEnabled?: SortOrder
+    twoFactorMethod?: SortOrder
+    twoFactorBackupCodes?: SortOrder
     balance?: SortOrder
     tenantId?: SortOrder
     createdAt?: SortOrder
@@ -26636,6 +36311,9 @@ export namespace Prisma {
     passwordHash?: SortOrder
     role?: SortOrder
     twoFactorSecret?: SortOrder
+    twoFactorEnabled?: SortOrder
+    twoFactorMethod?: SortOrder
+    twoFactorBackupCodes?: SortOrder
     balance?: SortOrder
     tenantId?: SortOrder
     createdAt?: SortOrder
@@ -26648,8 +36326,8 @@ export namespace Prisma {
 
   export type EnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[]
-    notIn?: $Enums.UserRole[]
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
     not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserRoleFilter<$PrismaModel>
@@ -26658,8 +36336,8 @@ export namespace Prisma {
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -26667,6 +36345,7 @@ export namespace Prisma {
     contains?: string | StringFieldRefInput<$PrismaModel>
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
     not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
@@ -26675,8 +36354,8 @@ export namespace Prisma {
 
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
@@ -26724,15 +36403,15 @@ export namespace Prisma {
 
   export type EnumDiskTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.DiskType | EnumDiskTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.DiskType[]
-    notIn?: $Enums.DiskType[]
+    in?: $Enums.DiskType[] | ListEnumDiskTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DiskType[] | ListEnumDiskTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumDiskTypeFilter<$PrismaModel> | $Enums.DiskType
   }
 
   export type EnumNodeStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.NodeStatus | EnumNodeStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.NodeStatus[]
-    notIn?: $Enums.NodeStatus[]
+    in?: $Enums.NodeStatus[] | ListEnumNodeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.NodeStatus[] | ListEnumNodeStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumNodeStatusFilter<$PrismaModel> | $Enums.NodeStatus
   }
 
@@ -26844,8 +36523,8 @@ export namespace Prisma {
 
   export type EnumDiskTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.DiskType | EnumDiskTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.DiskType[]
-    notIn?: $Enums.DiskType[]
+    in?: $Enums.DiskType[] | ListEnumDiskTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DiskType[] | ListEnumDiskTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumDiskTypeWithAggregatesFilter<$PrismaModel> | $Enums.DiskType
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumDiskTypeFilter<$PrismaModel>
@@ -26854,8 +36533,8 @@ export namespace Prisma {
 
   export type EnumNodeStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.NodeStatus | EnumNodeStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.NodeStatus[]
-    notIn?: $Enums.NodeStatus[]
+    in?: $Enums.NodeStatus[] | ListEnumNodeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.NodeStatus[] | ListEnumNodeStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumNodeStatusWithAggregatesFilter<$PrismaModel> | $Enums.NodeStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumNodeStatusFilter<$PrismaModel>
@@ -26864,15 +36543,15 @@ export namespace Prisma {
 
   export type EnumTaskTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.TaskType | EnumTaskTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskType[]
-    notIn?: $Enums.TaskType[]
+    in?: $Enums.TaskType[] | ListEnumTaskTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskType[] | ListEnumTaskTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumTaskTypeFilter<$PrismaModel> | $Enums.TaskType
   }
 
   export type EnumTaskStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskStatus[]
-    notIn?: $Enums.TaskStatus[]
+    in?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumTaskStatusFilter<$PrismaModel> | $Enums.TaskStatus
   }
   export type JsonFilter<$PrismaModel = never> = 
@@ -26884,17 +36563,17 @@ export namespace Prisma {
 
   export type JsonFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string
+    path?: string[]
     string_contains?: string | StringFieldRefInput<$PrismaModel>
     string_starts_with?: string | StringFieldRefInput<$PrismaModel>
     string_ends_with?: string | StringFieldRefInput<$PrismaModel>
     array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue
-    lte?: InputJsonValue
-    gt?: InputJsonValue
-    gte?: InputJsonValue
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
@@ -26939,8 +36618,8 @@ export namespace Prisma {
 
   export type EnumTaskTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.TaskType | EnumTaskTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskType[]
-    notIn?: $Enums.TaskType[]
+    in?: $Enums.TaskType[] | ListEnumTaskTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskType[] | ListEnumTaskTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumTaskTypeWithAggregatesFilter<$PrismaModel> | $Enums.TaskType
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTaskTypeFilter<$PrismaModel>
@@ -26949,8 +36628,8 @@ export namespace Prisma {
 
   export type EnumTaskStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskStatus[]
-    notIn?: $Enums.TaskStatus[]
+    in?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumTaskStatusWithAggregatesFilter<$PrismaModel> | $Enums.TaskStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTaskStatusFilter<$PrismaModel>
@@ -26965,17 +36644,17 @@ export namespace Prisma {
 
   export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string
+    path?: string[]
     string_contains?: string | StringFieldRefInput<$PrismaModel>
     string_starts_with?: string | StringFieldRefInput<$PrismaModel>
     string_ends_with?: string | StringFieldRefInput<$PrismaModel>
     array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue
-    lte?: InputJsonValue
-    gt?: InputJsonValue
-    gte?: InputJsonValue
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedJsonFilter<$PrismaModel>
@@ -26984,15 +36663,15 @@ export namespace Prisma {
 
   export type EnumProtocolFilter<$PrismaModel = never> = {
     equals?: $Enums.Protocol | EnumProtocolFieldRefInput<$PrismaModel>
-    in?: $Enums.Protocol[]
-    notIn?: $Enums.Protocol[]
+    in?: $Enums.Protocol[] | ListEnumProtocolFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Protocol[] | ListEnumProtocolFieldRefInput<$PrismaModel>
     not?: NestedEnumProtocolFilter<$PrismaModel> | $Enums.Protocol
   }
 
   export type EnumPortTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.PortType | EnumPortTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.PortType[]
-    notIn?: $Enums.PortType[]
+    in?: $Enums.PortType[] | ListEnumPortTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PortType[] | ListEnumPortTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumPortTypeFilter<$PrismaModel> | $Enums.PortType
   }
 
@@ -27050,8 +36729,8 @@ export namespace Prisma {
 
   export type EnumProtocolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.Protocol | EnumProtocolFieldRefInput<$PrismaModel>
-    in?: $Enums.Protocol[]
-    notIn?: $Enums.Protocol[]
+    in?: $Enums.Protocol[] | ListEnumProtocolFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Protocol[] | ListEnumProtocolFieldRefInput<$PrismaModel>
     not?: NestedEnumProtocolWithAggregatesFilter<$PrismaModel> | $Enums.Protocol
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumProtocolFilter<$PrismaModel>
@@ -27060,8 +36739,8 @@ export namespace Prisma {
 
   export type EnumPortTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PortType | EnumPortTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.PortType[]
-    notIn?: $Enums.PortType[]
+    in?: $Enums.PortType[] | ListEnumPortTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PortType[] | ListEnumPortTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumPortTypeWithAggregatesFilter<$PrismaModel> | $Enums.PortType
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPortTypeFilter<$PrismaModel>
@@ -27113,15 +36792,15 @@ export namespace Prisma {
 
   export type EnumGameTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.GameType | EnumGameTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.GameType[]
-    notIn?: $Enums.GameType[]
+    in?: $Enums.GameType[] | ListEnumGameTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GameType[] | ListEnumGameTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumGameTypeFilter<$PrismaModel> | $Enums.GameType
   }
 
   export type EnumServerStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ServerStatus | EnumServerStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ServerStatus[]
-    notIn?: $Enums.ServerStatus[]
+    in?: $Enums.ServerStatus[] | ListEnumServerStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ServerStatus[] | ListEnumServerStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumServerStatusFilter<$PrismaModel> | $Enums.ServerStatus
   }
 
@@ -27214,8 +36893,8 @@ export namespace Prisma {
 
   export type EnumGameTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.GameType | EnumGameTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.GameType[]
-    notIn?: $Enums.GameType[]
+    in?: $Enums.GameType[] | ListEnumGameTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GameType[] | ListEnumGameTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumGameTypeWithAggregatesFilter<$PrismaModel> | $Enums.GameType
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumGameTypeFilter<$PrismaModel>
@@ -27224,8 +36903,8 @@ export namespace Prisma {
 
   export type EnumServerStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.ServerStatus | EnumServerStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ServerStatus[]
-    notIn?: $Enums.ServerStatus[]
+    in?: $Enums.ServerStatus[] | ListEnumServerStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ServerStatus[] | ListEnumServerStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumServerStatusWithAggregatesFilter<$PrismaModel> | $Enums.ServerStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumServerStatusFilter<$PrismaModel>
@@ -27264,8 +36943,8 @@ export namespace Prisma {
 
   export type BigIntFilter<$PrismaModel = never> = {
     equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[]
-    notIn?: bigint[] | number[]
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
     lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
@@ -27275,8 +36954,8 @@ export namespace Prisma {
 
   export type EnumBackupLocationFilter<$PrismaModel = never> = {
     equals?: $Enums.BackupLocation | EnumBackupLocationFieldRefInput<$PrismaModel>
-    in?: $Enums.BackupLocation[]
-    notIn?: $Enums.BackupLocation[]
+    in?: $Enums.BackupLocation[] | ListEnumBackupLocationFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BackupLocation[] | ListEnumBackupLocationFieldRefInput<$PrismaModel>
     not?: NestedEnumBackupLocationFilter<$PrismaModel> | $Enums.BackupLocation
   }
 
@@ -27323,8 +37002,8 @@ export namespace Prisma {
 
   export type BigIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[]
-    notIn?: bigint[] | number[]
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
     lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
@@ -27339,8 +37018,8 @@ export namespace Prisma {
 
   export type EnumBackupLocationWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.BackupLocation | EnumBackupLocationFieldRefInput<$PrismaModel>
-    in?: $Enums.BackupLocation[]
-    notIn?: $Enums.BackupLocation[]
+    in?: $Enums.BackupLocation[] | ListEnumBackupLocationFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BackupLocation[] | ListEnumBackupLocationFieldRefInput<$PrismaModel>
     not?: NestedEnumBackupLocationWithAggregatesFilter<$PrismaModel> | $Enums.BackupLocation
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumBackupLocationFilter<$PrismaModel>
@@ -27349,8 +37028,8 @@ export namespace Prisma {
 
   export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -27427,8 +37106,8 @@ export namespace Prisma {
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -27443,15 +37122,15 @@ export namespace Prisma {
 
   export type EnumAlertSeverityFilter<$PrismaModel = never> = {
     equals?: $Enums.AlertSeverity | EnumAlertSeverityFieldRefInput<$PrismaModel>
-    in?: $Enums.AlertSeverity[]
-    notIn?: $Enums.AlertSeverity[]
+    in?: $Enums.AlertSeverity[] | ListEnumAlertSeverityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AlertSeverity[] | ListEnumAlertSeverityFieldRefInput<$PrismaModel>
     not?: NestedEnumAlertSeverityFilter<$PrismaModel> | $Enums.AlertSeverity
   }
 
   export type EnumResourceTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.ResourceType | EnumResourceTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.ResourceType[]
-    notIn?: $Enums.ResourceType[]
+    in?: $Enums.ResourceType[] | ListEnumResourceTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ResourceType[] | ListEnumResourceTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumResourceTypeFilter<$PrismaModel> | $Enums.ResourceType
   }
 
@@ -27511,8 +37190,8 @@ export namespace Prisma {
 
   export type EnumAlertSeverityWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.AlertSeverity | EnumAlertSeverityFieldRefInput<$PrismaModel>
-    in?: $Enums.AlertSeverity[]
-    notIn?: $Enums.AlertSeverity[]
+    in?: $Enums.AlertSeverity[] | ListEnumAlertSeverityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AlertSeverity[] | ListEnumAlertSeverityFieldRefInput<$PrismaModel>
     not?: NestedEnumAlertSeverityWithAggregatesFilter<$PrismaModel> | $Enums.AlertSeverity
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAlertSeverityFilter<$PrismaModel>
@@ -27521,8 +37200,8 @@ export namespace Prisma {
 
   export type EnumResourceTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.ResourceType | EnumResourceTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.ResourceType[]
-    notIn?: $Enums.ResourceType[]
+    in?: $Enums.ResourceType[] | ListEnumResourceTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ResourceType[] | ListEnumResourceTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumResourceTypeWithAggregatesFilter<$PrismaModel> | $Enums.ResourceType
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumResourceTypeFilter<$PrismaModel>
@@ -27630,15 +37309,15 @@ export namespace Prisma {
 
   export type EnumIncidentSeverityFilter<$PrismaModel = never> = {
     equals?: $Enums.IncidentSeverity | EnumIncidentSeverityFieldRefInput<$PrismaModel>
-    in?: $Enums.IncidentSeverity[]
-    notIn?: $Enums.IncidentSeverity[]
+    in?: $Enums.IncidentSeverity[] | ListEnumIncidentSeverityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.IncidentSeverity[] | ListEnumIncidentSeverityFieldRefInput<$PrismaModel>
     not?: NestedEnumIncidentSeverityFilter<$PrismaModel> | $Enums.IncidentSeverity
   }
 
   export type EnumIncidentStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.IncidentStatus | EnumIncidentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.IncidentStatus[]
-    notIn?: $Enums.IncidentStatus[]
+    in?: $Enums.IncidentStatus[] | ListEnumIncidentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.IncidentStatus[] | ListEnumIncidentStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumIncidentStatusFilter<$PrismaModel> | $Enums.IncidentStatus
   }
 
@@ -27687,8 +37366,8 @@ export namespace Prisma {
 
   export type EnumIncidentSeverityWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.IncidentSeverity | EnumIncidentSeverityFieldRefInput<$PrismaModel>
-    in?: $Enums.IncidentSeverity[]
-    notIn?: $Enums.IncidentSeverity[]
+    in?: $Enums.IncidentSeverity[] | ListEnumIncidentSeverityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.IncidentSeverity[] | ListEnumIncidentSeverityFieldRefInput<$PrismaModel>
     not?: NestedEnumIncidentSeverityWithAggregatesFilter<$PrismaModel> | $Enums.IncidentSeverity
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumIncidentSeverityFilter<$PrismaModel>
@@ -27697,8 +37376,8 @@ export namespace Prisma {
 
   export type EnumIncidentStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.IncidentStatus | EnumIncidentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.IncidentStatus[]
-    notIn?: $Enums.IncidentStatus[]
+    in?: $Enums.IncidentStatus[] | ListEnumIncidentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.IncidentStatus[] | ListEnumIncidentStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumIncidentStatusWithAggregatesFilter<$PrismaModel> | $Enums.IncidentStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumIncidentStatusFilter<$PrismaModel>
@@ -27707,8 +37386,8 @@ export namespace Prisma {
 
   export type EnumPlanStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.PlanStatus | EnumPlanStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.PlanStatus[]
-    notIn?: $Enums.PlanStatus[]
+    in?: $Enums.PlanStatus[] | ListEnumPlanStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PlanStatus[] | ListEnumPlanStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumPlanStatusFilter<$PrismaModel> | $Enums.PlanStatus
   }
 
@@ -27807,8 +37486,8 @@ export namespace Prisma {
 
   export type EnumPlanStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PlanStatus | EnumPlanStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.PlanStatus[]
-    notIn?: $Enums.PlanStatus[]
+    in?: $Enums.PlanStatus[] | ListEnumPlanStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PlanStatus[] | ListEnumPlanStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumPlanStatusWithAggregatesFilter<$PrismaModel> | $Enums.PlanStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPlanStatusFilter<$PrismaModel>
@@ -27817,15 +37496,15 @@ export namespace Prisma {
 
   export type EnumPromotionScopeFilter<$PrismaModel = never> = {
     equals?: $Enums.PromotionScope | EnumPromotionScopeFieldRefInput<$PrismaModel>
-    in?: $Enums.PromotionScope[]
-    notIn?: $Enums.PromotionScope[]
+    in?: $Enums.PromotionScope[] | ListEnumPromotionScopeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PromotionScope[] | ListEnumPromotionScopeFieldRefInput<$PrismaModel>
     not?: NestedEnumPromotionScopeFilter<$PrismaModel> | $Enums.PromotionScope
   }
 
   export type EnumGameTypeNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.GameType | EnumGameTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.GameType[] | null
-    notIn?: $Enums.GameType[] | null
+    in?: $Enums.GameType[] | ListEnumGameTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.GameType[] | ListEnumGameTypeFieldRefInput<$PrismaModel> | null
     not?: NestedEnumGameTypeNullableFilter<$PrismaModel> | $Enums.GameType | null
   }
 
@@ -27884,8 +37563,8 @@ export namespace Prisma {
 
   export type EnumPromotionScopeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PromotionScope | EnumPromotionScopeFieldRefInput<$PrismaModel>
-    in?: $Enums.PromotionScope[]
-    notIn?: $Enums.PromotionScope[]
+    in?: $Enums.PromotionScope[] | ListEnumPromotionScopeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PromotionScope[] | ListEnumPromotionScopeFieldRefInput<$PrismaModel>
     not?: NestedEnumPromotionScopeWithAggregatesFilter<$PrismaModel> | $Enums.PromotionScope
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPromotionScopeFilter<$PrismaModel>
@@ -27894,8 +37573,8 @@ export namespace Prisma {
 
   export type EnumGameTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.GameType | EnumGameTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.GameType[] | null
-    notIn?: $Enums.GameType[] | null
+    in?: $Enums.GameType[] | ListEnumGameTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.GameType[] | ListEnumGameTypeFieldRefInput<$PrismaModel> | null
     not?: NestedEnumGameTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.GameType | null
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumGameTypeNullableFilter<$PrismaModel>
@@ -27904,8 +37583,8 @@ export namespace Prisma {
 
   export type EnumOrderStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.OrderStatus[]
-    notIn?: $Enums.OrderStatus[]
+    in?: $Enums.OrderStatus[] | ListEnumOrderStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrderStatus[] | ListEnumOrderStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumOrderStatusFilter<$PrismaModel> | $Enums.OrderStatus
   }
 
@@ -27973,12 +37652,369 @@ export namespace Prisma {
 
   export type EnumOrderStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.OrderStatus[]
-    notIn?: $Enums.OrderStatus[]
+    in?: $Enums.OrderStatus[] | ListEnumOrderStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrderStatus[] | ListEnumOrderStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumOrderStatusWithAggregatesFilter<$PrismaModel> | $Enums.OrderStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumOrderStatusFilter<$PrismaModel>
     _max?: NestedEnumOrderStatusFilter<$PrismaModel>
+  }
+
+  export type EnumTicketPriorityFilter<$PrismaModel = never> = {
+    equals?: $Enums.TicketPriority | EnumTicketPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.TicketPriority[] | ListEnumTicketPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TicketPriority[] | ListEnumTicketPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumTicketPriorityFilter<$PrismaModel> | $Enums.TicketPriority
+  }
+
+  export type EnumTicketStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TicketStatus | EnumTicketStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TicketStatus[] | ListEnumTicketStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TicketStatus[] | ListEnumTicketStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTicketStatusFilter<$PrismaModel> | $Enums.TicketStatus
+  }
+
+  export type SupportTicketCountOrderByAggregateInput = {
+    id?: SortOrder
+    ticketNumber?: SortOrder
+    subject?: SortOrder
+    description?: SortOrder
+    priority?: SortOrder
+    category?: SortOrder
+    status?: SortOrder
+    assignedToId?: SortOrder
+    assignedAt?: SortOrder
+    slaResponseDeadline?: SortOrder
+    slaResolveDeadline?: SortOrder
+    firstResponseAt?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    closedAt?: SortOrder
+  }
+
+  export type SupportTicketMaxOrderByAggregateInput = {
+    id?: SortOrder
+    ticketNumber?: SortOrder
+    subject?: SortOrder
+    description?: SortOrder
+    priority?: SortOrder
+    category?: SortOrder
+    status?: SortOrder
+    assignedToId?: SortOrder
+    assignedAt?: SortOrder
+    slaResponseDeadline?: SortOrder
+    slaResolveDeadline?: SortOrder
+    firstResponseAt?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    closedAt?: SortOrder
+  }
+
+  export type SupportTicketMinOrderByAggregateInput = {
+    id?: SortOrder
+    ticketNumber?: SortOrder
+    subject?: SortOrder
+    description?: SortOrder
+    priority?: SortOrder
+    category?: SortOrder
+    status?: SortOrder
+    assignedToId?: SortOrder
+    assignedAt?: SortOrder
+    slaResponseDeadline?: SortOrder
+    slaResolveDeadline?: SortOrder
+    firstResponseAt?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    closedAt?: SortOrder
+  }
+
+  export type EnumTicketPriorityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TicketPriority | EnumTicketPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.TicketPriority[] | ListEnumTicketPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TicketPriority[] | ListEnumTicketPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumTicketPriorityWithAggregatesFilter<$PrismaModel> | $Enums.TicketPriority
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTicketPriorityFilter<$PrismaModel>
+    _max?: NestedEnumTicketPriorityFilter<$PrismaModel>
+  }
+
+  export type EnumTicketStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TicketStatus | EnumTicketStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TicketStatus[] | ListEnumTicketStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TicketStatus[] | ListEnumTicketStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTicketStatusWithAggregatesFilter<$PrismaModel> | $Enums.TicketStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTicketStatusFilter<$PrismaModel>
+    _max?: NestedEnumTicketStatusFilter<$PrismaModel>
+  }
+
+  export type SlaPolicyCountOrderByAggregateInput = {
+    id?: SortOrder
+    priority?: SortOrder
+    responseTimeHours?: SortOrder
+    resolveTimeHours?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SlaPolicyAvgOrderByAggregateInput = {
+    responseTimeHours?: SortOrder
+    resolveTimeHours?: SortOrder
+  }
+
+  export type SlaPolicyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    priority?: SortOrder
+    responseTimeHours?: SortOrder
+    resolveTimeHours?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SlaPolicyMinOrderByAggregateInput = {
+    id?: SortOrder
+    priority?: SortOrder
+    responseTimeHours?: SortOrder
+    resolveTimeHours?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SlaPolicySumOrderByAggregateInput = {
+    responseTimeHours?: SortOrder
+    resolveTimeHours?: SortOrder
+  }
+
+  export type SupportTicketRelationFilter = {
+    is?: SupportTicketWhereInput
+    isNot?: SupportTicketWhereInput
+  }
+
+  export type TicketCommentCountOrderByAggregateInput = {
+    id?: SortOrder
+    ticketId?: SortOrder
+    authorId?: SortOrder
+    message?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TicketCommentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    ticketId?: SortOrder
+    authorId?: SortOrder
+    message?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TicketCommentMinOrderByAggregateInput = {
+    id?: SortOrder
+    ticketId?: SortOrder
+    authorId?: SortOrder
+    message?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
+  export type KnowledgeBaseCategoryRelationFilter = {
+    is?: KnowledgeBaseCategoryWhereInput
+    isNot?: KnowledgeBaseCategoryWhereInput
+  }
+
+  export type ArticleVersionListRelationFilter = {
+    every?: ArticleVersionWhereInput
+    some?: ArticleVersionWhereInput
+    none?: ArticleVersionWhereInput
+  }
+
+  export type ArticleVersionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type KnowledgeBaseArticleCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    slug?: SortOrder
+    content?: SortOrder
+    excerpt?: SortOrder
+    categoryId?: SortOrder
+    authorId?: SortOrder
+    tags?: SortOrder
+    published?: SortOrder
+    views?: SortOrder
+    helpful?: SortOrder
+    notHelpful?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    publishedAt?: SortOrder
+  }
+
+  export type KnowledgeBaseArticleAvgOrderByAggregateInput = {
+    views?: SortOrder
+    helpful?: SortOrder
+    notHelpful?: SortOrder
+  }
+
+  export type KnowledgeBaseArticleMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    slug?: SortOrder
+    content?: SortOrder
+    excerpt?: SortOrder
+    categoryId?: SortOrder
+    authorId?: SortOrder
+    published?: SortOrder
+    views?: SortOrder
+    helpful?: SortOrder
+    notHelpful?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    publishedAt?: SortOrder
+  }
+
+  export type KnowledgeBaseArticleMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    slug?: SortOrder
+    content?: SortOrder
+    excerpt?: SortOrder
+    categoryId?: SortOrder
+    authorId?: SortOrder
+    published?: SortOrder
+    views?: SortOrder
+    helpful?: SortOrder
+    notHelpful?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    publishedAt?: SortOrder
+  }
+
+  export type KnowledgeBaseArticleSumOrderByAggregateInput = {
+    views?: SortOrder
+    helpful?: SortOrder
+    notHelpful?: SortOrder
+  }
+
+  export type KnowledgeBaseCategoryNullableRelationFilter = {
+    is?: KnowledgeBaseCategoryWhereInput | null
+    isNot?: KnowledgeBaseCategoryWhereInput | null
+  }
+
+  export type KnowledgeBaseCategoryListRelationFilter = {
+    every?: KnowledgeBaseCategoryWhereInput
+    some?: KnowledgeBaseCategoryWhereInput
+    none?: KnowledgeBaseCategoryWhereInput
+  }
+
+  export type KnowledgeBaseCategoryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type KnowledgeBaseCategoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    description?: SortOrder
+    icon?: SortOrder
+    order?: SortOrder
+    parentId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type KnowledgeBaseCategoryAvgOrderByAggregateInput = {
+    order?: SortOrder
+  }
+
+  export type KnowledgeBaseCategoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    description?: SortOrder
+    icon?: SortOrder
+    order?: SortOrder
+    parentId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type KnowledgeBaseCategoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    description?: SortOrder
+    icon?: SortOrder
+    order?: SortOrder
+    parentId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type KnowledgeBaseCategorySumOrderByAggregateInput = {
+    order?: SortOrder
+  }
+
+  export type KnowledgeBaseArticleRelationFilter = {
+    is?: KnowledgeBaseArticleWhereInput
+    isNot?: KnowledgeBaseArticleWhereInput
+  }
+
+  export type ArticleVersionArticleIdVersionCompoundUniqueInput = {
+    articleId: string
+    version: number
+  }
+
+  export type ArticleVersionCountOrderByAggregateInput = {
+    id?: SortOrder
+    articleId?: SortOrder
+    version?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    excerpt?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ArticleVersionAvgOrderByAggregateInput = {
+    version?: SortOrder
+  }
+
+  export type ArticleVersionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    articleId?: SortOrder
+    version?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    excerpt?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ArticleVersionMinOrderByAggregateInput = {
+    id?: SortOrder
+    articleId?: SortOrder
+    version?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    excerpt?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ArticleVersionSumOrderByAggregateInput = {
+    version?: SortOrder
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -28148,6 +38184,34 @@ export namespace Prisma {
     connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
   }
 
+  export type SupportTicketCreateNestedManyWithoutUserInput = {
+    create?: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput> | SupportTicketCreateWithoutUserInput[] | SupportTicketUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutUserInput | SupportTicketCreateOrConnectWithoutUserInput[]
+    createMany?: SupportTicketCreateManyUserInputEnvelope
+    connect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+  }
+
+  export type TicketCommentCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<TicketCommentCreateWithoutAuthorInput, TicketCommentUncheckedCreateWithoutAuthorInput> | TicketCommentCreateWithoutAuthorInput[] | TicketCommentUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: TicketCommentCreateOrConnectWithoutAuthorInput | TicketCommentCreateOrConnectWithoutAuthorInput[]
+    createMany?: TicketCommentCreateManyAuthorInputEnvelope
+    connect?: TicketCommentWhereUniqueInput | TicketCommentWhereUniqueInput[]
+  }
+
+  export type SupportTicketCreateNestedManyWithoutAssignedToInput = {
+    create?: XOR<SupportTicketCreateWithoutAssignedToInput, SupportTicketUncheckedCreateWithoutAssignedToInput> | SupportTicketCreateWithoutAssignedToInput[] | SupportTicketUncheckedCreateWithoutAssignedToInput[]
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutAssignedToInput | SupportTicketCreateOrConnectWithoutAssignedToInput[]
+    createMany?: SupportTicketCreateManyAssignedToInputEnvelope
+    connect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+  }
+
+  export type KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<KnowledgeBaseArticleCreateWithoutAuthorInput, KnowledgeBaseArticleUncheckedCreateWithoutAuthorInput> | KnowledgeBaseArticleCreateWithoutAuthorInput[] | KnowledgeBaseArticleUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: KnowledgeBaseArticleCreateOrConnectWithoutAuthorInput | KnowledgeBaseArticleCreateOrConnectWithoutAuthorInput[]
+    createMany?: KnowledgeBaseArticleCreateManyAuthorInputEnvelope
+    connect?: KnowledgeBaseArticleWhereUniqueInput | KnowledgeBaseArticleWhereUniqueInput[]
+  }
+
   export type GameServerUncheckedCreateNestedManyWithoutOwnerInput = {
     create?: XOR<GameServerCreateWithoutOwnerInput, GameServerUncheckedCreateWithoutOwnerInput> | GameServerCreateWithoutOwnerInput[] | GameServerUncheckedCreateWithoutOwnerInput[]
     connectOrCreate?: GameServerCreateOrConnectWithoutOwnerInput | GameServerCreateOrConnectWithoutOwnerInput[]
@@ -28195,6 +38259,34 @@ export namespace Prisma {
     connectOrCreate?: OrderCreateOrConnectWithoutUserInput | OrderCreateOrConnectWithoutUserInput[]
     createMany?: OrderCreateManyUserInputEnvelope
     connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+  }
+
+  export type SupportTicketUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput> | SupportTicketCreateWithoutUserInput[] | SupportTicketUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutUserInput | SupportTicketCreateOrConnectWithoutUserInput[]
+    createMany?: SupportTicketCreateManyUserInputEnvelope
+    connect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+  }
+
+  export type TicketCommentUncheckedCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<TicketCommentCreateWithoutAuthorInput, TicketCommentUncheckedCreateWithoutAuthorInput> | TicketCommentCreateWithoutAuthorInput[] | TicketCommentUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: TicketCommentCreateOrConnectWithoutAuthorInput | TicketCommentCreateOrConnectWithoutAuthorInput[]
+    createMany?: TicketCommentCreateManyAuthorInputEnvelope
+    connect?: TicketCommentWhereUniqueInput | TicketCommentWhereUniqueInput[]
+  }
+
+  export type SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput = {
+    create?: XOR<SupportTicketCreateWithoutAssignedToInput, SupportTicketUncheckedCreateWithoutAssignedToInput> | SupportTicketCreateWithoutAssignedToInput[] | SupportTicketUncheckedCreateWithoutAssignedToInput[]
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutAssignedToInput | SupportTicketCreateOrConnectWithoutAssignedToInput[]
+    createMany?: SupportTicketCreateManyAssignedToInputEnvelope
+    connect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+  }
+
+  export type KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<KnowledgeBaseArticleCreateWithoutAuthorInput, KnowledgeBaseArticleUncheckedCreateWithoutAuthorInput> | KnowledgeBaseArticleCreateWithoutAuthorInput[] | KnowledgeBaseArticleUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: KnowledgeBaseArticleCreateOrConnectWithoutAuthorInput | KnowledgeBaseArticleCreateOrConnectWithoutAuthorInput[]
+    createMany?: KnowledgeBaseArticleCreateManyAuthorInputEnvelope
+    connect?: KnowledgeBaseArticleWhereUniqueInput | KnowledgeBaseArticleWhereUniqueInput[]
   }
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
@@ -28321,6 +38413,62 @@ export namespace Prisma {
     deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
   }
 
+  export type SupportTicketUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput> | SupportTicketCreateWithoutUserInput[] | SupportTicketUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutUserInput | SupportTicketCreateOrConnectWithoutUserInput[]
+    upsert?: SupportTicketUpsertWithWhereUniqueWithoutUserInput | SupportTicketUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SupportTicketCreateManyUserInputEnvelope
+    set?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    disconnect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    delete?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    connect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    update?: SupportTicketUpdateWithWhereUniqueWithoutUserInput | SupportTicketUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SupportTicketUpdateManyWithWhereWithoutUserInput | SupportTicketUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SupportTicketScalarWhereInput | SupportTicketScalarWhereInput[]
+  }
+
+  export type TicketCommentUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<TicketCommentCreateWithoutAuthorInput, TicketCommentUncheckedCreateWithoutAuthorInput> | TicketCommentCreateWithoutAuthorInput[] | TicketCommentUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: TicketCommentCreateOrConnectWithoutAuthorInput | TicketCommentCreateOrConnectWithoutAuthorInput[]
+    upsert?: TicketCommentUpsertWithWhereUniqueWithoutAuthorInput | TicketCommentUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: TicketCommentCreateManyAuthorInputEnvelope
+    set?: TicketCommentWhereUniqueInput | TicketCommentWhereUniqueInput[]
+    disconnect?: TicketCommentWhereUniqueInput | TicketCommentWhereUniqueInput[]
+    delete?: TicketCommentWhereUniqueInput | TicketCommentWhereUniqueInput[]
+    connect?: TicketCommentWhereUniqueInput | TicketCommentWhereUniqueInput[]
+    update?: TicketCommentUpdateWithWhereUniqueWithoutAuthorInput | TicketCommentUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: TicketCommentUpdateManyWithWhereWithoutAuthorInput | TicketCommentUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: TicketCommentScalarWhereInput | TicketCommentScalarWhereInput[]
+  }
+
+  export type SupportTicketUpdateManyWithoutAssignedToNestedInput = {
+    create?: XOR<SupportTicketCreateWithoutAssignedToInput, SupportTicketUncheckedCreateWithoutAssignedToInput> | SupportTicketCreateWithoutAssignedToInput[] | SupportTicketUncheckedCreateWithoutAssignedToInput[]
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutAssignedToInput | SupportTicketCreateOrConnectWithoutAssignedToInput[]
+    upsert?: SupportTicketUpsertWithWhereUniqueWithoutAssignedToInput | SupportTicketUpsertWithWhereUniqueWithoutAssignedToInput[]
+    createMany?: SupportTicketCreateManyAssignedToInputEnvelope
+    set?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    disconnect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    delete?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    connect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    update?: SupportTicketUpdateWithWhereUniqueWithoutAssignedToInput | SupportTicketUpdateWithWhereUniqueWithoutAssignedToInput[]
+    updateMany?: SupportTicketUpdateManyWithWhereWithoutAssignedToInput | SupportTicketUpdateManyWithWhereWithoutAssignedToInput[]
+    deleteMany?: SupportTicketScalarWhereInput | SupportTicketScalarWhereInput[]
+  }
+
+  export type KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<KnowledgeBaseArticleCreateWithoutAuthorInput, KnowledgeBaseArticleUncheckedCreateWithoutAuthorInput> | KnowledgeBaseArticleCreateWithoutAuthorInput[] | KnowledgeBaseArticleUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: KnowledgeBaseArticleCreateOrConnectWithoutAuthorInput | KnowledgeBaseArticleCreateOrConnectWithoutAuthorInput[]
+    upsert?: KnowledgeBaseArticleUpsertWithWhereUniqueWithoutAuthorInput | KnowledgeBaseArticleUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: KnowledgeBaseArticleCreateManyAuthorInputEnvelope
+    set?: KnowledgeBaseArticleWhereUniqueInput | KnowledgeBaseArticleWhereUniqueInput[]
+    disconnect?: KnowledgeBaseArticleWhereUniqueInput | KnowledgeBaseArticleWhereUniqueInput[]
+    delete?: KnowledgeBaseArticleWhereUniqueInput | KnowledgeBaseArticleWhereUniqueInput[]
+    connect?: KnowledgeBaseArticleWhereUniqueInput | KnowledgeBaseArticleWhereUniqueInput[]
+    update?: KnowledgeBaseArticleUpdateWithWhereUniqueWithoutAuthorInput | KnowledgeBaseArticleUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: KnowledgeBaseArticleUpdateManyWithWhereWithoutAuthorInput | KnowledgeBaseArticleUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: KnowledgeBaseArticleScalarWhereInput | KnowledgeBaseArticleScalarWhereInput[]
+  }
+
   export type GameServerUncheckedUpdateManyWithoutOwnerNestedInput = {
     create?: XOR<GameServerCreateWithoutOwnerInput, GameServerUncheckedCreateWithoutOwnerInput> | GameServerCreateWithoutOwnerInput[] | GameServerUncheckedCreateWithoutOwnerInput[]
     connectOrCreate?: GameServerCreateOrConnectWithoutOwnerInput | GameServerCreateOrConnectWithoutOwnerInput[]
@@ -28417,6 +38565,62 @@ export namespace Prisma {
     update?: OrderUpdateWithWhereUniqueWithoutUserInput | OrderUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: OrderUpdateManyWithWhereWithoutUserInput | OrderUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
+  }
+
+  export type SupportTicketUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput> | SupportTicketCreateWithoutUserInput[] | SupportTicketUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutUserInput | SupportTicketCreateOrConnectWithoutUserInput[]
+    upsert?: SupportTicketUpsertWithWhereUniqueWithoutUserInput | SupportTicketUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SupportTicketCreateManyUserInputEnvelope
+    set?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    disconnect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    delete?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    connect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    update?: SupportTicketUpdateWithWhereUniqueWithoutUserInput | SupportTicketUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SupportTicketUpdateManyWithWhereWithoutUserInput | SupportTicketUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SupportTicketScalarWhereInput | SupportTicketScalarWhereInput[]
+  }
+
+  export type TicketCommentUncheckedUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<TicketCommentCreateWithoutAuthorInput, TicketCommentUncheckedCreateWithoutAuthorInput> | TicketCommentCreateWithoutAuthorInput[] | TicketCommentUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: TicketCommentCreateOrConnectWithoutAuthorInput | TicketCommentCreateOrConnectWithoutAuthorInput[]
+    upsert?: TicketCommentUpsertWithWhereUniqueWithoutAuthorInput | TicketCommentUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: TicketCommentCreateManyAuthorInputEnvelope
+    set?: TicketCommentWhereUniqueInput | TicketCommentWhereUniqueInput[]
+    disconnect?: TicketCommentWhereUniqueInput | TicketCommentWhereUniqueInput[]
+    delete?: TicketCommentWhereUniqueInput | TicketCommentWhereUniqueInput[]
+    connect?: TicketCommentWhereUniqueInput | TicketCommentWhereUniqueInput[]
+    update?: TicketCommentUpdateWithWhereUniqueWithoutAuthorInput | TicketCommentUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: TicketCommentUpdateManyWithWhereWithoutAuthorInput | TicketCommentUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: TicketCommentScalarWhereInput | TicketCommentScalarWhereInput[]
+  }
+
+  export type SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput = {
+    create?: XOR<SupportTicketCreateWithoutAssignedToInput, SupportTicketUncheckedCreateWithoutAssignedToInput> | SupportTicketCreateWithoutAssignedToInput[] | SupportTicketUncheckedCreateWithoutAssignedToInput[]
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutAssignedToInput | SupportTicketCreateOrConnectWithoutAssignedToInput[]
+    upsert?: SupportTicketUpsertWithWhereUniqueWithoutAssignedToInput | SupportTicketUpsertWithWhereUniqueWithoutAssignedToInput[]
+    createMany?: SupportTicketCreateManyAssignedToInputEnvelope
+    set?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    disconnect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    delete?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    connect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    update?: SupportTicketUpdateWithWhereUniqueWithoutAssignedToInput | SupportTicketUpdateWithWhereUniqueWithoutAssignedToInput[]
+    updateMany?: SupportTicketUpdateManyWithWhereWithoutAssignedToInput | SupportTicketUpdateManyWithWhereWithoutAssignedToInput[]
+    deleteMany?: SupportTicketScalarWhereInput | SupportTicketScalarWhereInput[]
+  }
+
+  export type KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<KnowledgeBaseArticleCreateWithoutAuthorInput, KnowledgeBaseArticleUncheckedCreateWithoutAuthorInput> | KnowledgeBaseArticleCreateWithoutAuthorInput[] | KnowledgeBaseArticleUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: KnowledgeBaseArticleCreateOrConnectWithoutAuthorInput | KnowledgeBaseArticleCreateOrConnectWithoutAuthorInput[]
+    upsert?: KnowledgeBaseArticleUpsertWithWhereUniqueWithoutAuthorInput | KnowledgeBaseArticleUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: KnowledgeBaseArticleCreateManyAuthorInputEnvelope
+    set?: KnowledgeBaseArticleWhereUniqueInput | KnowledgeBaseArticleWhereUniqueInput[]
+    disconnect?: KnowledgeBaseArticleWhereUniqueInput | KnowledgeBaseArticleWhereUniqueInput[]
+    delete?: KnowledgeBaseArticleWhereUniqueInput | KnowledgeBaseArticleWhereUniqueInput[]
+    connect?: KnowledgeBaseArticleWhereUniqueInput | KnowledgeBaseArticleWhereUniqueInput[]
+    update?: KnowledgeBaseArticleUpdateWithWhereUniqueWithoutAuthorInput | KnowledgeBaseArticleUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: KnowledgeBaseArticleUpdateManyWithWhereWithoutAuthorInput | KnowledgeBaseArticleUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: KnowledgeBaseArticleScalarWhereInput | KnowledgeBaseArticleScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutAuditLogsInput = {
@@ -29535,10 +39739,311 @@ export namespace Prisma {
     update?: XOR<XOR<GameServerUpdateToOneWithWhereWithoutOrdersInput, GameServerUpdateWithoutOrdersInput>, GameServerUncheckedUpdateWithoutOrdersInput>
   }
 
+  export type UserCreateNestedOneWithoutAssignedTicketsInput = {
+    create?: XOR<UserCreateWithoutAssignedTicketsInput, UserUncheckedCreateWithoutAssignedTicketsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAssignedTicketsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutSupportTicketsInput = {
+    create?: XOR<UserCreateWithoutSupportTicketsInput, UserUncheckedCreateWithoutSupportTicketsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSupportTicketsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type TicketCommentCreateNestedManyWithoutTicketInput = {
+    create?: XOR<TicketCommentCreateWithoutTicketInput, TicketCommentUncheckedCreateWithoutTicketInput> | TicketCommentCreateWithoutTicketInput[] | TicketCommentUncheckedCreateWithoutTicketInput[]
+    connectOrCreate?: TicketCommentCreateOrConnectWithoutTicketInput | TicketCommentCreateOrConnectWithoutTicketInput[]
+    createMany?: TicketCommentCreateManyTicketInputEnvelope
+    connect?: TicketCommentWhereUniqueInput | TicketCommentWhereUniqueInput[]
+  }
+
+  export type TicketCommentUncheckedCreateNestedManyWithoutTicketInput = {
+    create?: XOR<TicketCommentCreateWithoutTicketInput, TicketCommentUncheckedCreateWithoutTicketInput> | TicketCommentCreateWithoutTicketInput[] | TicketCommentUncheckedCreateWithoutTicketInput[]
+    connectOrCreate?: TicketCommentCreateOrConnectWithoutTicketInput | TicketCommentCreateOrConnectWithoutTicketInput[]
+    createMany?: TicketCommentCreateManyTicketInputEnvelope
+    connect?: TicketCommentWhereUniqueInput | TicketCommentWhereUniqueInput[]
+  }
+
+  export type EnumTicketPriorityFieldUpdateOperationsInput = {
+    set?: $Enums.TicketPriority
+  }
+
+  export type EnumTicketStatusFieldUpdateOperationsInput = {
+    set?: $Enums.TicketStatus
+  }
+
+  export type UserUpdateOneWithoutAssignedTicketsNestedInput = {
+    create?: XOR<UserCreateWithoutAssignedTicketsInput, UserUncheckedCreateWithoutAssignedTicketsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAssignedTicketsInput
+    upsert?: UserUpsertWithoutAssignedTicketsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAssignedTicketsInput, UserUpdateWithoutAssignedTicketsInput>, UserUncheckedUpdateWithoutAssignedTicketsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutSupportTicketsNestedInput = {
+    create?: XOR<UserCreateWithoutSupportTicketsInput, UserUncheckedCreateWithoutSupportTicketsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSupportTicketsInput
+    upsert?: UserUpsertWithoutSupportTicketsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSupportTicketsInput, UserUpdateWithoutSupportTicketsInput>, UserUncheckedUpdateWithoutSupportTicketsInput>
+  }
+
+  export type TicketCommentUpdateManyWithoutTicketNestedInput = {
+    create?: XOR<TicketCommentCreateWithoutTicketInput, TicketCommentUncheckedCreateWithoutTicketInput> | TicketCommentCreateWithoutTicketInput[] | TicketCommentUncheckedCreateWithoutTicketInput[]
+    connectOrCreate?: TicketCommentCreateOrConnectWithoutTicketInput | TicketCommentCreateOrConnectWithoutTicketInput[]
+    upsert?: TicketCommentUpsertWithWhereUniqueWithoutTicketInput | TicketCommentUpsertWithWhereUniqueWithoutTicketInput[]
+    createMany?: TicketCommentCreateManyTicketInputEnvelope
+    set?: TicketCommentWhereUniqueInput | TicketCommentWhereUniqueInput[]
+    disconnect?: TicketCommentWhereUniqueInput | TicketCommentWhereUniqueInput[]
+    delete?: TicketCommentWhereUniqueInput | TicketCommentWhereUniqueInput[]
+    connect?: TicketCommentWhereUniqueInput | TicketCommentWhereUniqueInput[]
+    update?: TicketCommentUpdateWithWhereUniqueWithoutTicketInput | TicketCommentUpdateWithWhereUniqueWithoutTicketInput[]
+    updateMany?: TicketCommentUpdateManyWithWhereWithoutTicketInput | TicketCommentUpdateManyWithWhereWithoutTicketInput[]
+    deleteMany?: TicketCommentScalarWhereInput | TicketCommentScalarWhereInput[]
+  }
+
+  export type TicketCommentUncheckedUpdateManyWithoutTicketNestedInput = {
+    create?: XOR<TicketCommentCreateWithoutTicketInput, TicketCommentUncheckedCreateWithoutTicketInput> | TicketCommentCreateWithoutTicketInput[] | TicketCommentUncheckedCreateWithoutTicketInput[]
+    connectOrCreate?: TicketCommentCreateOrConnectWithoutTicketInput | TicketCommentCreateOrConnectWithoutTicketInput[]
+    upsert?: TicketCommentUpsertWithWhereUniqueWithoutTicketInput | TicketCommentUpsertWithWhereUniqueWithoutTicketInput[]
+    createMany?: TicketCommentCreateManyTicketInputEnvelope
+    set?: TicketCommentWhereUniqueInput | TicketCommentWhereUniqueInput[]
+    disconnect?: TicketCommentWhereUniqueInput | TicketCommentWhereUniqueInput[]
+    delete?: TicketCommentWhereUniqueInput | TicketCommentWhereUniqueInput[]
+    connect?: TicketCommentWhereUniqueInput | TicketCommentWhereUniqueInput[]
+    update?: TicketCommentUpdateWithWhereUniqueWithoutTicketInput | TicketCommentUpdateWithWhereUniqueWithoutTicketInput[]
+    updateMany?: TicketCommentUpdateManyWithWhereWithoutTicketInput | TicketCommentUpdateManyWithWhereWithoutTicketInput[]
+    deleteMany?: TicketCommentScalarWhereInput | TicketCommentScalarWhereInput[]
+  }
+
+  export type SupportTicketCreateNestedOneWithoutCommentsInput = {
+    create?: XOR<SupportTicketCreateWithoutCommentsInput, SupportTicketUncheckedCreateWithoutCommentsInput>
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutCommentsInput
+    connect?: SupportTicketWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutTicketCommentsInput = {
+    create?: XOR<UserCreateWithoutTicketCommentsInput, UserUncheckedCreateWithoutTicketCommentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTicketCommentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type SupportTicketUpdateOneRequiredWithoutCommentsNestedInput = {
+    create?: XOR<SupportTicketCreateWithoutCommentsInput, SupportTicketUncheckedCreateWithoutCommentsInput>
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutCommentsInput
+    upsert?: SupportTicketUpsertWithoutCommentsInput
+    connect?: SupportTicketWhereUniqueInput
+    update?: XOR<XOR<SupportTicketUpdateToOneWithWhereWithoutCommentsInput, SupportTicketUpdateWithoutCommentsInput>, SupportTicketUncheckedUpdateWithoutCommentsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutTicketCommentsNestedInput = {
+    create?: XOR<UserCreateWithoutTicketCommentsInput, UserUncheckedCreateWithoutTicketCommentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTicketCommentsInput
+    upsert?: UserUpsertWithoutTicketCommentsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTicketCommentsInput, UserUpdateWithoutTicketCommentsInput>, UserUncheckedUpdateWithoutTicketCommentsInput>
+  }
+
+  export type KnowledgeBaseArticleCreatetagsInput = {
+    set: string[]
+  }
+
+  export type KnowledgeBaseCategoryCreateNestedOneWithoutArticlesInput = {
+    create?: XOR<KnowledgeBaseCategoryCreateWithoutArticlesInput, KnowledgeBaseCategoryUncheckedCreateWithoutArticlesInput>
+    connectOrCreate?: KnowledgeBaseCategoryCreateOrConnectWithoutArticlesInput
+    connect?: KnowledgeBaseCategoryWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutKnowledgeBaseArticlesInput = {
+    create?: XOR<UserCreateWithoutKnowledgeBaseArticlesInput, UserUncheckedCreateWithoutKnowledgeBaseArticlesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutKnowledgeBaseArticlesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ArticleVersionCreateNestedManyWithoutArticleInput = {
+    create?: XOR<ArticleVersionCreateWithoutArticleInput, ArticleVersionUncheckedCreateWithoutArticleInput> | ArticleVersionCreateWithoutArticleInput[] | ArticleVersionUncheckedCreateWithoutArticleInput[]
+    connectOrCreate?: ArticleVersionCreateOrConnectWithoutArticleInput | ArticleVersionCreateOrConnectWithoutArticleInput[]
+    createMany?: ArticleVersionCreateManyArticleInputEnvelope
+    connect?: ArticleVersionWhereUniqueInput | ArticleVersionWhereUniqueInput[]
+  }
+
+  export type ArticleVersionUncheckedCreateNestedManyWithoutArticleInput = {
+    create?: XOR<ArticleVersionCreateWithoutArticleInput, ArticleVersionUncheckedCreateWithoutArticleInput> | ArticleVersionCreateWithoutArticleInput[] | ArticleVersionUncheckedCreateWithoutArticleInput[]
+    connectOrCreate?: ArticleVersionCreateOrConnectWithoutArticleInput | ArticleVersionCreateOrConnectWithoutArticleInput[]
+    createMany?: ArticleVersionCreateManyArticleInputEnvelope
+    connect?: ArticleVersionWhereUniqueInput | ArticleVersionWhereUniqueInput[]
+  }
+
+  export type KnowledgeBaseArticleUpdatetagsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type KnowledgeBaseCategoryUpdateOneRequiredWithoutArticlesNestedInput = {
+    create?: XOR<KnowledgeBaseCategoryCreateWithoutArticlesInput, KnowledgeBaseCategoryUncheckedCreateWithoutArticlesInput>
+    connectOrCreate?: KnowledgeBaseCategoryCreateOrConnectWithoutArticlesInput
+    upsert?: KnowledgeBaseCategoryUpsertWithoutArticlesInput
+    connect?: KnowledgeBaseCategoryWhereUniqueInput
+    update?: XOR<XOR<KnowledgeBaseCategoryUpdateToOneWithWhereWithoutArticlesInput, KnowledgeBaseCategoryUpdateWithoutArticlesInput>, KnowledgeBaseCategoryUncheckedUpdateWithoutArticlesInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutKnowledgeBaseArticlesNestedInput = {
+    create?: XOR<UserCreateWithoutKnowledgeBaseArticlesInput, UserUncheckedCreateWithoutKnowledgeBaseArticlesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutKnowledgeBaseArticlesInput
+    upsert?: UserUpsertWithoutKnowledgeBaseArticlesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutKnowledgeBaseArticlesInput, UserUpdateWithoutKnowledgeBaseArticlesInput>, UserUncheckedUpdateWithoutKnowledgeBaseArticlesInput>
+  }
+
+  export type ArticleVersionUpdateManyWithoutArticleNestedInput = {
+    create?: XOR<ArticleVersionCreateWithoutArticleInput, ArticleVersionUncheckedCreateWithoutArticleInput> | ArticleVersionCreateWithoutArticleInput[] | ArticleVersionUncheckedCreateWithoutArticleInput[]
+    connectOrCreate?: ArticleVersionCreateOrConnectWithoutArticleInput | ArticleVersionCreateOrConnectWithoutArticleInput[]
+    upsert?: ArticleVersionUpsertWithWhereUniqueWithoutArticleInput | ArticleVersionUpsertWithWhereUniqueWithoutArticleInput[]
+    createMany?: ArticleVersionCreateManyArticleInputEnvelope
+    set?: ArticleVersionWhereUniqueInput | ArticleVersionWhereUniqueInput[]
+    disconnect?: ArticleVersionWhereUniqueInput | ArticleVersionWhereUniqueInput[]
+    delete?: ArticleVersionWhereUniqueInput | ArticleVersionWhereUniqueInput[]
+    connect?: ArticleVersionWhereUniqueInput | ArticleVersionWhereUniqueInput[]
+    update?: ArticleVersionUpdateWithWhereUniqueWithoutArticleInput | ArticleVersionUpdateWithWhereUniqueWithoutArticleInput[]
+    updateMany?: ArticleVersionUpdateManyWithWhereWithoutArticleInput | ArticleVersionUpdateManyWithWhereWithoutArticleInput[]
+    deleteMany?: ArticleVersionScalarWhereInput | ArticleVersionScalarWhereInput[]
+  }
+
+  export type ArticleVersionUncheckedUpdateManyWithoutArticleNestedInput = {
+    create?: XOR<ArticleVersionCreateWithoutArticleInput, ArticleVersionUncheckedCreateWithoutArticleInput> | ArticleVersionCreateWithoutArticleInput[] | ArticleVersionUncheckedCreateWithoutArticleInput[]
+    connectOrCreate?: ArticleVersionCreateOrConnectWithoutArticleInput | ArticleVersionCreateOrConnectWithoutArticleInput[]
+    upsert?: ArticleVersionUpsertWithWhereUniqueWithoutArticleInput | ArticleVersionUpsertWithWhereUniqueWithoutArticleInput[]
+    createMany?: ArticleVersionCreateManyArticleInputEnvelope
+    set?: ArticleVersionWhereUniqueInput | ArticleVersionWhereUniqueInput[]
+    disconnect?: ArticleVersionWhereUniqueInput | ArticleVersionWhereUniqueInput[]
+    delete?: ArticleVersionWhereUniqueInput | ArticleVersionWhereUniqueInput[]
+    connect?: ArticleVersionWhereUniqueInput | ArticleVersionWhereUniqueInput[]
+    update?: ArticleVersionUpdateWithWhereUniqueWithoutArticleInput | ArticleVersionUpdateWithWhereUniqueWithoutArticleInput[]
+    updateMany?: ArticleVersionUpdateManyWithWhereWithoutArticleInput | ArticleVersionUpdateManyWithWhereWithoutArticleInput[]
+    deleteMany?: ArticleVersionScalarWhereInput | ArticleVersionScalarWhereInput[]
+  }
+
+  export type KnowledgeBaseCategoryCreateNestedOneWithoutChildrenInput = {
+    create?: XOR<KnowledgeBaseCategoryCreateWithoutChildrenInput, KnowledgeBaseCategoryUncheckedCreateWithoutChildrenInput>
+    connectOrCreate?: KnowledgeBaseCategoryCreateOrConnectWithoutChildrenInput
+    connect?: KnowledgeBaseCategoryWhereUniqueInput
+  }
+
+  export type KnowledgeBaseCategoryCreateNestedManyWithoutParentInput = {
+    create?: XOR<KnowledgeBaseCategoryCreateWithoutParentInput, KnowledgeBaseCategoryUncheckedCreateWithoutParentInput> | KnowledgeBaseCategoryCreateWithoutParentInput[] | KnowledgeBaseCategoryUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: KnowledgeBaseCategoryCreateOrConnectWithoutParentInput | KnowledgeBaseCategoryCreateOrConnectWithoutParentInput[]
+    createMany?: KnowledgeBaseCategoryCreateManyParentInputEnvelope
+    connect?: KnowledgeBaseCategoryWhereUniqueInput | KnowledgeBaseCategoryWhereUniqueInput[]
+  }
+
+  export type KnowledgeBaseArticleCreateNestedManyWithoutCategoryInput = {
+    create?: XOR<KnowledgeBaseArticleCreateWithoutCategoryInput, KnowledgeBaseArticleUncheckedCreateWithoutCategoryInput> | KnowledgeBaseArticleCreateWithoutCategoryInput[] | KnowledgeBaseArticleUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: KnowledgeBaseArticleCreateOrConnectWithoutCategoryInput | KnowledgeBaseArticleCreateOrConnectWithoutCategoryInput[]
+    createMany?: KnowledgeBaseArticleCreateManyCategoryInputEnvelope
+    connect?: KnowledgeBaseArticleWhereUniqueInput | KnowledgeBaseArticleWhereUniqueInput[]
+  }
+
+  export type KnowledgeBaseCategoryUncheckedCreateNestedManyWithoutParentInput = {
+    create?: XOR<KnowledgeBaseCategoryCreateWithoutParentInput, KnowledgeBaseCategoryUncheckedCreateWithoutParentInput> | KnowledgeBaseCategoryCreateWithoutParentInput[] | KnowledgeBaseCategoryUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: KnowledgeBaseCategoryCreateOrConnectWithoutParentInput | KnowledgeBaseCategoryCreateOrConnectWithoutParentInput[]
+    createMany?: KnowledgeBaseCategoryCreateManyParentInputEnvelope
+    connect?: KnowledgeBaseCategoryWhereUniqueInput | KnowledgeBaseCategoryWhereUniqueInput[]
+  }
+
+  export type KnowledgeBaseArticleUncheckedCreateNestedManyWithoutCategoryInput = {
+    create?: XOR<KnowledgeBaseArticleCreateWithoutCategoryInput, KnowledgeBaseArticleUncheckedCreateWithoutCategoryInput> | KnowledgeBaseArticleCreateWithoutCategoryInput[] | KnowledgeBaseArticleUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: KnowledgeBaseArticleCreateOrConnectWithoutCategoryInput | KnowledgeBaseArticleCreateOrConnectWithoutCategoryInput[]
+    createMany?: KnowledgeBaseArticleCreateManyCategoryInputEnvelope
+    connect?: KnowledgeBaseArticleWhereUniqueInput | KnowledgeBaseArticleWhereUniqueInput[]
+  }
+
+  export type KnowledgeBaseCategoryUpdateOneWithoutChildrenNestedInput = {
+    create?: XOR<KnowledgeBaseCategoryCreateWithoutChildrenInput, KnowledgeBaseCategoryUncheckedCreateWithoutChildrenInput>
+    connectOrCreate?: KnowledgeBaseCategoryCreateOrConnectWithoutChildrenInput
+    upsert?: KnowledgeBaseCategoryUpsertWithoutChildrenInput
+    disconnect?: KnowledgeBaseCategoryWhereInput | boolean
+    delete?: KnowledgeBaseCategoryWhereInput | boolean
+    connect?: KnowledgeBaseCategoryWhereUniqueInput
+    update?: XOR<XOR<KnowledgeBaseCategoryUpdateToOneWithWhereWithoutChildrenInput, KnowledgeBaseCategoryUpdateWithoutChildrenInput>, KnowledgeBaseCategoryUncheckedUpdateWithoutChildrenInput>
+  }
+
+  export type KnowledgeBaseCategoryUpdateManyWithoutParentNestedInput = {
+    create?: XOR<KnowledgeBaseCategoryCreateWithoutParentInput, KnowledgeBaseCategoryUncheckedCreateWithoutParentInput> | KnowledgeBaseCategoryCreateWithoutParentInput[] | KnowledgeBaseCategoryUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: KnowledgeBaseCategoryCreateOrConnectWithoutParentInput | KnowledgeBaseCategoryCreateOrConnectWithoutParentInput[]
+    upsert?: KnowledgeBaseCategoryUpsertWithWhereUniqueWithoutParentInput | KnowledgeBaseCategoryUpsertWithWhereUniqueWithoutParentInput[]
+    createMany?: KnowledgeBaseCategoryCreateManyParentInputEnvelope
+    set?: KnowledgeBaseCategoryWhereUniqueInput | KnowledgeBaseCategoryWhereUniqueInput[]
+    disconnect?: KnowledgeBaseCategoryWhereUniqueInput | KnowledgeBaseCategoryWhereUniqueInput[]
+    delete?: KnowledgeBaseCategoryWhereUniqueInput | KnowledgeBaseCategoryWhereUniqueInput[]
+    connect?: KnowledgeBaseCategoryWhereUniqueInput | KnowledgeBaseCategoryWhereUniqueInput[]
+    update?: KnowledgeBaseCategoryUpdateWithWhereUniqueWithoutParentInput | KnowledgeBaseCategoryUpdateWithWhereUniqueWithoutParentInput[]
+    updateMany?: KnowledgeBaseCategoryUpdateManyWithWhereWithoutParentInput | KnowledgeBaseCategoryUpdateManyWithWhereWithoutParentInput[]
+    deleteMany?: KnowledgeBaseCategoryScalarWhereInput | KnowledgeBaseCategoryScalarWhereInput[]
+  }
+
+  export type KnowledgeBaseArticleUpdateManyWithoutCategoryNestedInput = {
+    create?: XOR<KnowledgeBaseArticleCreateWithoutCategoryInput, KnowledgeBaseArticleUncheckedCreateWithoutCategoryInput> | KnowledgeBaseArticleCreateWithoutCategoryInput[] | KnowledgeBaseArticleUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: KnowledgeBaseArticleCreateOrConnectWithoutCategoryInput | KnowledgeBaseArticleCreateOrConnectWithoutCategoryInput[]
+    upsert?: KnowledgeBaseArticleUpsertWithWhereUniqueWithoutCategoryInput | KnowledgeBaseArticleUpsertWithWhereUniqueWithoutCategoryInput[]
+    createMany?: KnowledgeBaseArticleCreateManyCategoryInputEnvelope
+    set?: KnowledgeBaseArticleWhereUniqueInput | KnowledgeBaseArticleWhereUniqueInput[]
+    disconnect?: KnowledgeBaseArticleWhereUniqueInput | KnowledgeBaseArticleWhereUniqueInput[]
+    delete?: KnowledgeBaseArticleWhereUniqueInput | KnowledgeBaseArticleWhereUniqueInput[]
+    connect?: KnowledgeBaseArticleWhereUniqueInput | KnowledgeBaseArticleWhereUniqueInput[]
+    update?: KnowledgeBaseArticleUpdateWithWhereUniqueWithoutCategoryInput | KnowledgeBaseArticleUpdateWithWhereUniqueWithoutCategoryInput[]
+    updateMany?: KnowledgeBaseArticleUpdateManyWithWhereWithoutCategoryInput | KnowledgeBaseArticleUpdateManyWithWhereWithoutCategoryInput[]
+    deleteMany?: KnowledgeBaseArticleScalarWhereInput | KnowledgeBaseArticleScalarWhereInput[]
+  }
+
+  export type KnowledgeBaseCategoryUncheckedUpdateManyWithoutParentNestedInput = {
+    create?: XOR<KnowledgeBaseCategoryCreateWithoutParentInput, KnowledgeBaseCategoryUncheckedCreateWithoutParentInput> | KnowledgeBaseCategoryCreateWithoutParentInput[] | KnowledgeBaseCategoryUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: KnowledgeBaseCategoryCreateOrConnectWithoutParentInput | KnowledgeBaseCategoryCreateOrConnectWithoutParentInput[]
+    upsert?: KnowledgeBaseCategoryUpsertWithWhereUniqueWithoutParentInput | KnowledgeBaseCategoryUpsertWithWhereUniqueWithoutParentInput[]
+    createMany?: KnowledgeBaseCategoryCreateManyParentInputEnvelope
+    set?: KnowledgeBaseCategoryWhereUniqueInput | KnowledgeBaseCategoryWhereUniqueInput[]
+    disconnect?: KnowledgeBaseCategoryWhereUniqueInput | KnowledgeBaseCategoryWhereUniqueInput[]
+    delete?: KnowledgeBaseCategoryWhereUniqueInput | KnowledgeBaseCategoryWhereUniqueInput[]
+    connect?: KnowledgeBaseCategoryWhereUniqueInput | KnowledgeBaseCategoryWhereUniqueInput[]
+    update?: KnowledgeBaseCategoryUpdateWithWhereUniqueWithoutParentInput | KnowledgeBaseCategoryUpdateWithWhereUniqueWithoutParentInput[]
+    updateMany?: KnowledgeBaseCategoryUpdateManyWithWhereWithoutParentInput | KnowledgeBaseCategoryUpdateManyWithWhereWithoutParentInput[]
+    deleteMany?: KnowledgeBaseCategoryScalarWhereInput | KnowledgeBaseCategoryScalarWhereInput[]
+  }
+
+  export type KnowledgeBaseArticleUncheckedUpdateManyWithoutCategoryNestedInput = {
+    create?: XOR<KnowledgeBaseArticleCreateWithoutCategoryInput, KnowledgeBaseArticleUncheckedCreateWithoutCategoryInput> | KnowledgeBaseArticleCreateWithoutCategoryInput[] | KnowledgeBaseArticleUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: KnowledgeBaseArticleCreateOrConnectWithoutCategoryInput | KnowledgeBaseArticleCreateOrConnectWithoutCategoryInput[]
+    upsert?: KnowledgeBaseArticleUpsertWithWhereUniqueWithoutCategoryInput | KnowledgeBaseArticleUpsertWithWhereUniqueWithoutCategoryInput[]
+    createMany?: KnowledgeBaseArticleCreateManyCategoryInputEnvelope
+    set?: KnowledgeBaseArticleWhereUniqueInput | KnowledgeBaseArticleWhereUniqueInput[]
+    disconnect?: KnowledgeBaseArticleWhereUniqueInput | KnowledgeBaseArticleWhereUniqueInput[]
+    delete?: KnowledgeBaseArticleWhereUniqueInput | KnowledgeBaseArticleWhereUniqueInput[]
+    connect?: KnowledgeBaseArticleWhereUniqueInput | KnowledgeBaseArticleWhereUniqueInput[]
+    update?: KnowledgeBaseArticleUpdateWithWhereUniqueWithoutCategoryInput | KnowledgeBaseArticleUpdateWithWhereUniqueWithoutCategoryInput[]
+    updateMany?: KnowledgeBaseArticleUpdateManyWithWhereWithoutCategoryInput | KnowledgeBaseArticleUpdateManyWithWhereWithoutCategoryInput[]
+    deleteMany?: KnowledgeBaseArticleScalarWhereInput | KnowledgeBaseArticleScalarWhereInput[]
+  }
+
+  export type KnowledgeBaseArticleCreateNestedOneWithoutVersionsInput = {
+    create?: XOR<KnowledgeBaseArticleCreateWithoutVersionsInput, KnowledgeBaseArticleUncheckedCreateWithoutVersionsInput>
+    connectOrCreate?: KnowledgeBaseArticleCreateOrConnectWithoutVersionsInput
+    connect?: KnowledgeBaseArticleWhereUniqueInput
+  }
+
+  export type KnowledgeBaseArticleUpdateOneRequiredWithoutVersionsNestedInput = {
+    create?: XOR<KnowledgeBaseArticleCreateWithoutVersionsInput, KnowledgeBaseArticleUncheckedCreateWithoutVersionsInput>
+    connectOrCreate?: KnowledgeBaseArticleCreateOrConnectWithoutVersionsInput
+    upsert?: KnowledgeBaseArticleUpsertWithoutVersionsInput
+    connect?: KnowledgeBaseArticleWhereUniqueInput
+    update?: XOR<XOR<KnowledgeBaseArticleUpdateToOneWithWhereWithoutVersionsInput, KnowledgeBaseArticleUpdateWithoutVersionsInput>, KnowledgeBaseArticleUncheckedUpdateWithoutVersionsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[]
-    notIn?: string[]
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -29551,15 +40056,15 @@ export namespace Prisma {
 
   export type NestedEnumLicenseStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.LicenseStatus | EnumLicenseStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.LicenseStatus[]
-    notIn?: $Enums.LicenseStatus[]
+    in?: $Enums.LicenseStatus[] | ListEnumLicenseStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LicenseStatus[] | ListEnumLicenseStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumLicenseStatusFilter<$PrismaModel> | $Enums.LicenseStatus
   }
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -29569,8 +40074,8 @@ export namespace Prisma {
 
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -29585,8 +40090,8 @@ export namespace Prisma {
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | null
-    notIn?: Date[] | string[] | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -29596,8 +40101,8 @@ export namespace Prisma {
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[]
-    notIn?: string[]
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -29613,8 +40118,8 @@ export namespace Prisma {
 
   export type NestedEnumLicenseStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.LicenseStatus | EnumLicenseStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.LicenseStatus[]
-    notIn?: $Enums.LicenseStatus[]
+    in?: $Enums.LicenseStatus[] | ListEnumLicenseStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LicenseStatus[] | ListEnumLicenseStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumLicenseStatusWithAggregatesFilter<$PrismaModel> | $Enums.LicenseStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumLicenseStatusFilter<$PrismaModel>
@@ -29623,8 +40128,8 @@ export namespace Prisma {
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -29637,8 +40142,8 @@ export namespace Prisma {
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -29653,8 +40158,8 @@ export namespace Prisma {
 
   export type NestedFloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
@@ -29672,8 +40177,8 @@ export namespace Prisma {
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | null
-    notIn?: Date[] | string[] | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
@@ -29686,8 +40191,8 @@ export namespace Prisma {
 
   export type NestedIntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -29703,31 +40208,31 @@ export namespace Prisma {
 
   export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string
+    path?: string[]
     string_contains?: string | StringFieldRefInput<$PrismaModel>
     string_starts_with?: string | StringFieldRefInput<$PrismaModel>
     string_ends_with?: string | StringFieldRefInput<$PrismaModel>
     array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue
-    lte?: InputJsonValue
-    gt?: InputJsonValue
-    gte?: InputJsonValue
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type NestedEnumUserRoleFilter<$PrismaModel = never> = {
     equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[]
-    notIn?: $Enums.UserRole[]
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
     not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
   }
 
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -29740,8 +40245,8 @@ export namespace Prisma {
 
   export type NestedEnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[]
-    notIn?: $Enums.UserRole[]
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
     not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserRoleFilter<$PrismaModel>
@@ -29750,8 +40255,8 @@ export namespace Prisma {
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     lt?: string | StringFieldRefInput<$PrismaModel>
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
@@ -29767,8 +40272,8 @@ export namespace Prisma {
 
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
@@ -29783,22 +40288,22 @@ export namespace Prisma {
 
   export type NestedEnumDiskTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.DiskType | EnumDiskTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.DiskType[]
-    notIn?: $Enums.DiskType[]
+    in?: $Enums.DiskType[] | ListEnumDiskTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DiskType[] | ListEnumDiskTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumDiskTypeFilter<$PrismaModel> | $Enums.DiskType
   }
 
   export type NestedEnumNodeStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.NodeStatus | EnumNodeStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.NodeStatus[]
-    notIn?: $Enums.NodeStatus[]
+    in?: $Enums.NodeStatus[] | ListEnumNodeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.NodeStatus[] | ListEnumNodeStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumNodeStatusFilter<$PrismaModel> | $Enums.NodeStatus
   }
 
   export type NestedEnumDiskTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.DiskType | EnumDiskTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.DiskType[]
-    notIn?: $Enums.DiskType[]
+    in?: $Enums.DiskType[] | ListEnumDiskTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DiskType[] | ListEnumDiskTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumDiskTypeWithAggregatesFilter<$PrismaModel> | $Enums.DiskType
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumDiskTypeFilter<$PrismaModel>
@@ -29807,8 +40312,8 @@ export namespace Prisma {
 
   export type NestedEnumNodeStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.NodeStatus | EnumNodeStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.NodeStatus[]
-    notIn?: $Enums.NodeStatus[]
+    in?: $Enums.NodeStatus[] | ListEnumNodeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.NodeStatus[] | ListEnumNodeStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumNodeStatusWithAggregatesFilter<$PrismaModel> | $Enums.NodeStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumNodeStatusFilter<$PrismaModel>
@@ -29817,22 +40322,22 @@ export namespace Prisma {
 
   export type NestedEnumTaskTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.TaskType | EnumTaskTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskType[]
-    notIn?: $Enums.TaskType[]
+    in?: $Enums.TaskType[] | ListEnumTaskTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskType[] | ListEnumTaskTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumTaskTypeFilter<$PrismaModel> | $Enums.TaskType
   }
 
   export type NestedEnumTaskStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskStatus[]
-    notIn?: $Enums.TaskStatus[]
+    in?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumTaskStatusFilter<$PrismaModel> | $Enums.TaskStatus
   }
 
   export type NestedEnumTaskTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.TaskType | EnumTaskTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskType[]
-    notIn?: $Enums.TaskType[]
+    in?: $Enums.TaskType[] | ListEnumTaskTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskType[] | ListEnumTaskTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumTaskTypeWithAggregatesFilter<$PrismaModel> | $Enums.TaskType
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTaskTypeFilter<$PrismaModel>
@@ -29841,8 +40346,8 @@ export namespace Prisma {
 
   export type NestedEnumTaskStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskStatus[]
-    notIn?: $Enums.TaskStatus[]
+    in?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumTaskStatusWithAggregatesFilter<$PrismaModel> | $Enums.TaskStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTaskStatusFilter<$PrismaModel>
@@ -29857,38 +40362,38 @@ export namespace Prisma {
 
   export type NestedJsonFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string
+    path?: string[]
     string_contains?: string | StringFieldRefInput<$PrismaModel>
     string_starts_with?: string | StringFieldRefInput<$PrismaModel>
     string_ends_with?: string | StringFieldRefInput<$PrismaModel>
     array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue
-    lte?: InputJsonValue
-    gt?: InputJsonValue
-    gte?: InputJsonValue
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type NestedEnumProtocolFilter<$PrismaModel = never> = {
     equals?: $Enums.Protocol | EnumProtocolFieldRefInput<$PrismaModel>
-    in?: $Enums.Protocol[]
-    notIn?: $Enums.Protocol[]
+    in?: $Enums.Protocol[] | ListEnumProtocolFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Protocol[] | ListEnumProtocolFieldRefInput<$PrismaModel>
     not?: NestedEnumProtocolFilter<$PrismaModel> | $Enums.Protocol
   }
 
   export type NestedEnumPortTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.PortType | EnumPortTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.PortType[]
-    notIn?: $Enums.PortType[]
+    in?: $Enums.PortType[] | ListEnumPortTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PortType[] | ListEnumPortTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumPortTypeFilter<$PrismaModel> | $Enums.PortType
   }
 
   export type NestedEnumProtocolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.Protocol | EnumProtocolFieldRefInput<$PrismaModel>
-    in?: $Enums.Protocol[]
-    notIn?: $Enums.Protocol[]
+    in?: $Enums.Protocol[] | ListEnumProtocolFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Protocol[] | ListEnumProtocolFieldRefInput<$PrismaModel>
     not?: NestedEnumProtocolWithAggregatesFilter<$PrismaModel> | $Enums.Protocol
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumProtocolFilter<$PrismaModel>
@@ -29897,8 +40402,8 @@ export namespace Prisma {
 
   export type NestedEnumPortTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PortType | EnumPortTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.PortType[]
-    notIn?: $Enums.PortType[]
+    in?: $Enums.PortType[] | ListEnumPortTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PortType[] | ListEnumPortTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumPortTypeWithAggregatesFilter<$PrismaModel> | $Enums.PortType
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPortTypeFilter<$PrismaModel>
@@ -29907,22 +40412,22 @@ export namespace Prisma {
 
   export type NestedEnumGameTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.GameType | EnumGameTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.GameType[]
-    notIn?: $Enums.GameType[]
+    in?: $Enums.GameType[] | ListEnumGameTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GameType[] | ListEnumGameTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumGameTypeFilter<$PrismaModel> | $Enums.GameType
   }
 
   export type NestedEnumServerStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ServerStatus | EnumServerStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ServerStatus[]
-    notIn?: $Enums.ServerStatus[]
+    in?: $Enums.ServerStatus[] | ListEnumServerStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ServerStatus[] | ListEnumServerStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumServerStatusFilter<$PrismaModel> | $Enums.ServerStatus
   }
 
   export type NestedEnumGameTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.GameType | EnumGameTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.GameType[]
-    notIn?: $Enums.GameType[]
+    in?: $Enums.GameType[] | ListEnumGameTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GameType[] | ListEnumGameTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumGameTypeWithAggregatesFilter<$PrismaModel> | $Enums.GameType
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumGameTypeFilter<$PrismaModel>
@@ -29931,8 +40436,8 @@ export namespace Prisma {
 
   export type NestedEnumServerStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.ServerStatus | EnumServerStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ServerStatus[]
-    notIn?: $Enums.ServerStatus[]
+    in?: $Enums.ServerStatus[] | ListEnumServerStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ServerStatus[] | ListEnumServerStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumServerStatusWithAggregatesFilter<$PrismaModel> | $Enums.ServerStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumServerStatusFilter<$PrismaModel>
@@ -29941,8 +40446,8 @@ export namespace Prisma {
 
   export type NestedBigIntFilter<$PrismaModel = never> = {
     equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[]
-    notIn?: bigint[] | number[]
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
     lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
@@ -29952,15 +40457,15 @@ export namespace Prisma {
 
   export type NestedEnumBackupLocationFilter<$PrismaModel = never> = {
     equals?: $Enums.BackupLocation | EnumBackupLocationFieldRefInput<$PrismaModel>
-    in?: $Enums.BackupLocation[]
-    notIn?: $Enums.BackupLocation[]
+    in?: $Enums.BackupLocation[] | ListEnumBackupLocationFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BackupLocation[] | ListEnumBackupLocationFieldRefInput<$PrismaModel>
     not?: NestedEnumBackupLocationFilter<$PrismaModel> | $Enums.BackupLocation
   }
 
   export type NestedBigIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    in?: bigint[] | number[]
-    notIn?: bigint[] | number[]
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
     lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
@@ -29975,8 +40480,8 @@ export namespace Prisma {
 
   export type NestedEnumBackupLocationWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.BackupLocation | EnumBackupLocationFieldRefInput<$PrismaModel>
-    in?: $Enums.BackupLocation[]
-    notIn?: $Enums.BackupLocation[]
+    in?: $Enums.BackupLocation[] | ListEnumBackupLocationFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BackupLocation[] | ListEnumBackupLocationFieldRefInput<$PrismaModel>
     not?: NestedEnumBackupLocationWithAggregatesFilter<$PrismaModel> | $Enums.BackupLocation
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumBackupLocationFilter<$PrismaModel>
@@ -29985,8 +40490,8 @@ export namespace Prisma {
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
     lt?: number | IntFieldRefInput<$PrismaModel>
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
@@ -30001,8 +40506,8 @@ export namespace Prisma {
 
   export type NestedFloatNullableFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
     lt?: number | FloatFieldRefInput<$PrismaModel>
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
@@ -30012,22 +40517,22 @@ export namespace Prisma {
 
   export type NestedEnumAlertSeverityFilter<$PrismaModel = never> = {
     equals?: $Enums.AlertSeverity | EnumAlertSeverityFieldRefInput<$PrismaModel>
-    in?: $Enums.AlertSeverity[]
-    notIn?: $Enums.AlertSeverity[]
+    in?: $Enums.AlertSeverity[] | ListEnumAlertSeverityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AlertSeverity[] | ListEnumAlertSeverityFieldRefInput<$PrismaModel>
     not?: NestedEnumAlertSeverityFilter<$PrismaModel> | $Enums.AlertSeverity
   }
 
   export type NestedEnumResourceTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.ResourceType | EnumResourceTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.ResourceType[]
-    notIn?: $Enums.ResourceType[]
+    in?: $Enums.ResourceType[] | ListEnumResourceTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ResourceType[] | ListEnumResourceTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumResourceTypeFilter<$PrismaModel> | $Enums.ResourceType
   }
 
   export type NestedEnumAlertSeverityWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.AlertSeverity | EnumAlertSeverityFieldRefInput<$PrismaModel>
-    in?: $Enums.AlertSeverity[]
-    notIn?: $Enums.AlertSeverity[]
+    in?: $Enums.AlertSeverity[] | ListEnumAlertSeverityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AlertSeverity[] | ListEnumAlertSeverityFieldRefInput<$PrismaModel>
     not?: NestedEnumAlertSeverityWithAggregatesFilter<$PrismaModel> | $Enums.AlertSeverity
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAlertSeverityFilter<$PrismaModel>
@@ -30036,8 +40541,8 @@ export namespace Prisma {
 
   export type NestedEnumResourceTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.ResourceType | EnumResourceTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.ResourceType[]
-    notIn?: $Enums.ResourceType[]
+    in?: $Enums.ResourceType[] | ListEnumResourceTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ResourceType[] | ListEnumResourceTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumResourceTypeWithAggregatesFilter<$PrismaModel> | $Enums.ResourceType
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumResourceTypeFilter<$PrismaModel>
@@ -30046,22 +40551,22 @@ export namespace Prisma {
 
   export type NestedEnumIncidentSeverityFilter<$PrismaModel = never> = {
     equals?: $Enums.IncidentSeverity | EnumIncidentSeverityFieldRefInput<$PrismaModel>
-    in?: $Enums.IncidentSeverity[]
-    notIn?: $Enums.IncidentSeverity[]
+    in?: $Enums.IncidentSeverity[] | ListEnumIncidentSeverityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.IncidentSeverity[] | ListEnumIncidentSeverityFieldRefInput<$PrismaModel>
     not?: NestedEnumIncidentSeverityFilter<$PrismaModel> | $Enums.IncidentSeverity
   }
 
   export type NestedEnumIncidentStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.IncidentStatus | EnumIncidentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.IncidentStatus[]
-    notIn?: $Enums.IncidentStatus[]
+    in?: $Enums.IncidentStatus[] | ListEnumIncidentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.IncidentStatus[] | ListEnumIncidentStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumIncidentStatusFilter<$PrismaModel> | $Enums.IncidentStatus
   }
 
   export type NestedEnumIncidentSeverityWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.IncidentSeverity | EnumIncidentSeverityFieldRefInput<$PrismaModel>
-    in?: $Enums.IncidentSeverity[]
-    notIn?: $Enums.IncidentSeverity[]
+    in?: $Enums.IncidentSeverity[] | ListEnumIncidentSeverityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.IncidentSeverity[] | ListEnumIncidentSeverityFieldRefInput<$PrismaModel>
     not?: NestedEnumIncidentSeverityWithAggregatesFilter<$PrismaModel> | $Enums.IncidentSeverity
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumIncidentSeverityFilter<$PrismaModel>
@@ -30070,8 +40575,8 @@ export namespace Prisma {
 
   export type NestedEnumIncidentStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.IncidentStatus | EnumIncidentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.IncidentStatus[]
-    notIn?: $Enums.IncidentStatus[]
+    in?: $Enums.IncidentStatus[] | ListEnumIncidentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.IncidentStatus[] | ListEnumIncidentStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumIncidentStatusWithAggregatesFilter<$PrismaModel> | $Enums.IncidentStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumIncidentStatusFilter<$PrismaModel>
@@ -30080,15 +40585,15 @@ export namespace Prisma {
 
   export type NestedEnumPlanStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.PlanStatus | EnumPlanStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.PlanStatus[]
-    notIn?: $Enums.PlanStatus[]
+    in?: $Enums.PlanStatus[] | ListEnumPlanStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PlanStatus[] | ListEnumPlanStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumPlanStatusFilter<$PrismaModel> | $Enums.PlanStatus
   }
 
   export type NestedEnumPlanStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PlanStatus | EnumPlanStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.PlanStatus[]
-    notIn?: $Enums.PlanStatus[]
+    in?: $Enums.PlanStatus[] | ListEnumPlanStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PlanStatus[] | ListEnumPlanStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumPlanStatusWithAggregatesFilter<$PrismaModel> | $Enums.PlanStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPlanStatusFilter<$PrismaModel>
@@ -30097,22 +40602,22 @@ export namespace Prisma {
 
   export type NestedEnumPromotionScopeFilter<$PrismaModel = never> = {
     equals?: $Enums.PromotionScope | EnumPromotionScopeFieldRefInput<$PrismaModel>
-    in?: $Enums.PromotionScope[]
-    notIn?: $Enums.PromotionScope[]
+    in?: $Enums.PromotionScope[] | ListEnumPromotionScopeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PromotionScope[] | ListEnumPromotionScopeFieldRefInput<$PrismaModel>
     not?: NestedEnumPromotionScopeFilter<$PrismaModel> | $Enums.PromotionScope
   }
 
   export type NestedEnumGameTypeNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.GameType | EnumGameTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.GameType[] | null
-    notIn?: $Enums.GameType[] | null
+    in?: $Enums.GameType[] | ListEnumGameTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.GameType[] | ListEnumGameTypeFieldRefInput<$PrismaModel> | null
     not?: NestedEnumGameTypeNullableFilter<$PrismaModel> | $Enums.GameType | null
   }
 
   export type NestedEnumPromotionScopeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PromotionScope | EnumPromotionScopeFieldRefInput<$PrismaModel>
-    in?: $Enums.PromotionScope[]
-    notIn?: $Enums.PromotionScope[]
+    in?: $Enums.PromotionScope[] | ListEnumPromotionScopeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PromotionScope[] | ListEnumPromotionScopeFieldRefInput<$PrismaModel>
     not?: NestedEnumPromotionScopeWithAggregatesFilter<$PrismaModel> | $Enums.PromotionScope
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPromotionScopeFilter<$PrismaModel>
@@ -30121,8 +40626,8 @@ export namespace Prisma {
 
   export type NestedEnumGameTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.GameType | EnumGameTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.GameType[] | null
-    notIn?: $Enums.GameType[] | null
+    in?: $Enums.GameType[] | ListEnumGameTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.GameType[] | ListEnumGameTypeFieldRefInput<$PrismaModel> | null
     not?: NestedEnumGameTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.GameType | null
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumGameTypeNullableFilter<$PrismaModel>
@@ -30131,19 +40636,53 @@ export namespace Prisma {
 
   export type NestedEnumOrderStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.OrderStatus[]
-    notIn?: $Enums.OrderStatus[]
+    in?: $Enums.OrderStatus[] | ListEnumOrderStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrderStatus[] | ListEnumOrderStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumOrderStatusFilter<$PrismaModel> | $Enums.OrderStatus
   }
 
   export type NestedEnumOrderStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.OrderStatus[]
-    notIn?: $Enums.OrderStatus[]
+    in?: $Enums.OrderStatus[] | ListEnumOrderStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrderStatus[] | ListEnumOrderStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumOrderStatusWithAggregatesFilter<$PrismaModel> | $Enums.OrderStatus
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumOrderStatusFilter<$PrismaModel>
     _max?: NestedEnumOrderStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTicketPriorityFilter<$PrismaModel = never> = {
+    equals?: $Enums.TicketPriority | EnumTicketPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.TicketPriority[] | ListEnumTicketPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TicketPriority[] | ListEnumTicketPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumTicketPriorityFilter<$PrismaModel> | $Enums.TicketPriority
+  }
+
+  export type NestedEnumTicketStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TicketStatus | EnumTicketStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TicketStatus[] | ListEnumTicketStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TicketStatus[] | ListEnumTicketStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTicketStatusFilter<$PrismaModel> | $Enums.TicketStatus
+  }
+
+  export type NestedEnumTicketPriorityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TicketPriority | EnumTicketPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.TicketPriority[] | ListEnumTicketPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TicketPriority[] | ListEnumTicketPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumTicketPriorityWithAggregatesFilter<$PrismaModel> | $Enums.TicketPriority
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTicketPriorityFilter<$PrismaModel>
+    _max?: NestedEnumTicketPriorityFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTicketStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TicketStatus | EnumTicketStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TicketStatus[] | ListEnumTicketStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TicketStatus[] | ListEnumTicketStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTicketStatusWithAggregatesFilter<$PrismaModel> | $Enums.TicketStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTicketStatusFilter<$PrismaModel>
+    _max?: NestedEnumTicketStatusFilter<$PrismaModel>
   }
 
   export type UserCreateWithoutTenantInput = {
@@ -30152,6 +40691,9 @@ export namespace Prisma {
     passwordHash: string
     role: $Enums.UserRole
     twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -30162,6 +40704,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentCreateNestedManyWithoutAssignedToInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutTenantInput = {
@@ -30170,6 +40716,9 @@ export namespace Prisma {
     passwordHash: string
     role: $Enums.UserRole
     twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -30180,6 +40729,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentUncheckedCreateNestedManyWithoutAssignedToInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutTenantInput = {
@@ -30253,6 +40806,9 @@ export namespace Prisma {
     passwordHash?: StringFilter<"User"> | string
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
     twoFactorSecret?: StringNullableFilter<"User"> | string | null
+    twoFactorEnabled?: BoolFilter<"User"> | boolean
+    twoFactorMethod?: StringNullableFilter<"User"> | string | null
+    twoFactorBackupCodes?: StringNullableFilter<"User"> | string | null
     balance?: FloatFilter<"User"> | number
     tenantId?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -30591,6 +41147,174 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SupportTicketCreateWithoutUserInput = {
+    id?: string
+    ticketNumber: string
+    subject: string
+    description: string
+    priority?: $Enums.TicketPriority
+    category?: string | null
+    status?: $Enums.TicketStatus
+    assignedAt?: Date | string | null
+    slaResponseDeadline?: Date | string | null
+    slaResolveDeadline?: Date | string | null
+    firstResponseAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    closedAt?: Date | string | null
+    assignedTo?: UserCreateNestedOneWithoutAssignedTicketsInput
+    comments?: TicketCommentCreateNestedManyWithoutTicketInput
+  }
+
+  export type SupportTicketUncheckedCreateWithoutUserInput = {
+    id?: string
+    ticketNumber: string
+    subject: string
+    description: string
+    priority?: $Enums.TicketPriority
+    category?: string | null
+    status?: $Enums.TicketStatus
+    assignedToId?: string | null
+    assignedAt?: Date | string | null
+    slaResponseDeadline?: Date | string | null
+    slaResolveDeadline?: Date | string | null
+    firstResponseAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    closedAt?: Date | string | null
+    comments?: TicketCommentUncheckedCreateNestedManyWithoutTicketInput
+  }
+
+  export type SupportTicketCreateOrConnectWithoutUserInput = {
+    where: SupportTicketWhereUniqueInput
+    create: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput>
+  }
+
+  export type SupportTicketCreateManyUserInputEnvelope = {
+    data: SupportTicketCreateManyUserInput | SupportTicketCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TicketCommentCreateWithoutAuthorInput = {
+    id?: string
+    message: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ticket: SupportTicketCreateNestedOneWithoutCommentsInput
+  }
+
+  export type TicketCommentUncheckedCreateWithoutAuthorInput = {
+    id?: string
+    ticketId: string
+    message: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TicketCommentCreateOrConnectWithoutAuthorInput = {
+    where: TicketCommentWhereUniqueInput
+    create: XOR<TicketCommentCreateWithoutAuthorInput, TicketCommentUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type TicketCommentCreateManyAuthorInputEnvelope = {
+    data: TicketCommentCreateManyAuthorInput | TicketCommentCreateManyAuthorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SupportTicketCreateWithoutAssignedToInput = {
+    id?: string
+    ticketNumber: string
+    subject: string
+    description: string
+    priority?: $Enums.TicketPriority
+    category?: string | null
+    status?: $Enums.TicketStatus
+    assignedAt?: Date | string | null
+    slaResponseDeadline?: Date | string | null
+    slaResolveDeadline?: Date | string | null
+    firstResponseAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    closedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutSupportTicketsInput
+    comments?: TicketCommentCreateNestedManyWithoutTicketInput
+  }
+
+  export type SupportTicketUncheckedCreateWithoutAssignedToInput = {
+    id?: string
+    ticketNumber: string
+    subject: string
+    description: string
+    priority?: $Enums.TicketPriority
+    category?: string | null
+    status?: $Enums.TicketStatus
+    assignedAt?: Date | string | null
+    slaResponseDeadline?: Date | string | null
+    slaResolveDeadline?: Date | string | null
+    firstResponseAt?: Date | string | null
+    userId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    closedAt?: Date | string | null
+    comments?: TicketCommentUncheckedCreateNestedManyWithoutTicketInput
+  }
+
+  export type SupportTicketCreateOrConnectWithoutAssignedToInput = {
+    where: SupportTicketWhereUniqueInput
+    create: XOR<SupportTicketCreateWithoutAssignedToInput, SupportTicketUncheckedCreateWithoutAssignedToInput>
+  }
+
+  export type SupportTicketCreateManyAssignedToInputEnvelope = {
+    data: SupportTicketCreateManyAssignedToInput | SupportTicketCreateManyAssignedToInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type KnowledgeBaseArticleCreateWithoutAuthorInput = {
+    id?: string
+    title: string
+    slug: string
+    content: string
+    excerpt?: string | null
+    tags?: KnowledgeBaseArticleCreatetagsInput | string[]
+    published?: boolean
+    views?: number
+    helpful?: number
+    notHelpful?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    category: KnowledgeBaseCategoryCreateNestedOneWithoutArticlesInput
+    versions?: ArticleVersionCreateNestedManyWithoutArticleInput
+  }
+
+  export type KnowledgeBaseArticleUncheckedCreateWithoutAuthorInput = {
+    id?: string
+    title: string
+    slug: string
+    content: string
+    excerpt?: string | null
+    categoryId: string
+    tags?: KnowledgeBaseArticleCreatetagsInput | string[]
+    published?: boolean
+    views?: number
+    helpful?: number
+    notHelpful?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    versions?: ArticleVersionUncheckedCreateNestedManyWithoutArticleInput
+  }
+
+  export type KnowledgeBaseArticleCreateOrConnectWithoutAuthorInput = {
+    where: KnowledgeBaseArticleWhereUniqueInput
+    create: XOR<KnowledgeBaseArticleCreateWithoutAuthorInput, KnowledgeBaseArticleUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type KnowledgeBaseArticleCreateManyAuthorInputEnvelope = {
+    data: KnowledgeBaseArticleCreateManyAuthorInput | KnowledgeBaseArticleCreateManyAuthorInput[]
+    skipDuplicates?: boolean
+  }
+
   export type TenantUpsertWithoutUsersInput = {
     update: XOR<TenantUpdateWithoutUsersInput, TenantUncheckedUpdateWithoutUsersInput>
     create: XOR<TenantCreateWithoutUsersInput, TenantUncheckedCreateWithoutUsersInput>
@@ -30842,12 +41566,134 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Order"> | Date | string
   }
 
+  export type SupportTicketUpsertWithWhereUniqueWithoutUserInput = {
+    where: SupportTicketWhereUniqueInput
+    update: XOR<SupportTicketUpdateWithoutUserInput, SupportTicketUncheckedUpdateWithoutUserInput>
+    create: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput>
+  }
+
+  export type SupportTicketUpdateWithWhereUniqueWithoutUserInput = {
+    where: SupportTicketWhereUniqueInput
+    data: XOR<SupportTicketUpdateWithoutUserInput, SupportTicketUncheckedUpdateWithoutUserInput>
+  }
+
+  export type SupportTicketUpdateManyWithWhereWithoutUserInput = {
+    where: SupportTicketScalarWhereInput
+    data: XOR<SupportTicketUpdateManyMutationInput, SupportTicketUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type SupportTicketScalarWhereInput = {
+    AND?: SupportTicketScalarWhereInput | SupportTicketScalarWhereInput[]
+    OR?: SupportTicketScalarWhereInput[]
+    NOT?: SupportTicketScalarWhereInput | SupportTicketScalarWhereInput[]
+    id?: StringFilter<"SupportTicket"> | string
+    ticketNumber?: StringFilter<"SupportTicket"> | string
+    subject?: StringFilter<"SupportTicket"> | string
+    description?: StringFilter<"SupportTicket"> | string
+    priority?: EnumTicketPriorityFilter<"SupportTicket"> | $Enums.TicketPriority
+    category?: StringNullableFilter<"SupportTicket"> | string | null
+    status?: EnumTicketStatusFilter<"SupportTicket"> | $Enums.TicketStatus
+    assignedToId?: StringNullableFilter<"SupportTicket"> | string | null
+    assignedAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    slaResponseDeadline?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    slaResolveDeadline?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    firstResponseAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    userId?: StringFilter<"SupportTicket"> | string
+    createdAt?: DateTimeFilter<"SupportTicket"> | Date | string
+    updatedAt?: DateTimeFilter<"SupportTicket"> | Date | string
+    closedAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+  }
+
+  export type TicketCommentUpsertWithWhereUniqueWithoutAuthorInput = {
+    where: TicketCommentWhereUniqueInput
+    update: XOR<TicketCommentUpdateWithoutAuthorInput, TicketCommentUncheckedUpdateWithoutAuthorInput>
+    create: XOR<TicketCommentCreateWithoutAuthorInput, TicketCommentUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type TicketCommentUpdateWithWhereUniqueWithoutAuthorInput = {
+    where: TicketCommentWhereUniqueInput
+    data: XOR<TicketCommentUpdateWithoutAuthorInput, TicketCommentUncheckedUpdateWithoutAuthorInput>
+  }
+
+  export type TicketCommentUpdateManyWithWhereWithoutAuthorInput = {
+    where: TicketCommentScalarWhereInput
+    data: XOR<TicketCommentUpdateManyMutationInput, TicketCommentUncheckedUpdateManyWithoutAuthorInput>
+  }
+
+  export type TicketCommentScalarWhereInput = {
+    AND?: TicketCommentScalarWhereInput | TicketCommentScalarWhereInput[]
+    OR?: TicketCommentScalarWhereInput[]
+    NOT?: TicketCommentScalarWhereInput | TicketCommentScalarWhereInput[]
+    id?: StringFilter<"TicketComment"> | string
+    ticketId?: StringFilter<"TicketComment"> | string
+    authorId?: StringFilter<"TicketComment"> | string
+    message?: StringFilter<"TicketComment"> | string
+    createdAt?: DateTimeFilter<"TicketComment"> | Date | string
+    updatedAt?: DateTimeFilter<"TicketComment"> | Date | string
+  }
+
+  export type SupportTicketUpsertWithWhereUniqueWithoutAssignedToInput = {
+    where: SupportTicketWhereUniqueInput
+    update: XOR<SupportTicketUpdateWithoutAssignedToInput, SupportTicketUncheckedUpdateWithoutAssignedToInput>
+    create: XOR<SupportTicketCreateWithoutAssignedToInput, SupportTicketUncheckedCreateWithoutAssignedToInput>
+  }
+
+  export type SupportTicketUpdateWithWhereUniqueWithoutAssignedToInput = {
+    where: SupportTicketWhereUniqueInput
+    data: XOR<SupportTicketUpdateWithoutAssignedToInput, SupportTicketUncheckedUpdateWithoutAssignedToInput>
+  }
+
+  export type SupportTicketUpdateManyWithWhereWithoutAssignedToInput = {
+    where: SupportTicketScalarWhereInput
+    data: XOR<SupportTicketUpdateManyMutationInput, SupportTicketUncheckedUpdateManyWithoutAssignedToInput>
+  }
+
+  export type KnowledgeBaseArticleUpsertWithWhereUniqueWithoutAuthorInput = {
+    where: KnowledgeBaseArticleWhereUniqueInput
+    update: XOR<KnowledgeBaseArticleUpdateWithoutAuthorInput, KnowledgeBaseArticleUncheckedUpdateWithoutAuthorInput>
+    create: XOR<KnowledgeBaseArticleCreateWithoutAuthorInput, KnowledgeBaseArticleUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type KnowledgeBaseArticleUpdateWithWhereUniqueWithoutAuthorInput = {
+    where: KnowledgeBaseArticleWhereUniqueInput
+    data: XOR<KnowledgeBaseArticleUpdateWithoutAuthorInput, KnowledgeBaseArticleUncheckedUpdateWithoutAuthorInput>
+  }
+
+  export type KnowledgeBaseArticleUpdateManyWithWhereWithoutAuthorInput = {
+    where: KnowledgeBaseArticleScalarWhereInput
+    data: XOR<KnowledgeBaseArticleUpdateManyMutationInput, KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorInput>
+  }
+
+  export type KnowledgeBaseArticleScalarWhereInput = {
+    AND?: KnowledgeBaseArticleScalarWhereInput | KnowledgeBaseArticleScalarWhereInput[]
+    OR?: KnowledgeBaseArticleScalarWhereInput[]
+    NOT?: KnowledgeBaseArticleScalarWhereInput | KnowledgeBaseArticleScalarWhereInput[]
+    id?: StringFilter<"KnowledgeBaseArticle"> | string
+    title?: StringFilter<"KnowledgeBaseArticle"> | string
+    slug?: StringFilter<"KnowledgeBaseArticle"> | string
+    content?: StringFilter<"KnowledgeBaseArticle"> | string
+    excerpt?: StringNullableFilter<"KnowledgeBaseArticle"> | string | null
+    categoryId?: StringFilter<"KnowledgeBaseArticle"> | string
+    authorId?: StringFilter<"KnowledgeBaseArticle"> | string
+    tags?: StringNullableListFilter<"KnowledgeBaseArticle">
+    published?: BoolFilter<"KnowledgeBaseArticle"> | boolean
+    views?: IntFilter<"KnowledgeBaseArticle"> | number
+    helpful?: IntFilter<"KnowledgeBaseArticle"> | number
+    notHelpful?: IntFilter<"KnowledgeBaseArticle"> | number
+    createdAt?: DateTimeFilter<"KnowledgeBaseArticle"> | Date | string
+    updatedAt?: DateTimeFilter<"KnowledgeBaseArticle"> | Date | string
+    publishedAt?: DateTimeNullableFilter<"KnowledgeBaseArticle"> | Date | string | null
+  }
+
   export type UserCreateWithoutAuditLogsInput = {
     id?: string
     email: string
     passwordHash: string
     role: $Enums.UserRole
     twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -30858,6 +41704,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentCreateNestedManyWithoutAssignedToInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -30866,6 +41716,9 @@ export namespace Prisma {
     passwordHash: string
     role: $Enums.UserRole
     twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -30876,6 +41729,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentUncheckedCreateNestedManyWithoutAssignedToInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -30900,6 +41757,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -30910,6 +41770,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUpdateManyWithoutAssignedToNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -30918,6 +41782,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -30928,6 +41795,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUncheckedUpdateManyWithoutAssignedToNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type GameServerCreateWithoutNodeInput = {
@@ -31783,6 +42654,9 @@ export namespace Prisma {
     passwordHash: string
     role: $Enums.UserRole
     twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -31793,6 +42667,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentCreateNestedManyWithoutAssignedToInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutOwnedServersInput = {
@@ -31801,6 +42679,9 @@ export namespace Prisma {
     passwordHash: string
     role: $Enums.UserRole
     twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -31811,6 +42692,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentUncheckedCreateNestedManyWithoutAssignedToInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutOwnedServersInput = {
@@ -32180,6 +43065,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32190,6 +43078,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUpdateManyWithoutAssignedToNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnedServersInput = {
@@ -32198,6 +43090,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32208,6 +43103,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUncheckedUpdateManyWithoutAssignedToNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type PlanUpsertWithoutServersInput = {
@@ -32912,6 +43811,9 @@ export namespace Prisma {
     passwordHash: string
     role: $Enums.UserRole
     twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -32922,6 +43824,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentCreateNestedManyWithoutAssignedToInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutResolvedAlertsInput = {
@@ -32930,6 +43836,9 @@ export namespace Prisma {
     passwordHash: string
     role: $Enums.UserRole
     twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -32940,6 +43849,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentUncheckedCreateNestedManyWithoutAssignedToInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutResolvedAlertsInput = {
@@ -33062,6 +43975,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33072,6 +43988,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUpdateManyWithoutAssignedToNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedAlertsInput = {
@@ -33080,6 +44000,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33090,6 +44013,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUncheckedUpdateManyWithoutAssignedToNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type NodeUpsertWithoutAlertsInput = {
@@ -33208,6 +44135,9 @@ export namespace Prisma {
     passwordHash: string
     role: $Enums.UserRole
     twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -33218,6 +44148,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentCreateNestedManyWithoutAssignedToInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutResourceQuotasInput = {
@@ -33226,6 +44160,9 @@ export namespace Prisma {
     passwordHash: string
     role: $Enums.UserRole
     twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -33236,6 +44173,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentUncheckedCreateNestedManyWithoutAssignedToInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutResourceQuotasInput = {
@@ -33287,6 +44228,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33297,6 +44241,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUpdateManyWithoutAssignedToNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResourceQuotasInput = {
@@ -33305,6 +44253,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33315,6 +44266,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUncheckedUpdateManyWithoutAssignedToNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type TenantUpsertWithoutResourceQuotasInput = {
@@ -33356,6 +44311,9 @@ export namespace Prisma {
     passwordHash: string
     role: $Enums.UserRole
     twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -33366,6 +44324,10 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentCreateNestedManyWithoutAssignedToInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutApiKeysInput = {
@@ -33374,6 +44336,9 @@ export namespace Prisma {
     passwordHash: string
     role: $Enums.UserRole
     twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -33384,6 +44349,10 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUncheckedCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentUncheckedCreateNestedManyWithoutAssignedToInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutApiKeysInput = {
@@ -33408,6 +44377,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33418,6 +44390,10 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUpdateManyWithoutAssignedToNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApiKeysInput = {
@@ -33426,6 +44402,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33436,6 +44415,10 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUncheckedUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUncheckedUpdateManyWithoutAssignedToNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserCreateWithoutAssignedIncidentsInput = {
@@ -33444,6 +44427,9 @@ export namespace Prisma {
     passwordHash: string
     role: $Enums.UserRole
     twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -33454,6 +44440,10 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaCreateNestedManyWithoutUserInput
     apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
     orders?: OrderCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutAssignedIncidentsInput = {
@@ -33462,6 +44452,9 @@ export namespace Prisma {
     passwordHash: string
     role: $Enums.UserRole
     twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -33472,6 +44465,10 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUncheckedCreateNestedManyWithoutUserInput
     apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutAssignedIncidentsInput = {
@@ -33496,6 +44493,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33506,6 +44506,10 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUpdateManyWithoutUserNestedInput
     apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedIncidentsInput = {
@@ -33514,6 +44518,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33524,6 +44531,10 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUncheckedUpdateManyWithoutUserNestedInput
     apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type GameServerCreateWithoutPlanInput = {
@@ -33838,6 +44849,9 @@ export namespace Prisma {
     passwordHash: string
     role: $Enums.UserRole
     twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -33848,6 +44862,10 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaCreateNestedManyWithoutUserInput
     apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentCreateNestedManyWithoutAssignedToInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutOrdersInput = {
@@ -33856,6 +44874,9 @@ export namespace Prisma {
     passwordHash: string
     role: $Enums.UserRole
     twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -33866,6 +44887,10 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUncheckedCreateNestedManyWithoutUserInput
     apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
     assignedIncidents?: IncidentUncheckedCreateNestedManyWithoutAssignedToInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutOrdersInput = {
@@ -33988,6 +45013,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33998,6 +45026,10 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUpdateManyWithoutUserNestedInput
     apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUpdateManyWithoutAssignedToNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -34006,6 +45038,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34016,6 +45051,10 @@ export namespace Prisma {
     resourceQuotas?: ResourceQuotaUncheckedUpdateManyWithoutUserNestedInput
     apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type PlanUpsertWithoutOrdersInput = {
@@ -34128,12 +45167,1026 @@ export namespace Prisma {
     alerts?: AlertUncheckedUpdateManyWithoutServerNestedInput
   }
 
+  export type UserCreateWithoutAssignedTicketsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    role: $Enums.UserRole
+    twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
+    balance?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant?: TenantCreateNestedOneWithoutUsersInput
+    ownedServers?: GameServerCreateNestedManyWithoutOwnerInput
+    auditLogs?: AuditLogCreateNestedManyWithoutUserInput
+    resolvedAlerts?: AlertCreateNestedManyWithoutResolvedByInput
+    resourceQuotas?: ResourceQuotaCreateNestedManyWithoutUserInput
+    apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
+    assignedIncidents?: IncidentCreateNestedManyWithoutAssignedToInput
+    orders?: OrderCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentCreateNestedManyWithoutAuthorInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserUncheckedCreateWithoutAssignedTicketsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    role: $Enums.UserRole
+    twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
+    balance?: number
+    tenantId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownedServers?: GameServerUncheckedCreateNestedManyWithoutOwnerInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutUserInput
+    resolvedAlerts?: AlertUncheckedCreateNestedManyWithoutResolvedByInput
+    resourceQuotas?: ResourceQuotaUncheckedCreateNestedManyWithoutUserInput
+    apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
+    assignedIncidents?: IncidentUncheckedCreateNestedManyWithoutAssignedToInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentUncheckedCreateNestedManyWithoutAuthorInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserCreateOrConnectWithoutAssignedTicketsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAssignedTicketsInput, UserUncheckedCreateWithoutAssignedTicketsInput>
+  }
+
+  export type UserCreateWithoutSupportTicketsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    role: $Enums.UserRole
+    twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
+    balance?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant?: TenantCreateNestedOneWithoutUsersInput
+    ownedServers?: GameServerCreateNestedManyWithoutOwnerInput
+    auditLogs?: AuditLogCreateNestedManyWithoutUserInput
+    resolvedAlerts?: AlertCreateNestedManyWithoutResolvedByInput
+    resourceQuotas?: ResourceQuotaCreateNestedManyWithoutUserInput
+    apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
+    assignedIncidents?: IncidentCreateNestedManyWithoutAssignedToInput
+    orders?: OrderCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserUncheckedCreateWithoutSupportTicketsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    role: $Enums.UserRole
+    twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
+    balance?: number
+    tenantId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownedServers?: GameServerUncheckedCreateNestedManyWithoutOwnerInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutUserInput
+    resolvedAlerts?: AlertUncheckedCreateNestedManyWithoutResolvedByInput
+    resourceQuotas?: ResourceQuotaUncheckedCreateNestedManyWithoutUserInput
+    apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
+    assignedIncidents?: IncidentUncheckedCreateNestedManyWithoutAssignedToInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserCreateOrConnectWithoutSupportTicketsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSupportTicketsInput, UserUncheckedCreateWithoutSupportTicketsInput>
+  }
+
+  export type TicketCommentCreateWithoutTicketInput = {
+    id?: string
+    message: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    author: UserCreateNestedOneWithoutTicketCommentsInput
+  }
+
+  export type TicketCommentUncheckedCreateWithoutTicketInput = {
+    id?: string
+    authorId: string
+    message: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TicketCommentCreateOrConnectWithoutTicketInput = {
+    where: TicketCommentWhereUniqueInput
+    create: XOR<TicketCommentCreateWithoutTicketInput, TicketCommentUncheckedCreateWithoutTicketInput>
+  }
+
+  export type TicketCommentCreateManyTicketInputEnvelope = {
+    data: TicketCommentCreateManyTicketInput | TicketCommentCreateManyTicketInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutAssignedTicketsInput = {
+    update: XOR<UserUpdateWithoutAssignedTicketsInput, UserUncheckedUpdateWithoutAssignedTicketsInput>
+    create: XOR<UserCreateWithoutAssignedTicketsInput, UserUncheckedCreateWithoutAssignedTicketsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAssignedTicketsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAssignedTicketsInput, UserUncheckedUpdateWithoutAssignedTicketsInput>
+  }
+
+  export type UserUpdateWithoutAssignedTicketsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    balance?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneWithoutUsersNestedInput
+    ownedServers?: GameServerUpdateManyWithoutOwnerNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutUserNestedInput
+    resolvedAlerts?: AlertUpdateManyWithoutResolvedByNestedInput
+    resourceQuotas?: ResourceQuotaUpdateManyWithoutUserNestedInput
+    apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
+    assignedIncidents?: IncidentUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUpdateManyWithoutAuthorNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAssignedTicketsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    balance?: FloatFieldUpdateOperationsInput | number
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownedServers?: GameServerUncheckedUpdateManyWithoutOwnerNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
+    resolvedAlerts?: AlertUncheckedUpdateManyWithoutResolvedByNestedInput
+    resourceQuotas?: ResourceQuotaUncheckedUpdateManyWithoutUserNestedInput
+    apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+    assignedIncidents?: IncidentUncheckedUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUpsertWithoutSupportTicketsInput = {
+    update: XOR<UserUpdateWithoutSupportTicketsInput, UserUncheckedUpdateWithoutSupportTicketsInput>
+    create: XOR<UserCreateWithoutSupportTicketsInput, UserUncheckedCreateWithoutSupportTicketsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSupportTicketsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSupportTicketsInput, UserUncheckedUpdateWithoutSupportTicketsInput>
+  }
+
+  export type UserUpdateWithoutSupportTicketsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    balance?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneWithoutUsersNestedInput
+    ownedServers?: GameServerUpdateManyWithoutOwnerNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutUserNestedInput
+    resolvedAlerts?: AlertUpdateManyWithoutResolvedByNestedInput
+    resourceQuotas?: ResourceQuotaUpdateManyWithoutUserNestedInput
+    apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
+    assignedIncidents?: IncidentUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSupportTicketsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    balance?: FloatFieldUpdateOperationsInput | number
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownedServers?: GameServerUncheckedUpdateManyWithoutOwnerNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
+    resolvedAlerts?: AlertUncheckedUpdateManyWithoutResolvedByNestedInput
+    resourceQuotas?: ResourceQuotaUncheckedUpdateManyWithoutUserNestedInput
+    apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+    assignedIncidents?: IncidentUncheckedUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type TicketCommentUpsertWithWhereUniqueWithoutTicketInput = {
+    where: TicketCommentWhereUniqueInput
+    update: XOR<TicketCommentUpdateWithoutTicketInput, TicketCommentUncheckedUpdateWithoutTicketInput>
+    create: XOR<TicketCommentCreateWithoutTicketInput, TicketCommentUncheckedCreateWithoutTicketInput>
+  }
+
+  export type TicketCommentUpdateWithWhereUniqueWithoutTicketInput = {
+    where: TicketCommentWhereUniqueInput
+    data: XOR<TicketCommentUpdateWithoutTicketInput, TicketCommentUncheckedUpdateWithoutTicketInput>
+  }
+
+  export type TicketCommentUpdateManyWithWhereWithoutTicketInput = {
+    where: TicketCommentScalarWhereInput
+    data: XOR<TicketCommentUpdateManyMutationInput, TicketCommentUncheckedUpdateManyWithoutTicketInput>
+  }
+
+  export type SupportTicketCreateWithoutCommentsInput = {
+    id?: string
+    ticketNumber: string
+    subject: string
+    description: string
+    priority?: $Enums.TicketPriority
+    category?: string | null
+    status?: $Enums.TicketStatus
+    assignedAt?: Date | string | null
+    slaResponseDeadline?: Date | string | null
+    slaResolveDeadline?: Date | string | null
+    firstResponseAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    closedAt?: Date | string | null
+    assignedTo?: UserCreateNestedOneWithoutAssignedTicketsInput
+    user: UserCreateNestedOneWithoutSupportTicketsInput
+  }
+
+  export type SupportTicketUncheckedCreateWithoutCommentsInput = {
+    id?: string
+    ticketNumber: string
+    subject: string
+    description: string
+    priority?: $Enums.TicketPriority
+    category?: string | null
+    status?: $Enums.TicketStatus
+    assignedToId?: string | null
+    assignedAt?: Date | string | null
+    slaResponseDeadline?: Date | string | null
+    slaResolveDeadline?: Date | string | null
+    firstResponseAt?: Date | string | null
+    userId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    closedAt?: Date | string | null
+  }
+
+  export type SupportTicketCreateOrConnectWithoutCommentsInput = {
+    where: SupportTicketWhereUniqueInput
+    create: XOR<SupportTicketCreateWithoutCommentsInput, SupportTicketUncheckedCreateWithoutCommentsInput>
+  }
+
+  export type UserCreateWithoutTicketCommentsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    role: $Enums.UserRole
+    twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
+    balance?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant?: TenantCreateNestedOneWithoutUsersInput
+    ownedServers?: GameServerCreateNestedManyWithoutOwnerInput
+    auditLogs?: AuditLogCreateNestedManyWithoutUserInput
+    resolvedAlerts?: AlertCreateNestedManyWithoutResolvedByInput
+    resourceQuotas?: ResourceQuotaCreateNestedManyWithoutUserInput
+    apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
+    assignedIncidents?: IncidentCreateNestedManyWithoutAssignedToInput
+    orders?: OrderCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserUncheckedCreateWithoutTicketCommentsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    role: $Enums.UserRole
+    twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
+    balance?: number
+    tenantId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownedServers?: GameServerUncheckedCreateNestedManyWithoutOwnerInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutUserInput
+    resolvedAlerts?: AlertUncheckedCreateNestedManyWithoutResolvedByInput
+    resourceQuotas?: ResourceQuotaUncheckedCreateNestedManyWithoutUserInput
+    apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
+    assignedIncidents?: IncidentUncheckedCreateNestedManyWithoutAssignedToInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserCreateOrConnectWithoutTicketCommentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTicketCommentsInput, UserUncheckedCreateWithoutTicketCommentsInput>
+  }
+
+  export type SupportTicketUpsertWithoutCommentsInput = {
+    update: XOR<SupportTicketUpdateWithoutCommentsInput, SupportTicketUncheckedUpdateWithoutCommentsInput>
+    create: XOR<SupportTicketCreateWithoutCommentsInput, SupportTicketUncheckedCreateWithoutCommentsInput>
+    where?: SupportTicketWhereInput
+  }
+
+  export type SupportTicketUpdateToOneWithWhereWithoutCommentsInput = {
+    where?: SupportTicketWhereInput
+    data: XOR<SupportTicketUpdateWithoutCommentsInput, SupportTicketUncheckedUpdateWithoutCommentsInput>
+  }
+
+  export type SupportTicketUpdateWithoutCommentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketNumber?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    assignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResponseDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResolveDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstResponseAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    assignedTo?: UserUpdateOneWithoutAssignedTicketsNestedInput
+    user?: UserUpdateOneRequiredWithoutSupportTicketsNestedInput
+  }
+
+  export type SupportTicketUncheckedUpdateWithoutCommentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketNumber?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    assignedToId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResponseDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResolveDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstResponseAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type UserUpsertWithoutTicketCommentsInput = {
+    update: XOR<UserUpdateWithoutTicketCommentsInput, UserUncheckedUpdateWithoutTicketCommentsInput>
+    create: XOR<UserCreateWithoutTicketCommentsInput, UserUncheckedCreateWithoutTicketCommentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutTicketCommentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTicketCommentsInput, UserUncheckedUpdateWithoutTicketCommentsInput>
+  }
+
+  export type UserUpdateWithoutTicketCommentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    balance?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneWithoutUsersNestedInput
+    ownedServers?: GameServerUpdateManyWithoutOwnerNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutUserNestedInput
+    resolvedAlerts?: AlertUpdateManyWithoutResolvedByNestedInput
+    resourceQuotas?: ResourceQuotaUpdateManyWithoutUserNestedInput
+    apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
+    assignedIncidents?: IncidentUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutTicketCommentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    balance?: FloatFieldUpdateOperationsInput | number
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownedServers?: GameServerUncheckedUpdateManyWithoutOwnerNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
+    resolvedAlerts?: AlertUncheckedUpdateManyWithoutResolvedByNestedInput
+    resourceQuotas?: ResourceQuotaUncheckedUpdateManyWithoutUserNestedInput
+    apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+    assignedIncidents?: IncidentUncheckedUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type KnowledgeBaseCategoryCreateWithoutArticlesInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    icon?: string | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parent?: KnowledgeBaseCategoryCreateNestedOneWithoutChildrenInput
+    children?: KnowledgeBaseCategoryCreateNestedManyWithoutParentInput
+  }
+
+  export type KnowledgeBaseCategoryUncheckedCreateWithoutArticlesInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    icon?: string | null
+    order?: number
+    parentId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    children?: KnowledgeBaseCategoryUncheckedCreateNestedManyWithoutParentInput
+  }
+
+  export type KnowledgeBaseCategoryCreateOrConnectWithoutArticlesInput = {
+    where: KnowledgeBaseCategoryWhereUniqueInput
+    create: XOR<KnowledgeBaseCategoryCreateWithoutArticlesInput, KnowledgeBaseCategoryUncheckedCreateWithoutArticlesInput>
+  }
+
+  export type UserCreateWithoutKnowledgeBaseArticlesInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    role: $Enums.UserRole
+    twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
+    balance?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant?: TenantCreateNestedOneWithoutUsersInput
+    ownedServers?: GameServerCreateNestedManyWithoutOwnerInput
+    auditLogs?: AuditLogCreateNestedManyWithoutUserInput
+    resolvedAlerts?: AlertCreateNestedManyWithoutResolvedByInput
+    resourceQuotas?: ResourceQuotaCreateNestedManyWithoutUserInput
+    apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
+    assignedIncidents?: IncidentCreateNestedManyWithoutAssignedToInput
+    orders?: OrderCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+  }
+
+  export type UserUncheckedCreateWithoutKnowledgeBaseArticlesInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    role: $Enums.UserRole
+    twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
+    balance?: number
+    tenantId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownedServers?: GameServerUncheckedCreateNestedManyWithoutOwnerInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutUserInput
+    resolvedAlerts?: AlertUncheckedCreateNestedManyWithoutResolvedByInput
+    resourceQuotas?: ResourceQuotaUncheckedCreateNestedManyWithoutUserInput
+    apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
+    assignedIncidents?: IncidentUncheckedCreateNestedManyWithoutAssignedToInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+  }
+
+  export type UserCreateOrConnectWithoutKnowledgeBaseArticlesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutKnowledgeBaseArticlesInput, UserUncheckedCreateWithoutKnowledgeBaseArticlesInput>
+  }
+
+  export type ArticleVersionCreateWithoutArticleInput = {
+    id?: string
+    version: number
+    title: string
+    content: string
+    excerpt?: string | null
+    createdBy: string
+    createdAt?: Date | string
+  }
+
+  export type ArticleVersionUncheckedCreateWithoutArticleInput = {
+    id?: string
+    version: number
+    title: string
+    content: string
+    excerpt?: string | null
+    createdBy: string
+    createdAt?: Date | string
+  }
+
+  export type ArticleVersionCreateOrConnectWithoutArticleInput = {
+    where: ArticleVersionWhereUniqueInput
+    create: XOR<ArticleVersionCreateWithoutArticleInput, ArticleVersionUncheckedCreateWithoutArticleInput>
+  }
+
+  export type ArticleVersionCreateManyArticleInputEnvelope = {
+    data: ArticleVersionCreateManyArticleInput | ArticleVersionCreateManyArticleInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type KnowledgeBaseCategoryUpsertWithoutArticlesInput = {
+    update: XOR<KnowledgeBaseCategoryUpdateWithoutArticlesInput, KnowledgeBaseCategoryUncheckedUpdateWithoutArticlesInput>
+    create: XOR<KnowledgeBaseCategoryCreateWithoutArticlesInput, KnowledgeBaseCategoryUncheckedCreateWithoutArticlesInput>
+    where?: KnowledgeBaseCategoryWhereInput
+  }
+
+  export type KnowledgeBaseCategoryUpdateToOneWithWhereWithoutArticlesInput = {
+    where?: KnowledgeBaseCategoryWhereInput
+    data: XOR<KnowledgeBaseCategoryUpdateWithoutArticlesInput, KnowledgeBaseCategoryUncheckedUpdateWithoutArticlesInput>
+  }
+
+  export type KnowledgeBaseCategoryUpdateWithoutArticlesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: KnowledgeBaseCategoryUpdateOneWithoutChildrenNestedInput
+    children?: KnowledgeBaseCategoryUpdateManyWithoutParentNestedInput
+  }
+
+  export type KnowledgeBaseCategoryUncheckedUpdateWithoutArticlesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: KnowledgeBaseCategoryUncheckedUpdateManyWithoutParentNestedInput
+  }
+
+  export type UserUpsertWithoutKnowledgeBaseArticlesInput = {
+    update: XOR<UserUpdateWithoutKnowledgeBaseArticlesInput, UserUncheckedUpdateWithoutKnowledgeBaseArticlesInput>
+    create: XOR<UserCreateWithoutKnowledgeBaseArticlesInput, UserUncheckedCreateWithoutKnowledgeBaseArticlesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutKnowledgeBaseArticlesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutKnowledgeBaseArticlesInput, UserUncheckedUpdateWithoutKnowledgeBaseArticlesInput>
+  }
+
+  export type UserUpdateWithoutKnowledgeBaseArticlesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    balance?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneWithoutUsersNestedInput
+    ownedServers?: GameServerUpdateManyWithoutOwnerNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutUserNestedInput
+    resolvedAlerts?: AlertUpdateManyWithoutResolvedByNestedInput
+    resourceQuotas?: ResourceQuotaUpdateManyWithoutUserNestedInput
+    apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
+    assignedIncidents?: IncidentUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutKnowledgeBaseArticlesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    balance?: FloatFieldUpdateOperationsInput | number
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownedServers?: GameServerUncheckedUpdateManyWithoutOwnerNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
+    resolvedAlerts?: AlertUncheckedUpdateManyWithoutResolvedByNestedInput
+    resourceQuotas?: ResourceQuotaUncheckedUpdateManyWithoutUserNestedInput
+    apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+    assignedIncidents?: IncidentUncheckedUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+  }
+
+  export type ArticleVersionUpsertWithWhereUniqueWithoutArticleInput = {
+    where: ArticleVersionWhereUniqueInput
+    update: XOR<ArticleVersionUpdateWithoutArticleInput, ArticleVersionUncheckedUpdateWithoutArticleInput>
+    create: XOR<ArticleVersionCreateWithoutArticleInput, ArticleVersionUncheckedCreateWithoutArticleInput>
+  }
+
+  export type ArticleVersionUpdateWithWhereUniqueWithoutArticleInput = {
+    where: ArticleVersionWhereUniqueInput
+    data: XOR<ArticleVersionUpdateWithoutArticleInput, ArticleVersionUncheckedUpdateWithoutArticleInput>
+  }
+
+  export type ArticleVersionUpdateManyWithWhereWithoutArticleInput = {
+    where: ArticleVersionScalarWhereInput
+    data: XOR<ArticleVersionUpdateManyMutationInput, ArticleVersionUncheckedUpdateManyWithoutArticleInput>
+  }
+
+  export type ArticleVersionScalarWhereInput = {
+    AND?: ArticleVersionScalarWhereInput | ArticleVersionScalarWhereInput[]
+    OR?: ArticleVersionScalarWhereInput[]
+    NOT?: ArticleVersionScalarWhereInput | ArticleVersionScalarWhereInput[]
+    id?: StringFilter<"ArticleVersion"> | string
+    articleId?: StringFilter<"ArticleVersion"> | string
+    version?: IntFilter<"ArticleVersion"> | number
+    title?: StringFilter<"ArticleVersion"> | string
+    content?: StringFilter<"ArticleVersion"> | string
+    excerpt?: StringNullableFilter<"ArticleVersion"> | string | null
+    createdBy?: StringFilter<"ArticleVersion"> | string
+    createdAt?: DateTimeFilter<"ArticleVersion"> | Date | string
+  }
+
+  export type KnowledgeBaseCategoryCreateWithoutChildrenInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    icon?: string | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parent?: KnowledgeBaseCategoryCreateNestedOneWithoutChildrenInput
+    articles?: KnowledgeBaseArticleCreateNestedManyWithoutCategoryInput
+  }
+
+  export type KnowledgeBaseCategoryUncheckedCreateWithoutChildrenInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    icon?: string | null
+    order?: number
+    parentId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    articles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutCategoryInput
+  }
+
+  export type KnowledgeBaseCategoryCreateOrConnectWithoutChildrenInput = {
+    where: KnowledgeBaseCategoryWhereUniqueInput
+    create: XOR<KnowledgeBaseCategoryCreateWithoutChildrenInput, KnowledgeBaseCategoryUncheckedCreateWithoutChildrenInput>
+  }
+
+  export type KnowledgeBaseCategoryCreateWithoutParentInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    icon?: string | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    children?: KnowledgeBaseCategoryCreateNestedManyWithoutParentInput
+    articles?: KnowledgeBaseArticleCreateNestedManyWithoutCategoryInput
+  }
+
+  export type KnowledgeBaseCategoryUncheckedCreateWithoutParentInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    icon?: string | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    children?: KnowledgeBaseCategoryUncheckedCreateNestedManyWithoutParentInput
+    articles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutCategoryInput
+  }
+
+  export type KnowledgeBaseCategoryCreateOrConnectWithoutParentInput = {
+    where: KnowledgeBaseCategoryWhereUniqueInput
+    create: XOR<KnowledgeBaseCategoryCreateWithoutParentInput, KnowledgeBaseCategoryUncheckedCreateWithoutParentInput>
+  }
+
+  export type KnowledgeBaseCategoryCreateManyParentInputEnvelope = {
+    data: KnowledgeBaseCategoryCreateManyParentInput | KnowledgeBaseCategoryCreateManyParentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type KnowledgeBaseArticleCreateWithoutCategoryInput = {
+    id?: string
+    title: string
+    slug: string
+    content: string
+    excerpt?: string | null
+    tags?: KnowledgeBaseArticleCreatetagsInput | string[]
+    published?: boolean
+    views?: number
+    helpful?: number
+    notHelpful?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    author: UserCreateNestedOneWithoutKnowledgeBaseArticlesInput
+    versions?: ArticleVersionCreateNestedManyWithoutArticleInput
+  }
+
+  export type KnowledgeBaseArticleUncheckedCreateWithoutCategoryInput = {
+    id?: string
+    title: string
+    slug: string
+    content: string
+    excerpt?: string | null
+    authorId: string
+    tags?: KnowledgeBaseArticleCreatetagsInput | string[]
+    published?: boolean
+    views?: number
+    helpful?: number
+    notHelpful?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    versions?: ArticleVersionUncheckedCreateNestedManyWithoutArticleInput
+  }
+
+  export type KnowledgeBaseArticleCreateOrConnectWithoutCategoryInput = {
+    where: KnowledgeBaseArticleWhereUniqueInput
+    create: XOR<KnowledgeBaseArticleCreateWithoutCategoryInput, KnowledgeBaseArticleUncheckedCreateWithoutCategoryInput>
+  }
+
+  export type KnowledgeBaseArticleCreateManyCategoryInputEnvelope = {
+    data: KnowledgeBaseArticleCreateManyCategoryInput | KnowledgeBaseArticleCreateManyCategoryInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type KnowledgeBaseCategoryUpsertWithoutChildrenInput = {
+    update: XOR<KnowledgeBaseCategoryUpdateWithoutChildrenInput, KnowledgeBaseCategoryUncheckedUpdateWithoutChildrenInput>
+    create: XOR<KnowledgeBaseCategoryCreateWithoutChildrenInput, KnowledgeBaseCategoryUncheckedCreateWithoutChildrenInput>
+    where?: KnowledgeBaseCategoryWhereInput
+  }
+
+  export type KnowledgeBaseCategoryUpdateToOneWithWhereWithoutChildrenInput = {
+    where?: KnowledgeBaseCategoryWhereInput
+    data: XOR<KnowledgeBaseCategoryUpdateWithoutChildrenInput, KnowledgeBaseCategoryUncheckedUpdateWithoutChildrenInput>
+  }
+
+  export type KnowledgeBaseCategoryUpdateWithoutChildrenInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: KnowledgeBaseCategoryUpdateOneWithoutChildrenNestedInput
+    articles?: KnowledgeBaseArticleUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type KnowledgeBaseCategoryUncheckedUpdateWithoutChildrenInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    articles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type KnowledgeBaseCategoryUpsertWithWhereUniqueWithoutParentInput = {
+    where: KnowledgeBaseCategoryWhereUniqueInput
+    update: XOR<KnowledgeBaseCategoryUpdateWithoutParentInput, KnowledgeBaseCategoryUncheckedUpdateWithoutParentInput>
+    create: XOR<KnowledgeBaseCategoryCreateWithoutParentInput, KnowledgeBaseCategoryUncheckedCreateWithoutParentInput>
+  }
+
+  export type KnowledgeBaseCategoryUpdateWithWhereUniqueWithoutParentInput = {
+    where: KnowledgeBaseCategoryWhereUniqueInput
+    data: XOR<KnowledgeBaseCategoryUpdateWithoutParentInput, KnowledgeBaseCategoryUncheckedUpdateWithoutParentInput>
+  }
+
+  export type KnowledgeBaseCategoryUpdateManyWithWhereWithoutParentInput = {
+    where: KnowledgeBaseCategoryScalarWhereInput
+    data: XOR<KnowledgeBaseCategoryUpdateManyMutationInput, KnowledgeBaseCategoryUncheckedUpdateManyWithoutParentInput>
+  }
+
+  export type KnowledgeBaseCategoryScalarWhereInput = {
+    AND?: KnowledgeBaseCategoryScalarWhereInput | KnowledgeBaseCategoryScalarWhereInput[]
+    OR?: KnowledgeBaseCategoryScalarWhereInput[]
+    NOT?: KnowledgeBaseCategoryScalarWhereInput | KnowledgeBaseCategoryScalarWhereInput[]
+    id?: StringFilter<"KnowledgeBaseCategory"> | string
+    name?: StringFilter<"KnowledgeBaseCategory"> | string
+    slug?: StringFilter<"KnowledgeBaseCategory"> | string
+    description?: StringNullableFilter<"KnowledgeBaseCategory"> | string | null
+    icon?: StringNullableFilter<"KnowledgeBaseCategory"> | string | null
+    order?: IntFilter<"KnowledgeBaseCategory"> | number
+    parentId?: StringNullableFilter<"KnowledgeBaseCategory"> | string | null
+    createdAt?: DateTimeFilter<"KnowledgeBaseCategory"> | Date | string
+    updatedAt?: DateTimeFilter<"KnowledgeBaseCategory"> | Date | string
+  }
+
+  export type KnowledgeBaseArticleUpsertWithWhereUniqueWithoutCategoryInput = {
+    where: KnowledgeBaseArticleWhereUniqueInput
+    update: XOR<KnowledgeBaseArticleUpdateWithoutCategoryInput, KnowledgeBaseArticleUncheckedUpdateWithoutCategoryInput>
+    create: XOR<KnowledgeBaseArticleCreateWithoutCategoryInput, KnowledgeBaseArticleUncheckedCreateWithoutCategoryInput>
+  }
+
+  export type KnowledgeBaseArticleUpdateWithWhereUniqueWithoutCategoryInput = {
+    where: KnowledgeBaseArticleWhereUniqueInput
+    data: XOR<KnowledgeBaseArticleUpdateWithoutCategoryInput, KnowledgeBaseArticleUncheckedUpdateWithoutCategoryInput>
+  }
+
+  export type KnowledgeBaseArticleUpdateManyWithWhereWithoutCategoryInput = {
+    where: KnowledgeBaseArticleScalarWhereInput
+    data: XOR<KnowledgeBaseArticleUpdateManyMutationInput, KnowledgeBaseArticleUncheckedUpdateManyWithoutCategoryInput>
+  }
+
+  export type KnowledgeBaseArticleCreateWithoutVersionsInput = {
+    id?: string
+    title: string
+    slug: string
+    content: string
+    excerpt?: string | null
+    tags?: KnowledgeBaseArticleCreatetagsInput | string[]
+    published?: boolean
+    views?: number
+    helpful?: number
+    notHelpful?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    category: KnowledgeBaseCategoryCreateNestedOneWithoutArticlesInput
+    author: UserCreateNestedOneWithoutKnowledgeBaseArticlesInput
+  }
+
+  export type KnowledgeBaseArticleUncheckedCreateWithoutVersionsInput = {
+    id?: string
+    title: string
+    slug: string
+    content: string
+    excerpt?: string | null
+    categoryId: string
+    authorId: string
+    tags?: KnowledgeBaseArticleCreatetagsInput | string[]
+    published?: boolean
+    views?: number
+    helpful?: number
+    notHelpful?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+  }
+
+  export type KnowledgeBaseArticleCreateOrConnectWithoutVersionsInput = {
+    where: KnowledgeBaseArticleWhereUniqueInput
+    create: XOR<KnowledgeBaseArticleCreateWithoutVersionsInput, KnowledgeBaseArticleUncheckedCreateWithoutVersionsInput>
+  }
+
+  export type KnowledgeBaseArticleUpsertWithoutVersionsInput = {
+    update: XOR<KnowledgeBaseArticleUpdateWithoutVersionsInput, KnowledgeBaseArticleUncheckedUpdateWithoutVersionsInput>
+    create: XOR<KnowledgeBaseArticleCreateWithoutVersionsInput, KnowledgeBaseArticleUncheckedCreateWithoutVersionsInput>
+    where?: KnowledgeBaseArticleWhereInput
+  }
+
+  export type KnowledgeBaseArticleUpdateToOneWithWhereWithoutVersionsInput = {
+    where?: KnowledgeBaseArticleWhereInput
+    data: XOR<KnowledgeBaseArticleUpdateWithoutVersionsInput, KnowledgeBaseArticleUncheckedUpdateWithoutVersionsInput>
+  }
+
+  export type KnowledgeBaseArticleUpdateWithoutVersionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: KnowledgeBaseArticleUpdatetagsInput | string[]
+    published?: BoolFieldUpdateOperationsInput | boolean
+    views?: IntFieldUpdateOperationsInput | number
+    helpful?: IntFieldUpdateOperationsInput | number
+    notHelpful?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    category?: KnowledgeBaseCategoryUpdateOneRequiredWithoutArticlesNestedInput
+    author?: UserUpdateOneRequiredWithoutKnowledgeBaseArticlesNestedInput
+  }
+
+  export type KnowledgeBaseArticleUncheckedUpdateWithoutVersionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    categoryId?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    tags?: KnowledgeBaseArticleUpdatetagsInput | string[]
+    published?: BoolFieldUpdateOperationsInput | boolean
+    views?: IntFieldUpdateOperationsInput | number
+    helpful?: IntFieldUpdateOperationsInput | number
+    notHelpful?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type UserCreateManyTenantInput = {
     id?: string
     email: string
     passwordHash: string
     role: $Enums.UserRole
     twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -34158,6 +46211,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34168,6 +46224,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUpdateManyWithoutAssignedToNestedInput
     orders?: OrderUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTenantInput = {
@@ -34176,6 +46236,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34186,6 +46249,10 @@ export namespace Prisma {
     apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
     assignedIncidents?: IncidentUncheckedUpdateManyWithoutAssignedToNestedInput
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutTenantInput = {
@@ -34194,6 +46261,9 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34331,6 +46401,67 @@ export namespace Prisma {
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type SupportTicketCreateManyUserInput = {
+    id?: string
+    ticketNumber: string
+    subject: string
+    description: string
+    priority?: $Enums.TicketPriority
+    category?: string | null
+    status?: $Enums.TicketStatus
+    assignedToId?: string | null
+    assignedAt?: Date | string | null
+    slaResponseDeadline?: Date | string | null
+    slaResolveDeadline?: Date | string | null
+    firstResponseAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    closedAt?: Date | string | null
+  }
+
+  export type TicketCommentCreateManyAuthorInput = {
+    id?: string
+    ticketId: string
+    message: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SupportTicketCreateManyAssignedToInput = {
+    id?: string
+    ticketNumber: string
+    subject: string
+    description: string
+    priority?: $Enums.TicketPriority
+    category?: string | null
+    status?: $Enums.TicketStatus
+    assignedAt?: Date | string | null
+    slaResponseDeadline?: Date | string | null
+    slaResolveDeadline?: Date | string | null
+    firstResponseAt?: Date | string | null
+    userId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    closedAt?: Date | string | null
+  }
+
+  export type KnowledgeBaseArticleCreateManyAuthorInput = {
+    id?: string
+    title: string
+    slug: string
+    content: string
+    excerpt?: string | null
+    categoryId: string
+    tags?: KnowledgeBaseArticleCreatetagsInput | string[]
+    published?: boolean
+    views?: number
+    helpful?: number
+    notHelpful?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
   }
 
   export type GameServerUpdateWithoutOwnerInput = {
@@ -34628,6 +46759,195 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportTicketUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketNumber?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    assignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResponseDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResolveDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstResponseAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    assignedTo?: UserUpdateOneWithoutAssignedTicketsNestedInput
+    comments?: TicketCommentUpdateManyWithoutTicketNestedInput
+  }
+
+  export type SupportTicketUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketNumber?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    assignedToId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResponseDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResolveDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstResponseAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    comments?: TicketCommentUncheckedUpdateManyWithoutTicketNestedInput
+  }
+
+  export type SupportTicketUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketNumber?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    assignedToId?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResponseDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResolveDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstResponseAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type TicketCommentUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ticket?: SupportTicketUpdateOneRequiredWithoutCommentsNestedInput
+  }
+
+  export type TicketCommentUncheckedUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketId?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TicketCommentUncheckedUpdateManyWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketId?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportTicketUpdateWithoutAssignedToInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketNumber?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    assignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResponseDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResolveDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstResponseAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutSupportTicketsNestedInput
+    comments?: TicketCommentUpdateManyWithoutTicketNestedInput
+  }
+
+  export type SupportTicketUncheckedUpdateWithoutAssignedToInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketNumber?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    assignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResponseDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResolveDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstResponseAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    comments?: TicketCommentUncheckedUpdateManyWithoutTicketNestedInput
+  }
+
+  export type SupportTicketUncheckedUpdateManyWithoutAssignedToInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketNumber?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    assignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResponseDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    slaResolveDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    firstResponseAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type KnowledgeBaseArticleUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: KnowledgeBaseArticleUpdatetagsInput | string[]
+    published?: BoolFieldUpdateOperationsInput | boolean
+    views?: IntFieldUpdateOperationsInput | number
+    helpful?: IntFieldUpdateOperationsInput | number
+    notHelpful?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    category?: KnowledgeBaseCategoryUpdateOneRequiredWithoutArticlesNestedInput
+    versions?: ArticleVersionUpdateManyWithoutArticleNestedInput
+  }
+
+  export type KnowledgeBaseArticleUncheckedUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    categoryId?: StringFieldUpdateOperationsInput | string
+    tags?: KnowledgeBaseArticleUpdatetagsInput | string[]
+    published?: BoolFieldUpdateOperationsInput | boolean
+    views?: IntFieldUpdateOperationsInput | number
+    helpful?: IntFieldUpdateOperationsInput | number
+    notHelpful?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    versions?: ArticleVersionUncheckedUpdateManyWithoutArticleNestedInput
+  }
+
+  export type KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    categoryId?: StringFieldUpdateOperationsInput | string
+    tags?: KnowledgeBaseArticleUpdatetagsInput | string[]
+    published?: BoolFieldUpdateOperationsInput | boolean
+    views?: IntFieldUpdateOperationsInput | number
+    helpful?: IntFieldUpdateOperationsInput | number
+    notHelpful?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type GameServerCreateManyNodeInput = {
@@ -35512,6 +47832,196 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TicketCommentCreateManyTicketInput = {
+    id?: string
+    authorId: string
+    message: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TicketCommentUpdateWithoutTicketInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    author?: UserUpdateOneRequiredWithoutTicketCommentsNestedInput
+  }
+
+  export type TicketCommentUncheckedUpdateWithoutTicketInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TicketCommentUncheckedUpdateManyWithoutTicketInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArticleVersionCreateManyArticleInput = {
+    id?: string
+    version: number
+    title: string
+    content: string
+    excerpt?: string | null
+    createdBy: string
+    createdAt?: Date | string
+  }
+
+  export type ArticleVersionUpdateWithoutArticleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArticleVersionUncheckedUpdateWithoutArticleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArticleVersionUncheckedUpdateManyWithoutArticleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KnowledgeBaseCategoryCreateManyParentInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    icon?: string | null
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type KnowledgeBaseArticleCreateManyCategoryInput = {
+    id?: string
+    title: string
+    slug: string
+    content: string
+    excerpt?: string | null
+    authorId: string
+    tags?: KnowledgeBaseArticleCreatetagsInput | string[]
+    published?: boolean
+    views?: number
+    helpful?: number
+    notHelpful?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+  }
+
+  export type KnowledgeBaseCategoryUpdateWithoutParentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: KnowledgeBaseCategoryUpdateManyWithoutParentNestedInput
+    articles?: KnowledgeBaseArticleUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type KnowledgeBaseCategoryUncheckedUpdateWithoutParentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: KnowledgeBaseCategoryUncheckedUpdateManyWithoutParentNestedInput
+    articles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type KnowledgeBaseCategoryUncheckedUpdateManyWithoutParentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KnowledgeBaseArticleUpdateWithoutCategoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: KnowledgeBaseArticleUpdatetagsInput | string[]
+    published?: BoolFieldUpdateOperationsInput | boolean
+    views?: IntFieldUpdateOperationsInput | number
+    helpful?: IntFieldUpdateOperationsInput | number
+    notHelpful?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    author?: UserUpdateOneRequiredWithoutKnowledgeBaseArticlesNestedInput
+    versions?: ArticleVersionUpdateManyWithoutArticleNestedInput
+  }
+
+  export type KnowledgeBaseArticleUncheckedUpdateWithoutCategoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    authorId?: StringFieldUpdateOperationsInput | string
+    tags?: KnowledgeBaseArticleUpdatetagsInput | string[]
+    published?: BoolFieldUpdateOperationsInput | boolean
+    views?: IntFieldUpdateOperationsInput | number
+    helpful?: IntFieldUpdateOperationsInput | number
+    notHelpful?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    versions?: ArticleVersionUncheckedUpdateManyWithoutArticleNestedInput
+  }
+
+  export type KnowledgeBaseArticleUncheckedUpdateManyWithoutCategoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    excerpt?: NullableStringFieldUpdateOperationsInput | string | null
+    authorId?: StringFieldUpdateOperationsInput | string
+    tags?: KnowledgeBaseArticleUpdatetagsInput | string[]
+    published?: BoolFieldUpdateOperationsInput | boolean
+    views?: IntFieldUpdateOperationsInput | number
+    helpful?: IntFieldUpdateOperationsInput | number
+    notHelpful?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
 
 
   /**
@@ -35541,6 +48051,18 @@ export namespace Prisma {
      * @deprecated Use PlanCountOutputTypeDefaultArgs instead
      */
     export type PlanCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PlanCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SupportTicketCountOutputTypeDefaultArgs instead
+     */
+    export type SupportTicketCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SupportTicketCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use KnowledgeBaseArticleCountOutputTypeDefaultArgs instead
+     */
+    export type KnowledgeBaseArticleCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = KnowledgeBaseArticleCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use KnowledgeBaseCategoryCountOutputTypeDefaultArgs instead
+     */
+    export type KnowledgeBaseCategoryCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = KnowledgeBaseCategoryCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use SystemLicenseDefaultArgs instead
      */
@@ -35617,6 +48139,30 @@ export namespace Prisma {
      * @deprecated Use OrderDefaultArgs instead
      */
     export type OrderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = OrderDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SupportTicketDefaultArgs instead
+     */
+    export type SupportTicketArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SupportTicketDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SlaPolicyDefaultArgs instead
+     */
+    export type SlaPolicyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SlaPolicyDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use TicketCommentDefaultArgs instead
+     */
+    export type TicketCommentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TicketCommentDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use KnowledgeBaseArticleDefaultArgs instead
+     */
+    export type KnowledgeBaseArticleArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = KnowledgeBaseArticleDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use KnowledgeBaseCategoryDefaultArgs instead
+     */
+    export type KnowledgeBaseCategoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = KnowledgeBaseCategoryDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ArticleVersionDefaultArgs instead
+     */
+    export type ArticleVersionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ArticleVersionDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

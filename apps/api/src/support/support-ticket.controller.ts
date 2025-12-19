@@ -15,7 +15,7 @@ import {
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminGuard } from '../auth/guards/admin.guard';
 import { SupportTicketService } from './support-ticket.service';
-import { WebSocketGateway } from '../websocket/websocket.gateway';
+import { AppWebSocketGateway } from '../websocket/websocket.gateway';
 import { CreateSupportTicketDto, UpdateTicketDto, AddCommentDto } from './dto/support-ticket.dto';
 
 /**
@@ -29,7 +29,7 @@ export class SupportTicketController implements OnModuleInit {
 
   constructor(
     private readonly supportTicketService: SupportTicketService,
-    private readonly webSocketGateway: WebSocketGateway,
+    private readonly webSocketGateway: AppWebSocketGateway,
   ) {}
 
   /**

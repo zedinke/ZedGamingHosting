@@ -151,6 +151,9 @@ exports.Prisma.UserScalarFieldEnum = {
   passwordHash: 'passwordHash',
   role: 'role',
   twoFactorSecret: 'twoFactorSecret',
+  twoFactorEnabled: 'twoFactorEnabled',
+  twoFactorMethod: 'twoFactorMethod',
+  twoFactorBackupCodes: 'twoFactorBackupCodes',
   balance: 'balance',
   tenantId: 'tenantId',
   createdAt: 'createdAt',
@@ -383,6 +386,84 @@ exports.Prisma.OrderScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SupportTicketScalarFieldEnum = {
+  id: 'id',
+  ticketNumber: 'ticketNumber',
+  subject: 'subject',
+  description: 'description',
+  priority: 'priority',
+  category: 'category',
+  status: 'status',
+  assignedToId: 'assignedToId',
+  assignedAt: 'assignedAt',
+  slaResponseDeadline: 'slaResponseDeadline',
+  slaResolveDeadline: 'slaResolveDeadline',
+  firstResponseAt: 'firstResponseAt',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  closedAt: 'closedAt'
+};
+
+exports.Prisma.SlaPolicyScalarFieldEnum = {
+  id: 'id',
+  priority: 'priority',
+  responseTimeHours: 'responseTimeHours',
+  resolveTimeHours: 'resolveTimeHours',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TicketCommentScalarFieldEnum = {
+  id: 'id',
+  ticketId: 'ticketId',
+  authorId: 'authorId',
+  message: 'message',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.KnowledgeBaseArticleScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  slug: 'slug',
+  content: 'content',
+  excerpt: 'excerpt',
+  categoryId: 'categoryId',
+  authorId: 'authorId',
+  tags: 'tags',
+  published: 'published',
+  views: 'views',
+  helpful: 'helpful',
+  notHelpful: 'notHelpful',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  publishedAt: 'publishedAt'
+};
+
+exports.Prisma.KnowledgeBaseCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  description: 'description',
+  icon: 'icon',
+  order: 'order',
+  parentId: 'parentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ArticleVersionScalarFieldEnum = {
+  id: 'id',
+  articleId: 'articleId',
+  version: 'version',
+  title: 'title',
+  content: 'content',
+  excerpt: 'excerpt',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -395,6 +476,11 @@ exports.Prisma.NullableJsonNullValueInput = {
 
 exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
 };
 
 exports.Prisma.NullsOrder = {
@@ -418,7 +504,8 @@ exports.UserRole = exports.$Enums.UserRole = {
   SUPERADMIN: 'SUPERADMIN',
   RESELLER_ADMIN: 'RESELLER_ADMIN',
   USER: 'USER',
-  SUPPORT: 'SUPPORT'
+  SUPPORT: 'SUPPORT',
+  SUPPORTER: 'SUPPORTER'
 };
 
 exports.DiskType = exports.$Enums.DiskType = {
@@ -537,6 +624,21 @@ exports.OrderStatus = exports.$Enums.OrderStatus = {
   REFUNDED: 'REFUNDED'
 };
 
+exports.TicketPriority = exports.$Enums.TicketPriority = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+  CRITICAL: 'CRITICAL'
+};
+
+exports.TicketStatus = exports.$Enums.TicketStatus = {
+  OPEN: 'OPEN',
+  IN_PROGRESS: 'IN_PROGRESS',
+  WAITING_CUSTOMER: 'WAITING_CUSTOMER',
+  RESOLVED: 'RESOLVED',
+  CLOSED: 'CLOSED'
+};
+
 exports.Prisma.ModelName = {
   SystemLicense: 'SystemLicense',
   Tenant: 'Tenant',
@@ -556,7 +658,13 @@ exports.Prisma.ModelName = {
   Incident: 'Incident',
   Plan: 'Plan',
   Promotion: 'Promotion',
-  Order: 'Order'
+  Order: 'Order',
+  SupportTicket: 'SupportTicket',
+  SlaPolicy: 'SlaPolicy',
+  TicketComment: 'TicketComment',
+  KnowledgeBaseArticle: 'KnowledgeBaseArticle',
+  KnowledgeBaseCategory: 'KnowledgeBaseCategory',
+  ArticleVersion: 'ArticleVersion'
 };
 
 /**

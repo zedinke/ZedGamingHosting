@@ -1,6 +1,6 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
-import { WebSocketGateway } from '../websocket/websocket.gateway';
+import { AppWebSocketGateway } from '../websocket/websocket.gateway';
 
 /**
  * Agent Service - business logic for daemon communication
@@ -8,14 +8,14 @@ import { WebSocketGateway } from '../websocket/websocket.gateway';
 @Injectable()
 export class AgentService {
   private readonly logger = new Logger(AgentService.name);
-  private webSocketGateway: WebSocketGateway | null = null;
+  private webSocketGateway: AppWebSocketGateway | null = null;
 
   constructor(private readonly prisma: PrismaService) {}
 
   /**
    * Sets WebSocket gateway for broadcasting metrics (lazy injection)
    */
-  setWebSocketGateway(gateway: WebSocketGateway): void {
+  setWebSocketGateway(gateway: AppWebSocketGateway): void {
     this.webSocketGateway = gateway;
   }
 

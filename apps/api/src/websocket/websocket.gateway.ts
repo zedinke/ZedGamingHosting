@@ -13,7 +13,7 @@ import { Server, Socket } from 'socket.io';
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { PrismaService } from '@zedgaming/db';
+import { PrismaService } from '@zed-hosting/db';
 
 interface AuthenticatedSocket extends Socket {
   userId?: string;
@@ -22,12 +22,6 @@ interface AuthenticatedSocket extends Socket {
     email: string;
     role: string;
   };
-}
-
-interface WsMessage {
-  type: string;
-  data: any;
-  timestamp?: number;
 }
 
 /**
@@ -87,6 +81,13 @@ export class AppWebSocketGateway
 
   async handleConnection(socket: AuthenticatedSocket) {
     const userId = socket.userId;
+    
+    if (!userId) {
+      this.logger.warn('Connection rejected: No user ID');
+      socket.disconnect(true);
+      return;
+    }
+    
     this.logger.log(`Client connected: ${socket.id}, User: ${userId}`);
 
     try {
@@ -120,7 +121,7 @@ export class AppWebSocketGateway
       });
 
       // Broadcast online status to admin if user is staff
-      if (user.role === 'ADMIN' || user.role === 'SUPPORT_STAFF') {
+      if (user.role === 'SUPERADMIN' || user.role === 'SUPPORT' || user.role === 'SUPPORTER') {
         this.server.emit('staff:online', {
           userId,
           email: user.email,
@@ -129,7 +130,7 @@ export class AppWebSocketGateway
         });
       }
     } catch (error) {
-      this.logger.error(`Connection handler error: ${error.message}`);
+      this.logger.error(`Connection handler error: ${error instanceof Error ? error.message : 'Unknown error'}`);
       socket.disconnect(true);
     }
   }
@@ -152,7 +153,7 @@ export class AppWebSocketGateway
               select: { role: true },
             });
 
-            if (user?.role === 'ADMIN' || user?.role === 'SUPPORT_STAFF') {
+            if (user?.role === 'SUPERADMIN' || user?.role === 'SUPPORT' || user?.role === 'SUPPORTER') {
               this.server.emit('staff:offline', {
                 userId,
                 timestamp: new Date(),
@@ -162,7 +163,7 @@ export class AppWebSocketGateway
         }
       }
     } catch (error) {
-      this.logger.error(`Disconnect handler error: ${error.message}`);
+      this.logger.error(`Disconnect handler error: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
@@ -195,7 +196,7 @@ export class AppWebSocketGateway
         select: { role: true },
       });
 
-      if (ticket.userId !== userId && user?.role !== 'ADMIN' && user?.role !== 'SUPPORT_STAFF') {
+      if (ticket.userId !== userId && user?.role !== 'SUPERADMIN' && user?.role !== 'SUPPORT' && user?.role !== 'SUPPORTER') {
         throw new WsException('Unauthorized');
       }
 
@@ -205,7 +206,7 @@ export class AppWebSocketGateway
 
       this.logger.log(`User ${userId} subscribed to ticket ${ticketId}`);
     } catch (error) {
-      socket.emit('error', { message: error.message });
+      socket.emit('error', { message: error instanceof Error ? error.message : 'Unknown error' });
     }
   }
 
@@ -363,11 +364,15 @@ export class AppWebSocketGateway
    * Send notification to all support staff
    */
   broadcastToStaff(event: string, data: any) {
-    this.server.to('role:ADMIN').emit(event, {
+    this.server.to('role:SUPERADMIN').emit(event, {
       ...data,
       timestamp: new Date(),
     });
-    this.server.to('role:SUPPORT_STAFF').emit(event, {
+    this.server.to('role:SUPPORT').emit(event, {
+      ...data,
+      timestamp: new Date(),
+    });
+    this.server.to('role:SUPPORTER').emit(event, {
       ...data,
       timestamp: new Date(),
     });

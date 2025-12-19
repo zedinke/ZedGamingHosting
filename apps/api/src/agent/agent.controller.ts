@@ -1,7 +1,7 @@
 import { Controller, Post, Get, Patch, Body, Param, Query, HttpCode, HttpStatus, OnModuleInit } from '@nestjs/common';
 import { Public } from '../auth/decorators/public.decorator';
 import { AgentService } from './agent.service';
-import { WebSocketGateway } from '../websocket/websocket.gateway';
+import { AppWebSocketGateway } from '../websocket/websocket.gateway';
 
 /**
  * Agent Controller - REST endpoints for daemon communication
@@ -11,7 +11,7 @@ import { WebSocketGateway } from '../websocket/websocket.gateway';
 export class AgentController implements OnModuleInit {
   constructor(
     private readonly agentService: AgentService,
-    private readonly webSocketGateway: WebSocketGateway,
+    private readonly webSocketGateway: AppWebSocketGateway,
   ) {}
 
   /**
