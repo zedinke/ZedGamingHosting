@@ -26,6 +26,7 @@ import { PaymentsModule } from './payments/payments.module';
 import { SupportModule } from './support/support.module';
 import { KnowledgeBaseModule } from './knowledge-base/knowledge-base.module';
 import { WebSocketModule } from './websocket/websocket.module';
+import { MetricsModule } from './metrics/metrics.module';
 import { MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { TenantMiddleware } from './common/middleware/tenant.middleware';
 import { APP_GUARD } from '@nestjs/core';
@@ -72,6 +73,7 @@ import { PublicOptionalJwtGuard } from './auth/guards/public-optional-jwt.guard'
     SupportModule, // Support ticketing system
     KnowledgeBaseModule, // Knowledge base articles
     WebSocketModule, // Real-time WebSocket gateway
+    MetricsModule, // Node and server metrics
   ],
   providers: [
     {

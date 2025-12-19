@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
 import { useAuthStore } from '../../../../stores/auth-store';
 import { AdminLayout } from '../../../../components/admin/admin-layout';
+import { NodeHealthSummary } from '../../../../components/admin/node-health-summary';
 import { Card, Button, Input, Badge } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../lib/api-client';
 import { useQuery } from '@tanstack/react-query';
@@ -145,7 +146,9 @@ export default function AdminNodesPage() {
             </p>
           </div>
 
-          <div className="flex gap-4 mb-6">
+          <NodeHealthSummary nodes={nodes} />
+
+          <div className="flex gap-4 mb-6 mt-6">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
               <Input
@@ -223,11 +226,19 @@ export default function AdminNodesPage() {
                     </div>
                   </div>
 
-                  <div className="pt-4 border-t border-border">
+                  <div className="pt-4 border-t border-border flex gap-2">
+                    <Button 
+                      variant="primary" 
+                      size="sm" 
+                      className="flex-1"
+                      onClick={() => router.push(`/${locale}/admin/nodes/${node.id}/health`)}
+                    >
+                      Részletek
+                    </Button>
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      className="w-full"
+                      className="flex-1"
                       onClick={() => router.push(`/${locale}/admin/nodes/${node.id}`)}
                     >
                       Szerkesztés
