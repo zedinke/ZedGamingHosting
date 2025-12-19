@@ -250,5 +250,115 @@ export class AuthService {
       message: this.i18n.translate('PASSWORD_CHANGED_SUCCESSFULLY'),
     };
   }
+
+  /**
+   * Verify 2FA code during login
+   * Uses the TwoFactorAuthService from the same module
+   */
+  async verify2FACode(userId: string, code: number): Promise<any> {
+    // This will be called from the auth controller
+    // We need to verify the code using speakeasy
+    const speakeasy = require('speakeasy');
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        tenantId: true,
+        twoFactorSecret: true,
+        twoFactorEnabled: true,
+      },
+    });
+
+    if (!user || !user.twoFactorEnabled || !user.twoFactorSecret) {
+      throw new UnauthorizedException('2FA is not enabled for this user');
+    }
+
+    // Verify the TOTP code
+    const isValid = speakeasy.totp.verify({
+      secret: user.twoFactorSecret,
+      encoding: 'base32',
+      window: 2, // Allow 30 seconds before/after
+      code: code.toString().padStart(6, '0'),
+    });
+
+    if (!isValid) {
+      throw new UnauthorizedException('Invalid 2FA code');
+    }
+
+    this.logger.log(`User ${user.email} verified 2FA code`);
+
+    return {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      tenantId: user.tenantId,
+    };
+  }
+
+  /**
+   * Verify backup code during login
+   */
+  async verifyBackupCode(userId: string, backupCode: string): Promise<any> {
+    const crypto = require('crypto');
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        tenantId: true,
+        twoFactorBackupCodes: true,
+        twoFactorEnabled: true,
+      },
+    });
+
+    if (!user || !user.twoFactorEnabled || !user.twoFactorBackupCodes) {
+      throw new UnauthorizedException('2FA is not enabled for this user');
+    }
+
+    // Hash the provided backup code
+    const hashedCode = crypto.createHash('sha256').update(backupCode).digest('hex');
+
+    // Parse stored backup codes (JSON string)
+    let backupCodesArray: { code: string; used: boolean }[] = [];
+    try {
+      backupCodesArray = JSON.parse(user.twoFactorBackupCodes as any);
+    } catch {
+      throw new UnauthorizedException('Invalid backup codes format');
+    }
+
+    // Find and mark the code as used
+    const codeIndex = backupCodesArray.findIndex(
+      (b) => b.code === hashedCode && !b.used
+    );
+
+    if (codeIndex === -1) {
+      throw new UnauthorizedException('Invalid or already used backup code');
+    }
+
+    // Mark the code as used
+    backupCodesArray[codeIndex].used = true;
+
+    // Update user with used backup code
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        twoFactorBackupCodes: JSON.stringify(backupCodesArray),
+      },
+    });
+
+    this.logger.log(`User ${user.email} verified backup code`);
+
+    return {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      tenantId: user.tenantId,
+    };
+  }
 }
 
