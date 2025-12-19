@@ -27,11 +27,6 @@
     "instantDeploy": {
       "title": "Instant Deployment",
       "description": "Your server is ready in seconds. Automated deployment with one click."
-      "cta": {
-        "title": "Start today",
-        "subtitle": "Create your first server in minutes and manage it from a modern dashboard.",
-        "button": "Browse plans"
-      },
     },
     "instantDeployment": {
       "title": "Instant Deployment",
@@ -57,6 +52,11 @@
       "title": "24/7 Support",
       "description": "Hungarian language support around the clock, so we can always help when you need it."
     }
+  },
+  "cta": {
+    "title": "Start today",
+    "subtitle": "Create your first server in minutes and manage it from a modern dashboard.",
+    "button": "Browse plans"
   },
   "footer": {
     "copyright": "© {year} ZedGamingHosting. All rights reserved.",
@@ -130,16 +130,26 @@
         "settings": "Settings",
         "metrics": "Metrics"
       },
+      "files": {
+        "title": "File Manager",
+        "description": "Manage server files"
+      },
+      "console": {
+        "title": "Server Console",
+        "description": "Console output and sending commands",
+        "commandPlaceholder": "Type a command..."
+      },
       "metrics": {
         "title": "Server Metrics",
+        "description": "Server performance and resource usage",
         "loading": "Loading metrics...",
         "noData": "No metrics data available",
         "cpu": "CPU Usage",
         "ram": "RAM Usage",
         "disk": "Disk Usage",
         "network": "Network Usage",
-        "networkIn": "In",
-        "networkOut": "Out"
+        "networkIn": "Inbound",
+        "networkOut": "Outbound"
       },
       "settings": {
         "title": "Server Settings",
