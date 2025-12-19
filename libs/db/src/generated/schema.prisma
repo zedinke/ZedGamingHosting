@@ -8,7 +8,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -643,7 +643,7 @@ model KnowledgeBaseArticle {
   authorId String
   author   User   @relation("KnowledgeBaseArticles", fields: [authorId], references: [id])
 
-  tags String[] // Array of tag strings
+  tags Json @default("[]") // JSON array of tag strings for MySQL compatibility
 
   published  Boolean @default(false)
   views      Int     @default(0)
