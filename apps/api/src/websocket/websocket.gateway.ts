@@ -10,10 +10,10 @@ import {
   MessageBody,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Injectable, Logger, UseGuards } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { PrismaService } from '@libs/db';
+import { PrismaService } from '@zedgaming/db';
 
 interface AuthenticatedSocket extends Socket {
   userId?: string;
@@ -44,13 +44,13 @@ interface WsMessage {
     credentials: true,
   },
 })
-export class WebSocketGateway
+export class AppWebSocketGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   @WebSocketServer()
-  server: Server;
+  server!: Server;
 
-  private readonly logger = new Logger(WebSocketGateway.name);
+  private readonly logger = new Logger(AppWebSocketGateway.name);
   private connectedUsers: Map<string, Set<string>> = new Map(); // userId -> Set of socketIds
 
   constructor(

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { SupportTicketService } from './support-ticket.service';
 import { SupportTicketController } from './support-ticket.controller';
-import { DbModule } from '@zed-hosting/db';
+import { PrismaModule } from '@zedgaming/db';
 import { EmailModule } from '../email/email.module';
 import { WebSocketModule } from '../websocket/websocket.module';
 

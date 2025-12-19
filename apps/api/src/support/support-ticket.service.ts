@@ -189,7 +189,8 @@ export class SupportTicketService {
    * Add comment to ticket
    */
   async addComment(ticketId: string, userId: string, dto: AddCommentDto): Promise<any> {
-    const ticket = await this.getTicket(ticketId, userId);
+    // Validate user has access to ticket
+    await this.getTicket(ticketId, userId);
 
     const comment = await this.prisma.ticketComment.create({
       data: {
@@ -453,7 +454,7 @@ export class SupportTicketService {
   /**
    * Assign ticket to support staff
    */
-  async assignTicket(ticketId: string, assignedToId: string, assignedBy: string): Promise<any> {
+  async assignTicket(ticketId: string, assignedToId: string, _assignedBy: string): Promise<any> {
     // Validate ticket exists
     const ticket = await this.prisma.supportTicket.findUnique({
       where: { id: ticketId },
@@ -469,7 +470,7 @@ export class SupportTicketService {
       where: { id: assignedToId },
     });
 
-    if (!assignee || (assignee.role !== 'ADMIN' && assignee.role !== 'SUPPORT')) {
+    if (!assignee || (assignee.role !== 'SUPERADMIN' && assignee.role !== 'SUPPORT' && assignee.role !== 'SUPPORTER')) {
       throw new ForbiddenException('Can only assign to support staff');
     }
 
@@ -512,8 +513,6 @@ export class SupportTicketService {
         assignedTo: {
           id: assignee.id,
           email: assignee.email,
-          firstName: assignee.firstName || '',
-          lastName: assignee.lastName || '',
         },
         ticket: updatedTicket,
       });
@@ -536,7 +535,7 @@ export class SupportTicketService {
   async getSupportStaffWorkload(): Promise<any[]> {
     const supportStaff = await this.prisma.user.findMany({
       where: {
-        role: { in: ['ADMIN', 'SUPPORT'] },
+        role: { in: ['SUPERADMIN', 'SUPPORT', 'SUPPORTER'] },
       },
       include: {
         assignedTickets: {
@@ -609,7 +608,7 @@ export class SupportTicketService {
     ticketNumber: string,
     subject: string,
     assigneeEmail: string,
-    ticketId: string,
+    _ticketId: string,
   ): string {
     return `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
