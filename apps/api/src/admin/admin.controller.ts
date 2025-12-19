@@ -1,11 +1,8 @@
 import {
   Controller,
   Get,
-  Post,
   Put,
-  Delete,
   Body,
-  Param,
   UseGuards,
   Request,
 } from '@nestjs/common';
@@ -13,25 +10,6 @@ import { AdminService } from './admin.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
-
-interface CreateUserDto {
-  email: string;
-  password: string;
-  role: string;
-  balance?: number;
-}
-
-interface UpdateUserDto {
-  email?: string;
-  role?: string;
-  balance?: number;
-}
-
-interface UpdateBalanceDto {
-  amount: number;
-  type: 'add' | 'subtract' | 'set';
-  reason?: string;
-}
 
 /**
  * Admin Controller - handles admin-only endpoints
