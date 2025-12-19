@@ -176,7 +176,8 @@ export class BarionService {
       } catch (e) {
         lastErr = e;
         const wait = baseMs * Math.pow(2, i);
-        this.logger.warn(`[Barion:${label}] attempt ${i + 1}/${retries} failed: ${e?.message || e}. Retrying in ${wait}ms`);
+        const msg = e instanceof Error ? e.message : String(e);
+        this.logger.warn(`[Barion:${label}] attempt ${i + 1}/${retries} failed: ${msg}. Retrying in ${wait}ms`);
         await new Promise((r) => setTimeout(r, wait));
       }
     }

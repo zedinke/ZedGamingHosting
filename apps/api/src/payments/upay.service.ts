@@ -124,7 +124,7 @@ export class UpayService {
     }
 
     try {
-      const response = await this.retry(async () => await this.httpClient.get(`/payments/${paymentId}`), 'getPayment');
+      const response = await this.retry(async () => await this.httpClient!.get(`/payments/${paymentId}`), 'getPayment');
       return response.data;
     } catch (error: any) {
       this.logger.error(`Failed to get Upay payment state: ${error.message}`);
