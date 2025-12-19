@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAuthStore } from '../../../../../stores/auth-store';
 import { Navigation } from '../../../../../components/navigation';
@@ -8,16 +8,34 @@ import { Card, Button } from '@zed-hosting/ui-kit';
 import { apiClient } from '../../../../../lib/api-client';
 import { useQuery } from '@tanstack/react-query';
 import { useNotificationContext } from '../../../../../context/notification-context';
+import { useSocketContext } from '../../../../../contexts/socket-context';
 import { GameServer } from '../../../../../types/server';
+
+interface ServerMetrics {
+  cpu: number;
+  memory: {
+    used: number;
+    total: number;
+    percent: number;
+  };
+  disk: Array<{ mount: string; used: number; total: number; percent: number }>;
+  network: { in: number; out: number };
+  containerCount: number;
+  timestamp: number;
+  nodeId: string;
+  nodeName: string;
+}
 
 export default function AdminServerDetailPage() {
   const router = useRouter();
   const params = useParams();
   const { user: currentUser, isAuthenticated, accessToken } = useAuthStore();
   const notifications = useNotificationContext();
+  const socket = useSocketContext();
   const locale = (params?.locale as string) || 'hu';
   const serverUuid = params?.uuid as string;
   const [isHydrated, setIsHydrated] = useState(false);
+  const [realtimeMetrics, setRealtimeMetrics] = useState<ServerMetrics | null>(null);
 
   useEffect(() => {
     setIsHydrated(true);
@@ -65,6 +83,27 @@ export default function AdminServerDetailPage() {
     enabled: !!accessToken && !!serverUuid && isHydrated,
     refetchInterval: 30000,
   });
+
+  // Handle real-time metrics from WebSocket
+  const handleServerMetricsUpdate = useCallback((data: ServerMetrics) => {
+    setRealtimeMetrics(data);
+  }, []);
+
+  // Subscribe to server metrics updates
+  useEffect(() => {
+    if (!socket || !server?.nodeId) return;
+
+    // Subscribe to server metrics
+    socket.subscribeToServer(server.nodeId);
+
+    // Listen for metrics updates
+    const unsubscribe = socket.subscribe('server:metricsUpdate', handleServerMetricsUpdate);
+
+    return () => {
+      unsubscribe();
+      socket.unsubscribeFromServer(server.nodeId);
+    };
+  }, [socket, server?.nodeId, handleServerMetricsUpdate]);
 
   const handleDelete = async () => {
     if (!window.confirm('Biztosan törölni szeretnéd ezt a szervert? Ez a művelet nem visszavonható!')) {
@@ -182,26 +221,72 @@ export default function AdminServerDetailPage() {
 
               <Card className="glass elevation-2 p-6">
                 <h2 className="text-xl font-semibold mb-4" style={{ color: '#f8fafc' }}>
-                  Erőforrások
+                  Valós Idejű Mérőszámok
+                  {realtimeMetrics && (
+                    <span style={{ fontSize: '0.875rem', color: '#10b981', marginLeft: '0.5rem' }}>
+                      (élő)
+                    </span>
+                  )}
                 </h2>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span style={{ color: '#cbd5e1' }}>CPU Limit:</span>
-                    <span style={{ color: '#f8fafc' }}>{server.resources?.cpuLimit || 0} mag</span>
+                {realtimeMetrics ? (
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span style={{ color: '#cbd5e1' }}>CPU Használat:</span>
+                      <div className="flex items-center gap-2">
+                        <span style={{ color: '#f8fafc' }}>{realtimeMetrics.cpu.toFixed(1)}%</span>
+                        <div style={{ width: '100px', height: '4px', backgroundColor: '#1e293b', borderRadius: '2px', overflow: 'hidden' }}>
+                          <div style={{ 
+                            width: `${Math.min(realtimeMetrics.cpu, 100)}%`, 
+                            height: '100%', 
+                            backgroundColor: realtimeMetrics.cpu > 80 ? '#ef4444' : realtimeMetrics.cpu > 60 ? '#f59e0b' : '#10b981',
+                            transition: 'width 0.3s ease'
+                          }} />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex justify-between">
+                      <span style={{ color: '#cbd5e1' }}>RAM Használat:</span>
+                      <div className="flex items-center gap-2">
+                        <span style={{ color: '#f8fafc' }}>
+                          {(realtimeMetrics.memory.used / 1024 / 1024 / 1024).toFixed(1)} GB / {(realtimeMetrics.memory.total / 1024 / 1024 / 1024).toFixed(1)} GB ({realtimeMetrics.memory.percent.toFixed(1)}%)
+                        </span>
+                        <div style={{ width: '100px', height: '4px', backgroundColor: '#1e293b', borderRadius: '2px', overflow: 'hidden' }}>
+                          <div style={{ 
+                            width: `${Math.min(realtimeMetrics.memory.percent, 100)}%`, 
+                            height: '100%', 
+                            backgroundColor: realtimeMetrics.memory.percent > 80 ? '#ef4444' : realtimeMetrics.memory.percent > 60 ? '#f59e0b' : '#10b981',
+                            transition: 'width 0.3s ease'
+                          }} />
+                        </div>
+                      </div>
+                    </div>
+                    {realtimeMetrics.disk.length > 0 && (
+                      <div className="flex justify-between">
+                        <span style={{ color: '#cbd5e1' }}>Disk Használat:</span>
+                        <div className="flex items-center gap-2">
+                          <span style={{ color: '#f8fafc' }}>
+                            {(realtimeMetrics.disk[0].used / 1024 / 1024 / 1024).toFixed(1)} GB / {(realtimeMetrics.disk[0].total / 1024 / 1024 / 1024).toFixed(1)} GB ({realtimeMetrics.disk[0].percent.toFixed(1)}%)
+                          </span>
+                          <div style={{ width: '100px', height: '4px', backgroundColor: '#1e293b', borderRadius: '2px', overflow: 'hidden' }}>
+                            <div style={{ 
+                              width: `${Math.min(realtimeMetrics.disk[0].percent, 100)}%`, 
+                              height: '100%', 
+                              backgroundColor: realtimeMetrics.disk[0].percent > 80 ? '#ef4444' : realtimeMetrics.disk[0].percent > 60 ? '#f59e0b' : '#10b981',
+                              transition: 'width 0.3s ease'
+                            }} />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    <div style={{ fontSize: '0.875rem', color: '#64748b', marginTop: '1rem' }}>
+                      Utolsó frissítés: {new Date(realtimeMetrics.timestamp).toLocaleTimeString('hu-HU')}
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span style={{ color: '#cbd5e1' }}>RAM Limit:</span>
-                    <span style={{ color: '#f8fafc' }}>{(server.resources?.ramLimit || 0) / 1024} GB</span>
+                ) : (
+                  <div style={{ color: '#64748b' }}>
+                    Várakozás a valós idejű adatokra...
                   </div>
-                  <div className="flex justify-between">
-                    <span style={{ color: '#cbd5e1' }}>Disk Limit:</span>
-                    <span style={{ color: '#f8fafc' }}>{server.resources?.diskLimit || 0} GB</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span style={{ color: '#cbd5e1' }}>Indítási prioritás:</span>
-                    <span style={{ color: '#f8fafc' }}>{server.startupPriority || 5}</span>
-                  </div>
-                </div>
+                )}
               </Card>
 
               <Card className="glass elevation-2 p-6 md:col-span-2">

@@ -1,14 +1,25 @@
-import { Controller, Post, Get, Patch, Body, Param, Query, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Get, Patch, Body, Param, Query, HttpCode, HttpStatus, OnModuleInit } from '@nestjs/common';
 import { Public } from '../auth/decorators/public.decorator';
 import { AgentService } from './agent.service';
+import { WebSocketGateway } from '../websocket/websocket.gateway';
 
 /**
  * Agent Controller - REST endpoints for daemon communication
  * These endpoints are called by daemon instances on game server nodes
  */
 @Controller('agent')
-export class AgentController {
-  constructor(private readonly agentService: AgentService) {}
+export class AgentController implements OnModuleInit {
+  constructor(
+    private readonly agentService: AgentService,
+    private readonly webSocketGateway: WebSocketGateway,
+  ) {}
+
+  /**
+   * Inject WebSocket gateway into agent service on module initialization
+   */
+  onModuleInit() {
+    this.agentService.setWebSocketGateway(this.webSocketGateway);
+  }
 
   /**
    * POST /agent/register

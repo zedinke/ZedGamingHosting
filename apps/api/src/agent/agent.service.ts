@@ -1,5 +1,6 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
+import { WebSocketGateway } from '../websocket/websocket.gateway';
 
 /**
  * Agent Service - business logic for daemon communication
@@ -7,8 +8,16 @@ import { PrismaService } from '@zed-hosting/db';
 @Injectable()
 export class AgentService {
   private readonly logger = new Logger(AgentService.name);
+  private webSocketGateway: WebSocketGateway | null = null;
 
   constructor(private readonly prisma: PrismaService) {}
+
+  /**
+   * Sets WebSocket gateway for broadcasting metrics (lazy injection)
+   */
+  setWebSocketGateway(gateway: WebSocketGateway): void {
+    this.webSocketGateway = gateway;
+  }
 
   /**
    * Registers or updates a daemon instance
@@ -94,6 +103,27 @@ export class AgentService {
         uptime: null,
       },
     });
+
+    // Broadcast metrics to WebSocket subscribers
+    if (this.webSocketGateway) {
+      this.webSocketGateway.broadcastServerMetrics(data.nodeId, {
+        cpu: data.systemInfo.cpu || 0,
+        memory: {
+          used: data.systemInfo.memory?.used || 0,
+          total: data.systemInfo.memory?.total || 0,
+          percent: data.systemInfo.memory?.percent || 0,
+        },
+        disk: data.systemInfo.disk || [],
+        network: {
+          in: data.systemInfo.network?.in || 0,
+          out: data.systemInfo.network?.out || 0,
+        },
+        containerCount: data.systemInfo.containerCount || 0,
+        timestamp: data.timestamp,
+        nodeId: data.nodeId,
+        nodeName: node.name,
+      });
+    }
 
     return { success: true };
   }
