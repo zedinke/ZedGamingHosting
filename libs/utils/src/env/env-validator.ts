@@ -23,9 +23,9 @@ export const envSchema = z.object({
   REDIS_DB: z.coerce.number().int().nonnegative().default(0),
 
   // Licensing
-  LICENSE_SERVER_URL: z.string().url(),
-  LICENSE_KEY: z.string().uuid(),
-  LICENSE_PUBLIC_KEY: z.string(),
+   LICENSE_SERVER_URL: z.string().url().optional(),
+   LICENSE_KEY: z.string().uuid().optional(),
+   LICENSE_PUBLIC_KEY: z.string().optional(),
   LICENSE_VALIDATION_CACHE_TTL: z.coerce.number().int().positive().default(86400),
   LICENSE_GRACE_PERIOD_HOURS: z.coerce.number().int().positive().default(72),
   LICENSE_REVALIDATION_INTERVAL: z.coerce.number().int().positive().default(21600),
@@ -40,9 +40,9 @@ export const envSchema = z.object({
 
   // Daemon
   DAEMON_PORT: z.coerce.number().int().positive().default(3001),
-  MANAGER_URL: z.string().url(),
-  API_KEY: z.string().min(32),
-  NODE_ID: z.string().uuid(),
+   MANAGER_URL: z.string().url().optional(),
+   API_KEY: z.string().min(32).optional(),
+   NODE_ID: z.string().uuid().optional(),
   METRICS_INTERVAL: z.coerce.number().int().positive().default(15000),
   HEARTBEAT_INTERVAL: z.coerce.number().int().positive().default(30000),
   TASK_POLL_INTERVAL: z.coerce.number().int().positive().default(5000),
