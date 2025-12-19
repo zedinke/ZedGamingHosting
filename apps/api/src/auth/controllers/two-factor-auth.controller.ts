@@ -11,9 +11,7 @@ import {
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { TwoFactorAuthService } from '../services/two-factor-auth.service';
 import {
-  Setup2FADto,
   Enable2FADto,
-  Verify2FADto,
   VerifyBackupCodeDto,
   Disable2FADto,
   TwoFASetupResponseDto,
@@ -39,10 +37,9 @@ export class TwoFactorAuthController {
   @HttpCode(200)
   async setup2FA(
     @Request() req: any,
-    @Body() dto: Setup2FADto = {},
   ): Promise<TwoFASetupResponseDto> {
     this.logger.log(`User ${req.user.id} requesting 2FA setup`);
-    return this.twoFactorAuthService.setup2FA(req.user.id, dto);
+    return this.twoFactorAuthService.setup2FA(req.user.id);
   }
 
   /**

@@ -81,7 +81,6 @@ export class AuthController {
   @Post('verify-2fa')
   @HttpCode(HttpStatus.OK)
   async verify2FA(
-    @Request() req: any,
     @Body() body: { tempToken: string; code: number; rememberDevice?: boolean },
   ) {
     const { tempToken, code, rememberDevice } = body;
@@ -136,7 +135,6 @@ export class AuthController {
   @Post('verify-backup-code')
   @HttpCode(HttpStatus.OK)
   async verifyBackupCode(
-    @Request() req: any,
     @Body() body: { tempToken: string; backupCode: string },
   ) {
     const { tempToken, backupCode } = body;

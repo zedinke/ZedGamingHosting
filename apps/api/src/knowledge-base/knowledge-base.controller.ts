@@ -18,6 +18,8 @@ import { KnowledgeBaseService } from './knowledge-base.service';
 /**
  * Knowledge Base Controller
  * Public endpoints for viewing articles and admin endpoints for management
+ * 
+ * IMPORTANT: Admin endpoints must come first before wildcard routes
  */
 @Controller('knowledge-base')
 export class KnowledgeBaseController {
@@ -25,112 +27,29 @@ export class KnowledgeBaseController {
 
   constructor(private readonly kbService: KnowledgeBaseService) {}
 
-  /**
-   * Get all published articles (public)
-   * GET /knowledge-base/articles?category=xxx&tags=tag1,tag2&search=keyword&page=1&limit=20
-   */
-  @Get('articles')
-  async getPublishedArticles(
-    @Query('category') categoryId?: string,
-    @Query('tags') tags?: string,
-    @Query('search') search?: string,
-    @Query('page') page?: string,
-    @Query('limit') limit?: string,
-  ) {
-    const tagArray = tags ? tags.split(',') : undefined;
-    return this.kbService.getPublishedArticles({
-      categoryId,
-      tags: tagArray,
-      search,
-      page: page ? parseInt(page, 10) : undefined,
-      limit: limit ? parseInt(limit, 10) : undefined,
-    });
-  }
+  // ========== ADMIN ENDPOINTS (MUST BE FIRST before wildcards) ==========
 
   /**
-   * Get article by ID or slug (public)
-   * GET /knowledge-base/articles/:idOrSlug
-   */
-  @Get('articles/:idOrSlug')
-  async getArticle(@Param('idOrSlug') idOrSlug: string) {
-    return this.kbService.getArticle(idOrSlug, true); // Increment views
-  }
-
-  /**
-   * Search articles (public)
-   * GET /knowledge-base/search?q=query&limit=10
-   */
-  @Get('search')
-  async searchArticles(
-    @Query('q') query: string,
-    @Query('limit') limit?: string,
-  ) {
-    return this.kbService.searchArticles(
-      query,
-      limit ? parseInt(limit, 10) : undefined,
-    );
-  }
-
-  /**
-   * Record article feedback (public)
-   * POST /knowledge-base/articles/:id/feedback
-   */
-  @Post('articles/:id/feedback')
-  async recordFeedback(
-    @Param('id') articleId: string,
-    @Body() body: { helpful: boolean },
-  ) {
-    return this.kbService.recordFeedback(articleId, body.helpful);
-  }
-
-  /**
-   * Get all categories (public)
-   * GET /knowledge-base/categories
-   */
-  @Get('categories')
-  async getCategories() {
-    return this.kbService.getCategories();
-  }
-
-  /**
-   * Auto-suggest articles based on ticket content (requires auth)
-   * POST /knowledge-base/suggest
-   */
-  @Post('suggest')
-  @UseGuards(JwtAuthGuard)
-  async suggestArticles(
-    @Body() body: { subject: string; description: string },
-  ) {
-    return this.kbService.suggestArticles(body.subject, body.description);
-  }
-
-  // ========== ADMIN ENDPOINTS ==========
-
-  /**
-   * Get all articles (admin only)
-   * GET /knowledge-base/admin/articles?category=xxx&published=true&page=1&limit=20
+   * Get all admin articles (admin only)
+   * GET /knowledge-base/admin/articles
    */
   @Get('admin/articles')
   @UseGuards(JwtAuthGuard, AdminGuard)
-  async getAllArticles(
+  async getAdminArticles(
     @Query('category') categoryId?: string,
     @Query('published') published?: string,
-    @Query('page') page?: string,
-    @Query('limit') limit?: string,
   ) {
     return this.kbService.getAllArticles({
       categoryId,
       published: published === 'true' ? true : published === 'false' ? false : undefined,
-      page: page ? parseInt(page, 10) : undefined,
-      limit: limit ? parseInt(limit, 10) : undefined,
     });
   }
 
   /**
    * Create article (admin only)
-   * POST /knowledge-base/admin/articles
+   * POST /knowledge-base (admin)
    */
-  @Post('admin/articles')
+  @Post()
   @UseGuards(JwtAuthGuard, AdminGuard)
   async createArticle(@Request() req: any, @Body() body: {
     title: string;
@@ -147,11 +66,98 @@ export class KnowledgeBaseController {
     });
   }
 
+  // ========== STATIC ROUTES ==========
+
+  // ========== STATIC ROUTES ==========
+
+  /**
+   * Search articles (public)
+   * GET /knowledge-base/search?q=query
+   */
+  @Get('search')
+  async searchArticles(
+    @Query('q') query?: string,
+    @Query('limit') limit?: string,
+  ) {
+    return this.kbService.searchArticles(
+      query || '',
+      limit ? parseInt(limit, 10) : 50,
+    );
+  }
+
+  /**
+   * Get all categories (public)
+   * GET /knowledge-base/categories
+   */
+  @Get('categories')
+  async getCategories() {
+    return this.kbService.getCategories();
+  }
+
+  /**
+   * Create category (admin only)
+   * POST /knowledge-base/categories
+   */
+  @Post('categories')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  async createCategory(@Body() body: {
+    name: string;
+    description?: string;
+    icon?: string;
+  }) {
+    this.logger.log(`Admin creating knowledge base category: ${body.name}`);
+    return this.kbService.createCategory(body);
+  }
+
+  /**
+   * Auto-suggest articles based on ticket content (requires auth)
+   * POST /knowledge-base/suggest
+   */
+  @Post('suggest')
+  @UseGuards(JwtAuthGuard)
+  async suggestArticles(
+    @Body() body: { subject: string; description: string },
+  ) {
+    return this.kbService.suggestArticles(body.subject, body.description);
+  }
+
+  // ========== DYNAMIC ROUTES (with :id param) ==========
+
+  /**
+   * Get article by ID or slug (public)
+   * GET /knowledge-base/:slug
+   */
+  @Get(':slug')
+  async getArticleBySlug(@Param('slug') slug: string) {
+    return this.kbService.getArticle(slug, true); // Increment views
+  }
+
+  /**
+   * Get related articles (public)
+   * GET /knowledge-base/:id/related
+   */
+  @Get(':id/related')
+  async getRelatedArticles(@Param('id') articleId: string) {
+    return this.kbService.getRelatedArticles(articleId);
+  }
+
+  /**
+   * Record article feedback (public)
+   * POST /knowledge-base/:id/feedback
+   */
+  @Post(':id/feedback')
+  async recordFeedback(
+    @Param('id') articleId: string,
+    @Body() body: { type: 'helpful' | 'not-helpful' },
+  ) {
+    return this.kbService.recordFeedback(articleId, body.type === 'helpful');
+  }
+
   /**
    * Update article (admin only)
-   * PATCH /knowledge-base/admin/articles/:id
+   * PATCH /knowledge-base/:id
    */
-  @Patch('admin/articles/:id')
+  @Patch(':id')
   @UseGuards(JwtAuthGuard, AdminGuard)
   async updateArticle(
     @Request() req: any,
@@ -171,29 +177,12 @@ export class KnowledgeBaseController {
 
   /**
    * Delete article (admin only)
-   * DELETE /knowledge-base/admin/articles/:id
+   * DELETE /knowledge-base/:id
    */
-  @Delete('admin/articles/:id')
+  @Delete(':id')
   @UseGuards(JwtAuthGuard, AdminGuard)
   async deleteArticle(@Param('id') articleId: string) {
     this.logger.log(`Admin deleting knowledge base article: ${articleId}`);
     return this.kbService.deleteArticle(articleId);
-  }
-
-  /**
-   * Create category (admin only)
-   * POST /knowledge-base/admin/categories
-   */
-  @Post('admin/categories')
-  @UseGuards(JwtAuthGuard, AdminGuard)
-  async createCategory(@Body() body: {
-    name: string;
-    description?: string;
-    icon?: string;
-    parentId?: string;
-    order?: number;
-  }) {
-    this.logger.log(`Admin creating knowledge base category: ${body.name}`);
-    return this.kbService.createCategory(body);
   }
 }

@@ -429,6 +429,53 @@ export class KnowledgeBaseService {
   }
 
   /**
+   * Get related articles based on tags and category
+   */
+  async getRelatedArticles(articleId: string, limit = 3) {
+    // Get current article
+    const article = await this.prisma.knowledgeBaseArticle.findUnique({
+      where: { id: articleId },
+    });
+
+    if (!article) {
+      return [];
+    }
+
+    // Find articles with similar tags or in same category
+    const related = await this.prisma.knowledgeBaseArticle.findMany({
+      where: {
+        published: true,
+        NOT: { id: articleId },
+        OR: [
+          {
+            categoryId: article.categoryId,
+          },
+          {
+            tags: {
+              hasSome: article.tags,
+            },
+          },
+        ],
+      },
+      take: limit,
+      include: {
+        category: true,
+      },
+      orderBy: [
+        { views: 'desc' },
+        { helpful: 'desc' },
+      ],
+    });
+
+    return related.map(a => ({
+      id: a.id,
+      title: a.title,
+      slug: a.slug,
+      excerpt: a.excerpt,
+    }));
+  }
+
+  /**
    * Auto-suggest articles based on ticket keywords
    */
   async suggestArticles(ticketSubject: string, ticketDescription: string) {
