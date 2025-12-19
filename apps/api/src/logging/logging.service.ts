@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
-import { I18nService } from '../i18n/i18n.service';
 
 interface ErrorLogEntry {
   message: string;
