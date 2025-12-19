@@ -67,12 +67,14 @@ async function bootstrap(): Promise<void> {
   const port = process.env.API_PORT || 3000;
   const host = process.env.API_HOST || '0.0.0.0';
 
+   Logger.log(`Attempting to listen on ${host}:${port}...`);
   await app.listen(port, host);
   Logger.log(`🚀 Application is running on: http://${host}:${port}/${globalPrefix}`);
 }
 
 bootstrap().catch((error) => {
   Logger.error('Failed to start application', error);
+   console.error('Bootstrap error details:', error);
   process.exit(1);
 });
 
