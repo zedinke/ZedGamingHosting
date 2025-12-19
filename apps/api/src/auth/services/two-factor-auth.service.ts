@@ -1,7 +1,7 @@
 import { Injectable, Logger, BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
-// import * as speakeasy from 'speakeasy';
-// import * as QRCode from 'qrcode';
+import * as speakeasy from 'speakeasy';
+import * as QRCode from 'qrcode';
 import * as crypto from 'crypto';
 import {
   Enable2FADto,
@@ -39,26 +39,27 @@ export class TwoFactorAuthService {
     }
 
     // Check if 2FA is already enabled
-    if (user.twoFactorSecret) {
+    if (user.twoFactorEnabled) {
       throw new BadRequestException('2FA already enabled for this account');
     }
 
-    // Generate TOTP secret - STUB (speakeasy not installed)
-    const secret = {
-      base32: crypto.randomBytes(16).toString('hex'),
-      otpauth_url: 'https://example.com/stub',
-    };
+    // Generate TOTP secret
+    const secret = speakeasy.generateSecret({
+      name: `ZedHosting (${user.email})`,
+      issuer: 'ZedHosting',
+      length: 32,
+    });
 
-    // Generate QR code - STUB (qrcode not installed)
-    const qrCode = 'data:image/png;base64,stub';
+    // Generate QR code
+    const qrCode = await QRCode.toDataURL(secret.otpauth_url || '');
 
     // Generate backup codes
     const backupCodes = this.generateBackupCodes();
 
     return {
-      secret: secret.base32,
+      secret: secret.base32 || '',
       qrCode,
-      manualEntryKey: secret.base32,
+      manualEntryKey: secret.base32 || '',
       backupCodes,
     };
   }
@@ -75,14 +76,19 @@ export class TwoFactorAuthService {
       throw new BadRequestException('User not found');
     }
 
-    // Verify the code with the provided secret - STUB (speakeasy not installed)
-    const isValid = dto.code > 100000; // Simple validation stub
+    // Verify the code with the provided secret
+    const isValid = speakeasy.totp.verify({
+      secret: dto.secret,
+      encoding: 'base32',
+      token: dto.code.toString(),
+      window: 2, // Allow 2 time steps before/after for clock skew
+    });
 
     if (!isValid) {
       throw new BadRequestException('Invalid verification code');
     }
 
-    // Save the secret and backup codes
+    // Generate and save backup codes
     const backupCodes = this.generateBackupCodes();
     const backupCodesHash = backupCodes.map(code =>
       this.hashBackupCode(code),
@@ -92,7 +98,6 @@ export class TwoFactorAuthService {
       where: { id: userId },
       data: {
         twoFactorSecret: dto.secret,
-        // Store backup codes as JSON (in production, encrypt these)
         twoFactorBackupCodes: JSON.stringify(backupCodesHash),
         twoFactorEnabled: true,
         twoFactorMethod: 'TOTP',
@@ -121,13 +126,20 @@ export class TwoFactorAuthService {
       throw new UnauthorizedException('2FA not enabled for this user');
     }
 
-    // Verify the code - STUB (speakeasy not installed)
-    const isValid = dto.code > 100000; // Simple validation stub
+    // Verify the code with speakeasy
+    const isValid = speakeasy.totp.verify({
+      secret: user.twoFactorSecret,
+      encoding: 'base32',
+      token: dto.code.toString(),
+      window: 2, // Allow 2 time steps before/after for clock skew
+    });
 
     if (!isValid) {
+      this.logger.warn(`Invalid 2FA code attempt for user ${userId}`);
       throw new BadRequestException('Invalid 2FA code');
     }
 
+    this.logger.log(`2FA code verified successfully for user ${userId}`);
     return true;
   }
 
@@ -179,8 +191,13 @@ export class TwoFactorAuthService {
       throw new BadRequestException('2FA not enabled');
     }
 
-    // Verify current code before disabling - STUB (speakeasy not installed)
-    const isValid = dto.code > 100000; // Simple validation stub
+    // Verify current code before disabling
+    const isValid = speakeasy.totp.verify({
+      secret: user.twoFactorSecret,
+      encoding: 'base32',
+      token: dto.code.toString(),
+      window: 2,
+    });
 
     if (!isValid) {
       throw new BadRequestException('Invalid 2FA code. Cannot disable 2FA.');

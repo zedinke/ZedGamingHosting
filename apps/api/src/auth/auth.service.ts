@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '@zed-hosting/db';
 import { I18nService } from '../i18n/i18n.service';
+import { TwoFactorAuthService } from './services/two-factor-auth.service';
 
 export interface JwtPayload {
   sub: string; // User ID
@@ -35,6 +36,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly config: ConfigService,
     private readonly i18n: I18nService,
+    private readonly twoFactorAuthService: TwoFactorAuthService,
   ) {}
 
   /**
@@ -256,8 +258,8 @@ export class AuthService {
    * Uses the TwoFactorAuthService from the same module
    */
   async verify2FACode(userId: string, code: number): Promise<any> {
-    // This will be called from the auth controller
-    // Simple verification stub (speakeasy not available)
+    // Delegate to TwoFactorAuthService for verification
+    await this.twoFactorAuthService.verify2FACode(userId, { code });
     
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
@@ -266,39 +268,23 @@ export class AuthService {
         email: true,
         role: true,
         tenantId: true,
-        twoFactorSecret: true,
-        twoFactorEnabled: true,
       },
     });
 
-    if (!user || !user.twoFactorEnabled || !user.twoFactorSecret) {
-      throw new UnauthorizedException('2FA is not enabled for this user');
+    if (!user) {
+      throw new UnauthorizedException('User not found');
     }
 
-    // Verify the TOTP code (stub - speakeasy package not installed)
-    // In production, use: speakeasy.totp.verify({ secret, encoding, window, code })
-    const isValid = code > 100000 && code < 1000000; // Simple validation
-
-    if (!isValid) {
-      throw new UnauthorizedException('Invalid 2FA code');
-    }
-
-    this.logger.log(`User ${user.email} verified 2FA code`);
-
-    return {
-      id: user.id,
-      email: user.email,
-      role: user.role,
-      tenantId: user.tenantId,
-    };
+    return user;
   }
 
   /**
    * Verify backup code during login
    */
   async verifyBackupCode(userId: string, backupCode: string): Promise<any> {
-    const crypto = require('crypto');
-
+    // Delegate to TwoFactorAuthService for verification
+    await this.twoFactorAuthService.verifyBackupCode(userId, { code: backupCode });
+    
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: {
@@ -306,54 +292,14 @@ export class AuthService {
         email: true,
         role: true,
         tenantId: true,
-        twoFactorBackupCodes: true,
-        twoFactorEnabled: true,
       },
     });
 
-    if (!user || !user.twoFactorEnabled || !user.twoFactorBackupCodes) {
-      throw new UnauthorizedException('2FA is not enabled for this user');
+    if (!user) {
+      throw new UnauthorizedException('User not found');
     }
 
-    // Hash the provided backup code
-    const hashedCode = crypto.createHash('sha256').update(backupCode).digest('hex');
-
-    // Parse stored backup codes (JSON string)
-    let backupCodesArray: { code: string; used: boolean }[] = [];
-    try {
-      backupCodesArray = JSON.parse(user.twoFactorBackupCodes as any);
-    } catch {
-      throw new UnauthorizedException('Invalid backup codes format');
-    }
-
-    // Find and mark the code as used
-    const codeIndex = backupCodesArray.findIndex(
-      (b) => b.code === hashedCode && !b.used
-    );
-
-    if (codeIndex === -1) {
-      throw new UnauthorizedException('Invalid or already used backup code');
-    }
-
-    // Mark the code as used
-    backupCodesArray[codeIndex].used = true;
-
-    // Update user with used backup code
-    await this.prisma.user.update({
-      where: { id: userId },
-      data: {
-        twoFactorBackupCodes: JSON.stringify(backupCodesArray),
-      },
-    });
-
-    this.logger.log(`User ${user.email} verified backup code`);
-
-    return {
-      id: user.id,
-      email: user.email,
-      role: user.role,
-      tenantId: user.tenantId,
-    };
+    return user;
   }
 }
 
