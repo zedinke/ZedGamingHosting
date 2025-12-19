@@ -54,10 +54,17 @@
   },
   "footer": {
     "copyright": "© {year} ZedGamingHosting. Minden jog fenntartva.",
+    "description": "Professzionális game server hosting globális hálózattal és 24/7 támogatással.",
     "company": "Vállalat",
     "about": "Rólunk",
     "contact": "Kapcsolat",
-    "terms": "Felhasználási feltételek"
+    "terms": "Felhasználási feltételek",
+    "products": "Termékek",
+    "gameServers": "Game Szerverei",
+    "support": "Támogatás",
+    "documentation": "Dokumentáció",
+    "helpCenter": "Segítség Központ",
+    "status": "Állapotoldal"
   },
   "dashboard": {
     "title": "Dashboard",

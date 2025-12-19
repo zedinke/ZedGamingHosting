@@ -54,10 +54,17 @@
   },
   "footer": {
     "copyright": "© {year} ZedGamingHosting. All rights reserved.",
+    "description": "Professional game server hosting with a global network and 24/7 support.",
     "company": "Company",
     "about": "About",
     "contact": "Contact",
-    "terms": "Terms of Service"
+    "terms": "Terms of Service",
+    "products": "Products",
+    "gameServers": "Game Servers",
+    "support": "Support",
+    "documentation": "Documentation",
+    "helpCenter": "Help Center",
+    "status": "Status Page"
   },
   "dashboard": {
     "title": "Dashboard",
