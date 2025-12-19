@@ -124,15 +124,6 @@ export class AdminController {
   }
 
   /**
-   * Get platform statistics
-   * GET /api/admin/stats
-   */
-  @Get('stats')
-  async getStats() {
-    return await this.adminService.getStats();
-  }
-
-  /**
    * Get system settings
    * GET /api/admin/settings
    */
