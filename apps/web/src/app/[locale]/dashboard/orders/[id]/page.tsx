@@ -40,6 +40,7 @@ export default function OrderDetailPage() {
   const [order, setOrder] = useState<OrderDetailDto | null>(null);
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [cancelLoading, setCancelLoading] = useState(false);
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
 
   useEffect(() => {
     if (accessToken) {
@@ -121,10 +122,13 @@ export default function OrderDetailPage() {
     }
   };
 
+  const openCancelDialog = () => {
+    if (!orderId) return;
+    setShowCancelDialog(true);
+  };
+
   const handleCancelOrder = async () => {
-    if (!orderId || !confirm('Biztosan törlöd a rendelést? A fizetett összeg visszakerül az egyenlegedre.')) {
-      return;
-    }
+    if (!orderId) return;
     setCancelLoading(true);
     try {
       const result = (await apiClient.delete(`/orders/${orderId}`)) as OrderDetailDto;
@@ -134,6 +138,7 @@ export default function OrderDetailPage() {
         title: 'Rendelés törlödve',
         message: 'A rendelés sikeresen törlödve. A fizetett összeg visszakerült az egyenlegedre.',
       });
+      setShowCancelDialog(false);
     } catch (e: any) {
       notifications.addNotification({
         type: 'error',
@@ -290,7 +295,7 @@ export default function OrderDetailPage() {
                     💳 Stripe
                   </Button>
                   <Button
-                    onClick={handleCancelOrder}
+                    onClick={openCancelDialog}
                     disabled={cancelLoading || paymentLoading}
                     variant="outline"
                     className="w-full mt-4 !text-red-400 !border-red-600/30 hover:!bg-red-900/10"
@@ -307,7 +312,7 @@ export default function OrderDetailPage() {
                   
                   {order.status !== 'CANCELLED' && order.status !== 'REFUNDED' && (
                     <Button
-                      onClick={handleCancelOrder}
+                      onClick={openCancelDialog}
                       disabled={cancelLoading}
                       variant="outline"
                       className="w-full mt-4 !text-red-400 !border-red-600/30 hover:!bg-red-900/10"
@@ -318,6 +323,35 @@ export default function OrderDetailPage() {
                 </div>
               )}
             </Card>
+            {/* Cancel Confirmation Dialog */}
+            {showCancelDialog && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)' }}>
+                <Card className="glass elevation-3 p-6 max-w-lg w-full">
+                  <h2 className="text-2xl font-bold mb-4" style={{ color: '#f8fafc' }}>Rendelés törlése</h2>
+                  <p className="text-text-secondary mb-4">
+                    Biztosan törlöd a rendelést? Ha történt fizetés, az összeg visszakerül az egyenlegedre. A kapcsolódó szerver deprovisionálásra kerül.
+                  </p>
+                  <div className="flex gap-3 pt-2">
+                    <Button
+                      onClick={handleCancelOrder}
+                      disabled={cancelLoading}
+                      variant="primary"
+                      className="flex-1 !bg-red-600 hover:!bg-red-700"
+                    >
+                      {cancelLoading ? 'Törlés...' : 'Törlés megerősítése'}
+                    </Button>
+                    <Button
+                      onClick={() => setShowCancelDialog(false)}
+                      disabled={cancelLoading}
+                      variant="outline"
+                      className="flex-1"
+                    >
+                      Mégse
+                    </Button>
+                  </div>
+                </Card>
+              </div>
+            )}
           </div>
         </div>
       </div>
