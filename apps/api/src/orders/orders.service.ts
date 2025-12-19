@@ -189,7 +189,7 @@ export class OrdersService {
       try {
         const server = await this.prisma.gameServer.findUnique({
           where: { uuid: order.serverId },
-          select: { uuid: true, nodeId: true, containerName: true, userId: true },
+          select: { uuid: true, nodeId: true, ownerId: true },
         });
 
         if (server && server.nodeId) {
@@ -201,8 +201,7 @@ export class OrdersService {
               status: 'PENDING',
               data: {
                 serverUuid: server.uuid,
-                containerName: server.containerName,
-                userId: server.userId,
+                userId: server.ownerId,
                 reason: 'ORDER_CANCELLED',
                 orderId: order.id,
               },
@@ -210,8 +209,8 @@ export class OrdersService {
           });
           this.logger.log(`Created DEPROVISION task for server ${server.uuid}`);
         }
-      } catch (error) {
-        this.logger.error(`Failed to create DEPROVISION task: ${error.message}`);
+      } catch (error: any) {
+        this.logger.error(`Failed to create DEPROVISION task: ${error?.message || 'Unknown error'}`);
       }
     }
 
