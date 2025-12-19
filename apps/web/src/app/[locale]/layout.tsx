@@ -8,6 +8,7 @@ import { geistSans, jetbrainsMono } from '../../lib/fonts';
 import { ErrorBoundary } from '../../components/error-boundary';
 import { NotificationProvider } from '../../context/notification-context';
 import { ErrorLoggerInitializer } from '../../components/error-logger-initializer';
+import { SocketProvider } from '../../contexts/socket-context';
 
 export const metadata = {
   title: 'ZedGamingHosting',
@@ -42,11 +43,13 @@ export default async function LocaleLayout({
         <ErrorBoundary>
           <ThemeProvider>
             <QueryProvider>
-              <NextIntlClientProvider messages={messages}>
-                <NotificationProvider>
-                  {children}
-                </NotificationProvider>
-              </NextIntlClientProvider>
+              <SocketProvider>
+                <NextIntlClientProvider messages={messages}>
+                  <NotificationProvider>
+                    {children}
+                  </NotificationProvider>
+                </NextIntlClientProvider>
+              </SocketProvider>
             </QueryProvider>
           </ThemeProvider>
         </ErrorBoundary>

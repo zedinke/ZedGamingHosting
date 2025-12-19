@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { useSocketContext } from '../../../../contexts/socket-context';
 import styles from './detail.module.css';
 
 interface TicketComment {
@@ -45,6 +46,7 @@ const statusTexts = {
 export default function TicketDetailPage() {
   const params = useParams();
   const router = useRouter();
+  const socket = useSocketContext();
   const ticketId = params.id as string;
   const locale = params.locale;
 
@@ -53,6 +55,8 @@ export default function TicketDetailPage() {
   const [commenting, setCommenting] = useState(false);
   const [comment, setComment] = useState('');
   const [error, setError] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const typingTimeoutRef = React.useRef<NodeJS.Timeout>();
 
   useEffect(() => {
     fetchTicket();
@@ -72,12 +76,80 @@ export default function TicketDetailPage() {
     }
   };
 
+  /**
+   * Handle new comment from WebSocket
+   */
+  const handleNewComment = useCallback((data: any) => {
+    setTicket((prev) => {
+      if (!prev || prev.id !== data.ticketId) return prev;
+      return {
+        ...prev,
+        comments: [data.comment, ...prev.comments],
+      };
+    });
+  }, []);
+
+  /**
+   * Handle status change from WebSocket
+   */
+  const handleStatusChange = useCallback((data: any) => {
+    if (data.ticketId !== ticketId) return;
+    setTicket((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        status: data.status,
+      };
+    });
+  }, [ticketId]);
+
+  /**
+   * Handle typing indicator
+   */
+  const handleTypingIndicator = useCallback((data: any) => {
+    if (data.ticketId !== ticketId) return;
+    // Could show a visual indicator that someone is typing
+  }, [ticketId]);
+
+  /**
+   * Subscribe to WebSocket events
+   */
+  useEffect(() => {
+    if (!socket.isConnected || !ticketId) return;
+
+    // Subscribe to ticket
+    socket.subscribeToTicket(ticketId);
+
+    // Subscribe to events
+    const unsubscribeComment = socket.subscribe(
+      'support:newComment',
+      handleNewComment
+    );
+    const unsubscribeStatus = socket.subscribe(
+      'support:statusChanged',
+      handleStatusChange
+    );
+    const unsubscribeTyping = socket.subscribe(
+      'support:userTyping',
+      handleTypingIndicator
+    );
+
+    return () => {
+      unsubscribeComment();
+      unsubscribeStatus();
+      unsubscribeTyping();
+      socket.unsubscribeFromTicket(ticketId);
+    };
+  }, [socket, ticketId, handleNewComment, handleStatusChange, handleTypingIndicator]);
+
   const handleAddComment = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!comment.trim()) return;
 
     setCommenting(true);
+    setIsTyping(false);
+
     try {
       const res = await fetch(`/api/support/tickets/${ticketId}/comments`, {
         method: 'POST',
@@ -88,12 +160,36 @@ export default function TicketDetailPage() {
       if (!res.ok) throw new Error('Hozzászólás küldése sikertelen');
 
       setComment('');
-      await fetchTicket(); // Refresh to get new comment
+      // Note: Comment will be added via WebSocket event, no need to refetch
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Hozzászólás küldése sikertelen');
     } finally {
       setCommenting(false);
     }
+  };
+
+  /**
+   * Handle comment input change with typing indicator
+   */
+  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setComment(e.target.value);
+
+    // Send typing indicator
+    if (!isTyping) {
+      setIsTyping(true);
+      socket.sendTypingIndicator(ticketId, true);
+    }
+
+    // Clear existing timeout
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+
+    // Set new timeout to stop typing indicator
+    typingTimeoutRef.current = setTimeout(() => {
+      setIsTyping(false);
+      socket.sendTypingIndicator(ticketId, false);
+    }, 2000);
   };
 
   if (loading) {
@@ -177,7 +273,7 @@ export default function TicketDetailPage() {
           <form onSubmit={handleAddComment} className={styles.commentForm}>
             <textarea
               value={comment}
-              onChange={(e) => setComment(e.target.value)}
+              onChange={handleCommentChange}
               placeholder="Írj egy hozzászólást..."
               rows={4}
               disabled={commenting}

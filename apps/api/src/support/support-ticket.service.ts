@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException, ForbiddenException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, ForbiddenException, Inject } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
 import { EmailService } from '../email/email.service';
 import { CreateSupportTicketDto, UpdateTicketDto, AddCommentDto, TicketPriority, TicketStatus } from './dto/support-ticket.dto';
@@ -10,11 +10,19 @@ import { CreateSupportTicketDto, UpdateTicketDto, AddCommentDto, TicketPriority,
 @Injectable()
 export class SupportTicketService {
   private readonly logger = new Logger(SupportTicketService.name);
+  private webSocketGateway: any; // Lazy loaded to avoid circular dependency
 
   constructor(
     private readonly prisma: PrismaService,
     private readonly emailService: EmailService,
   ) {}
+
+  /**
+   * Set WebSocket gateway (injected after module initialization)
+   */
+  setWebSocketGateway(gateway: any) {
+    this.webSocketGateway = gateway;
+  }
 
   /**
    * Create a new support ticket
@@ -53,6 +61,18 @@ export class SupportTicketService {
       });
     } catch (error) {
       this.logger.warn(`Failed to send ticket creation email: ${error}`);
+    }
+
+    // Broadcast to admin staff via WebSocket
+    if (this.webSocketGateway) {
+      this.webSocketGateway.broadcastToStaff('support:newTicket', {
+        ticketId: ticket.id,
+        ticketNumber: ticket.ticketNumber,
+        subject: ticket.subject,
+        priority: ticket.priority,
+        userId: user.id,
+        userName: user.email,
+      });
     }
 
     return ticket;
@@ -137,6 +157,17 @@ export class SupportTicketService {
       },
     });
 
+    // Broadcast new comment via WebSocket
+    if (this.webSocketGateway) {
+      this.webSocketGateway.broadcastTicketComment(ticketId, {
+        id: comment.id,
+        message: comment.message,
+        authorId: comment.authorId,
+        authorName: comment.author.email,
+        createdAt: comment.createdAt,
+      });
+    }
+
     return comment;
   }
 
@@ -179,6 +210,11 @@ export class SupportTicketService {
       } catch (error) {
         this.logger.warn(`Failed to send status change email: ${error}`);
       }
+    }
+
+    // Broadcast status change via WebSocket
+    if (this.webSocketGateway && dto.status && dto.status !== ticket.status) {
+      this.webSocketGateway.broadcastTicketStatusChange(ticketId, dto.status, 'admin');
     }
 
     return updated;
