@@ -52,6 +52,18 @@ export class TaskProcessor {
         case 'PROVISION':
           result = await this.containerManager.createContainer(task.data as any);
           break;
+        case 'DEPROVISION':
+          // Deprovision: stop and remove container, update server status to AVAILABLE
+          const deprovisionData = task.data as { 
+            serverUuid: string; 
+            containerName?: string;
+            userId?: string;
+            reason?: string;
+            orderId?: string;
+          };
+          await this.containerManager.deprovisionContainer(deprovisionData.serverUuid);
+          result = { deprovisioned: true, serverUuid: deprovisionData.serverUuid };
+          break;
         case 'START':
           // Start the container
           const startData = task.data as { serverUuid: string };

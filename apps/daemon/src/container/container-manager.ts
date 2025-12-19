@@ -207,6 +207,41 @@ export class ContainerManager {
   }
 
   /**
+   * Deprovisions a container (for order cancellation)
+   * Stops and removes the container, but keeps volumes
+   */
+  async deprovisionContainer(serverUuid: string): Promise<void> {
+    const containerName = `zedhosting-${serverUuid}`;
+    const container = this.docker.getContainer(containerName);
+
+    try {
+      // 1. Stop container if running
+      const info = await container.inspect();
+      if (info.State.Running) {
+        console.log(`Stopping container ${containerName} for deprovision...`);
+        await container.stop({ t: 10 });
+      }
+    } catch (error: any) {
+      // Container might not exist, that's OK for deprovision
+      if (error.statusCode !== 404) {
+        console.error(`Error stopping container ${containerName}:`, error);
+      }
+    }
+
+    try {
+      // 2. Remove container (keep volumes for potential recovery)
+      await container.remove({ v: false });
+      console.log(`✅ Container deprovisioned: ${containerName}`);
+    } catch (error: any) {
+      if (error.statusCode === 404) {
+        console.log(`Container ${containerName} does not exist, already deprovisioned`);
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  /**
    * Gets all managed containers
    */
   async getManagedContainers(): Promise<Docker.ContainerInfo[]> {

@@ -184,12 +184,35 @@ export class OrdersService {
       },
     });
 
-    // Best-effort deprovision: stop server if exists
+    // Create DEPROVISION task if server exists
     if (order.serverId) {
-      await this.prisma.gameServer.update({
-        where: { uuid: order.serverId },
-        data: { status: 'STOPPED' as any },
-      }).catch(() => undefined);
+      try {
+        const server = await this.prisma.gameServer.findUnique({
+          where: { uuid: order.serverId },
+          select: { uuid: true, nodeId: true, containerName: true, userId: true },
+        });
+
+        if (server && server.nodeId) {
+          // Create DEPROVISION task for daemon to process
+          await this.prisma.task.create({
+            data: {
+              nodeId: server.nodeId,
+              type: 'DEPROVISION',
+              status: 'PENDING',
+              data: {
+                serverUuid: server.uuid,
+                containerName: server.containerName,
+                userId: server.userId,
+                reason: 'ORDER_CANCELLED',
+                orderId: order.id,
+              },
+            },
+          });
+          this.logger.log(`Created DEPROVISION task for server ${server.uuid}`);
+        }
+      } catch (error) {
+        this.logger.error(`Failed to create DEPROVISION task: ${error.message}`);
+      }
     }
 
     // Audit log

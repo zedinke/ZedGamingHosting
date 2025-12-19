@@ -147,6 +147,7 @@ enum TaskStatus {
 
 enum TaskType {
   PROVISION
+  DEPROVISION
   START
   STOP
   RESTART
