@@ -18,10 +18,6 @@ interface ExecuteCommandDto {
   command: string;
 }
 
-interface CreateSessionDto {
-  serverId: string;
-}
-
 /**
  * Terminal Controller
  * WebSocket and REST endpoints for server terminal access

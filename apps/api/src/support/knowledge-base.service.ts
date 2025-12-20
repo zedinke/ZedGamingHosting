@@ -8,8 +8,6 @@ import { CreateKnowledgeArticleDto, UpdateKnowledgeArticleDto } from './dto/know
  */
 @Injectable()
 export class KnowledgeBaseService {
-  private readonly logger = new Logger(KnowledgeBaseService.name);
-
   constructor(private readonly prisma: PrismaService) {}
 
   /**
