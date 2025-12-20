@@ -31,21 +31,20 @@ ENV NEXT_TELEMETRY_DISABLED 1
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
-# Install only production dependencies at root so `npx next start` works
+# Install only production dependencies for any runtime needs
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
-# Copy built app artifacts
-COPY --from=builder /app/apps/web/.next /app/apps/web/.next
-COPY --from=builder /app/apps/web/public /app/apps/web/public
-# Copy next config needed at runtime
-COPY apps/web/next.config.js /app/apps/web/next.config.js
+# Copy standalone build output
+COPY --from=builder /app/apps/web/.next/standalone /app/apps/web/standalone
+COPY --from=builder /app/apps/web/.next/static /app/apps/web/standalone/.next/static
+COPY --from=builder /app/apps/web/public /app/apps/web/standalone/public
 
 # Healthcheck (HTTP 200-499 accepted as healthy)
 HEALTHCHECK --interval=30s --timeout=5s --retries=5 CMD node -e "const http=require('http');const req=http.request({host:'127.0.0.1',port:process.env.PORT||3000,path:'/'},res=>{process.exit(res.statusCode>=200&&res.statusCode<500?0:1)});req.on('error',()=>process.exit(1));req.end()"
 
 EXPOSE 3000
 
-# Run Next from the web app directory
-WORKDIR /app/apps/web
-CMD ["npx", "next", "start", "-p", "3000"]
+# Run standalone server entrypoint
+WORKDIR /app/apps/web/standalone
+CMD ["node", "server.js"]
