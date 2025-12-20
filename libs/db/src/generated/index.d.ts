@@ -5672,6 +5672,8 @@ export namespace Prisma {
     twoFactorEnabled: boolean | null
     twoFactorMethod: string | null
     twoFactorBackupCodes: string | null
+    resetToken: string | null
+    resetTokenExpires: Date | null
     balance: number | null
     tenantId: string | null
     createdAt: Date | null
@@ -5687,6 +5689,8 @@ export namespace Prisma {
     twoFactorEnabled: boolean | null
     twoFactorMethod: string | null
     twoFactorBackupCodes: string | null
+    resetToken: string | null
+    resetTokenExpires: Date | null
     balance: number | null
     tenantId: string | null
     createdAt: Date | null
@@ -5702,6 +5706,8 @@ export namespace Prisma {
     twoFactorEnabled: number
     twoFactorMethod: number
     twoFactorBackupCodes: number
+    resetToken: number
+    resetTokenExpires: number
     balance: number
     tenantId: number
     createdAt: number
@@ -5727,6 +5733,8 @@ export namespace Prisma {
     twoFactorEnabled?: true
     twoFactorMethod?: true
     twoFactorBackupCodes?: true
+    resetToken?: true
+    resetTokenExpires?: true
     balance?: true
     tenantId?: true
     createdAt?: true
@@ -5742,6 +5750,8 @@ export namespace Prisma {
     twoFactorEnabled?: true
     twoFactorMethod?: true
     twoFactorBackupCodes?: true
+    resetToken?: true
+    resetTokenExpires?: true
     balance?: true
     tenantId?: true
     createdAt?: true
@@ -5757,6 +5767,8 @@ export namespace Prisma {
     twoFactorEnabled?: true
     twoFactorMethod?: true
     twoFactorBackupCodes?: true
+    resetToken?: true
+    resetTokenExpires?: true
     balance?: true
     tenantId?: true
     createdAt?: true
@@ -5859,6 +5871,8 @@ export namespace Prisma {
     twoFactorEnabled: boolean
     twoFactorMethod: string | null
     twoFactorBackupCodes: string | null
+    resetToken: string | null
+    resetTokenExpires: Date | null
     balance: number
     tenantId: string | null
     createdAt: Date
@@ -5893,6 +5907,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: boolean
     twoFactorBackupCodes?: boolean
+    resetToken?: boolean
+    resetTokenExpires?: boolean
     balance?: boolean
     tenantId?: boolean
     createdAt?: boolean
@@ -5922,6 +5938,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: boolean
     twoFactorBackupCodes?: boolean
+    resetToken?: boolean
+    resetTokenExpires?: boolean
     balance?: boolean
     tenantId?: boolean
     createdAt?: boolean
@@ -5969,6 +5987,8 @@ export namespace Prisma {
       twoFactorEnabled: boolean
       twoFactorMethod: string | null
       twoFactorBackupCodes: string | null
+      resetToken: string | null
+      resetTokenExpires: Date | null
       balance: number
       tenantId: string | null
       createdAt: Date
@@ -6362,6 +6382,8 @@ export namespace Prisma {
     readonly twoFactorEnabled: FieldRef<"User", 'Boolean'>
     readonly twoFactorMethod: FieldRef<"User", 'String'>
     readonly twoFactorBackupCodes: FieldRef<"User", 'String'>
+    readonly resetToken: FieldRef<"User", 'String'>
+    readonly resetTokenExpires: FieldRef<"User", 'DateTime'>
     readonly balance: FieldRef<"User", 'Float'>
     readonly tenantId: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
@@ -30741,6 +30763,8 @@ export namespace Prisma {
     twoFactorEnabled: 'twoFactorEnabled',
     twoFactorMethod: 'twoFactorMethod',
     twoFactorBackupCodes: 'twoFactorBackupCodes',
+    resetToken: 'resetToken',
+    resetTokenExpires: 'resetTokenExpires',
     balance: 'balance',
     tenantId: 'tenantId',
     createdAt: 'createdAt',
@@ -31562,6 +31586,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFilter<"User"> | boolean
     twoFactorMethod?: StringNullableFilter<"User"> | string | null
     twoFactorBackupCodes?: StringNullableFilter<"User"> | string | null
+    resetToken?: StringNullableFilter<"User"> | string | null
+    resetTokenExpires?: DateTimeNullableFilter<"User"> | Date | string | null
     balance?: FloatFilter<"User"> | number
     tenantId?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -31589,6 +31615,8 @@ export namespace Prisma {
     twoFactorEnabled?: SortOrder
     twoFactorMethod?: SortOrderInput | SortOrder
     twoFactorBackupCodes?: SortOrderInput | SortOrder
+    resetToken?: SortOrderInput | SortOrder
+    resetTokenExpires?: SortOrderInput | SortOrder
     balance?: SortOrder
     tenantId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -31619,6 +31647,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFilter<"User"> | boolean
     twoFactorMethod?: StringNullableFilter<"User"> | string | null
     twoFactorBackupCodes?: StringNullableFilter<"User"> | string | null
+    resetToken?: StringNullableFilter<"User"> | string | null
+    resetTokenExpires?: DateTimeNullableFilter<"User"> | Date | string | null
     balance?: FloatFilter<"User"> | number
     tenantId?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -31646,6 +31676,8 @@ export namespace Prisma {
     twoFactorEnabled?: SortOrder
     twoFactorMethod?: SortOrderInput | SortOrder
     twoFactorBackupCodes?: SortOrderInput | SortOrder
+    resetToken?: SortOrderInput | SortOrder
+    resetTokenExpires?: SortOrderInput | SortOrder
     balance?: SortOrder
     tenantId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -31669,6 +31701,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolWithAggregatesFilter<"User"> | boolean
     twoFactorMethod?: StringNullableWithAggregatesFilter<"User"> | string | null
     twoFactorBackupCodes?: StringNullableWithAggregatesFilter<"User"> | string | null
+    resetToken?: StringNullableWithAggregatesFilter<"User"> | string | null
+    resetTokenExpires?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     balance?: FloatWithAggregatesFilter<"User"> | number
     tenantId?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -33982,6 +34016,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -34008,6 +34044,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -34034,6 +34072,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34060,6 +34100,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34086,6 +34128,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -34101,6 +34145,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34115,6 +34161,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -36898,6 +36946,8 @@ export namespace Prisma {
     twoFactorEnabled?: SortOrder
     twoFactorMethod?: SortOrder
     twoFactorBackupCodes?: SortOrder
+    resetToken?: SortOrder
+    resetTokenExpires?: SortOrder
     balance?: SortOrder
     tenantId?: SortOrder
     createdAt?: SortOrder
@@ -36917,6 +36967,8 @@ export namespace Prisma {
     twoFactorEnabled?: SortOrder
     twoFactorMethod?: SortOrder
     twoFactorBackupCodes?: SortOrder
+    resetToken?: SortOrder
+    resetTokenExpires?: SortOrder
     balance?: SortOrder
     tenantId?: SortOrder
     createdAt?: SortOrder
@@ -36932,6 +36984,8 @@ export namespace Prisma {
     twoFactorEnabled?: SortOrder
     twoFactorMethod?: SortOrder
     twoFactorBackupCodes?: SortOrder
+    resetToken?: SortOrder
+    resetTokenExpires?: SortOrder
     balance?: SortOrder
     tenantId?: SortOrder
     createdAt?: SortOrder
@@ -41468,6 +41522,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -41493,6 +41549,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -41583,6 +41641,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFilter<"User"> | boolean
     twoFactorMethod?: StringNullableFilter<"User"> | string | null
     twoFactorBackupCodes?: StringNullableFilter<"User"> | string | null
+    resetToken?: StringNullableFilter<"User"> | string | null
+    resetTokenExpires?: DateTimeNullableFilter<"User"> | Date | string | null
     balance?: FloatFilter<"User"> | number
     tenantId?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -42468,6 +42528,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -42493,6 +42555,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -42534,6 +42598,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42559,6 +42625,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -43431,6 +43499,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -43456,6 +43526,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -43842,6 +43914,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -43867,6 +43941,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44588,6 +44664,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -44613,6 +44691,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -44752,6 +44832,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44777,6 +44859,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44912,6 +44996,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -44937,6 +45023,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -45005,6 +45093,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45030,6 +45120,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45088,6 +45180,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -45113,6 +45207,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -45154,6 +45250,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45179,6 +45277,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45204,6 +45304,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -45229,6 +45331,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -45270,6 +45374,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45295,6 +45401,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45626,6 +45734,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -45651,6 +45761,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -45790,6 +45902,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45815,6 +45929,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45950,6 +46066,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -45975,6 +46093,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -46005,6 +46125,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -46030,6 +46152,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -46097,6 +46221,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46122,6 +46248,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46158,6 +46286,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46183,6 +46313,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46267,6 +46399,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -46292,6 +46426,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -46382,6 +46518,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46407,6 +46545,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46463,6 +46603,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -46488,6 +46630,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     tenantId?: string | null
     createdAt?: Date | string
@@ -46596,6 +46740,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46621,6 +46767,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     tenantId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46961,6 +47109,8 @@ export namespace Prisma {
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
     twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -46988,6 +47138,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47013,6 +47165,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47038,6 +47192,8 @@ export namespace Prisma {
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

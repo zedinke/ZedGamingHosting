@@ -154,6 +154,8 @@ exports.Prisma.UserScalarFieldEnum = {
   twoFactorEnabled: 'twoFactorEnabled',
   twoFactorMethod: 'twoFactorMethod',
   twoFactorBackupCodes: 'twoFactorBackupCodes',
+  resetToken: 'resetToken',
+  resetTokenExpires: 'resetTokenExpires',
   balance: 'balance',
   tenantId: 'tenantId',
   createdAt: 'createdAt',

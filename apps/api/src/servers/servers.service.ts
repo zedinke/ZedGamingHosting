@@ -768,23 +768,22 @@ export class ServersService {
     }
 
     // Get app ID from game preset
-    const preset = getGamePreset(server.gameType);
+      const preset = getGamePreset(server.gameType as string);
     if (!preset?.appId) {
       throw new BadRequestException('Game does not support Steam updates');
     }
 
     // Create update task for daemon
-    const task = await this.tasksService.createTask({
-      nodeId: server.nodeId,
-      type: 'UPDATE_SERVER',
+      const task = await this.tasksService.createTask(
+        server.nodeId,
+        'UPDATE',
       data: {
         serverUuid: server.uuid,
-        appId: preset.appId,
+          appId: preset.appId,
         validate: validate ?? true,
         beta: beta,
-      },
-      scheduledAt: new Date(),
-    });
+        },
+      );
 
     // Send email notification
     if (server.owner?.email) {
@@ -817,18 +816,18 @@ export class ServersService {
       throw new ForbiddenException(this.i18n.translate('FORBIDDEN'));
     }
 
-    // Find latest UPDATE_SERVER task for this server
+    // Find latest UPDATE task for this server
     const latestTask = await this.prisma.task.findFirst({
       where: {
         nodeId: server.nodeId,
-        type: 'UPDATE_SERVER',
+        type: 'UPDATE',
         data: {
           path: '$.serverUuid',
           equals: serverUuid,
         },
       },
       orderBy: {
-        scheduledAt: 'desc',
+        createdAt: 'desc',
       },
     });
 
