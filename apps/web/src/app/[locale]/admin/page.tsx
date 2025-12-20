@@ -168,7 +168,7 @@ export default function AdminPage() {
     {
       title: 'Naplók',
       description: 'Rendszernaplók és audit trail',
-      href: `/${locale}/admin/logs`,
+      href: `/${locale}/admin/monitoring/error-logs`,
       icon: FileText,
       iconColor: '#dc2626',
       bgColor: '#fef2f2',
