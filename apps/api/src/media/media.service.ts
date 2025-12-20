@@ -3,6 +3,7 @@ import { PrismaService } from '@zed-hosting/db';
 import { CreateSlideDto, UpdateSlideDto } from './dto/slide.dto';
 import * as fs from 'fs/promises';
 import * as path from 'path';
+import type { Express } from 'express';
 import sharp from 'sharp';
 
 @Injectable()
@@ -152,7 +153,7 @@ export class MediaService {
   /**
    * Upload media file (image or video)
    */
-  async uploadMedia(file: any, mediaType: 'IMAGE' | 'VIDEO') {
+  async uploadMedia(file: Express.Multer.File, mediaType: 'IMAGE' | 'VIDEO') {
     if (!file) {
       throw new BadRequestException('No file provided');
     }
