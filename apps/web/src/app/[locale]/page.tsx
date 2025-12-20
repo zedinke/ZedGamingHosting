@@ -4,6 +4,8 @@ import { GameShowcase } from '@/components/landing/GameShowcase';
 import { FeaturedPlans } from '@/components/landing/FeaturedPlans';
 import { Features } from '@/components/landing/Features';
 import { HeroSlideshow } from '@/components/landing/HeroSlideshow';
+import { TrustBadges } from '@/components/landing/TrustBadges';
+import { FloatingCTA } from '@/components/landing/FloatingCTA';
 
 async function getActiveSlides() {
   try {
@@ -68,6 +70,9 @@ export default async function Index({ params }: { params: { locale: Locale } }) 
           </div>
         </section>
       )}
+
+      {/* Trust Badges */}
+      <TrustBadges />
 
       {/* Game Showcase */}
       <GameShowcase />
@@ -135,6 +140,9 @@ export default async function Index({ params }: { params: { locale: Locale } }) 
           {t('footer.copyright', { year: new Date().getFullYear() })}
         </div>
       </footer>
+
+      {/* Floating CTA Button */}
+      <FloatingCTA />
     </main>
   );
 }
