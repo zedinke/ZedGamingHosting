@@ -1,11 +1,12 @@
-import { useTranslations } from '@i18n/translations';
+import { getServerTranslations, Locale, useLocale } from '@i18n/translations';
 import Link from 'next/link';
 import { GameShowcase } from '@/components/landing/GameShowcase';
 import { FeaturedPlans } from '@/components/landing/FeaturedPlans';
 import { Features } from '@/components/landing/Features';
 
-export default function Index() {
-  const t = useTranslations();
+export default function Index({ params }: { params: { locale: Locale } }) {
+  const locale = params.locale ?? useLocale();
+  const t = getServerTranslations(locale);
 
   return (
     <main className="flex min-h-screen flex-col">
@@ -27,7 +28,7 @@ export default function Index() {
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <Link
-              href="/plans"
+              href={`/${locale}/plans`}
               className="px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-primary-500/50 transition-all transform hover:scale-105"
             >
               {t('hero.ctaButton')}
@@ -61,7 +62,7 @@ export default function Index() {
             {t('cta.subtitle')}
           </p>
           <Link
-            href="/plans"
+            href={`/${locale}/plans`}
             className="inline-block px-10 py-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-bold text-lg rounded-lg shadow-xl hover:shadow-primary-500/50 transition-all transform hover:scale-105"
           >
             {t('cta.button')}
@@ -81,26 +82,26 @@ export default function Index() {
           <div>
             <h4 className="font-semibold mb-4 text-text-primary">{t('footer.products')}</h4>
             <ul className="space-y-2 text-sm text-text-muted">
-              <li><Link href="/plans" className="hover:text-primary-400 transition">{t('footer.gameServers')}</Link></li>
-              <li><Link href="/plans?game=MINECRAFT" className="hover:text-primary-400 transition">Minecraft</Link></li>
-              <li><Link href="/plans?game=RUST" className="hover:text-primary-400 transition">Rust</Link></li>
-              <li><Link href="/plans?game=CS2" className="hover:text-primary-400 transition">CS2</Link></li>
+              <li><Link href={`/${locale}/plans`} className="hover:text-primary-400 transition">{t('footer.gameServers')}</Link></li>
+              <li><Link href={`/${locale}/plans?game=MINECRAFT`} className="hover:text-primary-400 transition">Minecraft</Link></li>
+              <li><Link href={`/${locale}/plans?game=RUST`} className="hover:text-primary-400 transition">Rust</Link></li>
+              <li><Link href={`/${locale}/plans?game=CS2`} className="hover:text-primary-400 transition">CS2</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="font-semibold mb-4 text-text-primary">{t('footer.support')}</h4>
             <ul className="space-y-2 text-sm text-text-muted">
-              <li><Link href="/docs" className="hover:text-primary-400 transition">{t('footer.documentation')}</Link></li>
-              <li><Link href="/support" className="hover:text-primary-400 transition">{t('footer.helpCenter')}</Link></li>
-              <li><Link href="/status" className="hover:text-primary-400 transition">{t('footer.status')}</Link></li>
+              <li><Link href={`/${locale}/knowledge-base`} className="hover:text-primary-400 transition">{t('footer.documentation')}</Link></li>
+              <li><Link href={`/${locale}/dashboard/support`} className="hover:text-primary-400 transition">{t('footer.helpCenter')}</Link></li>
+              <li><Link href={`/${locale}/status`} className="hover:text-primary-400 transition">{t('footer.status')}</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="font-semibold mb-4 text-text-primary">{t('footer.company')}</h4>
             <ul className="space-y-2 text-sm text-text-muted">
-              <li><Link href="/about" className="hover:text-primary-400 transition">{t('footer.about')}</Link></li>
-              <li><Link href="/contact" className="hover:text-primary-400 transition">{t('footer.contact')}</Link></li>
-              <li><Link href="/terms" className="hover:text-primary-400 transition">{t('footer.terms')}</Link></li>
+              <li><Link href={`/${locale}/about`} className="hover:text-primary-400 transition">{t('footer.about')}</Link></li>
+              <li><Link href={`/${locale}/contact`} className="hover:text-primary-400 transition">{t('footer.contact')}</Link></li>
+              <li><Link href={`/${locale}/terms`} className="hover:text-primary-400 transition">{t('footer.terms')}</Link></li>
             </ul>
           </div>
         </div>

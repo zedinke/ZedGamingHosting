@@ -19,7 +19,10 @@
     },
     "popular": "Népszerű",
     "selectPlan": "Csomag kiválasztása",
-    "viewAll": "Összes csomag megtekintése"
+    "viewAll": "Összes csomag megtekintése",
+    "loading": "Csomagok betöltése…",
+    "perMonth": "Ft/hó",
+    "setupFee": "+ {fee} Ft telepítési díj"
   },
   "features": {
     "title": "Miért minket válassz?",
@@ -253,6 +256,14 @@
   },
   "accessibility": {
     "skipToContent": "Ugrás a fő tartalomhoz"
+  },
+  "units": {
+    "ramGb": "{gb} GB RAM",
+    "ramMb": "{mb} MB RAM",
+    "cpuCore": "{count} CPU mag",
+    "cpuCores": "{count} CPU mag",
+    "diskGb": "{gb} GB NVMe SSD",
+    "maxSlots": "{count} max férőhely"
   }
 }
 

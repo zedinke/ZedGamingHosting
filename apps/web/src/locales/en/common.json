@@ -19,7 +19,10 @@
     },
     "popular": "Popular",
     "selectPlan": "Select Plan",
-    "viewAll": "View all plans"
+    "viewAll": "View all plans",
+    "loading": "Loading plans…",
+    "perMonth": "HUF/month",
+    "setupFee": "+ {fee} HUF setup fee"
   },
   "features": {
     "title": "Why Choose Us?",
@@ -253,6 +256,14 @@
   },
   "accessibility": {
     "skipToContent": "Skip to main content"
+  },
+  "units": {
+    "ramGb": "{gb} GB RAM",
+    "ramMb": "{mb} MB RAM",
+    "cpuCore": "{count} CPU core",
+    "cpuCores": "{count} CPU cores",
+    "diskGb": "{gb} GB NVMe SSD",
+    "maxSlots": "{count} max slots"
   }
 }
 

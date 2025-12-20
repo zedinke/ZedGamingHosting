@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from '@i18n/translations';
+import { useTranslations, useLocale } from '@i18n/translations';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Card } from '@zed-hosting/ui-kit';
@@ -24,6 +24,8 @@ interface Plan {
 
 export function FeaturedPlans() {
   const t = useTranslations();
+  const locale = useLocale();
+  const formatLocale = locale === 'hu' ? 'hu-HU' : 'en-US';
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -45,7 +47,7 @@ export function FeaturedPlans() {
     return (
       <section className="py-20 px-6 bg-background-elevated">
         <div className="container max-w-7xl mx-auto text-center">
-          <div className="animate-pulse text-text-secondary">Loading plans...</div>
+          <div className="animate-pulse text-text-secondary">{t('plans.loading')}</div>
         </div>
       </section>
     );
@@ -87,13 +89,13 @@ export function FeaturedPlans() {
               <div className="mb-6">
                 <div className="flex items-baseline">
                   <span className="text-4xl font-bold text-text-primary">
-                    {(plan.monthlyPrice / 100).toLocaleString('hu-HU')}
+                    {(plan.monthlyPrice / 100).toLocaleString(formatLocale)}
                   </span>
-                  <span className="text-text-secondary ml-2">Ft/hó</span>
+                  <span className="text-text-secondary ml-2">{t('plans.perMonth')}</span>
                 </div>
                 {plan.setupFee > 0 && (
                   <p className="text-sm text-text-secondary mt-1">
-                    + {(plan.setupFee / 100).toLocaleString('hu-HU')} Ft telepítési díj
+                    {t('plans.setupFee', { fee: (plan.setupFee / 100).toLocaleString(formatLocale) })}
                   </p>
                 )}
               </div>
@@ -101,19 +103,21 @@ export function FeaturedPlans() {
               <div className="space-y-3 mb-8">
                 <div className="flex items-center text-text-secondary">
                   <span className="text-primary-400 mr-2">💾</span>
-                  {plan.ramMb >= 1024 ? `${plan.ramMb / 1024} GB RAM` : `${plan.ramMb} MB RAM`}
+                  {plan.ramMb >= 1024
+                    ? t('units.ramGb', { gb: plan.ramMb / 1024 })
+                    : t('units.ramMb', { mb: plan.ramMb })}
                 </div>
                 <div className="flex items-center text-text-secondary">
                   <span className="text-primary-400 mr-2">⚡</span>
-                  {plan.cpuCores} CPU {plan.cpuCores > 1 ? 'cores' : 'core'}
+                  {t(plan.cpuCores > 1 ? 'units.cpuCores' : 'units.cpuCore', { count: plan.cpuCores })}
                 </div>
                 <div className="flex items-center text-text-secondary">
                   <span className="text-primary-400 mr-2">📀</span>
-                  {plan.diskGb} GB NVMe SSD
+                  {t('units.diskGb', { gb: plan.diskGb })}
                 </div>
                 <div className="flex items-center text-text-secondary">
                   <span className="text-primary-400 mr-2">👥</span>
-                  {plan.maxSlots} max slots
+                  {t('units.maxSlots', { count: plan.maxSlots })}
                 </div>
               </div>
 
@@ -129,7 +133,7 @@ export function FeaturedPlans() {
               )}
 
               <Link
-                href={`/plans/${plan.slug}`}
+                href={`/${locale}/plans/${plan.slug}`}
                 className="block w-full bg-primary-500 hover:bg-primary-600 text-white text-center py-3 rounded-lg font-semibold transition group-hover:scale-105"
               >
                 {t('plans.selectPlan')}
@@ -140,7 +144,7 @@ export function FeaturedPlans() {
 
         <div className="text-center mt-12">
           <Link
-            href="/plans"
+            href={`/${locale}/plans`}
             className="inline-block px-8 py-3 bg-background-surface border-2 border-primary-500 text-primary-400 rounded-lg font-semibold hover:bg-primary-500 hover:text-white transition"
           >
             {t('plans.viewAll')}
