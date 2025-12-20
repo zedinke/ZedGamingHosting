@@ -74,106 +74,86 @@
 
 ## ⏳ KIMARADT FELADATOK
 
-### 🔴 PHASE 5: Daemon Advanced Features (KRITIKUS)
+### ✅ PHASE 5: Daemon Advanced Features (KÉSZ!)
 
-#### 5.1 Update Queue System
-- ⏳ **SteamService** - SteamCMD wrapper
-  - `apps/daemon/src/update/steam.service.ts`
-  - Update progress tracking
-  - Error handling
-- ⏳ **UpdateQueueService** - BullMQ queue
-  - `apps/daemon/src/update/update-queue.service.ts`
-  - Concurrent limit: 2 updates egyszerre
-  - Priority-based processing
-  - Queue state management
+#### 5.1 Update Queue System ✅
+- ✅ **SteamService** - SteamCMD wrapper
+  - `apps/daemon/src/update/steam.service.ts` ✅
+  - Update progress tracking ✅
+  - Error handling ✅
+  - Beta branch support ✅
+  - Version detection ✅
+- ✅ **UpdateQueueService** - BullMQ queue
+  - `apps/daemon/src/update/update-queue.service.ts` ✅
+  - Concurrent limit: 2 updates egyszerre ✅
+  - Priority-based processing ✅
+  - Queue state management ✅
+  - Retry logic (3 attempts, exponential backoff) ✅
+  - Cache integration ✅
 
-#### 5.2 Cache Manager
-- ⏳ **CacheManager** - Host-level Steam cache
-  - `apps/daemon/src/cache/cache-manager.ts`
-  - Cache lookup logic
-  - rsync copy from cache to server
-  - Cache metadata management (timestamps, sizes)
-  - Cache invalidation (30 nap cleanup policy)
+#### 5.2 Cache Manager ✅
+- ✅ **CacheManager** - Host-level Steam cache
+  - `apps/daemon/src/cache/cache-manager.service.ts` ✅
+  - Cache lookup logic ✅
+  - Hard-link copy from cache to server ✅
+  - Cache metadata management (timestamps, sizes) ✅
+  - Cache invalidation (30 nap cleanup policy) ✅
+  - Cache statistics tracking ✅
 
-#### 5.3 NFS Manager
-- ⏳ **NfsManager** - Cross-node clustering (ARK/Atlas)
-  - `apps/daemon/src/nfs/nfs-manager.ts`
-  - NFS server setup (storage node)
-  - NFS client mount (client nodes)
-  - `/etc/exports` management
-  - Mount health check
-  - Auto-remount on failure
+#### 5.3 NFS Manager ✅
+- ✅ **NfsManager** - Cross-node clustering (ARK/Atlas)
+  - `apps/daemon/src/nfs/nfs-manager.service.ts` ✅
+  - NFS server setup (storage node) ✅
+  - NFS client mount (client nodes) ✅
+  - `/etc/exports` management ✅
+  - Mount health check ✅
+  - Auto-remount on failure ✅
 
-#### 5.4 Backup Service
-- ⏳ **BackupService** - Restic wrapper
-  - `apps/daemon/src/backup/backup.service.ts`
-  - `apps/daemon/src/backup/restic-manager.ts`
-  - Restic installation check
-  - Repository initialization
-  - Backup creation (snapshot)
-  - Backup restore
-  - Retention policy (7 daily, 4 weekly, 12 monthly)
-  - Integrity checks
+#### 5.4 Backup Service ✅
+- ✅ **BackupService** - Restic wrapper
+  - `apps/daemon/src/backup/backup.service.ts` ✅
+  - `apps/daemon/src/backup/restic-manager.ts` ✅
+  - Restic installation check ✅
+  - Repository initialization ✅
+  - Backup creation (snapshot) ✅
+  - Backup restore ✅
+  - Retention policy (7 daily, 4 weekly, 12 monthly) ✅
+  - Integrity checks ✅
 
 ---
 
 ## ⏳ KIMARADT FELADATOK (Priority-based)
 
-### 🟡 PHASE 5.1: Two-Factor Authentication (HIGH PRIORITY)
-- ⏳ **2FA Service Implementation**
-  - Time-based OTP (TOTP) using speakeasy
-  - SMS-based 2FA (optional)
-  - QR code generation for authenticator apps
-  - Backup codes generation and storage
-  - 2FA enforcement per user
-  - Login flow with 2FA verification
+### ✅ WebSocket Real-Time Updates (KÉSZ!)
+- ✅ **WebSocket Gateway Setup**
+  - NestJS WebSocket gateway ✅
+  - JWT authentication for WebSocket ✅
+  - Room-based event distribution ✅
+  - User-specific notifications ✅
+  - Typing indicators ✅
+  - Online status tracking ✅
 
-- ⏳ **Frontend 2FA Integration**
-  - 2FA setup page in dashboard
-  - QR code display component
-  - Manual key input option
-  - Backup codes display and download
-  - Login with 2FA verification
-  - Disable 2FA option for admin
+- ✅ **Support Ticket Real-Time Updates**
+  - Real-time comment notifications ✅
+  - Status change broadcasts ✅
+  - Typing indicator for comments ✅
+  - Admin ticket assignment notifications ✅
+  - Comment count live updates ✅
 
-- ⏳ **API Endpoints**
-  - POST /auth/2fa/setup - Generate TOTP secret
-  - POST /auth/2fa/enable - Enable 2FA with verification
-  - POST /auth/2fa/disable - Disable 2FA
-  - POST /auth/2fa/backup-codes - Generate backup codes
-  - POST /auth/verify-2fa - Verify during login
-  - POST /auth/verify-backup-code - Use backup code
+- ✅ **Server Status Real-Time**
+  - Server status change broadcasts ✅
+  - Metrics streaming (CPU, RAM, Disk) ✅
+  - Console log streaming ✅
+  - File operation progress ✅
 
-### 🟡 PHASE 5.2: WebSocket Real-Time Updates (HIGH PRIORITY)
-- ⏳ **WebSocket Gateway Setup**
-  - NestJS WebSocket gateway
-  - JWT authentication for WebSocket
-  - Room-based event distribution
-  - User-specific notifications
-  - Typing indicators
-  - Online status tracking
+- ⏳ **Frontend WebSocket Integration** (RÉSZBEN KÉSZ)
+  - useSocket hook implementation ⏳
+  - Event subscription management ⏳
+  - Auto-reconnection logic ⏳
+  - Message buffering when offline ⏳
+  - Visual indicators for connection status ⏳
 
-- ⏳ **Support Ticket Real-Time Updates**
-  - Real-time comment notifications
-  - Status change broadcasts
-  - Typing indicator for comments
-  - Admin ticket assignment notifications
-  - Comment count live updates
-
-- ⏳ **Server Status Real-Time**
-  - Server status change broadcasts
-  - Metrics streaming (CPU, RAM, Disk)
-  - Console log streaming
-  - File operation progress
-
-- ⏳ **Frontend WebSocket Integration**
-  - useSocket hook implementation
-  - Event subscription management
-  - Auto-reconnection logic
-  - Message buffering when offline
-  - Visual indicators for connection status
-
-### 🟠 PHASE 5.3: Advanced Support Features
+### 🟠 Advanced Support Features
 - ⏳ **Ticket Assignment System**
   - Support staff assignment
   - Workload balancing
