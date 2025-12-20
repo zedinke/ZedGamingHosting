@@ -749,5 +749,98 @@ export class ServersService {
       throw new NotFoundException('Backup not found');
     }
   }
+
+  /**
+   * Trigger server update via SteamCMD
+   */
+  async updateServer(serverUuid: string, userId: string, validate?: boolean, beta?: string): Promise<{ message: string; jobId?: string }> {
+    const server = await this.prisma.gameServer.findUnique({
+      where: { uuid: serverUuid },
+      include: { node: true, owner: true },
+    });
+
+    if (!server) {
+      throw new NotFoundException(this.i18n.translate('SERVER_NOT_FOUND'));
+    }
+
+    if (server.ownerId !== userId) {
+      throw new ForbiddenException(this.i18n.translate('FORBIDDEN'));
+    }
+
+    // Get app ID from game preset
+    const preset = getGamePreset(server.gameType);
+    if (!preset?.appId) {
+      throw new BadRequestException('Game does not support Steam updates');
+    }
+
+    // Create update task for daemon
+    const task = await this.tasksService.createTask({
+      nodeId: server.nodeId,
+      type: 'UPDATE_SERVER',
+      data: {
+        serverUuid: server.uuid,
+        appId: preset.appId,
+        validate: validate ?? true,
+        beta: beta,
+      },
+      scheduledAt: new Date(),
+    });
+
+    // Send email notification
+    if (server.owner?.email) {
+      this.emailService.sendServerUpdateNotification(
+        server.owner.email,
+        server.uuid,
+        'started',
+      ).catch((err) => console.error('Failed to send email:', err));
+    }
+
+    return {
+      message: 'Server update queued',
+      jobId: task.id,
+    };
+  }
+
+  /**
+   * Get update status for a server
+   */
+  async getUpdateStatus(serverUuid: string, userId: string): Promise<{ status: string; progress?: number; error?: string }> {
+    const server = await this.prisma.gameServer.findUnique({
+      where: { uuid: serverUuid },
+    });
+
+    if (!server) {
+      throw new NotFoundException(this.i18n.translate('SERVER_NOT_FOUND'));
+    }
+
+    if (server.ownerId !== userId) {
+      throw new ForbiddenException(this.i18n.translate('FORBIDDEN'));
+    }
+
+    // Find latest UPDATE_SERVER task for this server
+    const latestTask = await this.prisma.task.findFirst({
+      where: {
+        nodeId: server.nodeId,
+        type: 'UPDATE_SERVER',
+        data: {
+          path: '$.serverUuid',
+          equals: serverUuid,
+        },
+      },
+      orderBy: {
+        scheduledAt: 'desc',
+      },
+    });
+
+    if (!latestTask) {
+      return { status: 'idle' };
+    }
+
+    return {
+      status: latestTask.status.toLowerCase(),
+      progress: latestTask.progress,
+      error: latestTask.error || undefined,
+    };
+  }
 }
 

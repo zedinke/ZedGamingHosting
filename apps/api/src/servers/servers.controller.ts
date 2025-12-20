@@ -83,6 +83,28 @@ export class ServersController {
   }
 
   /**
+   * Update server (SteamCMD update)
+   * POST /api/servers/:uuid/update
+   */
+  @Post(':uuid/update')
+  updateServer(
+    @Param('uuid') uuid: string,
+    @Body() body: { validate?: boolean; beta?: string },
+    @Request() req: any,
+  ) {
+    return this.serversService.updateServer(uuid, req.user.id, body.validate, body.beta);
+  }
+
+  /**
+   * Get update queue status for a server
+   * GET /api/servers/:uuid/update/status
+   */
+  @Get(':uuid/update/status')
+  getUpdateStatus(@Param('uuid') uuid: string, @Request() req: any) {
+    return this.serversService.getUpdateStatus(uuid, req.user.id);
+  }
+
+  /**
    * Update server settings
    * PUT /api/servers/:uuid/settings
    */

@@ -441,5 +441,70 @@ export class EmailService {
       </html>
     `;
   }
+
+  /**
+   * Send server update notification
+   */
+  async sendServerUpdateNotification(
+    userEmail: string,
+    serverUuid: string,
+    status: 'started' | 'completed' | 'failed',
+  ): Promise<void> {
+    const statusMessages = {
+      started: 'elindítva',
+      completed: 'sikeresen befejezve',
+      failed: 'sikertelen',
+    };
+
+    const statusMessage = statusMessages[status];
+    const appUrl = this.configService.get('APP_URL') || 'https://zedgaminghosting.hu';
+
+    await this.sendEmail({
+      to: userEmail,
+      subject: `Szerver frissítés ${statusMessage}: ${serverUuid}`,
+      html: `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <style>
+              body { font-family: Arial, sans-serif; color: #333; }
+              .container { max-width: 600px; margin: 0 auto; }
+              .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; text-align: center; }
+              .content { padding: 20px; background: #f9f9f9; }
+              .status { padding: 15px; border-radius: 5px; margin: 15px 0; }
+              .status.started { background: #cce5ff; border: 1px solid #99ccff; color: #004085; }
+              .status.completed { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+              .status.failed { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+              .footer { text-align: center; font-size: 12px; color: #999; padding: 20px; }
+              .button { background: #667eea; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1>Zed Gaming Hosting</h1>
+                <p>Szerver frissítés</p>
+              </div>
+              <div class="content">
+                <p>Kedves Felhasználó!</p>
+                <div class="status ${status}">
+                  <strong>A szerver frissítése ${statusMessage}</strong><br>
+                  Szerver: ${serverUuid}
+                </div>
+                ${status === 'started' ? '<p>A frissítés folyamatban van. Ezt néhány percig tarthat.</p>' : ''}
+                ${status === 'completed' ? '<p>A szerver most újra elindul a legfrissebb verzióval.</p>' : ''}
+                ${status === 'failed' ? '<p>A frissítés során hiba történt. Kérjük, vegye fel velünk a kapcsolatot.</p>' : ''}
+                <p><a href="${appUrl}/dashboard/servers/${serverUuid}" class="button">Szerver megtekintése</a></p>
+              </div>
+              <div class="footer">
+                <p>&copy; 2025 Zed Gaming Hosting. Minden jog fenntartva.</p>
+              </div>
+            </div>
+          </body>
+        </html>
+      `,
+    });
+  }
 }
 
