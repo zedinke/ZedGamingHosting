@@ -157,8 +157,6 @@ export default function ServerDetailPage() {
 
     const intervalId = setInterval(poll, 3000);
     poll();
-  };  });
-    }
   };
 
   const handleDelete = async () => {
