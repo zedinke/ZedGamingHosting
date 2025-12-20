@@ -152,7 +152,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "9101:9101"
+      - "127.0.0.1:9101:9101"
     volumes:
       - ./traefik.yml:/etc/traefik/traefik.yml:ro
       - ./dynamic.yml:/etc/traefik/dynamic.yml:ro
@@ -170,7 +170,7 @@ services:
     container_name: zed-prometheus
     restart: always
     ports:
-      - "9090:9090"
+      - "127.0.0.1:9090:9090"
     networks:
       - zed-network
     volumes:
@@ -187,7 +187,7 @@ services:
     restart: always
     pid: host
     ports:
-      - "9100:9100"
+      - "127.0.0.1:9100:9100"
     networks:
       - zed-network
     volumes:
@@ -205,7 +205,7 @@ services:
     container_name: zed-cadvisor
     restart: always
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     networks:
       - zed-network
     volumes:

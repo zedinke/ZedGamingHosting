@@ -41,6 +41,19 @@ http:
         certResolver: letsencrypt
       priority: 10
 
+    api-metrics-https:
+      rule: "(Host(`zedgaminghosting.hu`) || Host(`www.zedgaminghosting.hu`)) && PathPrefix(`/api/metrics`)"
+      entryPoints:
+        - websecure
+      service: api
+      middlewares:
+        - security-headers
+        - api-ratelimit
+        - metrics-ipallow
+      tls:
+        certResolver: letsencrypt
+      priority: 15
+
     # Adminer - Database Admin
     adminer-http:
       rule: "Host(`zedgaminghosting.hu`) && PathPrefix(`/adminer`)"
@@ -99,6 +112,12 @@ http:
         frameDeny: true
         referrerPolicy: "no-referrer-when-downgrade"
         permissionsPolicy: "camera=(), microphone=(), geolocation=(), payment=()"
+
+    metrics-ipallow:
+      ipAllowList:
+        sourceRange:
+          - "127.0.0.1/32"
+          - "116.203.226.140/32"
 
     api-ratelimit:
       rateLimit:
