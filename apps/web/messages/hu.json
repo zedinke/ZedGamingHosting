@@ -1,0 +1,218 @@
+{
+  "metadata": {
+    "title": "ZedGaming Hosting - Professzionális Játékszerver Hosting",
+    "description": "Vállalati szintű teljesítmény. Egyszerű irányítás. Korlátlan skálázhatóság."
+  },
+  "nav": {
+    "features": "Szolgáltatások",
+    "pricing": "Árazás",
+    "about": "Rólunk",
+    "contact": "Kapcsolat",
+    "login": "Bejelentkezés",
+    "dashboard": "Vezérlőpult"
+  },
+  "hero": {
+    "title": "Professzionális Játékszerver Hosting",
+    "subtitle": "Vállalati szintű teljesítmény. Egyszerű irányítás. Korlátlan skálázhatóság.",
+    "description": "DDoS védelem, Azonnali telepítés, 24/7 támogatás - Minden játékszerver típushoz.",
+    "cta": {
+      "getStarted": "Kezdjük El",
+      "learnMore": "Tudj Meg Többet"
+    }
+  },
+  "features": {
+    "title": "Miért válassz minket?",
+    "subtitle": "Vállalati szintű infrastruktúra játékosok számára",
+    "items": {
+      "performance": {
+        "title": "Villámgyors Teljesítmény",
+        "description": "Dedikált AMD Ryzen 9 processzorok NVMe SSD tárolással. Alacsony késleltetés és magas FPS garantált."
+      },
+      "ddos": {
+        "title": "DDoS Védelem",
+        "description": "Vállalati szintű DDoS védelem beépítve. A szervereid mindig elérhetők maradnak."
+      },
+      "support": {
+        "title": "24/7 Támogatás",
+        "description": "Szakértő támogató csapat elérhető nap mint nap. Átlagos válaszidő: <15 perc."
+      },
+      "control": {
+        "title": "Teljes Kontroll",
+        "description": "Intuitív vezérlőpult teljes FTP/SFTP hozzáféréssel. Kezeld a szerveredet ahogy szeretnéd."
+      },
+      "instant": {
+        "title": "Azonnali Telepítés",
+        "description": "A szerver 60 másodpercen belül fut. Nincs várakozás, csak játszás."
+      },
+      "backup": {
+        "title": "Automatikus Mentések",
+        "description": "Napi automatikus mentések 30 napos megtartással. Az adataid biztonságban vannak."
+      }
+    }
+  },
+  "pricing": {
+    "title": "Egyszerű, Átlátható Árazás",
+    "subtitle": "Fizess csak azért, amit használsz. Bármikor lemondható.",
+    "currency": "Ft",
+    "perMonth": "/hó",
+    "perSlot": "/slot",
+    "popular": "Népszerű",
+    "cta": {
+      "choosePlan": "Terv Választása",
+      "contactSales": "Kapcsolat Értékesítéssel"
+    },
+    "features": {
+      "slots": "{count} játékos slot",
+      "ram": "{amount} GB RAM",
+      "storage": "{amount} GB NVMe SSD",
+      "cpu": "{cores} CPU mag",
+      "databases": "{count} MySQL adatbázis",
+      "ddos": "DDoS védelem",
+      "backups": "Automatikus mentések",
+      "support": "24/7 támogatás",
+      "ftp": "Teljes FTP hozzáférés",
+      "subdomain": "Ingyenes aldomain",
+      "modSupport": "Mod támogatás",
+      "priority": "Prioritásos támogatás",
+      "dedicated": "Dedikált IP"
+    }
+  },
+  "games": {
+    "title": "Támogatott Játékok",
+    "subtitle": "Minden népszerű játékszerver egy helyen",
+    "viewAll": "Összes Játék Megtekintése"
+  },
+  "cta": {
+    "title": "Készen állsz az indulásra?",
+    "subtitle": "Csatlakozz több ezer elégedett játékoshoz világszerte",
+    "button": "Szerver Indítása Most"
+  },
+  "footer": {
+    "company": "Cég",
+    "about": "Rólunk",
+    "careers": "Karrier",
+    "press": "Sajtó",
+    "news": "Hírek",
+    "support": "Támogatás",
+    "helpCenter": "Súgó Központ",
+    "documentation": "Dokumentáció",
+    "guides": "Útmutatók",
+    "apiStatus": "API Státusz",
+    "legal": "Jogi",
+    "privacy": "Adatvédelem",
+    "terms": "Felhasználási Feltételek",
+    "cookies": "Cookie Szabályzat",
+    "copyright": "© {year} ZedGaming Hosting. Minden jog fenntartva."
+  },
+  "dashboard": {
+    "title": "Vezérlőpult",
+    "welcome": "Üdvözöljük, {name}!",
+    "servers": {
+      "title": "Szervereim",
+      "empty": "Még nincs szerverned",
+      "create": "Új Szerver Létrehozása",
+      "status": {
+        "online": "Online",
+        "offline": "Offline",
+        "starting": "Indítás",
+        "stopping": "Leállítás"
+      },
+      "actions": {
+        "start": "Indítás",
+        "stop": "Leállítás",
+        "restart": "Újraindítás",
+        "console": "Konzol",
+        "files": "Fájlok",
+        "settings": "Beállítások"
+      }
+    },
+    "billing": {
+      "title": "Számlázás",
+      "balance": "Egyenleg",
+      "addFunds": "Feltöltés",
+      "invoices": "Számlák",
+      "paymentMethods": "Fizetési Módok"
+    },
+    "support": {
+      "title": "Támogatás",
+      "tickets": "Támogatási Jegyek",
+      "createTicket": "Új Jegy Létrehozása",
+      "knowledgeBase": "Tudásbázis"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Bejelentkezés",
+      "email": "E-mail cím",
+      "password": "Jelszó",
+      "rememberMe": "Emlékezz rám",
+      "forgotPassword": "Elfelejtetted a jelszavad?",
+      "submit": "Bejelentkezés",
+      "noAccount": "Nincs még fiókod?",
+      "signUp": "Regisztráció"
+    },
+    "register": {
+      "title": "Regisztráció",
+      "name": "Teljes név",
+      "email": "E-mail cím",
+      "password": "Jelszó",
+      "confirmPassword": "Jelszó megerősítése",
+      "terms": "Elfogadom a {termsLink} és {privacyLink}",
+      "termsLink": "Felhasználási Feltételeket",
+      "privacyLink": "Adatvédelmi Szabályzatot",
+      "submit": "Fiók Létrehozása",
+      "haveAccount": "Már van fiókod?",
+      "signIn": "Bejelentkezés"
+    },
+    "forgotPassword": {
+      "title": "Jelszó Visszaállítása",
+      "description": "Add meg az e-mail címedet és küldünk egy linket a jelszó visszaállításához.",
+      "email": "E-mail cím",
+      "submit": "Visszaállítási Link Küldése",
+      "backToLogin": "Vissza a bejelentkezéshez"
+    },
+    "resetPassword": {
+      "title": "Új Jelszó Beállítása",
+      "password": "Új jelszó",
+      "confirmPassword": "Új jelszó megerősítése",
+      "submit": "Jelszó Mentése"
+    },
+    "logout": "Kijelentkezés"
+  },
+  "errors": {
+    "required": "Ez a mező kötelező",
+    "invalidEmail": "Érvénytelen e-mail cím",
+    "passwordMismatch": "A jelszavak nem egyeznek",
+    "passwordTooShort": "A jelszónak legalább {min} karakter hosszúnak kell lennie",
+    "serverError": "Szerverhiba történt. Kérjük, próbáld újra később.",
+    "unauthorized": "Nincs jogosultságod ehhez a művelethez",
+    "notFound": "Az oldal nem található",
+    "networkError": "Hálózati hiba. Ellenőrizd az internetkapcsolatod."
+  },
+  "common": {
+    "save": "Mentés",
+    "cancel": "Mégse",
+    "delete": "Törlés",
+    "edit": "Szerkesztés",
+    "create": "Létrehozás",
+    "update": "Frissítés",
+    "confirm": "Megerősítés",
+    "loading": "Betöltés...",
+    "search": "Keresés",
+    "filter": "Szűrés",
+    "sort": "Rendezés",
+    "actions": "Műveletek",
+    "status": "Státusz",
+    "name": "Név",
+    "email": "E-mail",
+    "date": "Dátum",
+    "time": "Idő",
+    "yes": "Igen",
+    "no": "Nem",
+    "back": "Vissza",
+    "next": "Következő",
+    "previous": "Előző",
+    "finish": "Befejezés",
+    "close": "Bezárás"
+  }
+}
