@@ -3,8 +3,17 @@ import { PrismaService } from '@zed-hosting/db';
 import { CreateSlideDto, UpdateSlideDto } from './dto/slide.dto';
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import type { Express } from 'express';
 import sharp from 'sharp';
+
+// Minimal file shape we need from Multer upload
+export interface UploadedMediaFile {
+  originalname: string;
+  mimetype: string;
+  buffer: Buffer;
+  size: number;
+  path?: string;
+  filename?: string;
+}
 
 @Injectable()
 export class MediaService {
@@ -153,7 +162,7 @@ export class MediaService {
   /**
    * Upload media file (image or video)
    */
-  async uploadMedia(file: Express.Multer.File, mediaType: 'IMAGE' | 'VIDEO') {
+  async uploadMedia(file: UploadedMediaFile, mediaType: 'IMAGE' | 'VIDEO') {
     if (!file) {
       throw new BadRequestException('No file provided');
     }

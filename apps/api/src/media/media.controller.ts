@@ -13,8 +13,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import type { Express } from 'express';
-import { MediaService } from './media.service';
+import { MediaService, UploadedMediaFile } from './media.service';
 import { CreateSlideDto, UpdateSlideDto } from './dto/slide.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -103,7 +102,7 @@ export class MediaController {
     },
   }))
   async uploadMedia(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: UploadedMediaFile,
     @Query('type') type: string,
   ) {
     if (!type || !['IMAGE', 'VIDEO'].includes(type)) {
