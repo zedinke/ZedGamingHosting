@@ -3,45 +3,71 @@ import Link from 'next/link';
 import { GameShowcase } from '@/components/landing/GameShowcase';
 import { FeaturedPlans } from '@/components/landing/FeaturedPlans';
 import { Features } from '@/components/landing/Features';
+import { HeroSlideshow } from '@/components/landing/HeroSlideshow';
 
-export default function Index({ params }: { params: { locale: Locale } }) {
+async function getActiveSlides() {
+  try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+    const res = await fetch(`${apiUrl}/api/media/slides`, {
+      next: { revalidate: 60 }, // Cache for 1 minute
+    });
+    
+    if (!res.ok) {
+      console.error('Failed to fetch slides:', res.status);
+      return [];
+    }
+    
+    return res.json();
+  } catch (error) {
+    console.error('Error fetching slides:', error);
+    return [];
+  }
+}
+
+export default async function Index({ params }: { params: { locale: Locale } }) {
   const locale = params.locale ?? useLocale();
   const t = getServerTranslations(locale);
+  const slides = await getActiveSlides();
 
   return (
     <main className="flex min-h-screen flex-col">
-      {/* Hero Section */}
-      <section className="relative flex flex-col items-center justify-center text-center py-32 px-6 bg-gradient-to-b from-black/60 via-black/40 to-transparent overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20"></div>
-        <div className="relative z-10 max-w-5xl">
-          <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
-            <span className="bg-gradient-to-br from-primary-400 to-primary-600 bg-clip-text text-transparent">
-              {t('hero.title')}
-            </span>
-            <br />
-            <span className="bg-gradient-to-br from-fuchsia-400 to-rose-500 bg-clip-text text-transparent">
-              {t('hero.titleHighlight')}
-            </span>
-          </h1>
-          <p className="text-xl md:text-2xl text-text-secondary mb-10 max-w-3xl mx-auto">
-            {t('hero.subtitle')}
-          </p>
-          <div className="flex gap-4 justify-center flex-wrap">
-            <Link
-              href={`/${locale}/plans`}
-              className="px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-primary-500/50 transition-all transform hover:scale-105"
-            >
-              {t('hero.ctaButton')}
-            </Link>
-            <Link
-              href="#features"
-              className="px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-semibold rounded-lg border border-white/20 transition-all"
-            >
-              {t('hero.learnMore')}
-            </Link>
+      {/* Hero Slideshow or Static Hero */}
+      {slides.length > 0 ? (
+        <HeroSlideshow slides={slides} />
+      ) : (
+        // Fallback Static Hero Section
+        <section className="relative flex flex-col items-center justify-center text-center py-32 px-6 bg-gradient-to-b from-black/60 via-black/40 to-transparent overflow-hidden min-h-[80vh]">
+          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20"></div>
+          <div className="relative z-10 max-w-5xl">
+            <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
+              <span className="bg-gradient-to-br from-primary-400 to-primary-600 bg-clip-text text-transparent">
+                {t('hero.title')}
+              </span>
+              <br />
+              <span className="bg-gradient-to-br from-fuchsia-400 to-rose-500 bg-clip-text text-transparent">
+                {t('hero.titleHighlight')}
+              </span>
+            </h1>
+            <p className="text-xl md:text-2xl text-text-secondary mb-10 max-w-3xl mx-auto">
+              {t('hero.subtitle')}
+            </p>
+            <div className="flex gap-4 justify-center flex-wrap">
+              <Link
+                href={`/${locale}/plans`}
+                className="px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-primary-500/50 transition-all transform hover:scale-105"
+              >
+                {t('hero.ctaButton')}
+              </Link>
+              <Link
+                href="#features"
+                className="px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-semibold rounded-lg border border-white/20 transition-all"
+              >
+                {t('hero.learnMore')}
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Game Showcase */}
       <GameShowcase />

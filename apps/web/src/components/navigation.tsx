@@ -29,6 +29,7 @@ export function Navigation() {
     { href: `/admin`, label: 'Áttekintés' },
     { href: `/admin/plans`, label: 'Csomagok' },
     { href: `/admin/promotions`, label: 'Akciók' },
+    { href: `/admin/media`, label: 'Média' },
     { href: `/admin/users`, label: 'Felhasználók' },
     { href: `/admin/nodes`, label: 'Node-ok' },
     { href: `/admin/servers`, label: 'Szerverek' },
