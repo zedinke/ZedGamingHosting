@@ -386,6 +386,21 @@ exports.Prisma.OrderScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PaymentEventScalarFieldEnum = {
+  id: 'id',
+  provider: 'provider',
+  eventType: 'eventType',
+  eventId: 'eventId',
+  paymentId: 'paymentId',
+  orderId: 'orderId',
+  status: 'status',
+  payload: 'payload',
+  error: 'error',
+  createdAt: 'createdAt',
+  processedAt: 'processedAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SupportTicketScalarFieldEnum = {
   id: 'id',
   ticketNumber: 'ticketNumber',
@@ -464,6 +479,17 @@ exports.Prisma.ArticleVersionScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.InvoiceMetadataScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  prefix: 'prefix',
+  sequenceNumber: 'sequenceNumber',
+  lastUsedDate: 'lastUsedDate',
+  year: 'year',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -518,6 +544,7 @@ exports.NodeStatus = exports.$Enums.NodeStatus = {
 
 exports.TaskType = exports.$Enums.TaskType = {
   PROVISION: 'PROVISION',
+  DEPROVISION: 'DEPROVISION',
   START: 'START',
   STOP: 'STOP',
   RESTART: 'RESTART',
@@ -619,6 +646,18 @@ exports.OrderStatus = exports.$Enums.OrderStatus = {
   REFUNDED: 'REFUNDED'
 };
 
+exports.PaymentProvider = exports.$Enums.PaymentProvider = {
+  BARION: 'BARION',
+  PAYPAL: 'PAYPAL',
+  UPAY: 'UPAY'
+};
+
+exports.PaymentEventStatus = exports.$Enums.PaymentEventStatus = {
+  RECEIVED: 'RECEIVED',
+  PROCESSED: 'PROCESSED',
+  FAILED: 'FAILED'
+};
+
 exports.TicketPriority = exports.$Enums.TicketPriority = {
   LOW: 'LOW',
   MEDIUM: 'MEDIUM',
@@ -654,12 +693,14 @@ exports.Prisma.ModelName = {
   Plan: 'Plan',
   Promotion: 'Promotion',
   Order: 'Order',
+  PaymentEvent: 'PaymentEvent',
   SupportTicket: 'SupportTicket',
   SlaPolicy: 'SlaPolicy',
   TicketComment: 'TicketComment',
   KnowledgeBaseArticle: 'KnowledgeBaseArticle',
   KnowledgeBaseCategory: 'KnowledgeBaseCategory',
-  ArticleVersion: 'ArticleVersion'
+  ArticleVersion: 'ArticleVersion',
+  InvoiceMetadata: 'InvoiceMetadata'
 };
 
 /**

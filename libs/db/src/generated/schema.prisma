@@ -147,6 +147,7 @@ enum TaskStatus {
 
 enum TaskType {
   PROVISION
+  DEPROVISION
   START
   STOP
   RESTART
@@ -545,6 +546,41 @@ enum OrderStatus {
 }
 
 // ============================================
+// PAYMENTS - EVENTS & IDEMPOTENCY
+// ============================================
+
+enum PaymentProvider {
+  BARION
+  PAYPAL
+  UPAY
+}
+
+enum PaymentEventStatus {
+  RECEIVED
+  PROCESSED
+  FAILED
+}
+
+model PaymentEvent {
+  id          String             @id @default(uuid())
+  provider    PaymentProvider
+  eventType   String // e.g., "callback", "webhook"
+  eventId     String // Provider event/token identifier (unique per provider+type)
+  paymentId   String?
+  orderId     String?
+  status      PaymentEventStatus @default(RECEIVED)
+  payload     Json?
+  error       String?
+  createdAt   DateTime           @default(now())
+  processedAt DateTime?
+  updatedAt   DateTime           @updatedAt
+
+  @@unique([provider, eventType, eventId])
+  @@index([paymentId])
+  @@index([orderId])
+}
+
+// ============================================
 // SUPPORT SYSTEM
 // ============================================
 
@@ -698,4 +734,29 @@ model ArticleVersion {
 
   @@unique([articleId, version])
   @@index([articleId])
+}
+
+// ============================================
+// INVOICE METADATA - SEQUENTIAL NUMBERING
+// ============================================
+
+model InvoiceMetadata {
+  id String @id @default(uuid())
+
+  // Tenant-specific or global invoice counter
+  tenantId String? // null = global counter
+
+  // Sequential numbering
+  prefix         String   @default("INV") // e.g., "INV", "INVOICE"
+  sequenceNumber Int      @default(1) // Incremental sequence: 1, 2, 3...
+  lastUsedDate   DateTime @default(now())
+
+  // Year-based reset (optional)
+  year Int? // If set, counter resets each year
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([tenantId, prefix, year])
+  @@index([tenantId])
 }
