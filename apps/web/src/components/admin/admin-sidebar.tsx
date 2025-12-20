@@ -12,6 +12,13 @@ import {
   FileText,
   Menu,
   X,
+  Package,
+  Tag,
+  ShoppingCart,
+  CreditCard,
+  Receipt,
+  MessageSquare,
+  BookOpen,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -53,6 +60,41 @@ export function AdminSidebar() {
       href: `/${locale}/admin/servers`,
       label: 'Szerverek',
       icon: Server,
+    },
+    {
+      href: `/${locale}/admin/plans`,
+      label: 'Csomagok',
+      icon: Package,
+    },
+    {
+      href: `/${locale}/admin/promotions`,
+      label: 'Akciók',
+      icon: Tag,
+    },
+    {
+      href: `/${locale}/admin/orders`,
+      label: 'Rendelések',
+      icon: ShoppingCart,
+    },
+    {
+      href: `/${locale}/admin/payments`,
+      label: 'Fizetések',
+      icon: CreditCard,
+    },
+    {
+      href: `/${locale}/admin/invoices`,
+      label: 'Számlák',
+      icon: Receipt,
+    },
+    {
+      href: `/${locale}/admin/support`,
+      label: 'Támogatás',
+      icon: MessageSquare,
+    },
+    {
+      href: `/${locale}/admin/knowledge-base`,
+      label: 'Tudásbázis',
+      icon: BookOpen,
     },
     {
       href: `/${locale}/admin/stats`,

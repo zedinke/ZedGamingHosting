@@ -162,6 +162,17 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  token: 'token',
+  ip: 'ip',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt',
+  lastActive: 'lastActive',
+  revokedAt: 'revokedAt'
+};
+
 exports.Prisma.AuditLogScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -679,6 +690,7 @@ exports.Prisma.ModelName = {
   SystemLicense: 'SystemLicense',
   Tenant: 'Tenant',
   User: 'User',
+  Session: 'Session',
   AuditLog: 'AuditLog',
   Node: 'Node',
   Task: 'Task',

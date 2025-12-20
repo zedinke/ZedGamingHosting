@@ -85,6 +85,23 @@ model User {
   ticketComments  TicketComment[]  @relation("TicketComments")
   assignedTickets SupportTicket[]  @relation("AssignedTickets")
   knowledgeBaseArticles KnowledgeBaseArticle[] @relation("KnowledgeBaseArticles")
+    sessions        Session[]
+}
+
+model Session {
+  id         String    @id @default(uuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token      String    @unique
+  ip         String
+  userAgent  String    @db.Text
+  createdAt  DateTime  @default(now())
+  lastActive DateTime  @updatedAt
+  revokedAt  DateTime?
+
+  @@index([userId])
+  @@index([token])
+  @@index([revokedAt])
 }
 
 model AuditLog {

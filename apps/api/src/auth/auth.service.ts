@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { PrismaService } from '@zed-hosting/db';
 import { I18nService } from '../i18n/i18n.service';
 import { TwoFactorAuthService } from './services/two-factor-auth.service';
+import { SessionsService } from './sessions.service';
 
 export interface JwtPayload {
   sub: string; // User ID
@@ -37,12 +38,18 @@ export class AuthService {
     private readonly config: ConfigService,
     private readonly i18n: I18nService,
     private readonly twoFactorAuthService: TwoFactorAuthService,
+    private readonly sessionsService: SessionsService,
   ) {}
 
   /**
    * Validates user credentials and returns JWT tokens
    */
-  async login(email: string, password: string): Promise<AuthResult> {
+  async login(
+    email: string,
+    password: string,
+    ip: string,
+    userAgent: string,
+  ): Promise<AuthResult> {
     const user = await this.prisma.user.findUnique({
       where: { email },
     });
@@ -73,6 +80,14 @@ export class AuthService {
     } as any);
 
     this.logger.log(`User ${user.email} logged in successfully`);
+
+    // Create session record
+    await this.sessionsService.createSession(
+      user.id,
+      accessToken,
+      ip,
+      userAgent,
+    );
 
     return {
       accessToken,

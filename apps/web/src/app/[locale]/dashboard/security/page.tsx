@@ -41,7 +41,7 @@ export default function SecurityPage() {
         </Link>
 
         {/* Sessions Section */}
-        <div className={styles.settingCard}>
+        <Link href={`/${locale}/dashboard/security/sessions`} className={styles.settingCard}>
           <div className={styles.settingIcon}>📱</div>
           <div className={styles.settingContent}>
             <h3>Aktív Munkamenetek</h3>
@@ -50,7 +50,7 @@ export default function SecurityPage() {
             </p>
             <span className={styles.arrow}>→</span>
           </div>
-        </div>
+        </Link>
 
         {/* API Keys Section */}
         <Link href={`/${locale}/dashboard/api-keys`} className={styles.settingCard}>

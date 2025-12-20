@@ -10,6 +10,8 @@ import { DatabaseModule } from '../database/database.module';
 import { I18nModule } from '../i18n/i18n.module';
 import { TwoFactorAuthService } from './services/two-factor-auth.service';
 import { TwoFactorAuthController } from './controllers/two-factor-auth.controller';
+import { SessionsController } from './sessions.controller';
+import { SessionsService } from './sessions.service';
 
 /**
  * Auth Module - Authentication & Authorization
@@ -31,9 +33,9 @@ import { TwoFactorAuthController } from './controllers/two-factor-auth.controlle
       }),
     }),
   ],
-  providers: [AuthService, JwtStrategy, LocalStrategy, TwoFactorAuthService],
-  controllers: [AuthController, TwoFactorAuthController],
-  exports: [AuthService, TwoFactorAuthService, JwtModule],
+  providers: [AuthService, JwtStrategy, LocalStrategy, TwoFactorAuthService, SessionsService],
+  controllers: [AuthController, TwoFactorAuthController, SessionsController],
+  exports: [AuthService, TwoFactorAuthService, SessionsService, JwtModule],
 })
 export class AuthModule {}
 

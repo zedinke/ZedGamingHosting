@@ -68,6 +68,18 @@ export class AuthController {
       expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN') || '7d',
     } as any);
 
+    // Extract IP and User-Agent for session tracking
+    const ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || 'Unknown';
+    const userAgent = req.headers['user-agent'] || 'Unknown';
+
+    // Create session record
+    await this.authService['sessionsService'].createSession(
+      req.user.id,
+      accessToken,
+      ip,
+      userAgent,
+    );
+
     return {
       accessToken,
       refreshToken,
@@ -84,6 +96,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async verify2FA(
     @Body() body: { tempToken: string; code: number; rememberDevice?: boolean },
+    @Request() req: any,
   ) {
     const { tempToken, code, rememberDevice } = body;
 
@@ -118,6 +131,18 @@ export class AuthController {
         expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN') || '7d',
       } as any);
 
+      // Extract IP and User-Agent for session tracking
+      const ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || 'Unknown';
+      const userAgent = req.headers['user-agent'] || 'Unknown';
+
+      // Create session record
+      await this.authService['sessionsService'].createSession(
+        user.id,
+        accessToken,
+        ip,
+        userAgent,
+      );
+
       return {
         accessToken,
         refreshToken,
@@ -138,6 +163,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async verifyBackupCode(
     @Body() body: { tempToken: string; backupCode: string },
+    @Request() req: any,
   ) {
     const { tempToken, backupCode } = body;
 
@@ -170,6 +196,18 @@ export class AuthController {
       const refreshToken = this.jwtService.sign(payload, {
         expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN') || '7d',
       } as any);
+
+      // Extract IP and User-Agent for session tracking
+      const ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || 'Unknown';
+      const userAgent = req.headers['user-agent'] || 'Unknown';
+
+      // Create session record
+      await this.authService['sessionsService'].createSession(
+        user.id,
+        accessToken,
+        ip,
+        userAgent,
+      );
 
       return {
         accessToken,
