@@ -152,6 +152,16 @@ docker exec -i zed-mysql mysql -u root -prT3Y8Au6KBNJ8zpp7uyMJhSeXgV8q1Wt \
   zedhosting -e "SELECT COUNT(*) FROM User;"
 ```
 
+### Completion Record (2025-12-20)
+
+- Canonical services restarted and verified healthy from `/root/ZedGamingHosting-latest`.
+- Legacy deployments archived and removed:
+  - `/opt/zedhosting` archived to `/root/zedhosting-backup-2025-12-20/opt-zedhosting.tgz`.
+  - Incomplete `/root/zedhosting` archived to `/root/zedhosting-backup-2025-12-20/root-zedhosting-incomplete.tgz` and removed.
+- Current canonical directories:
+  - `/root/ZedGamingHosting-latest` (active)
+  - `/root/zedhosting-backup-2025-12-20` (archives)
+
 ---
 
 ## Phase 2: Post-Migration Cleanup

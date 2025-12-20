@@ -163,11 +163,81 @@ services:
       - web
       - adminer
 
+  # Prometheus - Metrics collection
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: zed-prometheus
+    restart: always
+    ports:
+      - "9090:9090"
+    networks:
+      - zed-network
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    depends_on:
+      - node-exporter
+      - cadvisor
+
+  # Node Exporter - Host metrics
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: zed-node-exporter
+    restart: always
+    pid: host
+    ports:
+      - "9100:9100"
+    networks:
+      - zed-network
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc|rootfs|run|var/lib/docker/.+)($|/)"
+
+  # cAdvisor - Container metrics
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: zed-cadvisor
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - zed-network
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+
+  # Grafana - Metrics dashboard
+  grafana:
+    image: grafana/grafana:latest
+    container_name: zed-grafana
+    restart: always
+    ports:
+      - "3002:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: "admin"
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-changeme}
+      GF_SERVER_ROOT_URL: "http://localhost:3002"
+    networks:
+      - zed-network
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+
 volumes:
   mysql_data:
   redis_data:
   traefik_acme:
   daemon_cache:
+  prometheus_data:
+  grafana_data:
 
 networks:
   zed-network:
