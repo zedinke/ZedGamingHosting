@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS `Session` (
+  `id` VARCHAR(191) PRIMARY KEY,
+  `userId` VARCHAR(191) NOT NULL,
+  `token` VARCHAR(500) UNIQUE NOT NULL,
+  `ip` VARCHAR(100) NOT NULL,
+  `userAgent` TEXT NOT NULL,
+  `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastActive` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `revokedAt` DATETIME DEFAULT NULL,
+  INDEX `idx_userId` (`userId`),
+  INDEX `idx_token` (`token`),
+  INDEX `idx_revokedAt` (`revokedAt`)
+);

@@ -8,7 +8,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { SessionsService } from './sessions.service';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Request } from 'express';
 
 interface AuthenticatedRequest extends Request {
