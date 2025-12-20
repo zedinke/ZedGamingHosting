@@ -3,10 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../../../../../lib/api-client';
 import { useAuthStore } from '../../../../../stores/auth-store';
-import { Button } from '@zed-hosting/ui-kit';
+import { Button, UpdateProgressIndicator } from '@zed-hosting/ui-kit';
 import { Card, CardContent, CardHeader, CardTitle } from '@zed-hosting/ui-kit';
 import { Badge } from '@zed-hosting/ui-kit';
 import { ProtectedRoute } from '../../../../../components/protected-route';
@@ -14,8 +14,8 @@ import { Navigation } from '../../../../../components/navigation';
 import { GameServer } from '../../../../../types/server';
 import Link from 'next/link';
 import { ServerCloneDialog } from '../../../../../components/server-clone-dialog';
-import { Copy } from 'lucide-react';
-import { useState } from 'react';
+import { Copy, Download } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { useNotificationContext } from '../../../../../context/notification-context';
 
 export default function ServerDetailPage() {
@@ -23,9 +23,11 @@ export default function ServerDetailPage() {
   const router = useRouter();
   const t = useTranslations();
   const { accessToken } = useAuthStore();
+  const queryClient = useQueryClient();
   const serverUuid = params.uuid as string;
   const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'hu' : 'hu';
   const [showCloneDialog, setShowCloneDialog] = useState(false);
+  const [updateStatus, setUpdateStatus] = useState<any>(null);
   const notifications = useNotificationContext();
 
   const { data: server, isLoading, error } = useQuery<GameServer>({
@@ -106,7 +108,54 @@ export default function ServerDetailPage() {
         type: 'error',
         title: 'Hiba',
         message: err.message || 'A szerver újraindítása sikertelen volt.',
+    
+
+  const updateMutation = useMutation({
+    mutationFn: () => apiClient.post(`/servers/${serverUuid}/update`, {}),
+    onMutate: () => {
+      setUpdateStatus({ status: 'pending', message: 'Frissítés indítása...' });
+    },
+    onSuccess: () => {
+      setUpdateStatus({ status: 'downloading', message: 'Szerver frissítése folyamatban...' });
+      notifications.addNotification({
+        type: 'success',
+        title: 'Frissítés indítva',
+        message: 'A szerver frissítése megkezdődött.',
       });
+      pollUpdateStatus();
+    },
+    onError: (err: any) => {
+      setUpdateStatus({ status: 'failed', error: err.message });
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: err.message || 'A szerver frissítése sikertelen volt.',
+      });
+    },
+  });
+
+  const pollUpdateStatus = async () => {
+    const poll = async () => {
+      try {
+        const status = await apiClient.get<any>(`/servers/${serverUuid}/update/status`);
+        setUpdateStatus({
+          status: status.status,
+          progress: status.progress,
+          message: status.message,
+          error: status.error,
+        });
+
+        if (!['pending', 'downloading'].includes(status.status)) {
+          clearInterval(intervalId);
+        }
+      } catch (err) {
+        console.error('Failed to poll update status:', err);
+      }
+    };
+
+    const intervalId = setInterval(poll, 3000);
+    poll();
+  };  });
     }
   };
 
@@ -222,7 +271,15 @@ export default function ServerDetailPage() {
             </CardContent>
           </Card>
         </div>
-      );
+      );  <Button 
+                variant="primary" 
+                onClick={() => updateMutation.mutate()}
+                disabled={updateMutation.isPending || updateStatus?.status === 'downloading'}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Frissítés
+              </Button>
+            
     }
 
     return (
@@ -266,7 +323,17 @@ export default function ServerDetailPage() {
                   </Button>
                   <Button variant="secondary" onClick={handleRestart}>
                     {t('dashboard.server.actions.restart')}
-                  </Button>
+            Update Progress */}
+        {updateStatus && updateStatus.status !== 'idle' && (
+          <div className="mb-8">
+            <UpdateProgressIndicator
+              progress={updateStatus}
+              serverName={(server as any).name || server.gameType}
+            />
+          </div>
+        )}
+
+        {/*       </Button>
                 </>
               )}
             </div>
