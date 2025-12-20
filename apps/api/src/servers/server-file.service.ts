@@ -38,7 +38,7 @@ export class ServerFileService {
   /**
    * List files in a directory
    */
-  async listFiles(serverId: string, dirPath: string): Promise<FileEntry[]> {
+  async listFiles(_serverId: string, _dirPath: string): Promise<FileEntry[]> {
     try {
       // TODO: Call daemon API to list files on server
       // This would communicate with the daemon running on the game server host
@@ -109,21 +109,21 @@ export class ServerFileService {
       // This would send the file to the game server via the daemon
       
       this.logger.log(
-        `Uploaded file ${file.originalname} to ${destinationPath} on server ${serverId}`,
+        `Uploaded file ${file.filename} to ${destinationPath} on server ${serverId}`,
       );
 
       // Broadcast upload event via WebSocket
       if (this.webSocketGateway) {
         this.webSocketGateway.broadcastToStaff('server:fileUploaded', {
           serverId,
-          filename: file.originalname,
+          filename: file.filename,
           path: destinationPath,
           size: file.size,
         });
       }
 
       return {
-        filename: file.originalname,
+        filename: file.filename,
         path: destinationPath,
         size: file.size,
       };

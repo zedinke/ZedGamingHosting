@@ -3,15 +3,15 @@ import { IsString, IsOptional, IsArray, IsNotEmpty } from 'class-validator';
 export class CreateTicketTemplateDto {
   @IsNotEmpty()
   @IsString()
-  name: string;
+  name!: string;
 
   @IsNotEmpty()
   @IsString()
-  subject: string;
+  subject!: string;
 
   @IsNotEmpty()
   @IsString()
-  content: string;
+  content!: string;
 
   @IsOptional()
   @IsString()

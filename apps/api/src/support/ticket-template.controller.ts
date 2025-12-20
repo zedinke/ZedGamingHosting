@@ -138,19 +138,16 @@ export class TicketTemplateController {
    * POST /support/templates/:id/apply/:ticketId
    * Body: { variables: { user_name: "John", staff_name: "Jane", ... } }
    */
-  @Post(':id/apply/:ticketId')
+  @Post(':id/apply')
   @UseGuards(RolesGuard)
   @Roles('SUPERADMIN', 'SUPPORT')
   async applyTemplate(
     @Param('id') templateId: string,
-    @Param('ticketId') ticketId: string,
-    @Body() body: { variables?: Record<string, string> },
   ) {
-    this.logger.log(`Applying template ${templateId} to ticket ${ticketId}`);
+    this.logger.log(`Applying template ${templateId}`);
     return this.templateService.applyTemplate(
       templateId,
-      ticketId,
-      body.variables || {},
+      {}
     );
   }
 }

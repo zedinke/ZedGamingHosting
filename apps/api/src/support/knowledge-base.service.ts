@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@zed-hosting/db';
 import { CreateKnowledgeArticleDto, UpdateKnowledgeArticleDto } from './dto/knowledge-base.dto';
 
@@ -13,14 +13,16 @@ export class KnowledgeBaseService {
   /**
    * Create a new knowledge base article
    */
-  async createArticle(dto: CreateKnowledgeArticleDto): Promise<any> {
+  async createArticle(dto: CreateKnowledgeArticleDto, authorId: string): Promise<any> {
     return this.prisma.knowledgeBaseArticle.create({
       data: {
         title: dto.title,
         content: dto.content,
-        category: dto.category,
+        slug: dto.title.toLowerCase().replace(/\s+/g, '-'),
+        categoryId: dto.category || 'default-category',
+        authorId,
         tags: dto.tags || [],
-        isPublished: dto.isPublished || false,
+        published: dto.isPublished || false,
       },
     });
   }
@@ -42,9 +44,10 @@ export class KnowledgeBaseService {
       data: {
         title: dto.title,
         content: dto.content,
-        category: dto.category,
+        slug: dto.title ? dto.title.toLowerCase().replace(/\s+/g, '-') : undefined,
+        categoryId: dto.category,
         tags: dto.tags,
-        isPublished: dto.isPublished,
+        published: dto.isPublished,
       },
     });
   }
@@ -52,12 +55,12 @@ export class KnowledgeBaseService {
   /**
    * Get all published articles
    */
-  async getAllArticles(category?: string, page: number = 1, limit: number = 20): Promise<any> {
+  async getAllArticles(categoryId?: string, page: number = 1, limit: number = 20): Promise<any> {
     const skip = (page - 1) * limit;
-    const where: any = { isPublished: true };
+    const where: any = { published: true };
 
-    if (category) {
-      where.category = category;
+    if (categoryId) {
+      where.categoryId = categoryId;
     }
 
     const [articles, total] = await Promise.all([
@@ -66,13 +69,16 @@ export class KnowledgeBaseService {
         select: {
           id: true,
           title: true,
-          category: true,
+          slug: true,
+          excerpt: true,
+          category: { select: { id: true, name: true } },
           tags: true,
+          views: true,
+          author: { select: { id: true, email: true } },
           createdAt: true,
           updatedAt: true,
-          _count: { select: { linkedTickets: true } },
         },
-        orderBy: { updatedAt: 'desc' },
+        orderBy: { createdAt: 'desc' },
         skip,
         take: limit,
       }),
@@ -97,14 +103,8 @@ export class KnowledgeBaseService {
     const article = await this.prisma.knowledgeBaseArticle.findUnique({
       where: { id: articleId },
       include: {
-        linkedTickets: {
-          select: {
-            id: true,
-            ticketNumber: true,
-            subject: true,
-          },
-          take: 5,
-        },
+        category: { select: { id: true, name: true } },
+        author: { select: { id: true, email: true } },
       },
     });
 
@@ -112,30 +112,38 @@ export class KnowledgeBaseService {
       throw new NotFoundException('Article not found');
     }
 
+    // Increment view count
+    await this.prisma.knowledgeBaseArticle.update({
+      where: { id: articleId },
+      data: { views: { increment: 1 } },
+    });
+
     return article;
   }
 
   /**
    * Search articles by keyword
    */
-  async searchArticles(keyword: string): Promise<any[]> {
+  async searchArticles(keyword: string, limit: number = 10): Promise<any[]> {
     return this.prisma.knowledgeBaseArticle.findMany({
       where: {
-        isPublished: true,
+        published: true,
         OR: [
-          { title: { contains: keyword, mode: 'insensitive' } },
-          { content: { contains: keyword, mode: 'insensitive' } },
-          { tags: { has: keyword.toLowerCase() } },
+          { title: { contains: keyword } },
+          { content: { contains: keyword } },
         ],
       },
       select: {
         id: true,
         title: true,
-        category: true,
+        slug: true,
+        excerpt: true,
+        category: { select: { name: true } },
         tags: true,
-        updatedAt: true,
+        createdAt: true,
       },
-      take: 10,
+      orderBy: { views: 'desc' },
+      take: limit,
     });
   }
 
@@ -149,41 +157,39 @@ export class KnowledgeBaseService {
   ): Promise<any[]> {
     const ticket = await this.prisma.supportTicket.findUnique({
       where: { id: ticketId },
-      select: { subject: true, category: true },
+      select: { subject: true },
     });
 
     if (!ticket) {
       throw new NotFoundException('Ticket not found');
     }
 
-    // Search by category first, then by keyword matching
+    const keywords = this.extractKeywords(ticket.subject);
+
+    // Search by keywords matching
     const suggestions = await this.prisma.knowledgeBaseArticle.findMany({
       where: {
-        isPublished: true,
+        published: true,
         OR: [
-          // Exact category match (highest priority)
           {
-            category: ticket.category || undefined,
-            title: { contains: this.extractKeywords(ticket.subject)[0] || '', mode: 'insensitive' },
+            title: { contains: keywords[0] || '' },
           },
-          // Title keyword match
           {
-            title: { contains: this.extractKeywords(ticket.subject)[0] || '', mode: 'insensitive' },
-          },
-          // Tag match
-          {
-            tags: { hasSome: this.extractKeywords(ticket.subject).map((k) => k.toLowerCase()) },
+            content: { contains: keywords[0] || '' },
           },
         ],
       },
       select: {
         id: true,
         title: true,
-        category: true,
+        slug: true,
+        excerpt: true,
+        category: { select: { name: true } },
         tags: true,
-        _count: { select: { linkedTickets: true } },
+        views: true,
+        createdAt: true,
       },
-      orderBy: { updatedAt: 'desc' },
+      orderBy: { views: 'desc' },
       take: limit,
     });
 
@@ -193,22 +199,11 @@ export class KnowledgeBaseService {
   /**
    * Link article to ticket
    */
-  async linkArticleToTicket(ticketId: string, articleId: string): Promise<any> {
-    const [ticket, article] = await Promise.all([
-      this.prisma.supportTicket.findUnique({ where: { id: ticketId } }),
-      this.prisma.knowledgeBaseArticle.findUnique({ where: { id: articleId } }),
-    ]);
-
-    if (!ticket || !article) {
-      throw new NotFoundException('Ticket or article not found');
-    }
-
+  async linkArticleToTicket(articleId: string): Promise<any> {
     return this.prisma.knowledgeBaseArticle.update({
       where: { id: articleId },
       data: {
-        linkedTickets: {
-          connect: { id: ticketId },
-        },
+        helpful: { increment: 1 },
       },
     });
   }
@@ -218,19 +213,17 @@ export class KnowledgeBaseService {
    */
   async getPopularArticles(limit: number = 10): Promise<any[]> {
     return this.prisma.knowledgeBaseArticle.findMany({
-      where: { isPublished: true },
+      where: { published: true },
       select: {
         id: true,
         title: true,
-        category: true,
-        updatedAt: true,
-        _count: { select: { linkedTickets: true } },
+        slug: true,
+        category: { select: { name: true } },
+        views: true,
+        helpful: true,
+        createdAt: true,
       },
-      orderBy: {
-        linkedTickets: {
-          _count: 'desc',
-        },
-      },
+      orderBy: { views: 'desc' },
       take: limit,
     });
   }
@@ -239,7 +232,10 @@ export class KnowledgeBaseService {
    * Extract keywords from text (simple implementation)
    */
   private extractKeywords(text: string): string[] {
-    const stopWords = ['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for'];
+    const stopWords = [
+      'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
+      'of', 'with', 'by', 'from', 'is', 'am', 'are', 'be', 'been', 'being',
+    ];
     return text
       .toLowerCase()
       .split(/\s+/)
@@ -250,14 +246,11 @@ export class KnowledgeBaseService {
   /**
    * Get article categories
    */
-  async getCategories(): Promise<string[]> {
-    const result = await this.prisma.knowledgeBaseArticle.findMany({
-      where: { isPublished: true },
-      select: { category: true },
-      distinct: ['category'],
+  async getCategories(): Promise<any[]> {
+    return this.prisma.knowledgeBaseCategory.findMany({
+      select: { id: true, name: true },
+      orderBy: { name: 'asc' },
     });
-
-    return result.map((r: any) => r.category).filter(Boolean);
   }
 
   /**

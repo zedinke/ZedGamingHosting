@@ -17,7 +17,6 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
-import type { Multer } from 'multer';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -92,7 +91,7 @@ export class ServerFileController {
   async uploadFile(
     @Request() req: any,
     @Param('serverId') serverId: string,
-    @UploadedFile() file: Multer.File,
+    @UploadedFile() file: any,
     @Body() body: { path: string },
   ) {
     if (!file || !body.path) {

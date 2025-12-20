@@ -8,6 +8,7 @@ import {
   Body,
   Query,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -98,8 +99,8 @@ export class KnowledgeBaseController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('SUPERADMIN')
   @Post('articles')
-  async createArticle(@Body() dto: CreateKnowledgeArticleDto) {
-    return this.knowledgeBaseService.createArticle(dto);
+  async createArticle(@Request() req: any, @Body() dto: CreateKnowledgeArticleDto) {
+    return this.knowledgeBaseService.createArticle(dto, req.user.id);
   }
 
   /**
@@ -130,11 +131,10 @@ export class KnowledgeBaseController {
    */
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('SUPERADMIN', 'SUPPORT')
-  @Post('articles/:articleId/link/:ticketId')
+  @Post('articles/:articleId/mark-helpful')
   async linkArticleToTicket(
-    @Param('articleId') articleId: string,
-    @Param('ticketId') ticketId: string
+    @Param('articleId') articleId: string
   ) {
-    return this.knowledgeBaseService.linkArticleToTicket(ticketId, articleId);
+    return this.knowledgeBaseService.linkArticleToTicket(articleId);
   }
 }
