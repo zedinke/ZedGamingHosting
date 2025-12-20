@@ -59,6 +59,7 @@ export default function TicketDetailPage() {
   const [commenting, setCommenting] = useState(false);
   const [comment, setComment] = useState('');
   const [error, setError] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
   const typingTimeoutRef = React.useRef<NodeJS.Timeout>();
 
   useEffect(() => {
@@ -135,8 +136,6 @@ export default function TicketDetailPage() {
   /**
    * Handle comment input change with typing indicator
    */
-  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setComment(e.target.value);
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
 

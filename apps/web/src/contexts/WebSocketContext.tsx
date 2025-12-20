@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, ReactNode } from 'react';
 import { Socket } from 'socket.io-client';
-import { useSocket as useSocketHook } from './useSocket';
+import { useSocket as useSocketHook } from '../hooks/useSocket';
 
 interface WebSocketContextType {
   socket: Socket | null;

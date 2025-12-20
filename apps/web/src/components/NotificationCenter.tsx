@@ -1,7 +1,7 @@
 'use client';
 
-import { useWebSocket } from '../../../../../contexts/WebSocketContext';
-import { useNotifications, useSocketEvent } from '../../../../../hooks/useSocket';
+import { useWebSocket } from '../contexts/WebSocketContext';
+import { useNotifications, useSocketEvent } from '../hooks/useSocket';
 import { useEffect, useState } from 'react';
 
 interface Notification {
