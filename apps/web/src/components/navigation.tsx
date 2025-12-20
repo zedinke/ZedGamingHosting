@@ -9,6 +9,8 @@ import { cn } from '../lib/utils';
 import { NotificationCenter } from './notification-center';
 import { useNotificationContext } from '../context/notification-context';
 import { useEffect, useRef, useState } from 'react';
+import { Search } from 'lucide-react';
+import SearchModal from './SearchModal';
 
 export function Navigation() {
   const pathname = usePathname();
@@ -17,8 +19,21 @@ export function Navigation() {
   const t = useTranslations();
   const notifications = useNotificationContext();
   const [adminOpen, setAdminOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // Keyboard shortcut for search (Cmd+K or Ctrl+K)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // Check admin role - handle both uppercase and lowercase, and different formats
   // Prisma schema uses: SUPERADMIN, RESELLER_ADMIN, USER, SUPPORT
@@ -174,6 +189,18 @@ export function Navigation() {
 
           {/* User Menu */}
           <div className="flex items-center gap-3">
+            {/* Search Button */}
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="p-2 rounded-lg hover:bg-[var(--color-bg-elevated)] transition-colors group relative"
+              title="Keresés (⌘K)"
+            >
+              <Search className="w-5 h-5 text-[var(--color-text-muted)] group-hover:text-[var(--color-text-main)]" />
+              <span className="absolute -bottom-8 right-0 bg-gray-800 text-gray-300 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                ⌘K
+              </span>
+            </button>
+
             <NotificationCenter
               notifications={notifications.notifications}
               onMarkAsRead={notifications.markAsRead}
@@ -203,6 +230,9 @@ export function Navigation() {
           </div>
         </div>
       </div>
+
+      {/* Search Modal */}
+      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </nav>
   );
 }
