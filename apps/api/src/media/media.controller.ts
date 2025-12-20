@@ -13,6 +13,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import type { Multer } from 'multer';
 import { MediaService } from './media.service';
 import { CreateSlideDto, UpdateSlideDto } from './dto/slide.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -102,7 +103,7 @@ export class MediaController {
     },
   }))
   async uploadMedia(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: Multer.File,
     @Query('type') type: string,
   ) {
     if (!type || !['IMAGE', 'VIDEO'].includes(type)) {
