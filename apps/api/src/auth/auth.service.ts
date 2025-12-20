@@ -436,6 +436,11 @@ export class AuthService {
       },
     });
 
+    if (displayName) {
+      // Future: store displayName in user profile once profile model is added
+      this.logger.log(`User registered with display name: ${displayName}`);
+    }
+
     this.logger.log(`New user registered: ${newUser.email}`);
 
     // Generate tokens
@@ -461,4 +466,4 @@ export class AuthService {
         tenantId: newUser.tenantId || undefined,
       },
     };
-  }
+  }}
