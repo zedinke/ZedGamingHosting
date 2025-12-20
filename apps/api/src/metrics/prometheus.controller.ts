@@ -5,9 +5,9 @@ import * as client from 'prom-client';
 // Register default metrics once
 client.collectDefaultMetrics({ prefix: 'api_' });
 
-@Controller('metrics')
+@Controller('')
 export class PrometheusController {
-  @Get()
+  @Get('metrics')
   @Public()
   @Header('Content-Type', 'text/plain; version=0.0.4')
   async getMetrics(): Promise<string> {
