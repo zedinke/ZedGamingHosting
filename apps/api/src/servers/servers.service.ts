@@ -767,19 +767,13 @@ export class ServersService {
       throw new ForbiddenException(this.i18n.translate('FORBIDDEN'));
     }
 
-    // Get app ID from game preset
-      const preset = getGamePreset(server.gameType as string);
-    if (!preset?.appId) {
-      throw new BadRequestException('Game does not support Steam updates');
-    }
 
     // Create update task for daemon
       const task = await this.tasksService.createTask(
         server.nodeId,
         'UPDATE',
-      data: {
+        {
         serverUuid: server.uuid,
-          appId: preset.appId,
         validate: validate ?? true,
         beta: beta,
         },
@@ -821,10 +815,6 @@ export class ServersService {
       where: {
         nodeId: server.nodeId,
         type: 'UPDATE',
-        data: {
-          path: '$.serverUuid',
-          equals: serverUuid,
-        },
       },
       orderBy: {
         createdAt: 'desc',
@@ -837,7 +827,6 @@ export class ServersService {
 
     return {
       status: latestTask.status.toLowerCase(),
-      progress: latestTask.progress,
       error: latestTask.error || undefined,
     };
   }
