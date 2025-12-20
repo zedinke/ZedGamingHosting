@@ -11,6 +11,7 @@ import { useNotificationContext } from '../context/notification-context';
 import { useEffect, useRef, useState } from 'react';
 import { Search } from 'lucide-react';
 import SearchModal from './SearchModal';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 export function Navigation() {
   const pathname = usePathname();
@@ -20,7 +21,32 @@ export function Navigation() {
   const notifications = useNotificationContext();
   const [adminOpen, setAdminOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [navbarVisible, setNavbarVisible] = useState(true);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Scroll effects
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Check if scrolled past threshold
+      setScrolled(currentScrollY > 10);
+      
+      // Hide navbar on scroll down, show on scroll up
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setNavbarVisible(false);
+      } else {
+        setNavbarVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   // Keyboard shortcut for search (Cmd+K or Ctrl+K)
   useEffect(() => {
@@ -82,11 +108,23 @@ export function Navigation() {
   }, []);
 
   return (
-    <nav
-      className="border-b backdrop-blur-sm sticky top-0 z-50"
+    <motion.nav
+      initial={{ y: 0 }}
+      animate={{ 
+        y: navbarVisible ? 0 : -100,
+        backdropFilter: scrolled ? 'blur(20px)' : 'blur(8px)',
+      }}
+      transition={{ 
+        duration: 0.3,
+        ease: 'easeInOut'
+      }}
+      className="border-b sticky top-0 z-50 transition-all"
       style={{
-        backgroundColor: 'var(--color-bg-card)',
+        backgroundColor: scrolled 
+          ? 'rgba(var(--color-bg-card-rgb), 0.8)' 
+          : 'var(--color-bg-card)',
         borderColor: 'var(--color-border)',
+        boxShadow: scrolled ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' : 'none',
       }}
     >
       <div className="container mx-auto px-4">
@@ -233,7 +271,7 @@ export function Navigation() {
 
       {/* Search Modal */}
       <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
-    </nav>
+    </motion.nav>
   );
 }
 
