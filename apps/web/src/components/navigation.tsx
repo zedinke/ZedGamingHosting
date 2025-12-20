@@ -39,10 +39,21 @@ export function Navigation() {
     { href: `/admin/logs`, label: 'Naplók' },
   ];
 
-  const navItems = [
+  // Public navigation items (available to all users)
+  const publicNavItems = [
+    { href: `/${locale}`, label: 'Otthon', icon: null },
+    { href: `/${locale}/games`, label: 'Játékok', icon: null },
+    { href: `/${locale}/pricing`, label: 'Árazás', icon: null },
+    { href: `/${locale}/plans`, label: 'Csomagok', icon: null },
+    { href: `/${locale}/knowledge-base`, label: 'Tudásbázis', icon: null },
+  ];
+
+  // Authenticated user items
+  const userNavItems = user ? [
     { href: `/dashboard`, label: t('dashboard.title') },
     { href: `/dashboard/orders`, label: 'Rendelések' },
-  ];
+    { href: `/dashboard/support`, label: 'Támogatás' },
+  ] : [];
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -79,7 +90,27 @@ export function Navigation() {
 
           {/* Nav Items */}
           <div className="flex items-center gap-1">
-            {navItems.map((item) => {
+            {/* Public Navigation */}
+            {!user && publicNavItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
+                    isActive
+                      ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]'
+                      : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] hover:bg-[var(--color-bg-elevated)]'
+                  )}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+
+            {/* User Navigation (when logged in) */}
+            {user && userNavItems.map((item) => {
               const isActive = pathname === item.href;
               return (
                 <Link
