@@ -243,4 +243,63 @@ export class SlaService {
       </div>
     `;
   }
+
+  /**
+   * Get recent SLA breaches (for dashboard display)
+   */
+  async getRecentBreaches(limit: number = 10): Promise<any[]> {
+    return this.prisma.supportTicket.findMany({
+      where: {
+        slaResolveDeadline: { lte: new Date() },
+        status: { in: ['OPEN', 'IN_PROGRESS'] },
+      },
+      select: {
+        id: true,
+        ticketNumber: true,
+        subject: true,
+        priority: true,
+        status: true,
+        slaResolveDeadline: true,
+        assignedTo: { select: { id: true, email: true, name: true } },
+      },
+      orderBy: { slaResolveDeadline: 'asc' },
+      take: limit,
+    });
+  }
+
+  /**
+   * Get approaching SLA deadlines (for dashboard display)
+   */
+  async getApproachingDeadlines(limit: number = 10): Promise<any[]> {
+    const now = new Date();
+    const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000);
+
+    const tickets = await this.prisma.supportTicket.findMany({
+      where: {
+        slaResolveDeadline: {
+          gte: now,
+          lte: oneHourLater,
+        },
+        status: { in: ['OPEN', 'IN_PROGRESS'] },
+      },
+      select: {
+        id: true,
+        ticketNumber: true,
+        subject: true,
+        priority: true,
+        status: true,
+        slaResolveDeadline: true,
+        assignedTo: { select: { id: true, email: true, name: true } },
+      },
+      orderBy: { slaResolveDeadline: 'asc' },
+      take: limit,
+    });
+
+    return tickets.map((ticket) => ({
+      ...ticket,
+      hoursRemaining: Math.round(
+        (ticket.slaResolveDeadline.getTime() - now.getTime()) / (60 * 60 * 1000)
+      ),
+    }));
+  }
 }
