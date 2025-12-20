@@ -10,3 +10,13 @@ scrape_configs:
   - job_name: 'cadvisor'
     static_configs:
       - targets: ['cadvisor:8080']
+
+  - job_name: 'api'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['api:3000']
+
+  - job_name: 'traefik'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['traefik:9101']

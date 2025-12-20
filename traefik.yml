@@ -19,6 +19,9 @@ entryPoints:
   websecure:
     address: ":443"
 
+  metrics:
+    address: ":9101"
+
 certificatesResolvers:
   letsencrypt:
     acme:
@@ -36,4 +39,10 @@ log:
   filePath: ""
 
 accessLog: {}
+
+metrics:
+  prometheus:
+    addEntryPointsLabels: true
+    addServicesLabels: true
+    entryPoint: metrics
 
