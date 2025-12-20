@@ -256,6 +256,26 @@ export class AuthController {
   }
 
   /**
+   * Register a new user
+   * POST /api/auth/register
+   */
+  @Public()
+  @Post('register')
+  @HttpCode(HttpStatus.CREATED)
+  async register(@Body() body: { email: string; password: string; displayName?: string }) {
+    if (!body.email || !body.password) {
+      throw new BadRequestException('Email and password are required');
+    }
+
+    // Basic password validation
+    if (body.password.length < 8) {
+      throw new BadRequestException('Password must be at least 8 characters long');
+    }
+
+    return this.authService.register(body.email, body.password, body.displayName);
+  }
+
+  /**
    * Change password
    * POST /api/auth/change-password
    */

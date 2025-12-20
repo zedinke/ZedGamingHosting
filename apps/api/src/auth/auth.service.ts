@@ -408,5 +408,57 @@ export class AuthService {
       message: this.i18n.translate('PASSWORD_RESET_SUCCESSFULLY'),
     };
   }
-}
 
+  /**
+   * Register a new user
+   */
+  async register(email: string, password: string, displayName?: string): Promise<AuthResult> {
+    // Check if user already exists
+    const existingUser = await this.prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (existingUser) {
+      throw new UnauthorizedException(
+        this.i18n.translate('AUTH_USER_ALREADY_EXISTS') || 'User already exists',
+      );
+    }
+
+    // Hash password
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    // Create new user with USER role
+    const newUser = await this.prisma.user.create({
+      data: {
+        email,
+        passwordHash,
+        role: 'USER',
+      },
+    });
+
+    this.logger.log(`New user registered: ${newUser.email}`);
+
+    // Generate tokens
+    const payload: JwtPayload = {
+      sub: newUser.id,
+      email: newUser.email,
+      role: newUser.role,
+      tenantId: newUser.tenantId || undefined,
+    };
+
+    const accessToken = this.jwtService.sign(payload);
+    const refreshToken = this.jwtService.sign(payload, {
+      expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN') || '7d',
+    } as any);
+
+    return {
+      accessToken,
+      refreshToken,
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        role: newUser.role,
+        tenantId: newUser.tenantId || undefined,
+      },
+    };
+  }
