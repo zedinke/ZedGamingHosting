@@ -4,6 +4,29 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 
+/**
+ * Convert BigInt values to strings for JSON serialization
+ */
+function serializeBigInt(obj: any): any {
+  if (obj === null || obj === undefined) {
+    return obj;
+  }
+  if (typeof obj === 'bigint') {
+    return obj.toString();
+  }
+  if (Array.isArray(obj)) {
+    return obj.map(serializeBigInt);
+  }
+  if (typeof obj === 'object') {
+    const result: any = {};
+    for (const [key, value] of Object.entries(obj)) {
+      result[key] = serializeBigInt(value);
+    }
+    return result;
+  }
+  return obj;
+}
+
 @Controller('metrics')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class MetricsController {
@@ -20,11 +43,13 @@ export class MetricsController {
   ) {
     const take = limit ? parseInt(limit, 10) : 100;
 
-    return this.prisma.metric.findMany({
+    const metrics = await this.prisma.metric.findMany({
       where: { nodeId },
       orderBy: { timestamp: 'desc' },
       take: Math.min(take, 1000),
     });
+
+    return serializeBigInt(metrics);
   }
 
   /**
@@ -38,11 +63,13 @@ export class MetricsController {
   ) {
     const take = limit ? parseInt(limit, 10) : 100;
 
-    return this.prisma.metric.findMany({
+    const metrics = await this.prisma.metric.findMany({
       where: { serverUuid },
       orderBy: { timestamp: 'desc' },
       take: Math.min(take, 1000),
     });
+
+    return serializeBigInt(metrics);
   }
 
   /**
@@ -70,6 +97,6 @@ export class MetricsController {
       }),
     );
 
-    return summaries;
+    return serializeBigInt(summaries);
   }
 }
