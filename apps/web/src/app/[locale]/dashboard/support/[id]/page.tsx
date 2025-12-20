@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useSocketContext } from '../../../../../contexts/socket-context';
+import { useWebSocket } from '../../../../../contexts/WebSocketContext';
+import { useTicketSocket, useSocketEvent, useSocketEmit } from '../../../../../hooks/useSocket';
 import styles from './detail.module.css';
 
 interface TicketComment {
@@ -46,16 +47,18 @@ const statusTexts = {
 export default function TicketDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const socket = useSocketContext();
+  const { socket, isConnected } = useWebSocket();
   const ticketId = params.id as string;
   const locale = params.locale;
+
+  const { typingUsers, sendTyping } = useTicketSocket(socket, ticketId);
+  const emit = useSocketEmit(socket);
 
   const [ticket, setTicket] = useState<SupportTicket | null>(null);
   const [loading, setLoading] = useState(true);
   const [commenting, setCommenting] = useState(false);
   const [comment, setComment] = useState('');
   const [error, setError] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
   const typingTimeoutRef = React.useRef<NodeJS.Timeout>();
 
   useEffect(() => {
@@ -77,70 +80,31 @@ export default function TicketDetailPage() {
   };
 
   /**
-   * Handle new comment from WebSocket
+   * Listen for new comments
    */
-  const handleNewComment = useCallback((data: any) => {
+  useSocketEvent(socket, `ticket:${ticketId}:comment`, (newComment: any) => {
     setTicket((prev) => {
-      if (!prev || prev.id !== data.ticketId) return prev;
+      if (!prev) return prev;
       return {
         ...prev,
-        comments: [data.comment, ...prev.comments],
+        comments: [newComment, ...prev.comments],
       };
     });
-  }, []);
+  });
 
   /**
-   * Handle status change from WebSocket
+   * Listen for status changes
    */
-  const handleStatusChange = useCallback((data: any) => {
-    if (data.ticketId !== ticketId) return;
+  useSocketEvent(socket, `ticket:${ticketId}:statusChange`, (data: any) => {
     setTicket((prev) => {
       if (!prev) return prev;
       return {
         ...prev,
         status: data.status,
+        updatedAt: new Date().toISOString(),
       };
     });
-  }, [ticketId]);
-
-  /**
-   * Handle typing indicator
-   */
-  const handleTypingIndicator = useCallback((data: any) => {
-    if (data.ticketId !== ticketId) return;
-    // Could show a visual indicator that someone is typing
-  }, [ticketId]);
-
-  /**
-   * Subscribe to WebSocket events
-   */
-  useEffect(() => {
-    if (!socket.isConnected || !ticketId) return;
-
-    // Subscribe to ticket
-    socket.subscribeToTicket(ticketId);
-
-    // Subscribe to events
-    const unsubscribeComment = socket.subscribe(
-      'support:newComment',
-      handleNewComment
-    );
-    const unsubscribeStatus = socket.subscribe(
-      'support:statusChanged',
-      handleStatusChange
-    );
-    const unsubscribeTyping = socket.subscribe(
-      'support:userTyping',
-      handleTypingIndicator
-    );
-
-    return () => {
-      unsubscribeComment();
-      unsubscribeStatus();
-      unsubscribeTyping();
-      socket.unsubscribeFromTicket(ticketId);
-    };
-  }, [socket, ticketId, handleNewComment, handleStatusChange, handleTypingIndicator]);
+  });
 
   const handleAddComment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -173,23 +137,13 @@ export default function TicketDetailPage() {
    */
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
+  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setComment(e.target.value);
 
     // Send typing indicator
-    if (!isTyping) {
-      setIsTyping(true);
-      socket.sendTypingIndicator(ticketId, true);
+    if (isConnected) {
+      sendTyping();
     }
-
-    // Clear existing timeout
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
-    }
-
-    // Set new timeout to stop typing indicator
-    typingTimeoutRef.current = setTimeout(() => {
-      setIsTyping(false);
-      socket.sendTypingIndicator(ticketId, false);
-    }, 2000);
   };
 
   if (loading) {
@@ -249,7 +203,14 @@ export default function TicketDetailPage() {
       </div>
 
       <div className={styles.comments}>
-        <h2>Hozzászólások ({ticket.comments?.length || 0})</h2>
+        <h2>
+          Hozzászólások ({ticket.comments?.length || 0})
+          {typingUsers.size > 0 && (
+            <span style={{ fontSize: '0.8em', marginLeft: '1em', color: '#999' }}>
+              {Array.from(typingUsers).join(', ')} gépel...
+            </span>
+          )}
+        </h2>
 
         {ticket.comments && ticket.comments.length > 0 ? (
           <div className={styles.commentsList}>

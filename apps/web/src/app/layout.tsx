@@ -1,5 +1,7 @@
 import './global.css';
 import { geistSans, jetbrainsMono } from '../lib/fonts';
+import { WebSocketProvider } from '../contexts/WebSocketContext';
+import { NotificationCenter } from '../components/NotificationCenter';
 
 export const metadata = {
   title: 'ZedGamingHosting',
@@ -14,7 +16,10 @@ export default function RootLayout({
   return (
     <html lang="hu" className="dark" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${jetbrainsMono.variable} font-sans`}>
-        {children}
+        <WebSocketProvider autoConnect={true}>
+          <NotificationCenter />
+          {children}
+        </WebSocketProvider>
       </body>
     </html>
   );
