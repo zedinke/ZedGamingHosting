@@ -175,6 +175,7 @@ services:
       - zed-network
     volumes:
       - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/alerting.rules.yml:/etc/prometheus/alerting.rules.yml:ro
       - prometheus_data:/prometheus
     depends_on:
       - node-exporter

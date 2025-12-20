@@ -1,0 +1,38 @@
+groups:
+  - name: infrastructure
+    rules:
+      - alert: TraefikApiHigh5xxRate
+        expr: (sum(rate(traefik_service_requests_total{service="api@docker",code=~"5.."}[5m])) / sum(rate(traefik_service_requests_total{service="api@docker"}[5m]))) > 0.05 and sum(rate(traefik_service_requests_total{service="api@docker"}[5m])) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "API 5xx rate high"
+          description: "More than 5% of requests to api@docker are 5xx over 5m."
+
+      - alert: ApiContainerHighCpu
+        expr: avg by (instance) (rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_service="api",container!=""}[5m])) > 0.8
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "API container CPU high"
+          description: "API container CPU > 80% for 10m."
+
+      - alert: ApiContainerHighMemory
+        expr: container_memory_working_set_bytes{container_label_com_docker_compose_service="api",container!=""} > 1.5e9
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "API container memory high"
+          description: "API container working set over 1.5GB for 10m."
+
+      - alert: NodeDiskSpaceLow
+        expr: (node_filesystem_avail_bytes{fstype!~"tmpfs|overlay",mountpoint="/"} / node_filesystem_size_bytes{fstype!~"tmpfs|overlay",mountpoint="/"}) < 0.15
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Node disk space low"
+          description: "Root filesystem free < 15% for 15m."
