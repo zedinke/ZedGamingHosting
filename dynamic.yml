@@ -62,6 +62,27 @@ http:
         certResolver: letsencrypt
       priority: 20
 
+    # Grafana - Monitoring Dashboard
+    grafana-http:
+      rule: "Host(`grafana.zedgaminghosting.hu`)"
+      entryPoints:
+        - web
+      service: grafana
+      middlewares:
+        - redirect-to-https
+      priority: 30
+
+    grafana-https:
+      rule: "Host(`grafana.zedgaminghosting.hu`)"
+      entryPoints:
+        - websecure
+      service: grafana
+      middlewares:
+        - security-headers
+      tls:
+        certResolver: letsencrypt
+      priority: 30
+
   middlewares:
     redirect-to-https:
       redirectScheme:
@@ -100,3 +121,8 @@ http:
       loadBalancer:
         servers:
           - url: "http://zed-adminer:8080"
+
+    grafana:
+      loadBalancer:
+        servers:
+          - url: "http://zed-grafana:3000"

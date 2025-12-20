@@ -223,11 +223,12 @@ services:
     environment:
       GF_SECURITY_ADMIN_USER: "admin"
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-changeme}
-      GF_SERVER_ROOT_URL: "http://localhost:3002"
+      GF_SERVER_ROOT_URL: "https://grafana.zedgaminghosting.hu"
     networks:
       - zed-network
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
     depends_on:
       - prometheus
 
