@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { PrismaService } from '@zed-hosting/db';
 
 /**
  * Subdomain Service
@@ -9,13 +9,11 @@ import { PrismaClient } from '@prisma/client';
 @Injectable()
 export class SubdomainService {
   private readonly logger = new Logger(SubdomainService.name);
-  private prisma: PrismaClient;
   private cloudflareApiToken: string;
   private cloudflareZoneId: string;
   private primaryDomain: string;
 
-  constructor() {
-    this.prisma = new PrismaClient();
+  constructor(private readonly prisma: PrismaService) {
     this.cloudflareApiToken = process.env.CLOUDFLARE_API_TOKEN || '';
     this.cloudflareZoneId = process.env.CLOUDFLARE_ZONE_ID || '';
     this.primaryDomain = process.env.PRIMARY_DOMAIN || 'zedhosting.com';
@@ -36,7 +34,7 @@ export class SubdomainService {
       }
 
       // Check if subdomain already exists
-      const existing = await this.prisma.serverSubdomain.findUnique({
+      const existing = await (this.prisma as any).serverSubdomain.findUnique({
         where: { subdomain },
       });
 
@@ -48,7 +46,7 @@ export class SubdomainService {
       const dnsRecordId = await this.createDnsRecord(subdomain, ipAddress);
 
       // Create database entry
-      const record = await this.prisma.serverSubdomain.create({
+      const record = await (this.prisma as any).serverSubdomain.create({
         data: {
           serverId,
           subdomain,
@@ -73,7 +71,7 @@ export class SubdomainService {
    */
   async updateSubdomainIp(subdomainId: string, newIpAddress: string) {
     try {
-      const subdomain = await this.prisma.serverSubdomain.findUnique({
+      const subdomain = await (this.prisma as any).serverSubdomain.findUnique({
         where: { id: subdomainId },
       });
 
@@ -87,7 +85,7 @@ export class SubdomainService {
       }
 
       // Update database
-      const updated = await this.prisma.serverSubdomain.update({
+      const updated = await (this.prisma as any).serverSubdomain.update({
         where: { id: subdomainId },
         data: {
           ipAddress: newIpAddress,
@@ -108,7 +106,7 @@ export class SubdomainService {
    */
   async deleteSubdomain(subdomainId: string) {
     try {
-      const subdomain = await this.prisma.serverSubdomain.findUnique({
+      const subdomain = await (this.prisma as any).serverSubdomain.findUnique({
         where: { id: subdomainId },
       });
 
@@ -122,7 +120,7 @@ export class SubdomainService {
       }
 
       // Delete database entry
-      await this.prisma.serverSubdomain.delete({
+      await (this.prisma as any).serverSubdomain.delete({
         where: { id: subdomainId },
       });
 
@@ -137,7 +135,7 @@ export class SubdomainService {
    * Get all subdomains for a server
    */
   async getServerSubdomains(serverId: string) {
-    return this.prisma.serverSubdomain.findMany({
+    return (this.prisma as any).serverSubdomain.findMany({
       where: { serverId },
       orderBy: { createdAt: 'desc' },
     });
@@ -147,7 +145,7 @@ export class SubdomainService {
    * Get a specific subdomain by ID
    */
   async getSubdomainById(subdomainId: string) {
-    return this.prisma.serverSubdomain.findUnique({
+    return (this.prisma as any).serverSubdomain.findUnique({
       where: { id: subdomainId },
       include: { server: true },
     });
@@ -157,7 +155,7 @@ export class SubdomainService {
    * Get a subdomain by name
    */
   async getSubdomainByName(subdomain: string) {
-    return this.prisma.serverSubdomain.findUnique({
+    return (this.prisma as any).serverSubdomain.findUnique({
       where: { subdomain },
       include: { server: true },
     });
@@ -170,13 +168,13 @@ export class SubdomainService {
     const skip = (page - 1) * limit;
 
     const [subdomains, total] = await Promise.all([
-      this.prisma.serverSubdomain.findMany({
+      (this.prisma as any).serverSubdomain.findMany({
         include: { server: true },
         orderBy: { createdAt: 'desc' },
         skip,
         take: limit,
       }),
-      this.prisma.serverSubdomain.count(),
+      (this.prisma as any).serverSubdomain.count(),
     ]);
 
     return {
