@@ -108,7 +108,9 @@ export default function ServerDetailPage() {
         type: 'error',
         title: 'Hiba',
         message: err.message || 'A szerver újraindítása sikertelen volt.',
-    
+      });
+    }
+  };
 
   const updateMutation = useMutation({
     mutationFn: () => apiClient.post(`/servers/${serverUuid}/update`, {}),
