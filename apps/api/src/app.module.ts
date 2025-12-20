@@ -14,7 +14,6 @@ import { RateLimitingModule } from './rate-limiting/rate-limiting.module';
 import { SubdomainsModule } from './subdomains/subdomains.module';
 import { ServersModule } from './servers/servers.module';
 import { TasksModule } from './tasks/tasks.module';
-import { FilesModule } from './files/files.module';
 import { AdminModule } from './admin/admin.module';
 import { ConsoleModule } from './console/console.module';
 import { EmailModule } from './email/email.module';
@@ -58,7 +57,6 @@ import { PublicOptionalJwtGuard } from './auth/guards/public-optional-jwt.guard'
     SubdomainsModule,
     ServersModule,
     TasksModule,
-    FilesModule,
     NetworkingModule,
     NodesModule,
     ProvisioningModule,
