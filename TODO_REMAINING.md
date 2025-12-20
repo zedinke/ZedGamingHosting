@@ -146,51 +146,93 @@
   - Console log streaming ✅
   - File operation progress ✅
 
-- ⏳ **Frontend WebSocket Integration** (RÉSZBEN KÉSZ)
-  - useSocket hook implementation ⏳
-  - Event subscription management ⏳
-  - Auto-reconnection logic ⏳
-  - Message buffering when offline ⏳
-  - Visual indicators for connection status ⏳
+- ✅ **Frontend WebSocket Integration** (KÉSZ!)
+  - ✅ useSocket hook implementation
+  - ✅ Event subscription management
+  - ✅ Auto-reconnection logic (exponential backoff)
+  - ✅ Message buffering when offline
+  - ✅ Visual indicators for connection status
+  - ✅ WebSocketProvider context
+  - ✅ NotificationCenter component
+  - ✅ Support ticket detail real-time integration
 
-### 🟠 Advanced Support Features
-- ⏳ **Ticket Assignment System**
-  - Support staff assignment
-  - Workload balancing
-  - Priority escalation
-  - SLA tracking and alerts
-  - Ticket transfer between staff
+### ✅ Advanced Support Features (KÉSZ!)
 
-- ⏳ **Knowledge Base Integration**
-  - FAQ creation and management
-  - Auto-suggest solutions
-  - Article linking to tickets
-  - Search functionality
+- ✅ **Ticket Assignment System** (KÉSZ!)
+  - ✅ Support staff assignment endpoint
+  - ✅ Workload balancing algorithm
+  - ✅ Auto-assign to least-loaded staff
+  - ✅ Priority escalation
+  - ✅ SLA tracking with deadlines
+  - ✅ Ticket transfer between staff
+  - ✅ Socket.IO notifications for assignments
 
-- ⏳ **Ticket Templates**
-  - Template creation for common issues
-  - Quick response templates
-  - Macro functionality
+- ✅ **Knowledge Base Integration** (KÉSZ!)
+  - ✅ FAQ article creation and management
+  - ✅ Auto-suggest solutions using ML-like matching
+  - ✅ Article linking to tickets
+  - ✅ Full-text search functionality
+  - ✅ Category and tag-based filtering
+  - ✅ Popular articles ranking
+  - ✅ Public API endpoints
+  - ✅ Frontend: KnowledgeBaseSearch component
+  - ✅ Frontend: ArticleDetail component
+  - ✅ Frontend: SuggestedArticles component
 
-### 🟠 PHASE 6: Networking és Subdomains (RÉSZBEN KÉSZ)
+- ✅ **Ticket Templates** (KÉSZ!)
+  - ✅ Template creation for common issues
+  - ✅ Quick response templates
+  - ✅ Macro functionality (user_name, staff_name, date, time, etc.)
+  - ✅ Template search and filtering
+  - ✅ Category-based organization
+  - ✅ Usage tracking and statistics
+  - ✅ Template application with substitution
+  - ✅ Frontend: TicketTemplatePicker component
 
-#### 6.1 Subdomain Service (HIÁNYZIK)
-- ⏳ **SubdomainService** - DNS kezelés
-  - `apps/api/src/subdomains/subdomains.service.ts`
-  - `apps/api/src/subdomains/subdomains.controller.ts`
-  - Subdomain létrehozás/törlés
-  - IP change handling (server migration)
+- ✅ **SLA Monitoring & Alerts** (KÉSZ!)
+  - ✅ SLA metrics calculation (on-time %, compliance status)
+  - ✅ @Cron SLA breach detection (every 15 min)
+  - ✅ @Cron approaching deadline alerts (every 30 min)
+  - ✅ Priority-based SLA targets (CRITICAL:1h, HIGH:4h, MEDIUM:24h, LOW:72h)
+  - ✅ Email alerts (breach + warning templates)
+  - ✅ WebSocket notifications to staff
+  - ✅ SLA metrics dashboard/page
+  - ✅ Breach and warning ticket lists
+  - ✅ Real-time metrics with auto-refresh
 
-#### 6.2 Cloudflare Integration (HIÁNYZIK)
-- ⏳ **CloudflareClient** - Cloudflare API wrapper
-  - `libs/cloudflare/src/cloudflare-client.ts`
-  - DNS record management (A records)
-  - Zone management
-  - API authentication
-  - Error handling
+### ✅ PHASE 6: Networking és Subdomains (KÉSZ!)
 
-#### 6.3 Traefik Manager (RÉSZBEN KÉSZ)
-- ✅ Traefik statikus konfig (docker-compose)
+#### 6.1 Subdomain Service ✅ (KÉSZ!)
+- ✅ **SubdomainService** - DNS kezelés
+  - ✅ `apps/api/src/networking/subdomain.service.ts`
+  - ✅ `apps/api/src/networking/subdomain.controller.ts`
+  - ✅ Subdomain létrehozás/törlés/update
+  - ✅ IP change handling (server migration)
+  - ✅ Subdomain validation (alphanumeric, 3-63 chars)
+  - ✅ Bulk subdomain creation
+
+#### 6.2 Cloudflare Integration ✅ (KÉSZ!)
+- ✅ **SubdomainService** - Cloudflare API wrapper
+  - ✅ DNS A record creation
+  - ✅ DNS record updates
+  - ✅ DNS record deletion
+  - ✅ Zone management
+  - ✅ API authentication (Bearer token)
+  - ✅ Error handling and logging
+  - ✅ DNS propagation checking (Google DNS resolver)
+
+#### 6.3 Frontend Subdomain Management ✅ (KÉSZ!)
+- ✅ **SubdomainManager component**
+  - ✅ Create new subdomains
+  - ✅ List all subdomains for server
+  - ✅ Edit IP address
+  - ✅ Delete subdomains
+  - ✅ Check DNS propagation status
+  - ✅ Copy domain to clipboard
+  - ✅ Readonly mode support
+  - ✅ Real-time updates via React Query
+
+### ⏳ Traefik Manager (Maradék)
 - ⏳ **TraefikManager** - Dinamikus label management
   - `apps/daemon/src/traefik/traefik-manager.ts`
   - Container label update
