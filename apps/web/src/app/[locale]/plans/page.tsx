@@ -1,6 +1,6 @@
 'use client';
 
-// import { useTranslations } from 'next-intl';
+// import { useTranslations } from '@i18n/translations';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';

@@ -1,4 +1,4 @@
-import { useTranslations } from 'next-intl';
+import { useTranslations } from '@i18n/translations';
 import Link from 'next/link';
 import { GameShowcase } from '@/components/landing/GameShowcase';
 import { FeaturedPlans } from '@/components/landing/FeaturedPlans';

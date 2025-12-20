@@ -1,6 +1,3 @@
-import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
-import { routing } from '../../i18n/routing';
 import { QueryProvider } from '../../providers/query-provider';
 import { ThemeProvider } from '../../lib/theme';
 import { ErrorBoundary } from '../../components/error-boundary';
@@ -15,9 +12,6 @@ export default async function LocaleLayout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  const { locale } = params;
-  const messages = await getMessages();
-
   return (
     <div
       style={{
@@ -31,11 +25,9 @@ export default async function LocaleLayout({
         <ThemeProvider>
           <QueryProvider>
             <SocketProvider>
-              <NextIntlClientProvider messages={messages} locale={locale || routing.defaultLocale}>
-                <NotificationProvider>
-                  {children}
-                </NotificationProvider>
-              </NextIntlClientProvider>
+              <NotificationProvider>
+                {children}
+              </NotificationProvider>
             </SocketProvider>
           </QueryProvider>
         </ThemeProvider>

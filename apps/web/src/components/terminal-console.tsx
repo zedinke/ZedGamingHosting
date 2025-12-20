@@ -5,7 +5,7 @@ import { Terminal as XTerm } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import { WebLinksAddon } from '@xterm/addon-web-links';
 import '@xterm/xterm/css/xterm.css';
-import { useTranslations } from 'next-intl';
+import { useTranslations } from '@i18n/translations';
 import { Button } from '@zed-hosting/ui-kit';
 import { useAuthStore } from '../stores/auth-store';
 

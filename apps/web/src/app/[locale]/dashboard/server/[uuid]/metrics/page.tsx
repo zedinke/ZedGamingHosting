@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useTranslations } from '@i18n/translations';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '../../../../../../lib/api-client';
 import { useAuthStore } from '../../../../../../stores/auth-store';

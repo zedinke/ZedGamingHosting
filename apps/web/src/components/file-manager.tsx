@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations } from '@i18n/translations';
 import Editor from '@monaco-editor/react';
 import { Button } from '@zed-hosting/ui-kit';
 import { apiClient } from '../lib/api-client';

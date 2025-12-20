@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale } from '@i18n/translations';
 import styles from './security.module.css';
 
 export default function SecurityPage() {

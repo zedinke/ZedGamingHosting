@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useTranslations } from '@i18n/translations';
 import { apiClient } from '../../../../lib/api-client';
 import { useAuthStore } from '../../../../stores/auth-store';
 import { Button } from '@zed-hosting/ui-kit';

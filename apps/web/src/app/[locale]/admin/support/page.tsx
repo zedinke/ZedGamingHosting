@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale } from '@i18n/translations';
 import { useSocketContext } from '../../../../contexts/socket-context';
 import styles from './support.module.css';
 

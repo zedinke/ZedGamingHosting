@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useTranslations } from '@i18n/translations';
 import { motion } from 'framer-motion';
 import { Lock, AlertCircle, ArrowRight, Sparkles, Key } from 'lucide-react';
 import { useAuthStore } from '../../../stores/auth-store';

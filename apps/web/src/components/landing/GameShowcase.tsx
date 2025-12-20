@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTranslations } from '@i18n/translations';
 import Link from 'next/link';
 import { Card } from '@zed-hosting/ui-kit';
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { Link, usePathname, useRouter } from '../i18n/routing';
-import { useTranslations } from 'next-intl';
+import { useTranslations } from '@i18n/translations';
 import { useAuthStore } from '../stores/auth-store';
 import { Button } from '@zed-hosting/ui-kit';
 import { ThemeToggle } from '../lib/theme';
