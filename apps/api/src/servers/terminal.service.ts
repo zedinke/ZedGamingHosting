@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { exec } from 'child_process';
 import { promisify } from 'util';
-import { PrismaClient } from '@prisma/client';
+import { PrismaService } from '@zed-hosting/db';
 
 const execAsync = promisify(exec);
 
@@ -12,12 +12,9 @@ const execAsync = promisify(exec);
 @Injectable()
 export class TerminalService {
   private readonly logger = new Logger(TerminalService.name);
-  private prisma: PrismaClient;
   private activeSessions: Map<string, { serverId: string; sessionId: string; createdAt: Date }> = new Map();
 
-  constructor() {
-    this.prisma = new PrismaClient();
-  }
+  constructor(private readonly prisma: PrismaService) {}
 
   /**
    * Create a new terminal session for a server
@@ -57,7 +54,7 @@ export class TerminalService {
       }
 
       // Get server details (SSH host, port, key path)
-      const server = await this.prisma.gameServer.findUnique({
+      const server = await (this.prisma as any).gameServer.findUnique({
         where: { uuid: serverId },
         select: {
           name: true,

@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { PrismaService } from '@zed-hosting/db';
 import { CreateTicketTemplateDto, UpdateTicketTemplateDto } from './dto/ticket-template.dto';
 
 /**
@@ -10,18 +10,15 @@ import { CreateTicketTemplateDto, UpdateTicketTemplateDto } from './dto/ticket-t
 @Injectable()
 export class TicketTemplateService {
   private readonly logger = new Logger(TicketTemplateService.name);
-  private prisma: PrismaClient;
 
-  constructor() {
-    this.prisma = new PrismaClient();
-  }
+  constructor(private readonly prisma: PrismaService) {}
 
   /**
    * Create a new ticket response template
    */
   async createTemplate(dto: CreateTicketTemplateDto, userId: string) {
     try {
-      const template = await this.prisma.ticketTemplate.create({
+      const template = await (this.prisma as any).ticketTemplate.create({
         data: {
           name: dto.name,
           subject: dto.subject,
@@ -51,7 +48,7 @@ export class TicketTemplateService {
     userId: string,
   ) {
     try {
-      const template = await this.prisma.ticketTemplate.update({
+      const template = await (this.prisma as any).ticketTemplate.update({
         where: { id: templateId },
         data: {
           ...dto,
@@ -73,7 +70,7 @@ export class TicketTemplateService {
    */
   async deleteTemplate(templateId: string) {
     try {
-      await this.prisma.ticketTemplate.delete({
+      await (this.prisma as any).ticketTemplate.delete({
         where: { id: templateId },
       });
 
@@ -91,13 +88,13 @@ export class TicketTemplateService {
     const skip = (page - 1) * limit;
 
     const [templates, total] = await Promise.all([
-      this.prisma.ticketTemplate.findMany({
+      (this.prisma as any).ticketTemplate.findMany({
         where: category ? { category } : {},
         orderBy: { createdAt: 'desc' },
         skip,
         take: limit,
       }),
-      this.prisma.ticketTemplate.count({
+      (this.prisma as any).ticketTemplate.count({
         where: category ? { category } : {},
       }),
     ]);
@@ -114,7 +111,7 @@ export class TicketTemplateService {
    * Get a specific template by ID
    */
   async getTemplateById(templateId: string) {
-    return this.prisma.ticketTemplate.findUnique({
+    return (this.prisma as any).ticketTemplate.findUnique({
       where: { id: templateId },
       include: {
         createdByUser: { select: { id: true, email: true, name: true } },
@@ -127,7 +124,7 @@ export class TicketTemplateService {
    * Search templates by keyword
    */
   async searchTemplates(keyword: string, limit: number = 10) {
-    return this.prisma.ticketTemplate.findMany({
+    return (this.prisma as any).ticketTemplate.findMany({
       where: {
         OR: [
           { name: { contains: keyword, mode: 'insensitive' } },
@@ -145,7 +142,7 @@ export class TicketTemplateService {
    * Get templates by category
    */
   async getTemplatesByCategory(category: string) {
-    return this.prisma.ticketTemplate.findMany({
+    return (this.prisma as any).ticketTemplate.findMany({
       where: { category },
       orderBy: { name: 'asc' },
     });
@@ -155,7 +152,7 @@ export class TicketTemplateService {
    * Get all unique categories
    */
   async getCategories() {
-    const categories = await this.prisma.ticketTemplate.findMany({
+    const categories = await (this.prisma as any).ticketTemplate.findMany({
       distinct: ['category'],
       select: { category: true },
       where: { category: { not: null } },
@@ -198,7 +195,7 @@ export class TicketTemplateService {
       }
 
       // Log template usage
-      await this.prisma.ticketTemplate.update({
+      await (this.prisma as any).ticketTemplate.update({
         where: { id: templateId },
         data: {
           usageCount: { increment: 1 },
@@ -221,7 +218,7 @@ export class TicketTemplateService {
    * Get popular templates based on usage
    */
   async getPopularTemplates(limit: number = 10) {
-    return this.prisma.ticketTemplate.findMany({
+    return (this.prisma as any).ticketTemplate.findMany({
       orderBy: { usageCount: 'desc' },
       take: limit,
     });
