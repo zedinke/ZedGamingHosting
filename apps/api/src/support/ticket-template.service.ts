@@ -132,7 +132,7 @@ export class TicketTemplateService {
         OR: [
           { name: { contains: keyword, mode: 'insensitive' } },
           { subject: { contains: keyword, mode: 'insensitive' } },
-          { content: { contains: keyword, mode: ensitive' } },
+          { content: { contains: keyword, mode: 'insensitive' } },
           { tags: { hasSome: [keyword] } },
         ],
       },
@@ -161,7 +161,7 @@ export class TicketTemplateService {
       where: { category: { not: null } },
     });
 
-    return categories.map((c) => c.category).filter(Boolean);
+    return categories.map((c: any) => c.category).filter(Boolean);
   }
 
   /**
@@ -189,7 +189,6 @@ export class TicketTemplateService {
    */
   async applyTemplate(
     templateId: string,
-    ticketId: string,
     variables: Record<string, string>,
   ) {
     try {

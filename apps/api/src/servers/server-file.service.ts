@@ -1,5 +1,4 @@
-import { Injectable, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
-import * as fs from 'fs/promises';
+import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import * as path from 'path';
 import { AppWebSocketGateway } from '../websocket/websocket.gateway';
 
@@ -11,6 +10,13 @@ interface FileEntry {
   modified?: string;
 }
 
+interface UploadedFile {
+  filename: string;
+  buffer: Buffer;
+  mimetype: string;
+  size: number;
+}
+
 /**
  * Server File Service
  * Manages file operations on game servers via daemon
@@ -18,7 +24,7 @@ interface FileEntry {
 @Injectable()
 export class ServerFileService {
   private readonly logger = new Logger(ServerFileService.name);
-  private webSocketGateway: AppWebSocketGateway;
+  private webSocketGateway?: AppWebSocketGateway;
 
   constructor() {}
 
@@ -95,7 +101,7 @@ export class ServerFileService {
    */
   async uploadFile(
     serverId: string,
-    file: Express.Multer.File,
+    file: UploadedFile,
     destinationPath: string,
   ) {
     try {

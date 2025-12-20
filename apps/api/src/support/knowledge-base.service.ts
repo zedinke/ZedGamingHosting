@@ -16,7 +16,7 @@ export class KnowledgeBaseService {
    * Create a new knowledge base article
    */
   async createArticle(dto: CreateKnowledgeArticleDto): Promise<any> {
-    return this.prisma.knowledgeArticle.create({
+    return this.prisma.knowledgeBaseArticle.create({
       data: {
         title: dto.title,
         content: dto.content,
@@ -31,7 +31,7 @@ export class KnowledgeBaseService {
    * Update knowledge base article
    */
   async updateArticle(articleId: string, dto: UpdateKnowledgeArticleDto): Promise<any> {
-    const article = await this.prisma.knowledgeArticle.findUnique({
+    const article = await this.prisma.knowledgeBaseArticle.findUnique({
       where: { id: articleId },
     });
 
@@ -39,7 +39,7 @@ export class KnowledgeBaseService {
       throw new NotFoundException('Article not found');
     }
 
-    return this.prisma.knowledgeArticle.update({
+    return this.prisma.knowledgeBaseArticle.update({
       where: { id: articleId },
       data: {
         title: dto.title,
@@ -63,7 +63,7 @@ export class KnowledgeBaseService {
     }
 
     const [articles, total] = await Promise.all([
-      this.prisma.knowledgeArticle.findMany({
+      this.prisma.knowledgeBaseArticle.findMany({
         where,
         select: {
           id: true,
@@ -78,7 +78,7 @@ export class KnowledgeBaseService {
         skip,
         take: limit,
       }),
-      this.prisma.knowledgeArticle.count({ where }),
+      this.prisma.knowledgeBaseArticle.count({ where }),
     ]);
 
     return {
@@ -96,7 +96,7 @@ export class KnowledgeBaseService {
    * Get article by ID
    */
   async getArticleById(articleId: string): Promise<any> {
-    const article = await this.prisma.knowledgeArticle.findUnique({
+    const article = await this.prisma.knowledgeBaseArticle.findUnique({
       where: { id: articleId },
       include: {
         linkedTickets: {
@@ -121,7 +121,7 @@ export class KnowledgeBaseService {
    * Search articles by keyword
    */
   async searchArticles(keyword: string): Promise<any[]> {
-    return this.prisma.knowledgeArticle.findMany({
+    return this.prisma.knowledgeBaseArticle.findMany({
       where: {
         isPublished: true,
         OR: [
@@ -159,7 +159,7 @@ export class KnowledgeBaseService {
     }
 
     // Search by category first, then by keyword matching
-    const suggestions = await this.prisma.knowledgeArticle.findMany({
+    const suggestions = await this.prisma.knowledgeBaseArticle.findMany({
       where: {
         isPublished: true,
         OR: [
@@ -198,14 +198,14 @@ export class KnowledgeBaseService {
   async linkArticleToTicket(ticketId: string, articleId: string): Promise<any> {
     const [ticket, article] = await Promise.all([
       this.prisma.supportTicket.findUnique({ where: { id: ticketId } }),
-      this.prisma.knowledgeArticle.findUnique({ where: { id: articleId } }),
+      this.prisma.knowledgeBaseArticle.findUnique({ where: { id: articleId } }),
     ]);
 
     if (!ticket || !article) {
       throw new NotFoundException('Ticket or article not found');
     }
 
-    return this.prisma.knowledgeArticle.update({
+    return this.prisma.knowledgeBaseArticle.update({
       where: { id: articleId },
       data: {
         linkedTickets: {
@@ -219,7 +219,7 @@ export class KnowledgeBaseService {
    * Get popular articles
    */
   async getPopularArticles(limit: number = 10): Promise<any[]> {
-    return this.prisma.knowledgeArticle.findMany({
+    return this.prisma.knowledgeBaseArticle.findMany({
       where: { isPublished: true },
       select: {
         id: true,
@@ -253,12 +253,29 @@ export class KnowledgeBaseService {
    * Get article categories
    */
   async getCategories(): Promise<string[]> {
-    const result = await this.prisma.knowledgeArticle.findMany({
+    const result = await this.prisma.knowledgeBaseArticle.findMany({
       where: { isPublished: true },
       select: { category: true },
       distinct: ['category'],
     });
 
-    return result.map((r) => r.category).filter(Boolean);
+    return result.map((r: any) => r.category).filter(Boolean);
+  }
+
+  /**
+   * Delete a knowledge base article
+   */
+  async deleteArticle(articleId: string): Promise<any> {
+    const article = await this.prisma.knowledgeBaseArticle.findUnique({
+      where: { id: articleId },
+    });
+
+    if (!article) {
+      throw new NotFoundException(`Article with ID ${articleId} not found`);
+    }
+
+    return this.prisma.knowledgeBaseArticle.delete({
+      where: { id: articleId },
+    });
   }
 }

@@ -25,9 +25,9 @@ export class SlaService {
 
   /**
    * Check for breached SLA and send alerts
-   * Runs every 15 minutes
+   * Runs every 10 minutes
    */
-  @Cron(CronExpression.EVERY_15_MINUTES)
+  @Cron(CronExpression.EVERY_10_MINUTES)
   async checkSlaBreaches() {
     try {
       const breachedTickets = await this.prisma.supportTicket.findMany({
@@ -113,7 +113,7 @@ export class SlaService {
         }
 
         // Broadcast via WebSocket
-        if (this.webSocketGateway) {
+        if (this.webSocketGateway && ticket.slaResolveDeadline) {
           this.webSocketGateway.broadcastToStaff('support:slaWarning', {
             ticketId: ticket.id,
             ticketNumber: ticket.ticketNumber,
@@ -260,7 +260,7 @@ export class SlaService {
         priority: true,
         status: true,
         slaResolveDeadline: true,
-        assignedTo: { select: { id: true, email: true, name: true } },
+        assignedTo: { select: { id: true, email: true } },
       },
       orderBy: { slaResolveDeadline: 'asc' },
       take: limit,
@@ -289,7 +289,7 @@ export class SlaService {
         priority: true,
         status: true,
         slaResolveDeadline: true,
-        assignedTo: { select: { id: true, email: true, name: true } },
+        assignedTo: { select: { id: true, email: true } },
       },
       orderBy: { slaResolveDeadline: 'asc' },
       take: limit,
@@ -297,9 +297,9 @@ export class SlaService {
 
     return tickets.map((ticket) => ({
       ...ticket,
-      hoursRemaining: Math.round(
+      hoursRemaining: ticket.slaResolveDeadline ? Math.round(
         (ticket.slaResolveDeadline.getTime() - now.getTime()) / (60 * 60 * 1000)
-      ),
+      ) : 0,
     }));
   }
 }
