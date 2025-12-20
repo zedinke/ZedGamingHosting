@@ -26,11 +26,12 @@ const translations: Record<string, Record<string, string>> = {
 };
 
 export function useTranslations(namespace?: string) {
-  return (key: string, defaultValue?: string) => {
-    if (namespace) {
-      return translations[namespace]?.[key] || defaultValue || key;
+  // Return a function that takes a key and returns a string
+  return (key: string, defaultValue?: string | Record<string, unknown>): string => {
+    if (namespace && translations[namespace]) {
+      return translations[namespace][key] || (typeof defaultValue === 'string' ? defaultValue : key);
     }
-    return defaultValue || key;
+    return typeof defaultValue === 'string' ? defaultValue : key;
   };
 }
 
