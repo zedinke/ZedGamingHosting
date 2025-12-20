@@ -316,10 +316,10 @@ export default function LoginPage() {
                           {t('password')}
                         </label>
                         <a
-                          href="/forgot-password"
+                          href={`/${locale}/forgot-password`}
                           className="text-sm text-white hover:text-blue-400 transition-colors font-medium"
                         >
-                          {t('forgotPassword')}
+                          {t('forgotPassword') || 'Forgot Password?'}
                         </a>
                       </div>
                       <div className="relative group">
