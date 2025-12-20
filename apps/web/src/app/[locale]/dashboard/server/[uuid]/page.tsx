@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '../../../../../lib/api-client';
 import { useAuthStore } from '../../../../../stores/auth-store';
 import { Button, UpdateProgressIndicator } from '@zed-hosting/ui-kit';
@@ -15,7 +15,7 @@ import { GameServer } from '../../../../../types/server';
 import Link from 'next/link';
 import { ServerCloneDialog } from '../../../../../components/server-clone-dialog';
 import { Copy, Download } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNotificationContext } from '../../../../../context/notification-context';
 
 export default function ServerDetailPage() {
@@ -23,7 +23,6 @@ export default function ServerDetailPage() {
   const router = useRouter();
   const t = useTranslations();
   const { accessToken } = useAuthStore();
-  const queryClient = useQueryClient();
   const serverUuid = params.uuid as string;
   const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'hu' : 'hu';
   const [showCloneDialog, setShowCloneDialog] = useState(false);
@@ -112,53 +111,6 @@ export default function ServerDetailPage() {
     }
   };
 
-  const updateMutation = useMutation({
-    mutationFn: () => apiClient.post(`/servers/${serverUuid}/update`, {}),
-    onMutate: () => {
-      setUpdateStatus({ status: 'pending', message: 'Frissítés indítása...' });
-    },
-    onSuccess: () => {
-      setUpdateStatus({ status: 'downloading', message: 'Szerver frissítése folyamatban...' });
-      notifications.addNotification({
-        type: 'success',
-        title: 'Frissítés indítva',
-        message: 'A szerver frissítése megkezdődött.',
-      });
-      pollUpdateStatus();
-    },
-    onError: (err: any) => {
-      setUpdateStatus({ status: 'failed', error: err.message });
-      notifications.addNotification({
-        type: 'error',
-        title: 'Hiba',
-        message: err.message || 'A szerver frissítése sikertelen volt.',
-      });
-    },
-  });
-
-  const pollUpdateStatus = async () => {
-    const poll = async () => {
-      try {
-        const status = await apiClient.get<any>(`/servers/${serverUuid}/update/status`);
-        setUpdateStatus({
-          status: status.status,
-          progress: status.progress,
-          message: status.message,
-          error: status.error,
-        });
-
-        if (!['pending', 'downloading'].includes(status.status)) {
-          clearInterval(intervalId);
-        }
-      } catch (err) {
-        console.error('Failed to poll update status:', err);
-      }
-    };
-
-    const intervalId = setInterval(poll, 3000);
-    poll();
-  };
-
   const handleDelete = async () => {
     const confirmMessage = t('dashboard.server.deleteConfirm') || 'Are you sure you want to delete this server? This action cannot be undone.';
     if (!window.confirm(confirmMessage)) {
@@ -178,7 +130,45 @@ export default function ServerDetailPage() {
         title: 'Hiba',
         message: err.message || 'A szerver törlése sikertelen volt.',
       });
+    
+
+  const handleUpdate = async () => {
+    try {
+      setUpdateStatus({ status: 'pending', message: 'Frissítés indítása...' });
+      await apiClient.post(`/servers/${serverUuid}/update`, {});
+      setUpdateStatus({ status: 'downloading', message: 'Szerver frissítése folyamatban...' });
+      notifications.addNotification({
+        type: 'success',
+        title: 'Frissítés indítva',
+        message: 'A szerver frissítése megkezdődött.',
+      });
+      
+      // Poll update status
+      const pollInterval = setInterval(async () => {
+        try {
+          const status = await apiClient.get<any>(`/servers/${serverUuid}/update/status`);
+          setUpdateStatus({
+            status: status.status,
+            progress: status.progress,
+            message: status.message,
+            error: status.error,
+          });
+          if (!['pending', 'downloading'].includes(status.status)) {
+            clearInterval(pollInterval);
+          }
+        } catch (err) {
+          console.error('Failed to poll update status:', err);
+        }
+      }, 3000);
+    } catch (err: any) {
+      setUpdateStatus({ status: 'failed', error: err.message });
+      notifications.addNotification({
+        type: 'error',
+        title: 'Hiba',
+        message: err.message || 'A szerver frissítése sikertelen volt.',
+      });
     }
+  };}
   };
 
   const handleClone = async (data: {
@@ -271,15 +261,7 @@ export default function ServerDetailPage() {
             </CardContent>
           </Card>
         </div>
-      );  <Button 
-                variant="primary" 
-                onClick={() => updateMutation.mutate()}
-                disabled={updateMutation.isPending || updateStatus?.status === 'downloading'}
-              >
-                <Download className="h-4 w-4 mr-2" />
-                Frissítés
-              </Button>
-            
+      );
     }
 
     return (
@@ -323,22 +305,28 @@ export default function ServerDetailPage() {
                   </Button>
                   <Button variant="secondary" onClick={handleRestart}>
                     {t('dashboard.server.actions.restart')}
-            Update Progress */}
-        {updateStatus && updateStatus.status !== 'idle' && (
-          <div className="mb-8">
-            <UpdateProgressIndicator
-              progress={updateStatus}
-              serverName={(server as any).name || server.gameType}
-            />
-          </div>
-        )}
-
-        {/*       </Button>
+                  </Button>
+                  <Button 
+                    variant="secondary" 
+                    onClick={handleUpdate}
+                    disabled={updateStatus?.status === 'downloading' || updateStatus?.status === 'pending'}
+                    className="flex items-center gap-2"
+                  >
+                    <Download className="w-4 h-4" />
+                    {t('dashboard.server.actions.update')}
+                  </Button>
                 </>
               )}
             </div>
           </div>
         </div>
+
+        {/* Update Progress Indicator */}
+        {updateStatus && (
+          <div className="mb-6">
+            <UpdateProgressIndicator status={updateStatus} />
+          </div>
+        )}
 
         {/* Navigation Tabs */}
         <div className="mb-6 border-b border-border">
