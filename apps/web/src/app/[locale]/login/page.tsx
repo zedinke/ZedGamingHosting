@@ -10,10 +10,11 @@ import { Input } from '@zed-hosting/ui-kit';
 
 type LoginStep = 'credentials' | 'two-fa' | 'backup-code';
 
-export default function LoginPage() {
+export default function LoginPage({ params }: { params: { locale?: string } }) {
   const t = useTranslations('auth.login');
   const router = useRouter();
   const { login } = useAuthStore();
+  const locale = params?.locale && ['hu', 'en'].includes(params.locale) ? params.locale : 'hu';
   
   // Login form state
   const [email, setEmail] = useState('');
@@ -81,10 +82,6 @@ export default function LoginPage() {
         // Normal login without 2FA
         login(data.accessToken, data.refreshToken, data.user);
         
-        const currentPath = window.location.pathname;
-        const pathParts = currentPath.split('/').filter(Boolean);
-        const locale = pathParts[0] && ['hu', 'en'].includes(pathParts[0]) ? pathParts[0] : 'hu';
-        
         router.push(`/${locale}/dashboard`);
         router.refresh();
       }
@@ -135,10 +132,6 @@ export default function LoginPage() {
       const data = await response.json();
       login(data.accessToken, data.refreshToken, data.user);
       
-      const currentPath = window.location.pathname;
-      const pathParts = currentPath.split('/').filter(Boolean);
-      const locale = pathParts[0] && ['hu', 'en'].includes(pathParts[0]) ? pathParts[0] : 'hu';
-      
       router.push(`/${locale}/dashboard`);
       router.refresh();
     } catch (err: any) {
@@ -186,10 +179,6 @@ export default function LoginPage() {
 
       const data = await response.json();
       login(data.accessToken, data.refreshToken, data.user);
-      
-      const currentPath = window.location.pathname;
-      const pathParts = currentPath.split('/').filter(Boolean);
-      const locale = pathParts[0] && ['hu', 'en'].includes(pathParts[0]) ? pathParts[0] : 'hu';
       
       router.push(`/${locale}/dashboard`);
       router.refresh();
@@ -536,7 +525,7 @@ export default function LoginPage() {
                 </p>
                 <div className="text-center">
                   <a
-                    href="/register"
+                    href={`/${locale}/register`}
                     className="inline-flex items-center text-base text-white hover:text-blue-400 transition-colors font-medium group"
                   >
                     {t('signUp') || 'Regisztráció'}
