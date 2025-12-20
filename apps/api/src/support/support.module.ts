@@ -5,14 +5,31 @@ import { KnowledgeBaseService } from './knowledge-base.service';
 import { KnowledgeBaseController } from './knowledge-base.controller';
 import { SlaService } from './sla.service';
 import { SlaController } from './sla.controller';
+import { TicketTemplateService } from './ticket-template.service';
+import { TicketTemplateController } from './ticket-template.controller';
 import { EmailModule } from '../email/email.module';
 import { WebSocketModule } from '../websocket/websocket.module';
 
 @Module({
   imports: [EmailModule, WebSocketModule],
-  providers: [SupportTicketService, KnowledgeBaseService, SlaService],
-  controllers: [SupportTicketController, KnowledgeBaseController, SlaController],
-  exports: [SupportTicketService, KnowledgeBaseService, SlaService],
+  providers: [
+    SupportTicketService,
+    KnowledgeBaseService,
+    SlaService,
+    TicketTemplateService,
+  ],
+  controllers: [
+    SupportTicketController,
+    KnowledgeBaseController,
+    SlaController,
+    TicketTemplateController,
+  ],
+  exports: [
+    SupportTicketService,
+    KnowledgeBaseService,
+    SlaService,
+    TicketTemplateService,
+  ],
 })
 export class SupportModule {}
 
