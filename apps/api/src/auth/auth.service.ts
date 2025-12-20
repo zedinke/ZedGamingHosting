@@ -301,5 +301,97 @@ export class AuthService {
 
     return user;
   }
+
+  /**
+   * Request password reset - generates reset token and sends email
+   */
+  async requestPasswordReset(email: string): Promise<{ success: boolean; message: string }> {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+    });
+
+    // Always return success to prevent email enumeration attacks
+    if (!user) {
+      this.logger.warn(`Password reset requested for non-existent email: ${email}`);
+      return {
+        success: true,
+        message: 'If an account with that email exists, a password reset link has been sent.',
+      };
+    }
+
+    // Generate reset token (random 32 byte hex string)
+    const resetToken = require('crypto').randomBytes(32).toString('hex');
+    const resetTokenHash = await bcrypt.hash(resetToken, 10);
+    const resetTokenExpires = new Date(Date.now() + 3600000); // 1 hour from now
+
+    // Save reset token to database
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        resetToken: resetTokenHash,
+        resetTokenExpires,
+      },
+    });
+
+    // TODO: Send password reset email
+    // For now, log the reset token (only for development)
+    this.logger.log(`Password reset token for ${email}: ${resetToken}`);
+    this.logger.log(`Reset URL: ${this.config.get('FRONTEND_URL')}/reset-password?token=${resetToken}`);
+
+    return {
+      success: true,
+      message: 'If an account with that email exists, a password reset link has been sent.',
+    };
+  }
+
+  /**
+   * Reset password using reset token
+   */
+  async resetPassword(token: string, newPassword: string): Promise<{ success: boolean; message: string }> {
+    // Find user with valid reset token
+    const users = await this.prisma.user.findMany({
+      where: {
+        resetTokenExpires: {
+          gte: new Date(), // Token not expired
+        },
+      },
+    });
+
+    // Verify token against all users with unexpired tokens
+    let matchedUser = null;
+    for (const user of users) {
+      if (user.resetToken) {
+        const isTokenValid = await bcrypt.compare(token, user.resetToken);
+        if (isTokenValid) {
+          matchedUser = user;
+          break;
+        }
+      }
+    }
+
+    if (!matchedUser) {
+      throw new UnauthorizedException('Invalid or expired reset token');
+    }
+
+    // Hash new password
+    const hashedPassword = await this.hashPassword(newPassword);
+
+    // Update password and clear reset token
+    await this.prisma.user.update({
+      where: { id: matchedUser.id },
+      data: {
+        passwordHash: hashedPassword,
+        resetToken: null,
+        resetTokenExpires: null,
+      },
+    });
+
+    this.logger.log(`User ${matchedUser.email} reset their password`);
+
+    return {
+      success: true,
+      message: this.i18n.translate('PASSWORD_RESET_SUCCESSFULLY'),
+    };
+  }
 }
 

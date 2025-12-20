@@ -4,6 +4,8 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Public } from './decorators/public.decorator';
 
@@ -227,5 +229,27 @@ export class AuthController {
     @Body() body: { currentPassword: string; newPassword: string },
   ) {
     return this.authService.changePassword(req.user.id, body.currentPassword, body.newPassword);
+  }
+
+  /**
+   * Request password reset
+   * POST /api/auth/forgot-password
+   */
+  @Public()
+  @Post('forgot-password')
+  @HttpCode(HttpStatus.OK)
+  async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
+    return this.authService.requestPasswordReset(forgotPasswordDto.email);
+  }
+
+  /**
+   * Reset password with token
+   * POST /api/auth/reset-password
+   */
+  @Public()
+  @Post('reset-password')
+  @HttpCode(HttpStatus.OK)
+  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    return this.authService.resetPassword(resetPasswordDto.token, resetPasswordDto.newPassword);
   }
 }

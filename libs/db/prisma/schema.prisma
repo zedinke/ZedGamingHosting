@@ -66,6 +66,8 @@ model User {
   twoFactorEnabled Boolean  @default(false)
   twoFactorMethod String?   // "TOTP" or "SMS"
   twoFactorBackupCodes String? @db.Text // JSON stringified array of hashed backup codes
+  resetToken      String?   // Hashed password reset token
+  resetTokenExpires DateTime? // Reset token expiration time
   balance         Float     @default(0)
   tenantId        String?
   tenant          Tenant?   @relation(fields: [tenantId], references: [id], onDelete: SetNull)
