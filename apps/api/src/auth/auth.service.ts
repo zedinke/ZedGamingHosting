@@ -552,3 +552,5 @@ export class AuthService {
       message: this.i18n.translate('AUTH_EMAIL_VERIFIED') || 'Email verified successfully.',
     };
   }
+
+}
