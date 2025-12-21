@@ -182,6 +182,34 @@ export class AdminUsersController {
   }
 
   /**
+   * Verify user email (ADMIN ONLY - for testing)
+   */
+  @Put(':id/verify-email')
+  async verifyUserEmail(@Param('id') userId: string) {
+    try {
+      const user = await this.prisma.user.update({
+        where: { id: userId },
+        data: {
+          emailVerified: true,
+          emailVerificationToken: null,
+          emailVerificationExpires: null,
+        },
+        select: {
+          id: true,
+          email: true,
+          emailVerified: true,
+        },
+      });
+
+      this.logger.log(`User ${userId} email verified by admin`);
+      return { success: true, message: 'Email verified', user };
+    } catch (error: any) {
+      this.logger.error(`Failed to verify email for user ${userId}: ${error.message}`);
+      throw error;
+    }
+  }
+
+  /**
    * Delete user (ADMIN ONLY - careful!)
    */
   @Delete(':id')
