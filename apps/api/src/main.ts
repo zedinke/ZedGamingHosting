@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import helmet from '@fastify/helmet';
-import formBody from '@fastify/formbody';
 import { AppModule } from './app.module';
 import { validateEnv } from '@zed-hosting/utils';
 
@@ -33,8 +32,6 @@ async function bootstrap(): Promise<void> {
     crossOriginResourcePolicy: { policy: 'cross-origin' },
   });
 
-  // Támogatás application/x-www-form-urlencoded body-khoz (pl. Passport LocalStrategy)
-  await app.register(formBody);
 
   // Global validation pipe
   app.useGlobalPipes(
