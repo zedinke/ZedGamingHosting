@@ -1,7 +1,7 @@
 'use client';
 
 import { Link, usePathname, useRouter } from '../i18n/routing';
-import { useTranslations } from '@i18n/translations';
+import { useTranslations, useLocale } from '@i18n/translations';
 import { useAuthStore } from '../stores/auth-store';
 import { Button } from '@zed-hosting/ui-kit';
 import { ThemeToggle } from '../lib/theme';
@@ -18,6 +18,7 @@ export function Navigation() {
   const router = useRouter();
   const { user, logout } = useAuthStore();
   const t = useTranslations();
+  const locale = useLocale();
   const notifications = useNotificationContext();
   const [adminOpen, setAdminOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
