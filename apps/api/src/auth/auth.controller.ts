@@ -262,7 +262,25 @@ export class AuthController {
   @Public()
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
-  async register(@Body() body: { email: string; password: string; displayName?: string }) {
+  async register(
+    @Body()
+    body: {
+      email: string;
+      password: string;
+      displayName?: string;
+      billing?: {
+        type?: 'INDIVIDUAL' | 'COMPANY';
+        fullName?: string;
+        companyName?: string;
+        taxNumber?: string;
+        country: string;
+        city: string;
+        postalCode: string;
+        street: string;
+        phone?: string;
+      };
+    },
+  ) {
     if (!body.email || !body.password) {
       throw new BadRequestException('Email and password are required');
     }
@@ -272,7 +290,7 @@ export class AuthController {
       throw new BadRequestException('Password must be at least 8 characters long');
     }
 
-    return this.authService.register(body.email, body.password, body.displayName);
+    return this.authService.register(body.email, body.password, body.displayName, body.billing);
   }
 
   /**
@@ -309,5 +327,19 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
     return this.authService.resetPassword(resetPasswordDto.token, resetPasswordDto.newPassword);
+  }
+
+  /**
+   * Verify email with token
+   * POST /api/auth/verify-email
+   */
+  @Public()
+  @Post('verify-email')
+  @HttpCode(HttpStatus.OK)
+  async verifyEmail(@Body() body: { token: string }) {
+    if (!body.token) {
+      throw new BadRequestException('Verification token is required');
+    }
+    return this.authService.verifyEmail(body.token);
   }
 }

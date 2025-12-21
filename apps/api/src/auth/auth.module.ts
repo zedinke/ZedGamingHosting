@@ -7,6 +7,7 @@ import { AuthController } from './auth.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { DatabaseModule } from '../database/database.module';
+import { EmailModule } from '../email/email.module';
 import { I18nModule } from '../i18n/i18n.module';
 import { TwoFactorAuthService } from './services/two-factor-auth.service';
 import { TwoFactorAuthController } from './controllers/two-factor-auth.controller';
@@ -21,6 +22,7 @@ import { SessionsService } from './sessions.service';
   imports: [
     DatabaseModule,
     I18nModule,
+    EmailModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],

@@ -1,8 +1,10 @@
-import { Injectable, UnauthorizedException, Logger } from '@nestjs/common';
+import { Injectable, UnauthorizedException, Logger, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '@zed-hosting/db';
+import { EmailService } from '../email/email.service';
+import * as crypto from 'crypto';
 import { I18nService } from '../i18n/i18n.service';
 import { TwoFactorAuthService } from './services/two-factor-auth.service';
 import { SessionsService } from './sessions.service';
@@ -39,6 +41,7 @@ export class AuthService {
     private readonly i18n: I18nService,
     private readonly twoFactorAuthService: TwoFactorAuthService,
     private readonly sessionsService: SessionsService,
+    private readonly emailService: EmailService,
   ) {}
 
   /**
@@ -64,6 +67,13 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new UnauthorizedException(
         this.i18n.translate('AUTH_INVALID_CREDENTIALS'),
+      );
+    }
+
+    // Require email verification prior to login
+    if (!user.emailVerified && user.emailVerificationToken) {
+      throw new UnauthorizedException(
+        this.i18n.translate('AUTH_EMAIL_NOT_VERIFIED') || 'Email not verified',
       );
     }
 
@@ -412,7 +422,22 @@ export class AuthService {
   /**
    * Register a new user
    */
-  async register(email: string, password: string, displayName?: string): Promise<AuthResult> {
+  async register(
+    email: string,
+    password: string,
+    displayName?: string,
+    billing?: {
+      type?: 'INDIVIDUAL' | 'COMPANY';
+      fullName?: string;
+      companyName?: string;
+      taxNumber?: string;
+      country?: string;
+      city?: string;
+      postalCode?: string;
+      street?: string;
+      phone?: string;
+    },
+  ): Promise<{ success: boolean; message: string }> {
     // Check if user already exists
     const existingUser = await this.prisma.user.findUnique({
       where: { email },
@@ -427,12 +452,19 @@ export class AuthService {
     // Hash password
     const passwordHash = await bcrypt.hash(password, 10);
 
+    // Generate email verification token
+    const verificationToken = crypto.randomBytes(24).toString('hex');
+    const verificationExpires = new Date(Date.now() + 1000 * 60 * 60 * 24); // 24h
+
     // Create new user with USER role
     const newUser = await this.prisma.user.create({
       data: {
         email,
         passwordHash,
         role: 'USER',
+        emailVerified: false,
+        emailVerificationToken: verificationToken,
+        emailVerificationExpires: verificationExpires,
       },
     });
 
@@ -443,27 +475,80 @@ export class AuthService {
 
     this.logger.log(`New user registered: ${newUser.email}`);
 
-    // Generate tokens
-    const payload: JwtPayload = {
-      sub: newUser.id,
-      email: newUser.email,
-      role: newUser.role,
-      tenantId: newUser.tenantId || undefined,
-    };
+    // Persist billing profile if provided
+    if (billing && billing.country && billing.city && billing.postalCode && billing.street) {
+      await this.prisma.billingProfile.create({
+        data: {
+          userId: newUser.id,
+          type: (billing.type as any) || 'INDIVIDUAL',
+          fullName: billing.fullName || undefined,
+          companyName: billing.companyName || undefined,
+          taxNumber: billing.taxNumber || undefined,
+          country: billing.country,
+          city: billing.city,
+          postalCode: billing.postalCode,
+          street: billing.street,
+          phone: billing.phone || undefined,
+        },
+      });
+    }
 
-    const accessToken = this.jwtService.sign(payload);
-    const refreshToken = this.jwtService.sign(payload, {
-      expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN') || '7d',
-    } as any);
+    // Send email verification message
+    try {
+      const frontendUrl = this.config.get<string>('FRONTEND_URL') || 'https://zedgaminghosting.hu';
+      const verifyUrl = `${frontendUrl}/hu/verify-email?token=${verificationToken}`;
+      await this.emailService.sendEmail({
+        to: newUser.email,
+        subject: 'Email megerősítés',
+        html: `
+          <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;\">
+            <h2 style=\"color: #3b82f6;\">Email megerősítés</h2>
+            <p>Kedves felhasználó!</p>
+            <p>A regisztráció befejezéséhez kérjük, erősítsd meg az email címed az alábbi gombbal:</p>
+            <p style=\"margin: 20px 0;\">
+              <a href=\"${verifyUrl}\" style=\"background-color: #3b82f6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;\">Email megerősítése</a>
+            </p>
+            <p>Ez a link 24 óráig érvényes.</p>
+            <p>Üdvözlettel,<br>ZedGamingHosting Csapat</p>
+          </div>
+        `,
+      });
+    } catch (err: any) {
+      this.logger.warn(`Failed to send verification email: ${err?.message || err}`);
+    }
 
     return {
-      accessToken,
-      refreshToken,
-      user: {
-        id: newUser.id,
-        email: newUser.email,
-        role: newUser.role,
-        tenantId: newUser.tenantId || undefined,
-      },
+      success: true,
+      message: this.i18n.translate('AUTH_VERIFY_EMAIL_SENT') || 'Please verify your email to activate your account.',
     };
   }}
+
+  /** Verify email token and activate account */
+  async verifyEmail(token: string): Promise<{ success: boolean; message: string }> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        emailVerificationToken: token,
+        emailVerificationExpires: { gt: new Date() },
+      },
+    });
+
+    if (!user) {
+      throw new BadRequestException('Invalid or expired verification token');
+    }
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        emailVerified: true,
+        emailVerificationToken: null,
+        emailVerificationExpires: null,
+      },
+    });
+
+    this.logger.log(`Email verified for user ${user.email}`);
+
+    return {
+      success: true,
+      message: this.i18n.translate('AUTH_EMAIL_VERIFIED') || 'Email verified successfully.',
+    };
+  }

@@ -230,7 +230,24 @@
       "confirmPassword": "Jelszó megerősítése",
       "submit": "Regisztrálok",
       "submitting": "Feldolgozás...",
-      "backToLogin": "Vissza a bejelentkezéshez"
+      "backToLogin": "Vissza a bejelentkezéshez",
+      "billing": {
+        "title": "Számlázási adatok",
+        "type": "Típus",
+        "individual": "Magánszemély",
+        "company": "Cég",
+        "fullName": "Teljes név",
+        "companyName": "Cég neve",
+        "taxNumber": "Adószám",
+        "country": "Ország",
+        "city": "Város",
+        "postalCode": "Irányítószám",
+        "street": "Utca, házszám",
+        "phone": "Telefonszám (opcionális)"
+      },
+      "note": {
+        "verifyEmail": "Regisztráció után email megerősítés szükséges a belépéshez."
+      }
     },
     "logout": "Kijelentkezés"
   },

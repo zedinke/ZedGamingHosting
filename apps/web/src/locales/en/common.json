@@ -230,7 +230,24 @@
       "confirmPassword": "Confirm password",
       "submit": "Sign Up",
       "submitting": "Submitting...",
-      "backToLogin": "Back to login"
+      "backToLogin": "Back to login",
+      "billing": {
+        "title": "Billing Details",
+        "type": "Type",
+        "individual": "Individual",
+        "company": "Company",
+        "fullName": "Full name",
+        "companyName": "Company name",
+        "taxNumber": "Tax number",
+        "country": "Country",
+        "city": "City",
+        "postalCode": "Postal Code",
+        "street": "Street, number",
+        "phone": "Phone (optional)"
+      },
+      "note": {
+        "verifyEmail": "After sign up, please verify your email to log in."
+      }
     },
     "logout": "Logout"
   },
