@@ -149,7 +149,13 @@ exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
   passwordHash: 'passwordHash',
+  provider: 'provider',
+  providerId: 'providerId',
+  avatarUrl: 'avatarUrl',
   role: 'role',
+  emailVerified: 'emailVerified',
+  emailVerificationToken: 'emailVerificationToken',
+  emailVerificationExpires: 'emailVerificationExpires',
   twoFactorSecret: 'twoFactorSecret',
   twoFactorEnabled: 'twoFactorEnabled',
   twoFactorMethod: 'twoFactorMethod',
@@ -197,6 +203,22 @@ exports.Prisma.NodeScalarFieldEnum = {
   maxConcurrentUpdates: 'maxConcurrentUpdates',
   status: 'status',
   lastHeartbeat: 'lastHeartbeat',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.BillingProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  fullName: 'fullName',
+  companyName: 'companyName',
+  taxNumber: 'taxNumber',
+  country: 'country',
+  city: 'city',
+  postalCode: 'postalCode',
+  street: 'street',
+  phone: 'phone',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -503,6 +525,22 @@ exports.Prisma.InvoiceMetadataScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.HomepageSlideScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  mediaType: 'mediaType',
+  mediaUrl: 'mediaUrl',
+  linkUrl: 'linkUrl',
+  linkText: 'linkText',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  publishedFrom: 'publishedFrom',
+  publishedUntil: 'publishedUntil',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -534,6 +572,12 @@ exports.LicenseStatus = exports.$Enums.LicenseStatus = {
   GRACE_PERIOD: 'GRACE_PERIOD'
 };
 
+exports.AuthProvider = exports.$Enums.AuthProvider = {
+  LOCAL: 'LOCAL',
+  GOOGLE: 'GOOGLE',
+  DISCORD: 'DISCORD'
+};
+
 exports.UserRole = exports.$Enums.UserRole = {
   SUPERADMIN: 'SUPERADMIN',
   RESELLER_ADMIN: 'RESELLER_ADMIN',
@@ -553,6 +597,11 @@ exports.NodeStatus = exports.$Enums.NodeStatus = {
   ONLINE: 'ONLINE',
   OFFLINE: 'OFFLINE',
   MAINTENANCE: 'MAINTENANCE'
+};
+
+exports.BillingType = exports.$Enums.BillingType = {
+  INDIVIDUAL: 'INDIVIDUAL',
+  COMPANY: 'COMPANY'
 };
 
 exports.TaskType = exports.$Enums.TaskType = {
@@ -686,6 +735,12 @@ exports.TicketStatus = exports.$Enums.TicketStatus = {
   CLOSED: 'CLOSED'
 };
 
+exports.MediaType = exports.$Enums.MediaType = {
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO',
+  YOUTUBE: 'YOUTUBE'
+};
+
 exports.Prisma.ModelName = {
   SystemLicense: 'SystemLicense',
   Tenant: 'Tenant',
@@ -693,6 +748,7 @@ exports.Prisma.ModelName = {
   Session: 'Session',
   AuditLog: 'AuditLog',
   Node: 'Node',
+  BillingProfile: 'BillingProfile',
   Task: 'Task',
   NetworkAllocation: 'NetworkAllocation',
   Subdomain: 'Subdomain',
@@ -714,7 +770,8 @@ exports.Prisma.ModelName = {
   KnowledgeBaseArticle: 'KnowledgeBaseArticle',
   KnowledgeBaseCategory: 'KnowledgeBaseCategory',
   ArticleVersion: 'ArticleVersion',
-  InvoiceMetadata: 'InvoiceMetadata'
+  InvoiceMetadata: 'InvoiceMetadata',
+  HomepageSlide: 'HomepageSlide'
 };
 
 /**

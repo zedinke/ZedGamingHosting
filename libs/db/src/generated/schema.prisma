@@ -58,21 +58,27 @@ enum UserRole {
 }
 
 model User {
-  id                   String    @id @default(uuid())
-  email                String    @unique
-  passwordHash         String
-  role                 UserRole
-  twoFactorSecret      String?
-  twoFactorEnabled     Boolean   @default(false)
-  twoFactorMethod      String? // "TOTP" or "SMS"
-  twoFactorBackupCodes String?   @db.Text // JSON stringified array of hashed backup codes
-  resetToken           String? // Hashed password reset token
-  resetTokenExpires    DateTime? // Reset token expiration time
-  balance              Float     @default(0)
-  tenantId             String?
-  tenant               Tenant?   @relation(fields: [tenantId], references: [id], onDelete: SetNull)
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
+  id                       String       @id @default(uuid())
+  email                    String       @unique
+  passwordHash             String
+  provider                 AuthProvider @default(LOCAL)
+  providerId               String?
+  avatarUrl                String?
+  role                     UserRole
+  emailVerified            Boolean      @default(false)
+  emailVerificationToken   String?
+  emailVerificationExpires DateTime?
+  twoFactorSecret          String?
+  twoFactorEnabled         Boolean      @default(false)
+  twoFactorMethod          String? // "TOTP" or "SMS"
+  twoFactorBackupCodes     String?      @db.Text // JSON stringified array of hashed backup codes
+  resetToken               String? // Hashed password reset token
+  resetTokenExpires        DateTime? // Reset token expiration time
+  balance                  Float        @default(0)
+  tenantId                 String?
+  tenant                   Tenant?      @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  createdAt                DateTime     @default(now())
+  updatedAt                DateTime     @updatedAt
 
   ownedServers          GameServer[]           @relation("ServerOwner")
   auditLogs             AuditLog[]
@@ -86,6 +92,15 @@ model User {
   assignedTickets       SupportTicket[]        @relation("AssignedTickets")
   knowledgeBaseArticles KnowledgeBaseArticle[] @relation("KnowledgeBaseArticles")
   sessions              Session[]
+  billingProfile        BillingProfile?
+
+  @@index([provider, providerId])
+}
+
+enum AuthProvider {
+  LOCAL
+  GOOGLE
+  DISCORD
 }
 
 model Session {
@@ -162,6 +177,34 @@ enum TaskStatus {
   PROCESSING
   COMPLETED
   FAILED
+}
+
+// ============================================
+// BILLING PROFILE
+// ============================================
+
+enum BillingType {
+  INDIVIDUAL
+  COMPANY
+}
+
+model BillingProfile {
+  id          String      @id @default(uuid())
+  userId      String      @unique
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type        BillingType @default(INDIVIDUAL)
+  fullName    String?
+  companyName String?
+  taxNumber   String?
+  country     String
+  city        String
+  postalCode  String
+  street      String
+  phone       String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([userId])
 }
 
 enum TaskType {
@@ -778,4 +821,39 @@ model InvoiceMetadata {
 
   @@unique([tenantId, prefix, year])
   @@index([tenantId])
+}
+
+// ============================================
+// HOMEPAGE SLIDESHOW - HERO MEDIA MANAGEMENT
+// ============================================
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  YOUTUBE
+}
+
+model HomepageSlide {
+  id String @id @default(uuid())
+
+  title       String
+  description String? @db.Text
+
+  mediaType MediaType
+  mediaUrl  String // Local path or YouTube URL
+
+  linkUrl  String? // Optional CTA button link
+  linkText String? // CTA button text (default: "Tudj meg többet")
+
+  sortOrder Int     @default(0) // Display order
+  isActive  Boolean @default(true)
+
+  publishedFrom  DateTime? // Optional scheduling
+  publishedUntil DateTime? // Optional expiration
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive, sortOrder])
+  @@index([publishedFrom, publishedUntil])
 }

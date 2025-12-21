@@ -44,6 +44,11 @@ export type AuditLog = $Result.DefaultSelection<Prisma.$AuditLogPayload>
  */
 export type Node = $Result.DefaultSelection<Prisma.$NodePayload>
 /**
+ * Model BillingProfile
+ * 
+ */
+export type BillingProfile = $Result.DefaultSelection<Prisma.$BillingProfilePayload>
+/**
  * Model Task
  * 
  */
@@ -153,6 +158,11 @@ export type ArticleVersion = $Result.DefaultSelection<Prisma.$ArticleVersionPayl
  * 
  */
 export type InvoiceMetadata = $Result.DefaultSelection<Prisma.$InvoiceMetadataPayload>
+/**
+ * Model HomepageSlide
+ * 
+ */
+export type HomepageSlide = $Result.DefaultSelection<Prisma.$HomepageSlidePayload>
 
 /**
  * Enums
@@ -166,6 +176,15 @@ export namespace $Enums {
 };
 
 export type LicenseStatus = (typeof LicenseStatus)[keyof typeof LicenseStatus]
+
+
+export const AuthProvider: {
+  LOCAL: 'LOCAL',
+  GOOGLE: 'GOOGLE',
+  DISCORD: 'DISCORD'
+};
+
+export type AuthProvider = (typeof AuthProvider)[keyof typeof AuthProvider]
 
 
 export const UserRole: {
@@ -196,6 +215,14 @@ export const NodeStatus: {
 };
 
 export type NodeStatus = (typeof NodeStatus)[keyof typeof NodeStatus]
+
+
+export const BillingType: {
+  INDIVIDUAL: 'INDIVIDUAL',
+  COMPANY: 'COMPANY'
+};
+
+export type BillingType = (typeof BillingType)[keyof typeof BillingType]
 
 
 export const TaskType: {
@@ -382,11 +409,24 @@ export const TicketStatus: {
 
 export type TicketStatus = (typeof TicketStatus)[keyof typeof TicketStatus]
 
+
+export const MediaType: {
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO',
+  YOUTUBE: 'YOUTUBE'
+};
+
+export type MediaType = (typeof MediaType)[keyof typeof MediaType]
+
 }
 
 export type LicenseStatus = $Enums.LicenseStatus
 
 export const LicenseStatus: typeof $Enums.LicenseStatus
+
+export type AuthProvider = $Enums.AuthProvider
+
+export const AuthProvider: typeof $Enums.AuthProvider
 
 export type UserRole = $Enums.UserRole
 
@@ -399,6 +439,10 @@ export const DiskType: typeof $Enums.DiskType
 export type NodeStatus = $Enums.NodeStatus
 
 export const NodeStatus: typeof $Enums.NodeStatus
+
+export type BillingType = $Enums.BillingType
+
+export const BillingType: typeof $Enums.BillingType
 
 export type TaskType = $Enums.TaskType
 
@@ -471,6 +515,10 @@ export const TicketPriority: typeof $Enums.TicketPriority
 export type TicketStatus = $Enums.TicketStatus
 
 export const TicketStatus: typeof $Enums.TicketStatus
+
+export type MediaType = $Enums.MediaType
+
+export const MediaType: typeof $Enums.MediaType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -654,6 +702,16 @@ export class PrismaClient<
     * ```
     */
   get node(): Prisma.NodeDelegate<ExtArgs>;
+
+  /**
+   * `prisma.billingProfile`: Exposes CRUD operations for the **BillingProfile** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BillingProfiles
+    * const billingProfiles = await prisma.billingProfile.findMany()
+    * ```
+    */
+  get billingProfile(): Prisma.BillingProfileDelegate<ExtArgs>;
 
   /**
    * `prisma.task`: Exposes CRUD operations for the **Task** model.
@@ -874,6 +932,16 @@ export class PrismaClient<
     * ```
     */
   get invoiceMetadata(): Prisma.InvoiceMetadataDelegate<ExtArgs>;
+
+  /**
+   * `prisma.homepageSlide`: Exposes CRUD operations for the **HomepageSlide** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more HomepageSlides
+    * const homepageSlides = await prisma.homepageSlide.findMany()
+    * ```
+    */
+  get homepageSlide(): Prisma.HomepageSlideDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1321,6 +1389,7 @@ export namespace Prisma {
     Session: 'Session',
     AuditLog: 'AuditLog',
     Node: 'Node',
+    BillingProfile: 'BillingProfile',
     Task: 'Task',
     NetworkAllocation: 'NetworkAllocation',
     Subdomain: 'Subdomain',
@@ -1342,7 +1411,8 @@ export namespace Prisma {
     KnowledgeBaseArticle: 'KnowledgeBaseArticle',
     KnowledgeBaseCategory: 'KnowledgeBaseCategory',
     ArticleVersion: 'ArticleVersion',
-    InvoiceMetadata: 'InvoiceMetadata'
+    InvoiceMetadata: 'InvoiceMetadata',
+    HomepageSlide: 'HomepageSlide'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1358,7 +1428,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "systemLicense" | "tenant" | "user" | "session" | "auditLog" | "node" | "task" | "networkAllocation" | "subdomain" | "gameServer" | "gameCluster" | "backup" | "metric" | "alert" | "resourceQuota" | "apiKey" | "incident" | "plan" | "promotion" | "order" | "paymentEvent" | "supportTicket" | "slaPolicy" | "ticketComment" | "knowledgeBaseArticle" | "knowledgeBaseCategory" | "articleVersion" | "invoiceMetadata"
+      modelProps: "systemLicense" | "tenant" | "user" | "session" | "auditLog" | "node" | "billingProfile" | "task" | "networkAllocation" | "subdomain" | "gameServer" | "gameCluster" | "backup" | "metric" | "alert" | "resourceQuota" | "apiKey" | "incident" | "plan" | "promotion" | "order" | "paymentEvent" | "supportTicket" | "slaPolicy" | "ticketComment" | "knowledgeBaseArticle" | "knowledgeBaseCategory" | "articleVersion" | "invoiceMetadata" | "homepageSlide"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1755,6 +1825,72 @@ export namespace Prisma {
           count: {
             args: Prisma.NodeCountArgs<ExtArgs>
             result: $Utils.Optional<NodeCountAggregateOutputType> | number
+          }
+        }
+      }
+      BillingProfile: {
+        payload: Prisma.$BillingProfilePayload<ExtArgs>
+        fields: Prisma.BillingProfileFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BillingProfileFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BillingProfilePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BillingProfileFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BillingProfilePayload>
+          }
+          findFirst: {
+            args: Prisma.BillingProfileFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BillingProfilePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BillingProfileFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BillingProfilePayload>
+          }
+          findMany: {
+            args: Prisma.BillingProfileFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BillingProfilePayload>[]
+          }
+          create: {
+            args: Prisma.BillingProfileCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BillingProfilePayload>
+          }
+          createMany: {
+            args: Prisma.BillingProfileCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.BillingProfileDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BillingProfilePayload>
+          }
+          update: {
+            args: Prisma.BillingProfileUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BillingProfilePayload>
+          }
+          deleteMany: {
+            args: Prisma.BillingProfileDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BillingProfileUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.BillingProfileUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BillingProfilePayload>
+          }
+          aggregate: {
+            args: Prisma.BillingProfileAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBillingProfile>
+          }
+          groupBy: {
+            args: Prisma.BillingProfileGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BillingProfileGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BillingProfileCountArgs<ExtArgs>
+            result: $Utils.Optional<BillingProfileCountAggregateOutputType> | number
           }
         }
       }
@@ -3207,6 +3343,72 @@ export namespace Prisma {
           count: {
             args: Prisma.InvoiceMetadataCountArgs<ExtArgs>
             result: $Utils.Optional<InvoiceMetadataCountAggregateOutputType> | number
+          }
+        }
+      }
+      HomepageSlide: {
+        payload: Prisma.$HomepageSlidePayload<ExtArgs>
+        fields: Prisma.HomepageSlideFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.HomepageSlideFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HomepageSlidePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.HomepageSlideFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HomepageSlidePayload>
+          }
+          findFirst: {
+            args: Prisma.HomepageSlideFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HomepageSlidePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.HomepageSlideFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HomepageSlidePayload>
+          }
+          findMany: {
+            args: Prisma.HomepageSlideFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HomepageSlidePayload>[]
+          }
+          create: {
+            args: Prisma.HomepageSlideCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HomepageSlidePayload>
+          }
+          createMany: {
+            args: Prisma.HomepageSlideCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.HomepageSlideDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HomepageSlidePayload>
+          }
+          update: {
+            args: Prisma.HomepageSlideUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HomepageSlidePayload>
+          }
+          deleteMany: {
+            args: Prisma.HomepageSlideDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.HomepageSlideUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.HomepageSlideUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HomepageSlidePayload>
+          }
+          aggregate: {
+            args: Prisma.HomepageSlideAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateHomepageSlide>
+          }
+          groupBy: {
+            args: Prisma.HomepageSlideGroupByArgs<ExtArgs>
+            result: $Utils.Optional<HomepageSlideGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.HomepageSlideCountArgs<ExtArgs>
+            result: $Utils.Optional<HomepageSlideCountAggregateOutputType> | number
           }
         }
       }
@@ -5758,7 +5960,13 @@ export namespace Prisma {
     id: string | null
     email: string | null
     passwordHash: string | null
+    provider: $Enums.AuthProvider | null
+    providerId: string | null
+    avatarUrl: string | null
     role: $Enums.UserRole | null
+    emailVerified: boolean | null
+    emailVerificationToken: string | null
+    emailVerificationExpires: Date | null
     twoFactorSecret: string | null
     twoFactorEnabled: boolean | null
     twoFactorMethod: string | null
@@ -5775,7 +5983,13 @@ export namespace Prisma {
     id: string | null
     email: string | null
     passwordHash: string | null
+    provider: $Enums.AuthProvider | null
+    providerId: string | null
+    avatarUrl: string | null
     role: $Enums.UserRole | null
+    emailVerified: boolean | null
+    emailVerificationToken: string | null
+    emailVerificationExpires: Date | null
     twoFactorSecret: string | null
     twoFactorEnabled: boolean | null
     twoFactorMethod: string | null
@@ -5792,7 +6006,13 @@ export namespace Prisma {
     id: number
     email: number
     passwordHash: number
+    provider: number
+    providerId: number
+    avatarUrl: number
     role: number
+    emailVerified: number
+    emailVerificationToken: number
+    emailVerificationExpires: number
     twoFactorSecret: number
     twoFactorEnabled: number
     twoFactorMethod: number
@@ -5819,7 +6039,13 @@ export namespace Prisma {
     id?: true
     email?: true
     passwordHash?: true
+    provider?: true
+    providerId?: true
+    avatarUrl?: true
     role?: true
+    emailVerified?: true
+    emailVerificationToken?: true
+    emailVerificationExpires?: true
     twoFactorSecret?: true
     twoFactorEnabled?: true
     twoFactorMethod?: true
@@ -5836,7 +6062,13 @@ export namespace Prisma {
     id?: true
     email?: true
     passwordHash?: true
+    provider?: true
+    providerId?: true
+    avatarUrl?: true
     role?: true
+    emailVerified?: true
+    emailVerificationToken?: true
+    emailVerificationExpires?: true
     twoFactorSecret?: true
     twoFactorEnabled?: true
     twoFactorMethod?: true
@@ -5853,7 +6085,13 @@ export namespace Prisma {
     id?: true
     email?: true
     passwordHash?: true
+    provider?: true
+    providerId?: true
+    avatarUrl?: true
     role?: true
+    emailVerified?: true
+    emailVerificationToken?: true
+    emailVerificationExpires?: true
     twoFactorSecret?: true
     twoFactorEnabled?: true
     twoFactorMethod?: true
@@ -5957,7 +6195,13 @@ export namespace Prisma {
     id: string
     email: string
     passwordHash: string
+    provider: $Enums.AuthProvider
+    providerId: string | null
+    avatarUrl: string | null
     role: $Enums.UserRole
+    emailVerified: boolean
+    emailVerificationToken: string | null
+    emailVerificationExpires: Date | null
     twoFactorSecret: string | null
     twoFactorEnabled: boolean
     twoFactorMethod: string | null
@@ -5993,7 +6237,13 @@ export namespace Prisma {
     id?: boolean
     email?: boolean
     passwordHash?: boolean
+    provider?: boolean
+    providerId?: boolean
+    avatarUrl?: boolean
     role?: boolean
+    emailVerified?: boolean
+    emailVerificationToken?: boolean
+    emailVerificationExpires?: boolean
     twoFactorSecret?: boolean
     twoFactorEnabled?: boolean
     twoFactorMethod?: boolean
@@ -6017,6 +6267,7 @@ export namespace Prisma {
     assignedTickets?: boolean | User$assignedTicketsArgs<ExtArgs>
     knowledgeBaseArticles?: boolean | User$knowledgeBaseArticlesArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
+    billingProfile?: boolean | User$billingProfileArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6025,7 +6276,13 @@ export namespace Prisma {
     id?: boolean
     email?: boolean
     passwordHash?: boolean
+    provider?: boolean
+    providerId?: boolean
+    avatarUrl?: boolean
     role?: boolean
+    emailVerified?: boolean
+    emailVerificationToken?: boolean
+    emailVerificationExpires?: boolean
     twoFactorSecret?: boolean
     twoFactorEnabled?: boolean
     twoFactorMethod?: boolean
@@ -6052,6 +6309,7 @@ export namespace Prisma {
     assignedTickets?: boolean | User$assignedTicketsArgs<ExtArgs>
     knowledgeBaseArticles?: boolean | User$knowledgeBaseArticlesArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
+    billingProfile?: boolean | User$billingProfileArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -6071,12 +6329,19 @@ export namespace Prisma {
       assignedTickets: Prisma.$SupportTicketPayload<ExtArgs>[]
       knowledgeBaseArticles: Prisma.$KnowledgeBaseArticlePayload<ExtArgs>[]
       sessions: Prisma.$SessionPayload<ExtArgs>[]
+      billingProfile: Prisma.$BillingProfilePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       email: string
       passwordHash: string
+      provider: $Enums.AuthProvider
+      providerId: string | null
+      avatarUrl: string | null
       role: $Enums.UserRole
+      emailVerified: boolean
+      emailVerificationToken: string | null
+      emailVerificationExpires: Date | null
       twoFactorSecret: string | null
       twoFactorEnabled: boolean
       twoFactorMethod: string | null
@@ -6440,6 +6705,7 @@ export namespace Prisma {
     assignedTickets<T extends User$assignedTicketsArgs<ExtArgs> = {}>(args?: Subset<T, User$assignedTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany"> | Null>
     knowledgeBaseArticles<T extends User$knowledgeBaseArticlesArgs<ExtArgs> = {}>(args?: Subset<T, User$knowledgeBaseArticlesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KnowledgeBaseArticlePayload<ExtArgs>, T, "findMany"> | Null>
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany"> | Null>
+    billingProfile<T extends User$billingProfileArgs<ExtArgs> = {}>(args?: Subset<T, User$billingProfileArgs<ExtArgs>>): Prisma__BillingProfileClient<$Result.GetResult<Prisma.$BillingProfilePayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6472,7 +6738,13 @@ export namespace Prisma {
     readonly id: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
     readonly passwordHash: FieldRef<"User", 'String'>
+    readonly provider: FieldRef<"User", 'AuthProvider'>
+    readonly providerId: FieldRef<"User", 'String'>
+    readonly avatarUrl: FieldRef<"User", 'String'>
     readonly role: FieldRef<"User", 'UserRole'>
+    readonly emailVerified: FieldRef<"User", 'Boolean'>
+    readonly emailVerificationToken: FieldRef<"User", 'String'>
+    readonly emailVerificationExpires: FieldRef<"User", 'DateTime'>
     readonly twoFactorSecret: FieldRef<"User", 'String'>
     readonly twoFactorEnabled: FieldRef<"User", 'Boolean'>
     readonly twoFactorMethod: FieldRef<"User", 'String'>
@@ -7034,6 +7306,21 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
+  }
+
+  /**
+   * User.billingProfile
+   */
+  export type User$billingProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillingProfile
+     */
+    select?: BillingProfileSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingProfileInclude<ExtArgs> | null
+    where?: BillingProfileWhereInput
   }
 
   /**
@@ -10045,6 +10332,973 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: NodeInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model BillingProfile
+   */
+
+  export type AggregateBillingProfile = {
+    _count: BillingProfileCountAggregateOutputType | null
+    _min: BillingProfileMinAggregateOutputType | null
+    _max: BillingProfileMaxAggregateOutputType | null
+  }
+
+  export type BillingProfileMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    type: $Enums.BillingType | null
+    fullName: string | null
+    companyName: string | null
+    taxNumber: string | null
+    country: string | null
+    city: string | null
+    postalCode: string | null
+    street: string | null
+    phone: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BillingProfileMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    type: $Enums.BillingType | null
+    fullName: string | null
+    companyName: string | null
+    taxNumber: string | null
+    country: string | null
+    city: string | null
+    postalCode: string | null
+    street: string | null
+    phone: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BillingProfileCountAggregateOutputType = {
+    id: number
+    userId: number
+    type: number
+    fullName: number
+    companyName: number
+    taxNumber: number
+    country: number
+    city: number
+    postalCode: number
+    street: number
+    phone: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type BillingProfileMinAggregateInputType = {
+    id?: true
+    userId?: true
+    type?: true
+    fullName?: true
+    companyName?: true
+    taxNumber?: true
+    country?: true
+    city?: true
+    postalCode?: true
+    street?: true
+    phone?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BillingProfileMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    type?: true
+    fullName?: true
+    companyName?: true
+    taxNumber?: true
+    country?: true
+    city?: true
+    postalCode?: true
+    street?: true
+    phone?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BillingProfileCountAggregateInputType = {
+    id?: true
+    userId?: true
+    type?: true
+    fullName?: true
+    companyName?: true
+    taxNumber?: true
+    country?: true
+    city?: true
+    postalCode?: true
+    street?: true
+    phone?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type BillingProfileAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BillingProfile to aggregate.
+     */
+    where?: BillingProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BillingProfiles to fetch.
+     */
+    orderBy?: BillingProfileOrderByWithRelationInput | BillingProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BillingProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BillingProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BillingProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BillingProfiles
+    **/
+    _count?: true | BillingProfileCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BillingProfileMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BillingProfileMaxAggregateInputType
+  }
+
+  export type GetBillingProfileAggregateType<T extends BillingProfileAggregateArgs> = {
+        [P in keyof T & keyof AggregateBillingProfile]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBillingProfile[P]>
+      : GetScalarType<T[P], AggregateBillingProfile[P]>
+  }
+
+
+
+
+  export type BillingProfileGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BillingProfileWhereInput
+    orderBy?: BillingProfileOrderByWithAggregationInput | BillingProfileOrderByWithAggregationInput[]
+    by: BillingProfileScalarFieldEnum[] | BillingProfileScalarFieldEnum
+    having?: BillingProfileScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BillingProfileCountAggregateInputType | true
+    _min?: BillingProfileMinAggregateInputType
+    _max?: BillingProfileMaxAggregateInputType
+  }
+
+  export type BillingProfileGroupByOutputType = {
+    id: string
+    userId: string
+    type: $Enums.BillingType
+    fullName: string | null
+    companyName: string | null
+    taxNumber: string | null
+    country: string
+    city: string
+    postalCode: string
+    street: string
+    phone: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: BillingProfileCountAggregateOutputType | null
+    _min: BillingProfileMinAggregateOutputType | null
+    _max: BillingProfileMaxAggregateOutputType | null
+  }
+
+  type GetBillingProfileGroupByPayload<T extends BillingProfileGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BillingProfileGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BillingProfileGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BillingProfileGroupByOutputType[P]>
+            : GetScalarType<T[P], BillingProfileGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BillingProfileSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    type?: boolean
+    fullName?: boolean
+    companyName?: boolean
+    taxNumber?: boolean
+    country?: boolean
+    city?: boolean
+    postalCode?: boolean
+    street?: boolean
+    phone?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["billingProfile"]>
+
+
+  export type BillingProfileSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    type?: boolean
+    fullName?: boolean
+    companyName?: boolean
+    taxNumber?: boolean
+    country?: boolean
+    city?: boolean
+    postalCode?: boolean
+    street?: boolean
+    phone?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type BillingProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $BillingProfilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BillingProfile"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      type: $Enums.BillingType
+      fullName: string | null
+      companyName: string | null
+      taxNumber: string | null
+      country: string
+      city: string
+      postalCode: string
+      street: string
+      phone: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["billingProfile"]>
+    composites: {}
+  }
+
+  type BillingProfileGetPayload<S extends boolean | null | undefined | BillingProfileDefaultArgs> = $Result.GetResult<Prisma.$BillingProfilePayload, S>
+
+  type BillingProfileCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<BillingProfileFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: BillingProfileCountAggregateInputType | true
+    }
+
+  export interface BillingProfileDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BillingProfile'], meta: { name: 'BillingProfile' } }
+    /**
+     * Find zero or one BillingProfile that matches the filter.
+     * @param {BillingProfileFindUniqueArgs} args - Arguments to find a BillingProfile
+     * @example
+     * // Get one BillingProfile
+     * const billingProfile = await prisma.billingProfile.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BillingProfileFindUniqueArgs>(args: SelectSubset<T, BillingProfileFindUniqueArgs<ExtArgs>>): Prisma__BillingProfileClient<$Result.GetResult<Prisma.$BillingProfilePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one BillingProfile that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {BillingProfileFindUniqueOrThrowArgs} args - Arguments to find a BillingProfile
+     * @example
+     * // Get one BillingProfile
+     * const billingProfile = await prisma.billingProfile.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BillingProfileFindUniqueOrThrowArgs>(args: SelectSubset<T, BillingProfileFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BillingProfileClient<$Result.GetResult<Prisma.$BillingProfilePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first BillingProfile that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BillingProfileFindFirstArgs} args - Arguments to find a BillingProfile
+     * @example
+     * // Get one BillingProfile
+     * const billingProfile = await prisma.billingProfile.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BillingProfileFindFirstArgs>(args?: SelectSubset<T, BillingProfileFindFirstArgs<ExtArgs>>): Prisma__BillingProfileClient<$Result.GetResult<Prisma.$BillingProfilePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first BillingProfile that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BillingProfileFindFirstOrThrowArgs} args - Arguments to find a BillingProfile
+     * @example
+     * // Get one BillingProfile
+     * const billingProfile = await prisma.billingProfile.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BillingProfileFindFirstOrThrowArgs>(args?: SelectSubset<T, BillingProfileFindFirstOrThrowArgs<ExtArgs>>): Prisma__BillingProfileClient<$Result.GetResult<Prisma.$BillingProfilePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more BillingProfiles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BillingProfileFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BillingProfiles
+     * const billingProfiles = await prisma.billingProfile.findMany()
+     * 
+     * // Get first 10 BillingProfiles
+     * const billingProfiles = await prisma.billingProfile.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const billingProfileWithIdOnly = await prisma.billingProfile.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BillingProfileFindManyArgs>(args?: SelectSubset<T, BillingProfileFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BillingProfilePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a BillingProfile.
+     * @param {BillingProfileCreateArgs} args - Arguments to create a BillingProfile.
+     * @example
+     * // Create one BillingProfile
+     * const BillingProfile = await prisma.billingProfile.create({
+     *   data: {
+     *     // ... data to create a BillingProfile
+     *   }
+     * })
+     * 
+     */
+    create<T extends BillingProfileCreateArgs>(args: SelectSubset<T, BillingProfileCreateArgs<ExtArgs>>): Prisma__BillingProfileClient<$Result.GetResult<Prisma.$BillingProfilePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many BillingProfiles.
+     * @param {BillingProfileCreateManyArgs} args - Arguments to create many BillingProfiles.
+     * @example
+     * // Create many BillingProfiles
+     * const billingProfile = await prisma.billingProfile.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BillingProfileCreateManyArgs>(args?: SelectSubset<T, BillingProfileCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a BillingProfile.
+     * @param {BillingProfileDeleteArgs} args - Arguments to delete one BillingProfile.
+     * @example
+     * // Delete one BillingProfile
+     * const BillingProfile = await prisma.billingProfile.delete({
+     *   where: {
+     *     // ... filter to delete one BillingProfile
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BillingProfileDeleteArgs>(args: SelectSubset<T, BillingProfileDeleteArgs<ExtArgs>>): Prisma__BillingProfileClient<$Result.GetResult<Prisma.$BillingProfilePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one BillingProfile.
+     * @param {BillingProfileUpdateArgs} args - Arguments to update one BillingProfile.
+     * @example
+     * // Update one BillingProfile
+     * const billingProfile = await prisma.billingProfile.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BillingProfileUpdateArgs>(args: SelectSubset<T, BillingProfileUpdateArgs<ExtArgs>>): Prisma__BillingProfileClient<$Result.GetResult<Prisma.$BillingProfilePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more BillingProfiles.
+     * @param {BillingProfileDeleteManyArgs} args - Arguments to filter BillingProfiles to delete.
+     * @example
+     * // Delete a few BillingProfiles
+     * const { count } = await prisma.billingProfile.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BillingProfileDeleteManyArgs>(args?: SelectSubset<T, BillingProfileDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BillingProfiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BillingProfileUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BillingProfiles
+     * const billingProfile = await prisma.billingProfile.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BillingProfileUpdateManyArgs>(args: SelectSubset<T, BillingProfileUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one BillingProfile.
+     * @param {BillingProfileUpsertArgs} args - Arguments to update or create a BillingProfile.
+     * @example
+     * // Update or create a BillingProfile
+     * const billingProfile = await prisma.billingProfile.upsert({
+     *   create: {
+     *     // ... data to create a BillingProfile
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BillingProfile we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BillingProfileUpsertArgs>(args: SelectSubset<T, BillingProfileUpsertArgs<ExtArgs>>): Prisma__BillingProfileClient<$Result.GetResult<Prisma.$BillingProfilePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of BillingProfiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BillingProfileCountArgs} args - Arguments to filter BillingProfiles to count.
+     * @example
+     * // Count the number of BillingProfiles
+     * const count = await prisma.billingProfile.count({
+     *   where: {
+     *     // ... the filter for the BillingProfiles we want to count
+     *   }
+     * })
+    **/
+    count<T extends BillingProfileCountArgs>(
+      args?: Subset<T, BillingProfileCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BillingProfileCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BillingProfile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BillingProfileAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BillingProfileAggregateArgs>(args: Subset<T, BillingProfileAggregateArgs>): Prisma.PrismaPromise<GetBillingProfileAggregateType<T>>
+
+    /**
+     * Group by BillingProfile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BillingProfileGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BillingProfileGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BillingProfileGroupByArgs['orderBy'] }
+        : { orderBy?: BillingProfileGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BillingProfileGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBillingProfileGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BillingProfile model
+   */
+  readonly fields: BillingProfileFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BillingProfile.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BillingProfileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BillingProfile model
+   */ 
+  interface BillingProfileFieldRefs {
+    readonly id: FieldRef<"BillingProfile", 'String'>
+    readonly userId: FieldRef<"BillingProfile", 'String'>
+    readonly type: FieldRef<"BillingProfile", 'BillingType'>
+    readonly fullName: FieldRef<"BillingProfile", 'String'>
+    readonly companyName: FieldRef<"BillingProfile", 'String'>
+    readonly taxNumber: FieldRef<"BillingProfile", 'String'>
+    readonly country: FieldRef<"BillingProfile", 'String'>
+    readonly city: FieldRef<"BillingProfile", 'String'>
+    readonly postalCode: FieldRef<"BillingProfile", 'String'>
+    readonly street: FieldRef<"BillingProfile", 'String'>
+    readonly phone: FieldRef<"BillingProfile", 'String'>
+    readonly createdAt: FieldRef<"BillingProfile", 'DateTime'>
+    readonly updatedAt: FieldRef<"BillingProfile", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BillingProfile findUnique
+   */
+  export type BillingProfileFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillingProfile
+     */
+    select?: BillingProfileSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which BillingProfile to fetch.
+     */
+    where: BillingProfileWhereUniqueInput
+  }
+
+  /**
+   * BillingProfile findUniqueOrThrow
+   */
+  export type BillingProfileFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillingProfile
+     */
+    select?: BillingProfileSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which BillingProfile to fetch.
+     */
+    where: BillingProfileWhereUniqueInput
+  }
+
+  /**
+   * BillingProfile findFirst
+   */
+  export type BillingProfileFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillingProfile
+     */
+    select?: BillingProfileSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which BillingProfile to fetch.
+     */
+    where?: BillingProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BillingProfiles to fetch.
+     */
+    orderBy?: BillingProfileOrderByWithRelationInput | BillingProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BillingProfiles.
+     */
+    cursor?: BillingProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BillingProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BillingProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BillingProfiles.
+     */
+    distinct?: BillingProfileScalarFieldEnum | BillingProfileScalarFieldEnum[]
+  }
+
+  /**
+   * BillingProfile findFirstOrThrow
+   */
+  export type BillingProfileFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillingProfile
+     */
+    select?: BillingProfileSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which BillingProfile to fetch.
+     */
+    where?: BillingProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BillingProfiles to fetch.
+     */
+    orderBy?: BillingProfileOrderByWithRelationInput | BillingProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BillingProfiles.
+     */
+    cursor?: BillingProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BillingProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BillingProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BillingProfiles.
+     */
+    distinct?: BillingProfileScalarFieldEnum | BillingProfileScalarFieldEnum[]
+  }
+
+  /**
+   * BillingProfile findMany
+   */
+  export type BillingProfileFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillingProfile
+     */
+    select?: BillingProfileSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which BillingProfiles to fetch.
+     */
+    where?: BillingProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BillingProfiles to fetch.
+     */
+    orderBy?: BillingProfileOrderByWithRelationInput | BillingProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BillingProfiles.
+     */
+    cursor?: BillingProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BillingProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BillingProfiles.
+     */
+    skip?: number
+    distinct?: BillingProfileScalarFieldEnum | BillingProfileScalarFieldEnum[]
+  }
+
+  /**
+   * BillingProfile create
+   */
+  export type BillingProfileCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillingProfile
+     */
+    select?: BillingProfileSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingProfileInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BillingProfile.
+     */
+    data: XOR<BillingProfileCreateInput, BillingProfileUncheckedCreateInput>
+  }
+
+  /**
+   * BillingProfile createMany
+   */
+  export type BillingProfileCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BillingProfiles.
+     */
+    data: BillingProfileCreateManyInput | BillingProfileCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BillingProfile update
+   */
+  export type BillingProfileUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillingProfile
+     */
+    select?: BillingProfileSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingProfileInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BillingProfile.
+     */
+    data: XOR<BillingProfileUpdateInput, BillingProfileUncheckedUpdateInput>
+    /**
+     * Choose, which BillingProfile to update.
+     */
+    where: BillingProfileWhereUniqueInput
+  }
+
+  /**
+   * BillingProfile updateMany
+   */
+  export type BillingProfileUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BillingProfiles.
+     */
+    data: XOR<BillingProfileUpdateManyMutationInput, BillingProfileUncheckedUpdateManyInput>
+    /**
+     * Filter which BillingProfiles to update
+     */
+    where?: BillingProfileWhereInput
+  }
+
+  /**
+   * BillingProfile upsert
+   */
+  export type BillingProfileUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillingProfile
+     */
+    select?: BillingProfileSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingProfileInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BillingProfile to update in case it exists.
+     */
+    where: BillingProfileWhereUniqueInput
+    /**
+     * In case the BillingProfile found by the `where` argument doesn't exist, create a new BillingProfile with this data.
+     */
+    create: XOR<BillingProfileCreateInput, BillingProfileUncheckedCreateInput>
+    /**
+     * In case the BillingProfile was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BillingProfileUpdateInput, BillingProfileUncheckedUpdateInput>
+  }
+
+  /**
+   * BillingProfile delete
+   */
+  export type BillingProfileDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillingProfile
+     */
+    select?: BillingProfileSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingProfileInclude<ExtArgs> | null
+    /**
+     * Filter which BillingProfile to delete.
+     */
+    where: BillingProfileWhereUniqueInput
+  }
+
+  /**
+   * BillingProfile deleteMany
+   */
+  export type BillingProfileDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BillingProfiles to delete
+     */
+    where?: BillingProfileWhereInput
+  }
+
+  /**
+   * BillingProfile without action
+   */
+  export type BillingProfileDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillingProfile
+     */
+    select?: BillingProfileSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillingProfileInclude<ExtArgs> | null
   }
 
 
@@ -31739,6 +32993,960 @@ export namespace Prisma {
 
 
   /**
+   * Model HomepageSlide
+   */
+
+  export type AggregateHomepageSlide = {
+    _count: HomepageSlideCountAggregateOutputType | null
+    _avg: HomepageSlideAvgAggregateOutputType | null
+    _sum: HomepageSlideSumAggregateOutputType | null
+    _min: HomepageSlideMinAggregateOutputType | null
+    _max: HomepageSlideMaxAggregateOutputType | null
+  }
+
+  export type HomepageSlideAvgAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type HomepageSlideSumAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type HomepageSlideMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    description: string | null
+    mediaType: $Enums.MediaType | null
+    mediaUrl: string | null
+    linkUrl: string | null
+    linkText: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    publishedFrom: Date | null
+    publishedUntil: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type HomepageSlideMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    description: string | null
+    mediaType: $Enums.MediaType | null
+    mediaUrl: string | null
+    linkUrl: string | null
+    linkText: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    publishedFrom: Date | null
+    publishedUntil: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type HomepageSlideCountAggregateOutputType = {
+    id: number
+    title: number
+    description: number
+    mediaType: number
+    mediaUrl: number
+    linkUrl: number
+    linkText: number
+    sortOrder: number
+    isActive: number
+    publishedFrom: number
+    publishedUntil: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type HomepageSlideAvgAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type HomepageSlideSumAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type HomepageSlideMinAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    mediaType?: true
+    mediaUrl?: true
+    linkUrl?: true
+    linkText?: true
+    sortOrder?: true
+    isActive?: true
+    publishedFrom?: true
+    publishedUntil?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type HomepageSlideMaxAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    mediaType?: true
+    mediaUrl?: true
+    linkUrl?: true
+    linkText?: true
+    sortOrder?: true
+    isActive?: true
+    publishedFrom?: true
+    publishedUntil?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type HomepageSlideCountAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    mediaType?: true
+    mediaUrl?: true
+    linkUrl?: true
+    linkText?: true
+    sortOrder?: true
+    isActive?: true
+    publishedFrom?: true
+    publishedUntil?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type HomepageSlideAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HomepageSlide to aggregate.
+     */
+    where?: HomepageSlideWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HomepageSlides to fetch.
+     */
+    orderBy?: HomepageSlideOrderByWithRelationInput | HomepageSlideOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: HomepageSlideWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HomepageSlides from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HomepageSlides.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned HomepageSlides
+    **/
+    _count?: true | HomepageSlideCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: HomepageSlideAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: HomepageSlideSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: HomepageSlideMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: HomepageSlideMaxAggregateInputType
+  }
+
+  export type GetHomepageSlideAggregateType<T extends HomepageSlideAggregateArgs> = {
+        [P in keyof T & keyof AggregateHomepageSlide]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateHomepageSlide[P]>
+      : GetScalarType<T[P], AggregateHomepageSlide[P]>
+  }
+
+
+
+
+  export type HomepageSlideGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HomepageSlideWhereInput
+    orderBy?: HomepageSlideOrderByWithAggregationInput | HomepageSlideOrderByWithAggregationInput[]
+    by: HomepageSlideScalarFieldEnum[] | HomepageSlideScalarFieldEnum
+    having?: HomepageSlideScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: HomepageSlideCountAggregateInputType | true
+    _avg?: HomepageSlideAvgAggregateInputType
+    _sum?: HomepageSlideSumAggregateInputType
+    _min?: HomepageSlideMinAggregateInputType
+    _max?: HomepageSlideMaxAggregateInputType
+  }
+
+  export type HomepageSlideGroupByOutputType = {
+    id: string
+    title: string
+    description: string | null
+    mediaType: $Enums.MediaType
+    mediaUrl: string
+    linkUrl: string | null
+    linkText: string | null
+    sortOrder: number
+    isActive: boolean
+    publishedFrom: Date | null
+    publishedUntil: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: HomepageSlideCountAggregateOutputType | null
+    _avg: HomepageSlideAvgAggregateOutputType | null
+    _sum: HomepageSlideSumAggregateOutputType | null
+    _min: HomepageSlideMinAggregateOutputType | null
+    _max: HomepageSlideMaxAggregateOutputType | null
+  }
+
+  type GetHomepageSlideGroupByPayload<T extends HomepageSlideGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<HomepageSlideGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof HomepageSlideGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], HomepageSlideGroupByOutputType[P]>
+            : GetScalarType<T[P], HomepageSlideGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type HomepageSlideSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    mediaType?: boolean
+    mediaUrl?: boolean
+    linkUrl?: boolean
+    linkText?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    publishedFrom?: boolean
+    publishedUntil?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["homepageSlide"]>
+
+
+  export type HomepageSlideSelectScalar = {
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    mediaType?: boolean
+    mediaUrl?: boolean
+    linkUrl?: boolean
+    linkText?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    publishedFrom?: boolean
+    publishedUntil?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $HomepageSlidePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "HomepageSlide"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      description: string | null
+      mediaType: $Enums.MediaType
+      mediaUrl: string
+      linkUrl: string | null
+      linkText: string | null
+      sortOrder: number
+      isActive: boolean
+      publishedFrom: Date | null
+      publishedUntil: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["homepageSlide"]>
+    composites: {}
+  }
+
+  type HomepageSlideGetPayload<S extends boolean | null | undefined | HomepageSlideDefaultArgs> = $Result.GetResult<Prisma.$HomepageSlidePayload, S>
+
+  type HomepageSlideCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<HomepageSlideFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: HomepageSlideCountAggregateInputType | true
+    }
+
+  export interface HomepageSlideDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['HomepageSlide'], meta: { name: 'HomepageSlide' } }
+    /**
+     * Find zero or one HomepageSlide that matches the filter.
+     * @param {HomepageSlideFindUniqueArgs} args - Arguments to find a HomepageSlide
+     * @example
+     * // Get one HomepageSlide
+     * const homepageSlide = await prisma.homepageSlide.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends HomepageSlideFindUniqueArgs>(args: SelectSubset<T, HomepageSlideFindUniqueArgs<ExtArgs>>): Prisma__HomepageSlideClient<$Result.GetResult<Prisma.$HomepageSlidePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one HomepageSlide that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {HomepageSlideFindUniqueOrThrowArgs} args - Arguments to find a HomepageSlide
+     * @example
+     * // Get one HomepageSlide
+     * const homepageSlide = await prisma.homepageSlide.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends HomepageSlideFindUniqueOrThrowArgs>(args: SelectSubset<T, HomepageSlideFindUniqueOrThrowArgs<ExtArgs>>): Prisma__HomepageSlideClient<$Result.GetResult<Prisma.$HomepageSlidePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first HomepageSlide that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HomepageSlideFindFirstArgs} args - Arguments to find a HomepageSlide
+     * @example
+     * // Get one HomepageSlide
+     * const homepageSlide = await prisma.homepageSlide.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends HomepageSlideFindFirstArgs>(args?: SelectSubset<T, HomepageSlideFindFirstArgs<ExtArgs>>): Prisma__HomepageSlideClient<$Result.GetResult<Prisma.$HomepageSlidePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first HomepageSlide that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HomepageSlideFindFirstOrThrowArgs} args - Arguments to find a HomepageSlide
+     * @example
+     * // Get one HomepageSlide
+     * const homepageSlide = await prisma.homepageSlide.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends HomepageSlideFindFirstOrThrowArgs>(args?: SelectSubset<T, HomepageSlideFindFirstOrThrowArgs<ExtArgs>>): Prisma__HomepageSlideClient<$Result.GetResult<Prisma.$HomepageSlidePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more HomepageSlides that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HomepageSlideFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all HomepageSlides
+     * const homepageSlides = await prisma.homepageSlide.findMany()
+     * 
+     * // Get first 10 HomepageSlides
+     * const homepageSlides = await prisma.homepageSlide.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const homepageSlideWithIdOnly = await prisma.homepageSlide.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends HomepageSlideFindManyArgs>(args?: SelectSubset<T, HomepageSlideFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HomepageSlidePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a HomepageSlide.
+     * @param {HomepageSlideCreateArgs} args - Arguments to create a HomepageSlide.
+     * @example
+     * // Create one HomepageSlide
+     * const HomepageSlide = await prisma.homepageSlide.create({
+     *   data: {
+     *     // ... data to create a HomepageSlide
+     *   }
+     * })
+     * 
+     */
+    create<T extends HomepageSlideCreateArgs>(args: SelectSubset<T, HomepageSlideCreateArgs<ExtArgs>>): Prisma__HomepageSlideClient<$Result.GetResult<Prisma.$HomepageSlidePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many HomepageSlides.
+     * @param {HomepageSlideCreateManyArgs} args - Arguments to create many HomepageSlides.
+     * @example
+     * // Create many HomepageSlides
+     * const homepageSlide = await prisma.homepageSlide.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends HomepageSlideCreateManyArgs>(args?: SelectSubset<T, HomepageSlideCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a HomepageSlide.
+     * @param {HomepageSlideDeleteArgs} args - Arguments to delete one HomepageSlide.
+     * @example
+     * // Delete one HomepageSlide
+     * const HomepageSlide = await prisma.homepageSlide.delete({
+     *   where: {
+     *     // ... filter to delete one HomepageSlide
+     *   }
+     * })
+     * 
+     */
+    delete<T extends HomepageSlideDeleteArgs>(args: SelectSubset<T, HomepageSlideDeleteArgs<ExtArgs>>): Prisma__HomepageSlideClient<$Result.GetResult<Prisma.$HomepageSlidePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one HomepageSlide.
+     * @param {HomepageSlideUpdateArgs} args - Arguments to update one HomepageSlide.
+     * @example
+     * // Update one HomepageSlide
+     * const homepageSlide = await prisma.homepageSlide.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends HomepageSlideUpdateArgs>(args: SelectSubset<T, HomepageSlideUpdateArgs<ExtArgs>>): Prisma__HomepageSlideClient<$Result.GetResult<Prisma.$HomepageSlidePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more HomepageSlides.
+     * @param {HomepageSlideDeleteManyArgs} args - Arguments to filter HomepageSlides to delete.
+     * @example
+     * // Delete a few HomepageSlides
+     * const { count } = await prisma.homepageSlide.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends HomepageSlideDeleteManyArgs>(args?: SelectSubset<T, HomepageSlideDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more HomepageSlides.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HomepageSlideUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many HomepageSlides
+     * const homepageSlide = await prisma.homepageSlide.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends HomepageSlideUpdateManyArgs>(args: SelectSubset<T, HomepageSlideUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one HomepageSlide.
+     * @param {HomepageSlideUpsertArgs} args - Arguments to update or create a HomepageSlide.
+     * @example
+     * // Update or create a HomepageSlide
+     * const homepageSlide = await prisma.homepageSlide.upsert({
+     *   create: {
+     *     // ... data to create a HomepageSlide
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the HomepageSlide we want to update
+     *   }
+     * })
+     */
+    upsert<T extends HomepageSlideUpsertArgs>(args: SelectSubset<T, HomepageSlideUpsertArgs<ExtArgs>>): Prisma__HomepageSlideClient<$Result.GetResult<Prisma.$HomepageSlidePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of HomepageSlides.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HomepageSlideCountArgs} args - Arguments to filter HomepageSlides to count.
+     * @example
+     * // Count the number of HomepageSlides
+     * const count = await prisma.homepageSlide.count({
+     *   where: {
+     *     // ... the filter for the HomepageSlides we want to count
+     *   }
+     * })
+    **/
+    count<T extends HomepageSlideCountArgs>(
+      args?: Subset<T, HomepageSlideCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], HomepageSlideCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a HomepageSlide.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HomepageSlideAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends HomepageSlideAggregateArgs>(args: Subset<T, HomepageSlideAggregateArgs>): Prisma.PrismaPromise<GetHomepageSlideAggregateType<T>>
+
+    /**
+     * Group by HomepageSlide.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HomepageSlideGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends HomepageSlideGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: HomepageSlideGroupByArgs['orderBy'] }
+        : { orderBy?: HomepageSlideGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, HomepageSlideGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetHomepageSlideGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the HomepageSlide model
+   */
+  readonly fields: HomepageSlideFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for HomepageSlide.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__HomepageSlideClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the HomepageSlide model
+   */ 
+  interface HomepageSlideFieldRefs {
+    readonly id: FieldRef<"HomepageSlide", 'String'>
+    readonly title: FieldRef<"HomepageSlide", 'String'>
+    readonly description: FieldRef<"HomepageSlide", 'String'>
+    readonly mediaType: FieldRef<"HomepageSlide", 'MediaType'>
+    readonly mediaUrl: FieldRef<"HomepageSlide", 'String'>
+    readonly linkUrl: FieldRef<"HomepageSlide", 'String'>
+    readonly linkText: FieldRef<"HomepageSlide", 'String'>
+    readonly sortOrder: FieldRef<"HomepageSlide", 'Int'>
+    readonly isActive: FieldRef<"HomepageSlide", 'Boolean'>
+    readonly publishedFrom: FieldRef<"HomepageSlide", 'DateTime'>
+    readonly publishedUntil: FieldRef<"HomepageSlide", 'DateTime'>
+    readonly createdAt: FieldRef<"HomepageSlide", 'DateTime'>
+    readonly updatedAt: FieldRef<"HomepageSlide", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * HomepageSlide findUnique
+   */
+  export type HomepageSlideFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HomepageSlide
+     */
+    select?: HomepageSlideSelect<ExtArgs> | null
+    /**
+     * Filter, which HomepageSlide to fetch.
+     */
+    where: HomepageSlideWhereUniqueInput
+  }
+
+  /**
+   * HomepageSlide findUniqueOrThrow
+   */
+  export type HomepageSlideFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HomepageSlide
+     */
+    select?: HomepageSlideSelect<ExtArgs> | null
+    /**
+     * Filter, which HomepageSlide to fetch.
+     */
+    where: HomepageSlideWhereUniqueInput
+  }
+
+  /**
+   * HomepageSlide findFirst
+   */
+  export type HomepageSlideFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HomepageSlide
+     */
+    select?: HomepageSlideSelect<ExtArgs> | null
+    /**
+     * Filter, which HomepageSlide to fetch.
+     */
+    where?: HomepageSlideWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HomepageSlides to fetch.
+     */
+    orderBy?: HomepageSlideOrderByWithRelationInput | HomepageSlideOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HomepageSlides.
+     */
+    cursor?: HomepageSlideWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HomepageSlides from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HomepageSlides.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HomepageSlides.
+     */
+    distinct?: HomepageSlideScalarFieldEnum | HomepageSlideScalarFieldEnum[]
+  }
+
+  /**
+   * HomepageSlide findFirstOrThrow
+   */
+  export type HomepageSlideFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HomepageSlide
+     */
+    select?: HomepageSlideSelect<ExtArgs> | null
+    /**
+     * Filter, which HomepageSlide to fetch.
+     */
+    where?: HomepageSlideWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HomepageSlides to fetch.
+     */
+    orderBy?: HomepageSlideOrderByWithRelationInput | HomepageSlideOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HomepageSlides.
+     */
+    cursor?: HomepageSlideWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HomepageSlides from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HomepageSlides.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HomepageSlides.
+     */
+    distinct?: HomepageSlideScalarFieldEnum | HomepageSlideScalarFieldEnum[]
+  }
+
+  /**
+   * HomepageSlide findMany
+   */
+  export type HomepageSlideFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HomepageSlide
+     */
+    select?: HomepageSlideSelect<ExtArgs> | null
+    /**
+     * Filter, which HomepageSlides to fetch.
+     */
+    where?: HomepageSlideWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HomepageSlides to fetch.
+     */
+    orderBy?: HomepageSlideOrderByWithRelationInput | HomepageSlideOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing HomepageSlides.
+     */
+    cursor?: HomepageSlideWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HomepageSlides from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HomepageSlides.
+     */
+    skip?: number
+    distinct?: HomepageSlideScalarFieldEnum | HomepageSlideScalarFieldEnum[]
+  }
+
+  /**
+   * HomepageSlide create
+   */
+  export type HomepageSlideCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HomepageSlide
+     */
+    select?: HomepageSlideSelect<ExtArgs> | null
+    /**
+     * The data needed to create a HomepageSlide.
+     */
+    data: XOR<HomepageSlideCreateInput, HomepageSlideUncheckedCreateInput>
+  }
+
+  /**
+   * HomepageSlide createMany
+   */
+  export type HomepageSlideCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many HomepageSlides.
+     */
+    data: HomepageSlideCreateManyInput | HomepageSlideCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * HomepageSlide update
+   */
+  export type HomepageSlideUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HomepageSlide
+     */
+    select?: HomepageSlideSelect<ExtArgs> | null
+    /**
+     * The data needed to update a HomepageSlide.
+     */
+    data: XOR<HomepageSlideUpdateInput, HomepageSlideUncheckedUpdateInput>
+    /**
+     * Choose, which HomepageSlide to update.
+     */
+    where: HomepageSlideWhereUniqueInput
+  }
+
+  /**
+   * HomepageSlide updateMany
+   */
+  export type HomepageSlideUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update HomepageSlides.
+     */
+    data: XOR<HomepageSlideUpdateManyMutationInput, HomepageSlideUncheckedUpdateManyInput>
+    /**
+     * Filter which HomepageSlides to update
+     */
+    where?: HomepageSlideWhereInput
+  }
+
+  /**
+   * HomepageSlide upsert
+   */
+  export type HomepageSlideUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HomepageSlide
+     */
+    select?: HomepageSlideSelect<ExtArgs> | null
+    /**
+     * The filter to search for the HomepageSlide to update in case it exists.
+     */
+    where: HomepageSlideWhereUniqueInput
+    /**
+     * In case the HomepageSlide found by the `where` argument doesn't exist, create a new HomepageSlide with this data.
+     */
+    create: XOR<HomepageSlideCreateInput, HomepageSlideUncheckedCreateInput>
+    /**
+     * In case the HomepageSlide was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<HomepageSlideUpdateInput, HomepageSlideUncheckedUpdateInput>
+  }
+
+  /**
+   * HomepageSlide delete
+   */
+  export type HomepageSlideDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HomepageSlide
+     */
+    select?: HomepageSlideSelect<ExtArgs> | null
+    /**
+     * Filter which HomepageSlide to delete.
+     */
+    where: HomepageSlideWhereUniqueInput
+  }
+
+  /**
+   * HomepageSlide deleteMany
+   */
+  export type HomepageSlideDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HomepageSlides to delete
+     */
+    where?: HomepageSlideWhereInput
+  }
+
+  /**
+   * HomepageSlide without action
+   */
+  export type HomepageSlideDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HomepageSlide
+     */
+    select?: HomepageSlideSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -31785,7 +33993,13 @@ export namespace Prisma {
     id: 'id',
     email: 'email',
     passwordHash: 'passwordHash',
+    provider: 'provider',
+    providerId: 'providerId',
+    avatarUrl: 'avatarUrl',
     role: 'role',
+    emailVerified: 'emailVerified',
+    emailVerificationToken: 'emailVerificationToken',
+    emailVerificationExpires: 'emailVerificationExpires',
     twoFactorSecret: 'twoFactorSecret',
     twoFactorEnabled: 'twoFactorEnabled',
     twoFactorMethod: 'twoFactorMethod',
@@ -31847,6 +34061,25 @@ export namespace Prisma {
   };
 
   export type NodeScalarFieldEnum = (typeof NodeScalarFieldEnum)[keyof typeof NodeScalarFieldEnum]
+
+
+  export const BillingProfileScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    type: 'type',
+    fullName: 'fullName',
+    companyName: 'companyName',
+    taxNumber: 'taxNumber',
+    country: 'country',
+    city: 'city',
+    postalCode: 'postalCode',
+    street: 'street',
+    phone: 'phone',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type BillingProfileScalarFieldEnum = (typeof BillingProfileScalarFieldEnum)[keyof typeof BillingProfileScalarFieldEnum]
 
 
   export const TaskScalarFieldEnum: {
@@ -32217,6 +34450,25 @@ export namespace Prisma {
   export type InvoiceMetadataScalarFieldEnum = (typeof InvoiceMetadataScalarFieldEnum)[keyof typeof InvoiceMetadataScalarFieldEnum]
 
 
+  export const HomepageSlideScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    description: 'description',
+    mediaType: 'mediaType',
+    mediaUrl: 'mediaUrl',
+    linkUrl: 'linkUrl',
+    linkText: 'linkText',
+    sortOrder: 'sortOrder',
+    isActive: 'isActive',
+    publishedFrom: 'publishedFrom',
+    publishedUntil: 'publishedUntil',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type HomepageSlideScalarFieldEnum = (typeof HomepageSlideScalarFieldEnum)[keyof typeof HomepageSlideScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -32305,6 +34557,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'AuthProvider'
+   */
+  export type EnumAuthProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuthProvider'>
+    
+
+
+  /**
    * Reference to a field of type 'UserRole'
    */
   export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole'>
@@ -32329,6 +34588,13 @@ export namespace Prisma {
    * Reference to a field of type 'NodeStatus'
    */
   export type EnumNodeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NodeStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'BillingType'
+   */
+  export type EnumBillingTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BillingType'>
     
 
 
@@ -32462,6 +34728,13 @@ export namespace Prisma {
    * Reference to a field of type 'TicketStatus'
    */
   export type EnumTicketStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TicketStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'MediaType'
+   */
+  export type EnumMediaTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MediaType'>
     
   /**
    * Deep Input Types
@@ -32622,7 +34895,13 @@ export namespace Prisma {
     id?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     passwordHash?: StringFilter<"User"> | string
+    provider?: EnumAuthProviderFilter<"User"> | $Enums.AuthProvider
+    providerId?: StringNullableFilter<"User"> | string | null
+    avatarUrl?: StringNullableFilter<"User"> | string | null
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    emailVerified?: BoolFilter<"User"> | boolean
+    emailVerificationToken?: StringNullableFilter<"User"> | string | null
+    emailVerificationExpires?: DateTimeNullableFilter<"User"> | Date | string | null
     twoFactorSecret?: StringNullableFilter<"User"> | string | null
     twoFactorEnabled?: BoolFilter<"User"> | boolean
     twoFactorMethod?: StringNullableFilter<"User"> | string | null
@@ -32646,13 +34925,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketListRelationFilter
     knowledgeBaseArticles?: KnowledgeBaseArticleListRelationFilter
     sessions?: SessionListRelationFilter
+    billingProfile?: XOR<BillingProfileNullableRelationFilter, BillingProfileWhereInput> | null
   }
 
   export type UserOrderByWithRelationInput = {
     id?: SortOrder
     email?: SortOrder
     passwordHash?: SortOrder
+    provider?: SortOrder
+    providerId?: SortOrderInput | SortOrder
+    avatarUrl?: SortOrderInput | SortOrder
     role?: SortOrder
+    emailVerified?: SortOrder
+    emailVerificationToken?: SortOrderInput | SortOrder
+    emailVerificationExpires?: SortOrderInput | SortOrder
     twoFactorSecret?: SortOrderInput | SortOrder
     twoFactorEnabled?: SortOrder
     twoFactorMethod?: SortOrderInput | SortOrder
@@ -32676,6 +34962,7 @@ export namespace Prisma {
     assignedTickets?: SupportTicketOrderByRelationAggregateInput
     knowledgeBaseArticles?: KnowledgeBaseArticleOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
+    billingProfile?: BillingProfileOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -32685,7 +34972,13 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     passwordHash?: StringFilter<"User"> | string
+    provider?: EnumAuthProviderFilter<"User"> | $Enums.AuthProvider
+    providerId?: StringNullableFilter<"User"> | string | null
+    avatarUrl?: StringNullableFilter<"User"> | string | null
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    emailVerified?: BoolFilter<"User"> | boolean
+    emailVerificationToken?: StringNullableFilter<"User"> | string | null
+    emailVerificationExpires?: DateTimeNullableFilter<"User"> | Date | string | null
     twoFactorSecret?: StringNullableFilter<"User"> | string | null
     twoFactorEnabled?: BoolFilter<"User"> | boolean
     twoFactorMethod?: StringNullableFilter<"User"> | string | null
@@ -32709,13 +35002,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketListRelationFilter
     knowledgeBaseArticles?: KnowledgeBaseArticleListRelationFilter
     sessions?: SessionListRelationFilter
+    billingProfile?: XOR<BillingProfileNullableRelationFilter, BillingProfileWhereInput> | null
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
     email?: SortOrder
     passwordHash?: SortOrder
+    provider?: SortOrder
+    providerId?: SortOrderInput | SortOrder
+    avatarUrl?: SortOrderInput | SortOrder
     role?: SortOrder
+    emailVerified?: SortOrder
+    emailVerificationToken?: SortOrderInput | SortOrder
+    emailVerificationExpires?: SortOrderInput | SortOrder
     twoFactorSecret?: SortOrderInput | SortOrder
     twoFactorEnabled?: SortOrder
     twoFactorMethod?: SortOrderInput | SortOrder
@@ -32740,7 +35040,13 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
     passwordHash?: StringWithAggregatesFilter<"User"> | string
+    provider?: EnumAuthProviderWithAggregatesFilter<"User"> | $Enums.AuthProvider
+    providerId?: StringNullableWithAggregatesFilter<"User"> | string | null
+    avatarUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
     role?: EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
+    emailVerified?: BoolWithAggregatesFilter<"User"> | boolean
+    emailVerificationToken?: StringNullableWithAggregatesFilter<"User"> | string | null
+    emailVerificationExpires?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     twoFactorSecret?: StringNullableWithAggregatesFilter<"User"> | string | null
     twoFactorEnabled?: BoolWithAggregatesFilter<"User"> | boolean
     twoFactorMethod?: StringNullableWithAggregatesFilter<"User"> | string | null
@@ -33008,6 +35314,101 @@ export namespace Prisma {
     lastHeartbeat?: DateTimeNullableWithAggregatesFilter<"Node"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Node"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Node"> | Date | string
+  }
+
+  export type BillingProfileWhereInput = {
+    AND?: BillingProfileWhereInput | BillingProfileWhereInput[]
+    OR?: BillingProfileWhereInput[]
+    NOT?: BillingProfileWhereInput | BillingProfileWhereInput[]
+    id?: StringFilter<"BillingProfile"> | string
+    userId?: StringFilter<"BillingProfile"> | string
+    type?: EnumBillingTypeFilter<"BillingProfile"> | $Enums.BillingType
+    fullName?: StringNullableFilter<"BillingProfile"> | string | null
+    companyName?: StringNullableFilter<"BillingProfile"> | string | null
+    taxNumber?: StringNullableFilter<"BillingProfile"> | string | null
+    country?: StringFilter<"BillingProfile"> | string
+    city?: StringFilter<"BillingProfile"> | string
+    postalCode?: StringFilter<"BillingProfile"> | string
+    street?: StringFilter<"BillingProfile"> | string
+    phone?: StringNullableFilter<"BillingProfile"> | string | null
+    createdAt?: DateTimeFilter<"BillingProfile"> | Date | string
+    updatedAt?: DateTimeFilter<"BillingProfile"> | Date | string
+    user?: XOR<UserRelationFilter, UserWhereInput>
+  }
+
+  export type BillingProfileOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    fullName?: SortOrderInput | SortOrder
+    companyName?: SortOrderInput | SortOrder
+    taxNumber?: SortOrderInput | SortOrder
+    country?: SortOrder
+    city?: SortOrder
+    postalCode?: SortOrder
+    street?: SortOrder
+    phone?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type BillingProfileWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId?: string
+    AND?: BillingProfileWhereInput | BillingProfileWhereInput[]
+    OR?: BillingProfileWhereInput[]
+    NOT?: BillingProfileWhereInput | BillingProfileWhereInput[]
+    type?: EnumBillingTypeFilter<"BillingProfile"> | $Enums.BillingType
+    fullName?: StringNullableFilter<"BillingProfile"> | string | null
+    companyName?: StringNullableFilter<"BillingProfile"> | string | null
+    taxNumber?: StringNullableFilter<"BillingProfile"> | string | null
+    country?: StringFilter<"BillingProfile"> | string
+    city?: StringFilter<"BillingProfile"> | string
+    postalCode?: StringFilter<"BillingProfile"> | string
+    street?: StringFilter<"BillingProfile"> | string
+    phone?: StringNullableFilter<"BillingProfile"> | string | null
+    createdAt?: DateTimeFilter<"BillingProfile"> | Date | string
+    updatedAt?: DateTimeFilter<"BillingProfile"> | Date | string
+    user?: XOR<UserRelationFilter, UserWhereInput>
+  }, "id" | "userId">
+
+  export type BillingProfileOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    fullName?: SortOrderInput | SortOrder
+    companyName?: SortOrderInput | SortOrder
+    taxNumber?: SortOrderInput | SortOrder
+    country?: SortOrder
+    city?: SortOrder
+    postalCode?: SortOrder
+    street?: SortOrder
+    phone?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: BillingProfileCountOrderByAggregateInput
+    _max?: BillingProfileMaxOrderByAggregateInput
+    _min?: BillingProfileMinOrderByAggregateInput
+  }
+
+  export type BillingProfileScalarWhereWithAggregatesInput = {
+    AND?: BillingProfileScalarWhereWithAggregatesInput | BillingProfileScalarWhereWithAggregatesInput[]
+    OR?: BillingProfileScalarWhereWithAggregatesInput[]
+    NOT?: BillingProfileScalarWhereWithAggregatesInput | BillingProfileScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"BillingProfile"> | string
+    userId?: StringWithAggregatesFilter<"BillingProfile"> | string
+    type?: EnumBillingTypeWithAggregatesFilter<"BillingProfile"> | $Enums.BillingType
+    fullName?: StringNullableWithAggregatesFilter<"BillingProfile"> | string | null
+    companyName?: StringNullableWithAggregatesFilter<"BillingProfile"> | string | null
+    taxNumber?: StringNullableWithAggregatesFilter<"BillingProfile"> | string | null
+    country?: StringWithAggregatesFilter<"BillingProfile"> | string
+    city?: StringWithAggregatesFilter<"BillingProfile"> | string
+    postalCode?: StringWithAggregatesFilter<"BillingProfile"> | string
+    street?: StringWithAggregatesFilter<"BillingProfile"> | string
+    phone?: StringNullableWithAggregatesFilter<"BillingProfile"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"BillingProfile"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"BillingProfile"> | Date | string
   }
 
   export type TaskWhereInput = {
@@ -34952,6 +37353,100 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"InvoiceMetadata"> | Date | string
   }
 
+  export type HomepageSlideWhereInput = {
+    AND?: HomepageSlideWhereInput | HomepageSlideWhereInput[]
+    OR?: HomepageSlideWhereInput[]
+    NOT?: HomepageSlideWhereInput | HomepageSlideWhereInput[]
+    id?: StringFilter<"HomepageSlide"> | string
+    title?: StringFilter<"HomepageSlide"> | string
+    description?: StringNullableFilter<"HomepageSlide"> | string | null
+    mediaType?: EnumMediaTypeFilter<"HomepageSlide"> | $Enums.MediaType
+    mediaUrl?: StringFilter<"HomepageSlide"> | string
+    linkUrl?: StringNullableFilter<"HomepageSlide"> | string | null
+    linkText?: StringNullableFilter<"HomepageSlide"> | string | null
+    sortOrder?: IntFilter<"HomepageSlide"> | number
+    isActive?: BoolFilter<"HomepageSlide"> | boolean
+    publishedFrom?: DateTimeNullableFilter<"HomepageSlide"> | Date | string | null
+    publishedUntil?: DateTimeNullableFilter<"HomepageSlide"> | Date | string | null
+    createdAt?: DateTimeFilter<"HomepageSlide"> | Date | string
+    updatedAt?: DateTimeFilter<"HomepageSlide"> | Date | string
+  }
+
+  export type HomepageSlideOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    mediaType?: SortOrder
+    mediaUrl?: SortOrder
+    linkUrl?: SortOrderInput | SortOrder
+    linkText?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    publishedFrom?: SortOrderInput | SortOrder
+    publishedUntil?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type HomepageSlideWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: HomepageSlideWhereInput | HomepageSlideWhereInput[]
+    OR?: HomepageSlideWhereInput[]
+    NOT?: HomepageSlideWhereInput | HomepageSlideWhereInput[]
+    title?: StringFilter<"HomepageSlide"> | string
+    description?: StringNullableFilter<"HomepageSlide"> | string | null
+    mediaType?: EnumMediaTypeFilter<"HomepageSlide"> | $Enums.MediaType
+    mediaUrl?: StringFilter<"HomepageSlide"> | string
+    linkUrl?: StringNullableFilter<"HomepageSlide"> | string | null
+    linkText?: StringNullableFilter<"HomepageSlide"> | string | null
+    sortOrder?: IntFilter<"HomepageSlide"> | number
+    isActive?: BoolFilter<"HomepageSlide"> | boolean
+    publishedFrom?: DateTimeNullableFilter<"HomepageSlide"> | Date | string | null
+    publishedUntil?: DateTimeNullableFilter<"HomepageSlide"> | Date | string | null
+    createdAt?: DateTimeFilter<"HomepageSlide"> | Date | string
+    updatedAt?: DateTimeFilter<"HomepageSlide"> | Date | string
+  }, "id">
+
+  export type HomepageSlideOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    mediaType?: SortOrder
+    mediaUrl?: SortOrder
+    linkUrl?: SortOrderInput | SortOrder
+    linkText?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    publishedFrom?: SortOrderInput | SortOrder
+    publishedUntil?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: HomepageSlideCountOrderByAggregateInput
+    _avg?: HomepageSlideAvgOrderByAggregateInput
+    _max?: HomepageSlideMaxOrderByAggregateInput
+    _min?: HomepageSlideMinOrderByAggregateInput
+    _sum?: HomepageSlideSumOrderByAggregateInput
+  }
+
+  export type HomepageSlideScalarWhereWithAggregatesInput = {
+    AND?: HomepageSlideScalarWhereWithAggregatesInput | HomepageSlideScalarWhereWithAggregatesInput[]
+    OR?: HomepageSlideScalarWhereWithAggregatesInput[]
+    NOT?: HomepageSlideScalarWhereWithAggregatesInput | HomepageSlideScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"HomepageSlide"> | string
+    title?: StringWithAggregatesFilter<"HomepageSlide"> | string
+    description?: StringNullableWithAggregatesFilter<"HomepageSlide"> | string | null
+    mediaType?: EnumMediaTypeWithAggregatesFilter<"HomepageSlide"> | $Enums.MediaType
+    mediaUrl?: StringWithAggregatesFilter<"HomepageSlide"> | string
+    linkUrl?: StringNullableWithAggregatesFilter<"HomepageSlide"> | string | null
+    linkText?: StringNullableWithAggregatesFilter<"HomepageSlide"> | string | null
+    sortOrder?: IntWithAggregatesFilter<"HomepageSlide"> | number
+    isActive?: BoolWithAggregatesFilter<"HomepageSlide"> | boolean
+    publishedFrom?: DateTimeNullableWithAggregatesFilter<"HomepageSlide"> | Date | string | null
+    publishedUntil?: DateTimeNullableWithAggregatesFilter<"HomepageSlide"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"HomepageSlide"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"HomepageSlide"> | Date | string
+  }
+
   export type SystemLicenseCreateInput = {
     id?: string
     licenseKey: string
@@ -35125,7 +37620,13 @@ export namespace Prisma {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -35148,13 +37649,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -35177,13 +37685,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35206,13 +37721,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35235,13 +37757,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -35258,7 +37787,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35274,7 +37809,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35578,6 +38119,117 @@ export namespace Prisma {
     maxConcurrentUpdates?: IntFieldUpdateOperationsInput | number
     status?: EnumNodeStatusFieldUpdateOperationsInput | $Enums.NodeStatus
     lastHeartbeat?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BillingProfileCreateInput = {
+    id?: string
+    type?: $Enums.BillingType
+    fullName?: string | null
+    companyName?: string | null
+    taxNumber?: string | null
+    country: string
+    city: string
+    postalCode: string
+    street: string
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutBillingProfileInput
+  }
+
+  export type BillingProfileUncheckedCreateInput = {
+    id?: string
+    userId: string
+    type?: $Enums.BillingType
+    fullName?: string | null
+    companyName?: string | null
+    taxNumber?: string | null
+    country: string
+    city: string
+    postalCode: string
+    street: string
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BillingProfileUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumBillingTypeFieldUpdateOperationsInput | $Enums.BillingType
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    postalCode?: StringFieldUpdateOperationsInput | string
+    street?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutBillingProfileNestedInput
+  }
+
+  export type BillingProfileUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    type?: EnumBillingTypeFieldUpdateOperationsInput | $Enums.BillingType
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    postalCode?: StringFieldUpdateOperationsInput | string
+    street?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BillingProfileCreateManyInput = {
+    id?: string
+    userId: string
+    type?: $Enums.BillingType
+    fullName?: string | null
+    companyName?: string | null
+    taxNumber?: string | null
+    country: string
+    city: string
+    postalCode: string
+    street: string
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BillingProfileUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumBillingTypeFieldUpdateOperationsInput | $Enums.BillingType
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    postalCode?: StringFieldUpdateOperationsInput | string
+    street?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BillingProfileUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    type?: EnumBillingTypeFieldUpdateOperationsInput | $Enums.BillingType
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    postalCode?: StringFieldUpdateOperationsInput | string
+    street?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -37721,6 +40373,118 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type HomepageSlideCreateInput = {
+    id?: string
+    title: string
+    description?: string | null
+    mediaType: $Enums.MediaType
+    mediaUrl: string
+    linkUrl?: string | null
+    linkText?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    publishedFrom?: Date | string | null
+    publishedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type HomepageSlideUncheckedCreateInput = {
+    id?: string
+    title: string
+    description?: string | null
+    mediaType: $Enums.MediaType
+    mediaUrl: string
+    linkUrl?: string | null
+    linkText?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    publishedFrom?: Date | string | null
+    publishedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type HomepageSlideUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    mediaType?: EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
+    mediaUrl?: StringFieldUpdateOperationsInput | string
+    linkUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    linkText?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    publishedFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    publishedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HomepageSlideUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    mediaType?: EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
+    mediaUrl?: StringFieldUpdateOperationsInput | string
+    linkUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    linkText?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    publishedFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    publishedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HomepageSlideCreateManyInput = {
+    id?: string
+    title: string
+    description?: string | null
+    mediaType: $Enums.MediaType
+    mediaUrl: string
+    linkUrl?: string | null
+    linkText?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    publishedFrom?: Date | string | null
+    publishedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type HomepageSlideUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    mediaType?: EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
+    mediaUrl?: StringFieldUpdateOperationsInput | string
+    linkUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    linkText?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    publishedFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    publishedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HomepageSlideUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    mediaType?: EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
+    mediaUrl?: StringFieldUpdateOperationsInput | string
+    linkUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    linkText?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    publishedFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    publishedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -38004,11 +40768,11 @@ export namespace Prisma {
     _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
-  export type EnumUserRoleFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[]
-    notIn?: $Enums.UserRole[]
-    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
+  export type EnumAuthProviderFilter<$PrismaModel = never> = {
+    equals?: $Enums.AuthProvider | EnumAuthProviderFieldRefInput<$PrismaModel>
+    in?: $Enums.AuthProvider[]
+    notIn?: $Enums.AuthProvider[]
+    not?: NestedEnumAuthProviderFilter<$PrismaModel> | $Enums.AuthProvider
   }
 
   export type StringNullableFilter<$PrismaModel = never> = {
@@ -38023,6 +40787,13 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type EnumUserRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[]
+    notIn?: $Enums.UserRole[]
+    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
   }
 
   export type FloatFilter<$PrismaModel = never> = {
@@ -38101,6 +40872,11 @@ export namespace Prisma {
     none?: SessionWhereInput
   }
 
+  export type BillingProfileNullableRelationFilter = {
+    is?: BillingProfileWhereInput | null
+    isNot?: BillingProfileWhereInput | null
+  }
+
   export type GameServerOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -38145,7 +40921,13 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     passwordHash?: SortOrder
+    provider?: SortOrder
+    providerId?: SortOrder
+    avatarUrl?: SortOrder
     role?: SortOrder
+    emailVerified?: SortOrder
+    emailVerificationToken?: SortOrder
+    emailVerificationExpires?: SortOrder
     twoFactorSecret?: SortOrder
     twoFactorEnabled?: SortOrder
     twoFactorMethod?: SortOrder
@@ -38166,7 +40948,13 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     passwordHash?: SortOrder
+    provider?: SortOrder
+    providerId?: SortOrder
+    avatarUrl?: SortOrder
     role?: SortOrder
+    emailVerified?: SortOrder
+    emailVerificationToken?: SortOrder
+    emailVerificationExpires?: SortOrder
     twoFactorSecret?: SortOrder
     twoFactorEnabled?: SortOrder
     twoFactorMethod?: SortOrder
@@ -38183,7 +40971,13 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     passwordHash?: SortOrder
+    provider?: SortOrder
+    providerId?: SortOrder
+    avatarUrl?: SortOrder
     role?: SortOrder
+    emailVerified?: SortOrder
+    emailVerificationToken?: SortOrder
+    emailVerificationExpires?: SortOrder
     twoFactorSecret?: SortOrder
     twoFactorEnabled?: SortOrder
     twoFactorMethod?: SortOrder
@@ -38200,14 +40994,14 @@ export namespace Prisma {
     balance?: SortOrder
   }
 
-  export type EnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[]
-    notIn?: $Enums.UserRole[]
-    not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
+  export type EnumAuthProviderWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AuthProvider | EnumAuthProviderFieldRefInput<$PrismaModel>
+    in?: $Enums.AuthProvider[]
+    notIn?: $Enums.AuthProvider[]
+    not?: NestedEnumAuthProviderWithAggregatesFilter<$PrismaModel> | $Enums.AuthProvider
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumUserRoleFilter<$PrismaModel>
-    _max?: NestedEnumUserRoleFilter<$PrismaModel>
+    _min?: NestedEnumAuthProviderFilter<$PrismaModel>
+    _max?: NestedEnumAuthProviderFilter<$PrismaModel>
   }
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -38225,6 +41019,16 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type EnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[]
+    notIn?: $Enums.UserRole[]
+    not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumUserRoleFilter<$PrismaModel>
+    _max?: NestedEnumUserRoleFilter<$PrismaModel>
   }
 
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -38452,6 +41256,71 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumNodeStatusFilter<$PrismaModel>
     _max?: NestedEnumNodeStatusFilter<$PrismaModel>
+  }
+
+  export type EnumBillingTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.BillingType | EnumBillingTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BillingType[]
+    notIn?: $Enums.BillingType[]
+    not?: NestedEnumBillingTypeFilter<$PrismaModel> | $Enums.BillingType
+  }
+
+  export type BillingProfileCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    fullName?: SortOrder
+    companyName?: SortOrder
+    taxNumber?: SortOrder
+    country?: SortOrder
+    city?: SortOrder
+    postalCode?: SortOrder
+    street?: SortOrder
+    phone?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BillingProfileMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    fullName?: SortOrder
+    companyName?: SortOrder
+    taxNumber?: SortOrder
+    country?: SortOrder
+    city?: SortOrder
+    postalCode?: SortOrder
+    street?: SortOrder
+    phone?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BillingProfileMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    fullName?: SortOrder
+    companyName?: SortOrder
+    taxNumber?: SortOrder
+    country?: SortOrder
+    city?: SortOrder
+    postalCode?: SortOrder
+    street?: SortOrder
+    phone?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumBillingTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BillingType | EnumBillingTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BillingType[]
+    notIn?: $Enums.BillingType[]
+    not?: NestedEnumBillingTypeWithAggregatesFilter<$PrismaModel> | $Enums.BillingType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBillingTypeFilter<$PrismaModel>
+    _max?: NestedEnumBillingTypeFilter<$PrismaModel>
   }
 
   export type EnumTaskTypeFilter<$PrismaModel = never> = {
@@ -40049,6 +42918,79 @@ export namespace Prisma {
     year?: SortOrder
   }
 
+  export type EnumMediaTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.MediaType | EnumMediaTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MediaType[]
+    notIn?: $Enums.MediaType[]
+    not?: NestedEnumMediaTypeFilter<$PrismaModel> | $Enums.MediaType
+  }
+
+  export type HomepageSlideCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    mediaType?: SortOrder
+    mediaUrl?: SortOrder
+    linkUrl?: SortOrder
+    linkText?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    publishedFrom?: SortOrder
+    publishedUntil?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type HomepageSlideAvgOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type HomepageSlideMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    mediaType?: SortOrder
+    mediaUrl?: SortOrder
+    linkUrl?: SortOrder
+    linkText?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    publishedFrom?: SortOrder
+    publishedUntil?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type HomepageSlideMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    mediaType?: SortOrder
+    mediaUrl?: SortOrder
+    linkUrl?: SortOrder
+    linkText?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    publishedFrom?: SortOrder
+    publishedUntil?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type HomepageSlideSumOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type EnumMediaTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MediaType | EnumMediaTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MediaType[]
+    notIn?: $Enums.MediaType[]
+    not?: NestedEnumMediaTypeWithAggregatesFilter<$PrismaModel> | $Enums.MediaType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMediaTypeFilter<$PrismaModel>
+    _max?: NestedEnumMediaTypeFilter<$PrismaModel>
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -40251,6 +43193,12 @@ export namespace Prisma {
     connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
   }
 
+  export type BillingProfileCreateNestedOneWithoutUserInput = {
+    create?: XOR<BillingProfileCreateWithoutUserInput, BillingProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: BillingProfileCreateOrConnectWithoutUserInput
+    connect?: BillingProfileWhereUniqueInput
+  }
+
   export type GameServerUncheckedCreateNestedManyWithoutOwnerInput = {
     create?: XOR<GameServerCreateWithoutOwnerInput, GameServerUncheckedCreateWithoutOwnerInput> | GameServerCreateWithoutOwnerInput[] | GameServerUncheckedCreateWithoutOwnerInput[]
     connectOrCreate?: GameServerCreateOrConnectWithoutOwnerInput | GameServerCreateOrConnectWithoutOwnerInput[]
@@ -40335,12 +43283,22 @@ export namespace Prisma {
     connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
   }
 
-  export type EnumUserRoleFieldUpdateOperationsInput = {
-    set?: $Enums.UserRole
+  export type BillingProfileUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<BillingProfileCreateWithoutUserInput, BillingProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: BillingProfileCreateOrConnectWithoutUserInput
+    connect?: BillingProfileWhereUniqueInput
+  }
+
+  export type EnumAuthProviderFieldUpdateOperationsInput = {
+    set?: $Enums.AuthProvider
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
+  }
+
+  export type EnumUserRoleFieldUpdateOperationsInput = {
+    set?: $Enums.UserRole
   }
 
   export type FloatFieldUpdateOperationsInput = {
@@ -40529,6 +43487,16 @@ export namespace Prisma {
     deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
   }
 
+  export type BillingProfileUpdateOneWithoutUserNestedInput = {
+    create?: XOR<BillingProfileCreateWithoutUserInput, BillingProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: BillingProfileCreateOrConnectWithoutUserInput
+    upsert?: BillingProfileUpsertWithoutUserInput
+    disconnect?: BillingProfileWhereInput | boolean
+    delete?: BillingProfileWhereInput | boolean
+    connect?: BillingProfileWhereUniqueInput
+    update?: XOR<XOR<BillingProfileUpdateToOneWithWhereWithoutUserInput, BillingProfileUpdateWithoutUserInput>, BillingProfileUncheckedUpdateWithoutUserInput>
+  }
+
   export type GameServerUncheckedUpdateManyWithoutOwnerNestedInput = {
     create?: XOR<GameServerCreateWithoutOwnerInput, GameServerUncheckedCreateWithoutOwnerInput> | GameServerCreateWithoutOwnerInput[] | GameServerUncheckedCreateWithoutOwnerInput[]
     connectOrCreate?: GameServerCreateOrConnectWithoutOwnerInput | GameServerCreateOrConnectWithoutOwnerInput[]
@@ -40695,6 +43663,16 @@ export namespace Prisma {
     update?: SessionUpdateWithWhereUniqueWithoutUserInput | SessionUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: SessionUpdateManyWithWhereWithoutUserInput | SessionUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
+  }
+
+  export type BillingProfileUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<BillingProfileCreateWithoutUserInput, BillingProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: BillingProfileCreateOrConnectWithoutUserInput
+    upsert?: BillingProfileUpsertWithoutUserInput
+    disconnect?: BillingProfileWhereInput | boolean
+    delete?: BillingProfileWhereInput | boolean
+    connect?: BillingProfileWhereUniqueInput
+    update?: XOR<XOR<BillingProfileUpdateToOneWithWhereWithoutUserInput, BillingProfileUpdateWithoutUserInput>, BillingProfileUncheckedUpdateWithoutUserInput>
   }
 
   export type UserCreateNestedOneWithoutSessionsInput = {
@@ -40985,6 +43963,24 @@ export namespace Prisma {
     update?: TaskUpdateWithWhereUniqueWithoutNodeInput | TaskUpdateWithWhereUniqueWithoutNodeInput[]
     updateMany?: TaskUpdateManyWithWhereWithoutNodeInput | TaskUpdateManyWithWhereWithoutNodeInput[]
     deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutBillingProfileInput = {
+    create?: XOR<UserCreateWithoutBillingProfileInput, UserUncheckedCreateWithoutBillingProfileInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBillingProfileInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumBillingTypeFieldUpdateOperationsInput = {
+    set?: $Enums.BillingType
+  }
+
+  export type UserUpdateOneRequiredWithoutBillingProfileNestedInput = {
+    create?: XOR<UserCreateWithoutBillingProfileInput, UserUncheckedCreateWithoutBillingProfileInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBillingProfileInput
+    upsert?: UserUpsertWithoutBillingProfileInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBillingProfileInput, UserUpdateWithoutBillingProfileInput>, UserUncheckedUpdateWithoutBillingProfileInput>
   }
 
   export type NodeCreateNestedOneWithoutTasksInput = {
@@ -42127,6 +45123,10 @@ export namespace Prisma {
     update?: XOR<XOR<KnowledgeBaseArticleUpdateToOneWithWhereWithoutVersionsInput, KnowledgeBaseArticleUpdateWithoutVersionsInput>, KnowledgeBaseArticleUncheckedUpdateWithoutVersionsInput>
   }
 
+  export type EnumMediaTypeFieldUpdateOperationsInput = {
+    set?: $Enums.MediaType
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -42309,11 +45309,11 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type NestedEnumUserRoleFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[]
-    notIn?: $Enums.UserRole[]
-    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
+  export type NestedEnumAuthProviderFilter<$PrismaModel = never> = {
+    equals?: $Enums.AuthProvider | EnumAuthProviderFieldRefInput<$PrismaModel>
+    in?: $Enums.AuthProvider[]
+    notIn?: $Enums.AuthProvider[]
+    not?: NestedEnumAuthProviderFilter<$PrismaModel> | $Enums.AuthProvider
   }
 
   export type NestedStringNullableFilter<$PrismaModel = never> = {
@@ -42330,14 +45330,21 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type NestedEnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
+  export type NestedEnumUserRoleFilter<$PrismaModel = never> = {
     equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
     in?: $Enums.UserRole[]
     notIn?: $Enums.UserRole[]
-    not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
+    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
+  }
+
+  export type NestedEnumAuthProviderWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AuthProvider | EnumAuthProviderFieldRefInput<$PrismaModel>
+    in?: $Enums.AuthProvider[]
+    notIn?: $Enums.AuthProvider[]
+    not?: NestedEnumAuthProviderWithAggregatesFilter<$PrismaModel> | $Enums.AuthProvider
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumUserRoleFilter<$PrismaModel>
-    _max?: NestedEnumUserRoleFilter<$PrismaModel>
+    _min?: NestedEnumAuthProviderFilter<$PrismaModel>
+    _max?: NestedEnumAuthProviderFilter<$PrismaModel>
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -42355,6 +45362,16 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[]
+    notIn?: $Enums.UserRole[]
+    not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumUserRoleFilter<$PrismaModel>
+    _max?: NestedEnumUserRoleFilter<$PrismaModel>
   }
 
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -42405,6 +45422,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumNodeStatusFilter<$PrismaModel>
     _max?: NestedEnumNodeStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumBillingTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.BillingType | EnumBillingTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BillingType[]
+    notIn?: $Enums.BillingType[]
+    not?: NestedEnumBillingTypeFilter<$PrismaModel> | $Enums.BillingType
+  }
+
+  export type NestedEnumBillingTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BillingType | EnumBillingTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BillingType[]
+    notIn?: $Enums.BillingType[]
+    not?: NestedEnumBillingTypeWithAggregatesFilter<$PrismaModel> | $Enums.BillingType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBillingTypeFilter<$PrismaModel>
+    _max?: NestedEnumBillingTypeFilter<$PrismaModel>
   }
 
   export type NestedEnumTaskTypeFilter<$PrismaModel = never> = {
@@ -42806,11 +45840,34 @@ export namespace Prisma {
     _max?: NestedEnumTicketStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumMediaTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.MediaType | EnumMediaTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MediaType[]
+    notIn?: $Enums.MediaType[]
+    not?: NestedEnumMediaTypeFilter<$PrismaModel> | $Enums.MediaType
+  }
+
+  export type NestedEnumMediaTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MediaType | EnumMediaTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MediaType[]
+    notIn?: $Enums.MediaType[]
+    not?: NestedEnumMediaTypeWithAggregatesFilter<$PrismaModel> | $Enums.MediaType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMediaTypeFilter<$PrismaModel>
+    _max?: NestedEnumMediaTypeFilter<$PrismaModel>
+  }
+
   export type UserCreateWithoutTenantInput = {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -42832,13 +45889,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTenantInput = {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -42860,6 +45924,7 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTenantInput = {
@@ -42931,7 +45996,13 @@ export namespace Prisma {
     id?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     passwordHash?: StringFilter<"User"> | string
+    provider?: EnumAuthProviderFilter<"User"> | $Enums.AuthProvider
+    providerId?: StringNullableFilter<"User"> | string | null
+    avatarUrl?: StringNullableFilter<"User"> | string | null
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    emailVerified?: BoolFilter<"User"> | boolean
+    emailVerificationToken?: StringNullableFilter<"User"> | string | null
+    emailVerificationExpires?: DateTimeNullableFilter<"User"> | Date | string | null
     twoFactorSecret?: StringNullableFilter<"User"> | string | null
     twoFactorEnabled?: BoolFilter<"User"> | boolean
     twoFactorMethod?: StringNullableFilter<"User"> | string | null
@@ -43474,6 +46545,41 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type BillingProfileCreateWithoutUserInput = {
+    id?: string
+    type?: $Enums.BillingType
+    fullName?: string | null
+    companyName?: string | null
+    taxNumber?: string | null
+    country: string
+    city: string
+    postalCode: string
+    street: string
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BillingProfileUncheckedCreateWithoutUserInput = {
+    id?: string
+    type?: $Enums.BillingType
+    fullName?: string | null
+    companyName?: string | null
+    taxNumber?: string | null
+    country: string
+    city: string
+    postalCode: string
+    street: string
+    phone?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BillingProfileCreateOrConnectWithoutUserInput = {
+    where: BillingProfileWhereUniqueInput
+    create: XOR<BillingProfileCreateWithoutUserInput, BillingProfileUncheckedCreateWithoutUserInput>
+  }
+
   export type TenantUpsertWithoutUsersInput = {
     update: XOR<TenantUpdateWithoutUsersInput, TenantUncheckedUpdateWithoutUsersInput>
     create: XOR<TenantCreateWithoutUsersInput, TenantUncheckedCreateWithoutUsersInput>
@@ -43874,11 +46980,58 @@ export namespace Prisma {
     revokedAt?: DateTimeNullableFilter<"Session"> | Date | string | null
   }
 
+  export type BillingProfileUpsertWithoutUserInput = {
+    update: XOR<BillingProfileUpdateWithoutUserInput, BillingProfileUncheckedUpdateWithoutUserInput>
+    create: XOR<BillingProfileCreateWithoutUserInput, BillingProfileUncheckedCreateWithoutUserInput>
+    where?: BillingProfileWhereInput
+  }
+
+  export type BillingProfileUpdateToOneWithWhereWithoutUserInput = {
+    where?: BillingProfileWhereInput
+    data: XOR<BillingProfileUpdateWithoutUserInput, BillingProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type BillingProfileUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumBillingTypeFieldUpdateOperationsInput | $Enums.BillingType
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    postalCode?: StringFieldUpdateOperationsInput | string
+    street?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BillingProfileUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumBillingTypeFieldUpdateOperationsInput | $Enums.BillingType
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    taxNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    city?: StringFieldUpdateOperationsInput | string
+    postalCode?: StringFieldUpdateOperationsInput | string
+    street?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UserCreateWithoutSessionsInput = {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -43900,13 +47053,20 @@ export namespace Prisma {
     ticketComments?: TicketCommentCreateNestedManyWithoutAuthorInput
     assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
+    billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -43928,6 +47088,7 @@ export namespace Prisma {
     ticketComments?: TicketCommentUncheckedCreateNestedManyWithoutAuthorInput
     assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
+    billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -43950,7 +47111,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -43972,13 +47139,20 @@ export namespace Prisma {
     ticketComments?: TicketCommentUpdateManyWithoutAuthorNestedInput
     assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
+    billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44000,13 +47174,20 @@ export namespace Prisma {
     ticketComments?: TicketCommentUncheckedUpdateManyWithoutAuthorNestedInput
     assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
+    billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAuditLogsInput = {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -44028,13 +47209,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAuditLogsInput = {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -44056,6 +47244,7 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -44078,7 +47267,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44100,13 +47295,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditLogsInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44128,6 +47330,7 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type GameServerCreateWithoutNodeInput = {
@@ -44508,6 +47711,162 @@ export namespace Prisma {
     completedAt?: DateTimeNullableFilter<"Task"> | Date | string | null
     createdAt?: DateTimeFilter<"Task"> | Date | string
     updatedAt?: DateTimeFilter<"Task"> | Date | string
+  }
+
+  export type UserCreateWithoutBillingProfileInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
+    role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
+    twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
+    balance?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tenant?: TenantCreateNestedOneWithoutUsersInput
+    ownedServers?: GameServerCreateNestedManyWithoutOwnerInput
+    auditLogs?: AuditLogCreateNestedManyWithoutUserInput
+    resolvedAlerts?: AlertCreateNestedManyWithoutResolvedByInput
+    resourceQuotas?: ResourceQuotaCreateNestedManyWithoutUserInput
+    apiKeys?: ApiKeyCreateNestedManyWithoutUserInput
+    assignedIncidents?: IncidentCreateNestedManyWithoutAssignedToInput
+    orders?: OrderCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutBillingProfileInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
+    role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
+    twoFactorSecret?: string | null
+    twoFactorEnabled?: boolean
+    twoFactorMethod?: string | null
+    twoFactorBackupCodes?: string | null
+    resetToken?: string | null
+    resetTokenExpires?: Date | string | null
+    balance?: number
+    tenantId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ownedServers?: GameServerUncheckedCreateNestedManyWithoutOwnerInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutUserInput
+    resolvedAlerts?: AlertUncheckedCreateNestedManyWithoutResolvedByInput
+    resourceQuotas?: ResourceQuotaUncheckedCreateNestedManyWithoutUserInput
+    apiKeys?: ApiKeyUncheckedCreateNestedManyWithoutUserInput
+    assignedIncidents?: IncidentUncheckedCreateNestedManyWithoutAssignedToInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    ticketComments?: TicketCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutBillingProfileInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutBillingProfileInput, UserUncheckedCreateWithoutBillingProfileInput>
+  }
+
+  export type UserUpsertWithoutBillingProfileInput = {
+    update: XOR<UserUpdateWithoutBillingProfileInput, UserUncheckedUpdateWithoutBillingProfileInput>
+    create: XOR<UserCreateWithoutBillingProfileInput, UserUncheckedCreateWithoutBillingProfileInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutBillingProfileInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutBillingProfileInput, UserUncheckedUpdateWithoutBillingProfileInput>
+  }
+
+  export type UserUpdateWithoutBillingProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    balance?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneWithoutUsersNestedInput
+    ownedServers?: GameServerUpdateManyWithoutOwnerNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutUserNestedInput
+    resolvedAlerts?: AlertUpdateManyWithoutResolvedByNestedInput
+    resourceQuotas?: ResourceQuotaUpdateManyWithoutUserNestedInput
+    apiKeys?: ApiKeyUpdateManyWithoutUserNestedInput
+    assignedIncidents?: IncidentUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutBillingProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
+    twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
+    twoFactorBackupCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    resetToken?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    balance?: FloatFieldUpdateOperationsInput | number
+    tenantId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownedServers?: GameServerUncheckedUpdateManyWithoutOwnerNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
+    resolvedAlerts?: AlertUncheckedUpdateManyWithoutResolvedByNestedInput
+    resourceQuotas?: ResourceQuotaUncheckedUpdateManyWithoutUserNestedInput
+    apiKeys?: ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+    assignedIncidents?: IncidentUncheckedUpdateManyWithoutAssignedToNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    ticketComments?: TicketCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type NodeCreateWithoutTasksInput = {
@@ -44981,7 +48340,13 @@ export namespace Prisma {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -45003,13 +48368,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOwnedServersInput = {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -45031,6 +48403,7 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOwnedServersInput = {
@@ -45398,7 +48771,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -45420,13 +48799,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnedServersInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -45448,6 +48834,7 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type PlanUpsertWithoutServersInput = {
@@ -46150,7 +49537,13 @@ export namespace Prisma {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -46172,13 +49565,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutResolvedAlertsInput = {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -46200,6 +49600,7 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutResolvedAlertsInput = {
@@ -46320,7 +49721,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46342,13 +49749,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedAlertsInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46370,6 +49784,7 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type NodeUpsertWithoutAlertsInput = {
@@ -46486,7 +49901,13 @@ export namespace Prisma {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -46508,13 +49929,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutResourceQuotasInput = {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -46536,6 +49964,7 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutResourceQuotasInput = {
@@ -46585,7 +50014,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46607,13 +50042,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResourceQuotasInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46635,6 +50077,7 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type TenantUpsertWithoutResourceQuotasInput = {
@@ -46674,7 +50117,13 @@ export namespace Prisma {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -46696,13 +50145,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApiKeysInput = {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -46724,6 +50180,7 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApiKeysInput = {
@@ -46746,7 +50203,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46768,13 +50231,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApiKeysInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46796,13 +50266,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAssignedIncidentsInput = {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -46824,13 +50301,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAssignedIncidentsInput = {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -46852,6 +50336,7 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAssignedIncidentsInput = {
@@ -46874,7 +50359,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46896,13 +50387,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedIncidentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46924,6 +50422,7 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type GameServerCreateWithoutPlanInput = {
@@ -47236,7 +50735,13 @@ export namespace Prisma {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -47258,13 +50763,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOrdersInput = {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -47286,6 +50798,7 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOrdersInput = {
@@ -47406,7 +50919,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -47428,13 +50947,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrdersInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -47456,6 +50982,7 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type PlanUpsertWithoutOrdersInput = {
@@ -47572,7 +51099,13 @@ export namespace Prisma {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -47594,13 +51127,20 @@ export namespace Prisma {
     ticketComments?: TicketCommentCreateNestedManyWithoutAuthorInput
     knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTicketsInput = {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -47622,6 +51162,7 @@ export namespace Prisma {
     ticketComments?: TicketCommentUncheckedCreateNestedManyWithoutAuthorInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTicketsInput = {
@@ -47633,7 +51174,13 @@ export namespace Prisma {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -47655,13 +51202,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSupportTicketsInput = {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -47683,6 +51237,7 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSupportTicketsInput = {
@@ -47731,7 +51286,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -47753,13 +51314,20 @@ export namespace Prisma {
     ticketComments?: TicketCommentUpdateManyWithoutAuthorNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTicketsInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -47781,6 +51349,7 @@ export namespace Prisma {
     ticketComments?: TicketCommentUncheckedUpdateManyWithoutAuthorNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutSupportTicketsInput = {
@@ -47798,7 +51367,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -47820,13 +51395,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSupportTicketsInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -47848,6 +51430,7 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type TicketCommentUpsertWithWhereUniqueWithoutTicketInput = {
@@ -47913,7 +51496,13 @@ export namespace Prisma {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -47935,13 +51524,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleCreateNestedManyWithoutAuthorInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTicketCommentsInput = {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -47963,6 +51559,7 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedCreateNestedManyWithoutAuthorInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTicketCommentsInput = {
@@ -48034,7 +51631,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48056,13 +51659,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTicketCommentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48084,6 +51694,7 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type KnowledgeBaseCategoryCreateWithoutArticlesInput = {
@@ -48121,7 +51732,13 @@ export namespace Prisma {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -48143,13 +51760,20 @@ export namespace Prisma {
     ticketComments?: TicketCommentCreateNestedManyWithoutAuthorInput
     assignedTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutKnowledgeBaseArticlesInput = {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -48171,6 +51795,7 @@ export namespace Prisma {
     ticketComments?: TicketCommentUncheckedCreateNestedManyWithoutAuthorInput
     assignedTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutKnowledgeBaseArticlesInput = {
@@ -48260,7 +51885,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48282,13 +51913,20 @@ export namespace Prisma {
     ticketComments?: TicketCommentUpdateManyWithoutAuthorNestedInput
     assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutKnowledgeBaseArticlesInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48310,6 +51948,7 @@ export namespace Prisma {
     ticketComments?: TicketCommentUncheckedUpdateManyWithoutAuthorNestedInput
     assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type ArticleVersionUpsertWithWhereUniqueWithoutArticleInput = {
@@ -48631,7 +52270,13 @@ export namespace Prisma {
     id?: string
     email: string
     passwordHash: string
+    provider?: $Enums.AuthProvider
+    providerId?: string | null
+    avatarUrl?: string | null
     role: $Enums.UserRole
+    emailVerified?: boolean
+    emailVerificationToken?: string | null
+    emailVerificationExpires?: Date | string | null
     twoFactorSecret?: string | null
     twoFactorEnabled?: boolean
     twoFactorMethod?: string | null
@@ -48660,7 +52305,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48682,13 +52333,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48710,13 +52368,20 @@ export namespace Prisma {
     assignedTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     knowledgeBaseArticles?: KnowledgeBaseArticleUncheckedUpdateManyWithoutAuthorNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutTenantInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
+    provider?: EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+    providerId?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    emailVerificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerificationExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     twoFactorSecret?: NullableStringFieldUpdateOperationsInput | string | null
     twoFactorEnabled?: BoolFieldUpdateOperationsInput | boolean
     twoFactorMethod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -50587,6 +54252,10 @@ export namespace Prisma {
      */
     export type NodeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = NodeDefaultArgs<ExtArgs>
     /**
+     * @deprecated Use BillingProfileDefaultArgs instead
+     */
+    export type BillingProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BillingProfileDefaultArgs<ExtArgs>
+    /**
      * @deprecated Use TaskDefaultArgs instead
      */
     export type TaskArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TaskDefaultArgs<ExtArgs>
@@ -50674,6 +54343,10 @@ export namespace Prisma {
      * @deprecated Use InvoiceMetadataDefaultArgs instead
      */
     export type InvoiceMetadataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InvoiceMetadataDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use HomepageSlideDefaultArgs instead
+     */
+    export type HomepageSlideArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = HomepageSlideDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany
