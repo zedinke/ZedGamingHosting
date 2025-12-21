@@ -221,6 +221,17 @@
       "noAccount": "Nincs még fiókod?",
       "signUp": "Regisztráció"
     },
+    "register": {
+      "title": "Regisztráció",
+      "subtitle": "Hozz létre új fiókot.",
+      "email": "E-mail cím",
+      "displayName": "Megjelenített név (opcionális)",
+      "password": "Jelszó",
+      "confirmPassword": "Jelszó megerősítése",
+      "submit": "Regisztrálok",
+      "submitting": "Feldolgozás...",
+      "backToLogin": "Vissza a bejelentkezéshez"
+    },
     "logout": "Kijelentkezés"
   },
   "terminal": {

@@ -221,6 +221,17 @@
       "noAccount": "Don't have an account?",
       "signUp": "Sign up"
     },
+    "register": {
+      "title": "Sign Up",
+      "subtitle": "Create a new account.",
+      "email": "Email address",
+      "displayName": "Display name (optional)",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "submit": "Sign Up",
+      "submitting": "Submitting...",
+      "backToLogin": "Back to login"
+    },
     "logout": "Logout"
   },
   "terminal": {
