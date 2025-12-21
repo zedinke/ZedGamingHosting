@@ -8,6 +8,7 @@ import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Public } from './decorators/public.decorator';
+import * as crypto from 'crypto';
 
 /**
  * Auth Controller - handles authentication endpoints
@@ -63,7 +64,9 @@ export class AuthController {
       tenantId: req.user.tenantId,
     };
 
-    const accessToken = this.jwtService.sign(payload);
+    const accessToken = this.jwtService.sign(payload, {
+      jwtid: crypto.randomUUID(),
+    } as any);
     const refreshToken = this.jwtService.sign(payload, {
       expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN') || '7d',
     } as any);
@@ -126,7 +129,9 @@ export class AuthController {
         deviceId: rememberDevice ? `device_${Date.now()}` : undefined,
       };
 
-      const accessToken = this.jwtService.sign(payload);
+      const accessToken = this.jwtService.sign(payload, {
+        jwtid: crypto.randomUUID(),
+      } as any);
       const refreshToken = this.jwtService.sign(payload, {
         expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN') || '7d',
       } as any);
@@ -192,7 +197,9 @@ export class AuthController {
         tenantId: user.tenantId,
       };
 
-      const accessToken = this.jwtService.sign(payload);
+      const accessToken = this.jwtService.sign(payload, {
+        jwtid: crypto.randomUUID(),
+      } as any);
       const refreshToken = this.jwtService.sign(payload, {
         expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN') || '7d',
       } as any);

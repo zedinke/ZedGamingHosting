@@ -84,7 +84,9 @@ export class AuthService {
       tenantId: user.tenantId || undefined,
     };
 
-    const accessToken = this.jwtService.sign(payload);
+    const accessToken = this.jwtService.sign(payload, {
+      jwtid: crypto.randomUUID(),
+    } as any);
     const refreshToken = this.jwtService.sign(payload, {
       expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN') || '7d',
     } as any);
@@ -126,6 +128,11 @@ export class AuthService {
 
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordValid) {
+      return null;
+    }
+
+    // Enforce email verification before allowing login via LocalStrategy
+    if (!user.emailVerified && user.emailVerificationToken) {
       return null;
     }
 
