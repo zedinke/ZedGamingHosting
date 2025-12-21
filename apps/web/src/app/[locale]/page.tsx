@@ -6,6 +6,7 @@ import { Features } from '@/components/landing/Features';
 import { HeroSlideshow } from '@/components/landing/HeroSlideshow';
 import { TrustBadges } from '@/components/landing/TrustBadges';
 import { FloatingCTA } from '@/components/landing/FloatingCTA';
+import { HeaderBar } from '@/components/landing/HeaderBar';
 
 async function getActiveSlides() {
   try {
@@ -33,12 +34,17 @@ export default async function Index({ params }: { params: { locale: Locale } }) 
 
   return (
     <main className="flex min-h-screen flex-col">
+      <HeaderBar locale={locale} />
+
       {/* Hero Slideshow or Static Hero */}
       {slides.length > 0 ? (
         <HeroSlideshow slides={slides} />
       ) : (
         // Fallback Static Hero Section
-        <section className="relative flex flex-col items-center justify-center text-center py-32 px-6 bg-gradient-to-b from-black/60 via-black/40 to-transparent overflow-hidden min-h-[80vh]">
+        <section
+          id="top"
+          className="relative flex flex-col items-center justify-center text-center py-32 px-6 bg-gradient-to-b from-black/60 via-black/40 to-transparent overflow-hidden min-h-[80vh]"
+        >
           <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20"></div>
           <div className="relative z-10 max-w-5xl">
             <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
@@ -72,19 +78,25 @@ export default async function Index({ params }: { params: { locale: Locale } }) 
       )}
 
       {/* Trust Badges */}
-      <TrustBadges />
+      <div id="trust">
+        <TrustBadges />
+      </div>
 
       {/* Game Showcase */}
       <GameShowcase />
 
       {/* Featured Plans */}
-      <FeaturedPlans />
+      <div id="plans">
+        <FeaturedPlans />
+      </div>
 
       {/* Features */}
-      <Features />
+      <div id="features">
+        <Features />
+      </div>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 bg-gradient-to-br from-primary-900/20 to-fuchsia-900/20">
+      <section id="contact" className="py-20 px-6 bg-gradient-to-br from-primary-900/20 to-fuchsia-900/20">
         <div className="container text-center max-w-4xl mx-auto">
           <h2 className="text-4xl font-bold mb-4 text-text-primary">
             {t('cta.title')}
