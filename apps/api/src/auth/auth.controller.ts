@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, HttpCode, HttpStatus, Get, Request, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, HttpCode, HttpStatus, Get, Request, BadRequestException, Res } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -9,6 +9,7 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Public } from './decorators/public.decorator';
 import * as crypto from 'crypto';
+import { Response } from 'express';
 
 /**
  * Auth Controller - handles authentication endpoints
@@ -88,6 +89,107 @@ export class AuthController {
       refreshToken,
       user: req.user,
     };
+  }
+
+  /**
+   * Google OAuth entry
+   */
+  @Public()
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  async googleAuth() {
+    // Passport handles redirect
+    return;
+  }
+
+  /**
+   * Google OAuth callback
+   */
+  @Public()
+  @Get('google/callback')
+  @UseGuards(AuthGuard('google'))
+  async googleCallback(@Request() req: any, @Res() res: Response) {
+    const { successUrl, errorUrl } = this.getOauthRedirects(req);
+
+    try {
+      const ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || 'Unknown';
+      const userAgent = req.headers['user-agent'] || 'Unknown';
+      const result = await this.authService.socialLogin(req.user, ip, userAgent);
+      return this.handleSocialRedirect(res, successUrl, 'google', result);
+    } catch (error: any) {
+      const message = encodeURIComponent(error?.message || 'social_login_failed');
+      return res.redirect(`${errorUrl}?provider=google&error=${message}`);
+    }
+  }
+
+  /**
+   * Discord OAuth entry
+   */
+  @Public()
+  @Get('discord')
+  @UseGuards(AuthGuard('discord'))
+  async discordAuth() {
+    return;
+  }
+
+  /**
+   * Discord OAuth callback
+   */
+  @Public()
+  @Get('discord/callback')
+  @UseGuards(AuthGuard('discord'))
+  async discordCallback(@Request() req: any, @Res() res: Response) {
+    const { successUrl, errorUrl } = this.getOauthRedirects(req);
+
+    try {
+      const ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || 'Unknown';
+      const userAgent = req.headers['user-agent'] || 'Unknown';
+      const result = await this.authService.socialLogin(req.user, ip, userAgent);
+      return this.handleSocialRedirect(res, successUrl, 'discord', result);
+    } catch (error: any) {
+      const message = encodeURIComponent(error?.message || 'social_login_failed');
+      return res.redirect(`${errorUrl}?provider=discord&error=${message}`);
+    }
+  }
+
+  /**
+   * Build success/error redirect URLs (allow ?redirect override on the initial request)
+   */
+  private getOauthRedirects(req: any) {
+    const frontendBase = this.config.get<string>('FRONTEND_URL') || 'http://localhost:3000';
+    const redirectParam = req.query?.redirect as string | undefined;
+    const successUrl = redirectParam || this.config.get<string>('FRONTEND_OAUTH_SUCCESS_URL') || `${frontendBase}/hu/auth/callback`;
+    const errorUrl = this.config.get<string>('FRONTEND_OAUTH_ERROR_URL') || `${frontendBase}/hu/login`;
+    return { successUrl, errorUrl };
+  }
+
+  /**
+   * Redirect user back to FE with tokens in hash fragment or temp 2FA token in query
+   */
+  private handleSocialRedirect(res: Response, successUrl: string, provider: 'google' | 'discord', result: any) {
+    const target = new URL(successUrl);
+    target.searchParams.set('provider', provider);
+
+    if (result?.requiresTwoFactor && result?.tempToken) {
+      target.searchParams.set('twoFactor', '1');
+      target.searchParams.set('tempToken', result.tempToken);
+      if (result.user?.email) {
+        target.searchParams.set('email', result.user.email);
+      }
+      return res.redirect(target.toString());
+    }
+
+    const fragment = new URLSearchParams();
+    if (result?.accessToken) fragment.set('accessToken', result.accessToken);
+    if (result?.refreshToken) fragment.set('refreshToken', result.refreshToken);
+    if (result?.user?.id) fragment.set('userId', result.user.id);
+    if (result?.user?.email) fragment.set('email', result.user.email);
+    if (result?.user?.role) fragment.set('role', result.user.role);
+    if (result?.user?.tenantId) fragment.set('tenantId', result.user.tenantId);
+    fragment.set('provider', provider);
+
+    const redirectUrl = `${target.toString()}#${fragment.toString()}`;
+    return res.redirect(redirectUrl);
   }
 
   /**

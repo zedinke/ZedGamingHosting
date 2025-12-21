@@ -27,6 +27,14 @@ export interface AuthResult {
   };
 }
 
+export interface SocialProfile {
+  provider: 'GOOGLE' | 'DISCORD';
+  providerId: string;
+  email?: string;
+  displayName?: string;
+  avatarUrl?: string;
+}
+
 /**
  * Auth Service - handles authentication and authorization
  */
@@ -100,6 +108,111 @@ export class AuthService {
       ip,
       userAgent,
     );
+
+    return {
+      accessToken,
+      refreshToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        tenantId: user.tenantId || undefined,
+      },
+    };
+  }
+
+  /**
+   * Social login (Google/Discord). Creates or links user, then returns JWTs.
+   */
+  async socialLogin(
+    profile: SocialProfile,
+    ip: string,
+    userAgent: string,
+  ): Promise<any> {
+    const email = profile.email?.toLowerCase();
+    if (!email) {
+      throw new BadRequestException('A social fiók nem adott vissza e-mail címet.');
+    }
+
+    // Find by provider+id first
+    let user = await this.prisma.user.findFirst({
+      where: {
+        provider: profile.provider,
+        providerId: profile.providerId,
+      },
+    });
+
+    if (!user) {
+      // Try linking existing local account by email
+      const existingByEmail = await this.prisma.user.findUnique({ where: { email } });
+
+      if (existingByEmail) {
+        user = await this.prisma.user.update({
+          where: { id: existingByEmail.id },
+          data: {
+            provider: profile.provider,
+            providerId: profile.providerId,
+            avatarUrl: profile.avatarUrl ?? existingByEmail.avatarUrl,
+            emailVerified: true,
+          },
+        });
+      } else {
+        // Create new user with random password placeholder
+        const randomPassword = crypto.randomBytes(32).toString('hex');
+        const passwordHash = await this.hashPassword(randomPassword);
+
+        user = await this.prisma.user.create({
+          data: {
+            email,
+            passwordHash,
+            role: 'USER',
+            provider: profile.provider,
+            providerId: profile.providerId,
+            avatarUrl: profile.avatarUrl,
+            emailVerified: true,
+          },
+        });
+      }
+    }
+
+    // If the user has 2FA enabled, require verification
+    if (user.twoFactorEnabled) {
+      const tempPayload = {
+        sub: user.id,
+        email: user.email,
+        type: 'temp_2fa',
+      };
+
+      const tempToken = this.jwtService.sign(tempPayload, {
+        expiresIn: '5m',
+        secret: this.config.get('JWT_SECRET') + '_2FA_TEMP',
+      } as any);
+
+      return {
+        requiresTwoFactor: true,
+        tempToken,
+        user: {
+          id: user.id,
+          email: user.email,
+        },
+      };
+    }
+
+    const payload: JwtPayload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+      tenantId: user.tenantId || undefined,
+    };
+
+    const accessToken = this.jwtService.sign(payload, {
+      jwtid: crypto.randomUUID(),
+    } as any);
+    const refreshToken = this.jwtService.sign(payload, {
+      expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN') || '7d',
+    } as any);
+
+    await this.sessionsService.createSession(user.id, accessToken, ip, userAgent);
 
     return {
       accessToken,

@@ -6,6 +6,8 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
+import { GoogleStrategy } from './strategies/google.strategy';
+import { DiscordStrategy } from './strategies/discord.strategy';
 import { DatabaseModule } from '../database/database.module';
 import { EmailModule } from '../email/email.module';
 import { I18nModule } from '../i18n/i18n.module';
@@ -35,7 +37,7 @@ import { SessionsService } from './sessions.service';
       }),
     }),
   ],
-  providers: [AuthService, JwtStrategy, LocalStrategy, TwoFactorAuthService, SessionsService],
+  providers: [AuthService, JwtStrategy, LocalStrategy, GoogleStrategy, DiscordStrategy, TwoFactorAuthService, SessionsService],
   controllers: [AuthController, TwoFactorAuthController, SessionsController],
   exports: [AuthService, TwoFactorAuthService, SessionsService, JwtModule],
 })
