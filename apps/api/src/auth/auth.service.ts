@@ -521,7 +521,7 @@ export class AuthService {
       success: true,
       message: this.i18n.translate('AUTH_VERIFY_EMAIL_SENT') || 'Please verify your email to activate your account.',
     };
-  }}
+  }
 
   /** Verify email token and activate account */
   async verifyEmail(token: string): Promise<{ success: boolean; message: string }> {
