@@ -6,6 +6,9 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
+ # Accept API URL at build time
+ ARG NEXT_PUBLIC_API_URL=https://zedgaminghosting.hu
+ ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 # Copy source files
 # Copy root files
 COPY package.json package-lock.json tsconfig.base.json nx.json ./
