@@ -27,6 +27,15 @@ export default function RegisterPage({ params }: { params: { locale?: string } }
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const startSocialLogin = (provider: 'google' | 'discord') => {
+    if (typeof window === 'undefined') return;
+    // Always point to the API server to avoid hitting the Next.js dev instance.
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+    const callbackUrl = `${window.location.origin}/${locale}/auth/callback`;
+    const redirectUrl = `${apiBase}/api/auth/${provider}?redirect=${encodeURIComponent(callbackUrl)}`;
+    window.location.href = redirectUrl;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -102,6 +111,23 @@ export default function RegisterPage({ params }: { params: { locale?: string } }
         <p className="text-slate-400 text-sm mb-6">
           {t('subtitle') || (locale === 'hu' ? 'Hozz létre új fiókot.' : 'Create a new account.')}
         </p>
+
+        <div className="flex flex-col gap-3 mb-6">
+          <button
+            type="button"
+            onClick={() => startSocialLogin('google')}
+            className="w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-lg bg-white text-slate-900 font-semibold hover:bg-slate-100 transition"
+          >
+            <span>Continue with Google</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => startSocialLogin('discord')}
+            className="w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-lg bg-[#5865F2] text-white font-semibold hover:bg-[#4752c4] transition"
+          >
+            <span>Continue with Discord</span>
+          </button>
+        </div>
 
         {error && (
           <div className="mb-4 text-red-400 text-sm">{error}</div>

@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from '@i18n/translations';
 import { motion } from 'framer-motion';
 import { Lock, AlertCircle, ArrowRight, Sparkles, Key } from 'lucide-react';
@@ -13,6 +13,7 @@ type LoginStep = 'credentials' | 'two-fa' | 'backup-code';
 export default function LoginPage({ params }: { params: { locale?: string } }) {
   const t = useTranslations('auth.login');
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { login } = useAuthStore();
   const locale = params?.locale && ['hu', 'en'].includes(params.locale) ? params.locale : 'hu';
   
@@ -31,6 +32,31 @@ export default function LoginPage({ params }: { params: { locale?: string } }) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [show2FAOptions, setShow2FAOptions] = useState(false);
+
+  // Prefill state when coming back from social login with 2FA requirement or error
+  useEffect(() => {
+    const twoFactor = searchParams.get('twoFactor');
+    const temp = searchParams.get('tempToken');
+    const emailParam = searchParams.get('email');
+    const errParam = searchParams.get('error');
+
+    if (emailParam) setEmail(emailParam);
+    if (errParam) setError(errParam);
+
+    if (twoFactor === '1' && temp) {
+      setTempToken(temp);
+      setStep('two-fa');
+    }
+  }, [searchParams]);
+
+  const startSocialLogin = (provider: 'google' | 'discord') => {
+    if (typeof window === 'undefined') return;
+    // Always point to the API server to avoid hitting the Next.js dev instance.
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+    const callbackUrl = `${window.location.origin}/${locale}/auth/callback`;
+    const redirectUrl = `${apiBase}/api/auth/${provider}?redirect=${encodeURIComponent(callbackUrl)}`;
+    window.location.href = redirectUrl;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -250,6 +276,23 @@ export default function LoginPage({ params }: { params: { locale?: string } }) {
                 <p className="text-base text-slate-300">
                   {t('subtitle') || 'Jelentkezz be a fiókodba'}
                 </p>
+              </div>
+
+              <div className="flex flex-col gap-3 mb-8">
+                <button
+                  type="button"
+                  onClick={() => startSocialLogin('google')}
+                  className="w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-lg bg-white text-slate-900 font-semibold hover:bg-slate-100 transition"
+                >
+                  <span>Continue with Google</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => startSocialLogin('discord')}
+                  className="w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-lg bg-[#5865F2] text-white font-semibold hover:bg-[#4752c4] transition"
+                >
+                  <span>Continue with Discord</span>
+                </button>
               </div>
 
               <form 
