@@ -48,10 +48,14 @@ export default function SupportTicketsPage() {
   const fetchTickets = async () => {
     try {
       setLoading(true);
+      const token = localStorage.getItem('accessToken');
       const res = await fetch(
         `/api/support/tickets?page=${page}&limit=10`,
         {
-          headers: { 'Accept-Language': locale },
+          headers: {
+            'Accept-Language': locale,
+            ...(token && { Authorization: `Bearer ${token}` }),
+          },
         }
       );
       if (!res.ok) throw new Error('Failed to fetch tickets');

@@ -69,7 +69,10 @@ export default function TicketDetailPage() {
   const fetchTicket = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`/api/support/tickets/${ticketId}`);
+      const token = localStorage.getItem('accessToken');
+      const res = await fetch(`/api/support/tickets/${ticketId}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
       if (!res.ok) throw new Error('Jegy nem található');
       const data = await res.json();
       setTicket(data);
@@ -116,9 +119,13 @@ export default function TicketDetailPage() {
     setIsTyping(false);
 
     try {
+      const token = localStorage.getItem('accessToken');
       const res = await fetch(`/api/support/tickets/${ticketId}/comments`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { Authorization: `Bearer ${token}` }),
+        },
         body: JSON.stringify({ message: comment }),
       });
 

@@ -51,10 +51,12 @@ export default function CreateSupportTicketPage() {
     setError('');
 
     try {
+      const token = localStorage.getItem('accessToken');
       const res = await fetch('/api/support/tickets', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          ...(token && { Authorization: `Bearer ${token}` }),
         },
         body: JSON.stringify(form),
       });

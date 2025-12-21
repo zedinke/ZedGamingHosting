@@ -48,7 +48,10 @@ export default function AdminTicketEditPage() {
   const fetchTicket = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`/api/admin/support/tickets/${ticketId}`);
+      const token = localStorage.getItem('accessToken');
+      const res = await fetch(`/api/admin/support/tickets/${ticketId}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
       if (!res.ok) throw new Error('Jegy nem található');
       const data = await res.json();
       setTicket(data);
@@ -68,9 +71,13 @@ export default function AdminTicketEditPage() {
 
     setSaving(true);
     try {
+      const token = localStorage.getItem('accessToken');
       const res = await fetch(`/api/admin/support/tickets/${ticketId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { Authorization: `Bearer ${token}` }),
+        },
         body: JSON.stringify(form),
       });
 
@@ -93,8 +100,10 @@ export default function AdminTicketEditPage() {
 
     setSaving(true);
     try {
+      const token = localStorage.getItem('accessToken');
       const res = await fetch(`/api/admin/support/tickets/${ticketId}/close`, {
         method: 'PATCH',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
 
       if (!res.ok) throw new Error('Lezárás sikertelen');

@@ -92,21 +92,23 @@ export default function AdminSupportPage() {
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
+      const token = localStorage.getItem('accessToken');
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       // Fetch stats
-      const statsRes = await fetch('/api/admin/support/stats');
+      const statsRes = await fetch('/api/admin/support/stats', { headers });
       if (statsRes.ok) {
         setStats(await statsRes.json());
       }
 
       // Fetch support staff workload
-      const staffRes = await fetch('/api/admin/support/workload');
+      const staffRes = await fetch('/api/admin/support/workload', { headers });
       if (staffRes.ok) {
         setSupportStaff(await staffRes.json());
       }
 
       // Fetch overdue SLA tickets
-      const overdueRes = await fetch('/api/admin/support/overdue');
+      const overdueRes = await fetch('/api/admin/support/overdue', { headers });
       if (overdueRes.ok) {
         setOverdueTickets(await overdueRes.json());
       }
@@ -119,7 +121,7 @@ export default function AdminSupportPage() {
       if (filters.priority) params.set('priority', filters.priority);
       if (filters.category) params.set('category', filters.category);
 
-      const ticketsRes = await fetch(`/api/admin/support/tickets?${params}`);
+      const ticketsRes = await fetch(`/api/admin/support/tickets?${params}`, { headers });
       if (!ticketsRes.ok) throw new Error('Failed to fetch tickets');
 
       const data = await ticketsRes.json();
@@ -195,9 +197,13 @@ export default function AdminSupportPage() {
   // Assign ticket to specific staff member
   const assignTicket = async (ticketId: string, assignedToId: string) => {
     try {
+      const token = localStorage.getItem('accessToken');
       const res = await fetch(`/api/admin/support/${ticketId}/assign`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { Authorization: `Bearer ${token}` }),
+        },
         body: JSON.stringify({ assignedToId }),
       });
 
@@ -216,8 +222,10 @@ export default function AdminSupportPage() {
   // Auto-assign ticket to least loaded staff
   const autoAssignTicket = async (ticketId: string) => {
     try {
+      const token = localStorage.getItem('accessToken');
       const res = await fetch(`/api/admin/support/${ticketId}/auto-assign`, {
         method: 'POST',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
 
       if (!res.ok) throw new Error('Failed to auto-assign ticket');
