@@ -1,11 +1,18 @@
+'use client';
+
 import { QueryProvider } from '../../providers/query-provider';
 import { ThemeProvider } from '../../lib/theme';
 import { ErrorBoundary } from '../../components/error-boundary';
 import { NotificationProvider } from '../../context/notification-context';
 import { ErrorLoggerInitializer } from '../../components/error-logger-initializer';
 import { SocketProvider } from '../../contexts/socket-context';
+import { WebSocketProvider } from '../../contexts/WebSocketContext';
+import { NotificationCenter } from '../../components/NotificationCenter';
 
-export default async function LocaleLayout({
+// Mark as dynamic to avoid static generation
+export const dynamic = 'force-dynamic';
+
+export default function LocaleLayout({
   children,
   params,
 }: {
@@ -24,11 +31,14 @@ export default async function LocaleLayout({
       <ErrorBoundary>
         <ThemeProvider>
           <QueryProvider>
-            <SocketProvider>
-              <NotificationProvider>
-                {children}
-              </NotificationProvider>
-            </SocketProvider>
+            <WebSocketProvider autoConnect={true}>
+              <SocketProvider>
+                <NotificationProvider>
+                  <NotificationCenter />
+                  {children}
+                </NotificationProvider>
+              </SocketProvider>
+            </WebSocketProvider>
           </QueryProvider>
         </ThemeProvider>
       </ErrorBoundary>

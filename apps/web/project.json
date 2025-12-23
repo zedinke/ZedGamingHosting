@@ -13,13 +13,11 @@
       }
     },
     "build": {
-      "executor": "@nx/next:build",
-      "dependsOn": ["validate-locales"],
-      "outputs": ["{workspaceRoot}/dist/apps/web"],
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/apps/web/.next"],
       "options": {
-        "root": "apps/web",
-        "outputPath": "dist/apps/web",
-        "skipTypeCheck": true
+        "cwd": "apps/web",
+        "command": "node build-wrapper.js"
       },
       "configurations": {
         "production": {}

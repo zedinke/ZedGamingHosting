@@ -177,7 +177,13 @@
       "confirmPassword": "Új jelszó megerősítése",
       "submit": "Jelszó Mentése"
     },
-    "logout": "Kijelentkezés"
+    "logout": "Kijelentkezés",
+    "social": {
+      "processing": "Bejelentkezés feldolgozása...",
+      "success": "Sikeres bejelentkezés, átirányítás...",
+      "missingTokens": "Nem sikerült feldolgozni a tokeneket. Próbáld újra.",
+      "backToLogin": "Vissza a bejelentkezéshez"
+    }
   },
   "errors": {
     "required": "Ez a mező kötelező",

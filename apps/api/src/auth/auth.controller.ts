@@ -110,6 +110,7 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   async googleCallback(@Request() req: any, @Res() res: Response) {
     const { successUrl, errorUrl } = this.getOauthRedirects(req);
+    this.logger.debug(`Google callback - redirecting to: ${successUrl}`);
 
     try {
       const ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || 'Unknown';
@@ -157,8 +158,12 @@ export class AuthController {
    */
   private getOauthRedirects(req: any) {
     const frontendBase = this.config.get<string>('FRONTEND_URL') || 'http://localhost:3000';
+    // CRITICAL: Check redirect param FIRST before env var (query params have priority)
     const redirectParam = req.query?.redirect as string | undefined;
-    const successUrl = redirectParam || this.config.get<string>('FRONTEND_OAUTH_SUCCESS_URL') || `${frontendBase}/hu/auth/callback`;
+    // Only use env var if no redirect param provided
+    const successUrl = redirectParam 
+      ? redirectParam 
+      : (this.config.get<string>('FRONTEND_OAUTH_SUCCESS_URL') || `${frontendBase}/hu/auth/callback`);
     const errorUrl = this.config.get<string>('FRONTEND_OAUTH_ERROR_URL') || `${frontendBase}/hu/login`;
     return { successUrl, errorUrl };
   }

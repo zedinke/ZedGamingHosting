@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
-import helmet from '@fastify/helmet';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { validateEnv } from '@zed-hosting/utils';
 
@@ -18,19 +18,16 @@ async function bootstrap(): Promise<void> {
     process.exit(1);
   }
 
-  const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule,
-    new FastifyAdapter({
-      logger: process.env.NODE_ENV === 'development',
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  // Biztonsági fejlécek Express Helmet
+  app.use(
+    helmet({
+      contentSecurityPolicy: false, // frontend Next saját CSP-je felülírhatja
+      crossOriginEmbedderPolicy: false,
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
     })
   );
-
-  // Biztonsági fejlécek Fastify/Helmet
-  await app.register(helmet, {
-    contentSecurityPolicy: false, // frontend Next saját CSP-je felülírhatja
-    crossOriginEmbedderPolicy: false,
-    crossOriginResourcePolicy: { policy: 'cross-origin' },
-  });
 
 
   // Global validation pipe
@@ -75,10 +72,10 @@ async function bootstrap(): Promise<void> {
     exclude: ['/metrics'],
   });
 
-  const port = process.env.API_PORT || 3000;
+  const port = Number(process.env.API_PORT) || 3000;
   const host = process.env.API_HOST || '0.0.0.0';
 
-   Logger.log(`Attempting to listen on ${host}:${port}...`);
+  Logger.log(`Attempting to listen on ${host}:${port}...`);
   await app.listen(port, host);
   Logger.log(`🚀 Application is running on: http://${host}:${port}/${globalPrefix}`);
 }

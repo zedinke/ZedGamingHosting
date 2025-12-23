@@ -249,6 +249,12 @@
         "verifyEmail": "Regisztráció után email megerősítés szükséges a belépéshez."
       }
     },
+    "social": {
+      "processing": "Bejelentkezés feldolgozása...",
+      "success": "Sikeres bejelentkezés, átirányítás...",
+      "missingTokens": "Nem sikerült feldolgozni a tokeneket. Próbáld újra.",
+      "backToLogin": "Vissza a bejelentkezéshez"
+    },
     "logout": "Kijelentkezés"
   },
   "terminal": {

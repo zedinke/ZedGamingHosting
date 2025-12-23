@@ -4,6 +4,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useWebSocket } from '../../../../../contexts/WebSocketContext';
 import { useTicketSocket, useSocketEvent, useSocketEmit } from '../../../../../hooks/useSocket';
+import { getAccessToken, getRefreshToken } from '@/lib/get-access-token';
+import { useAuthStore } from '@/stores/auth-store';
 import styles from './detail.module.css';
 
 interface TicketComment {
@@ -60,7 +62,9 @@ export default function TicketDetailPage() {
   const [comment, setComment] = useState('');
   const [error, setError] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [notification, setNotification] = useState<{ message: string; type: 'success' | 'info' } | null>(null);
   const typingTimeoutRef = React.useRef<NodeJS.Timeout>();
+  const notificationTimeoutRef = React.useRef<NodeJS.Timeout>();
 
   useEffect(() => {
     fetchTicket();
@@ -69,7 +73,7 @@ export default function TicketDetailPage() {
   const fetchTicket = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('accessToken');
+      const token = getAccessToken();
       const res = await fetch(`/api/support/tickets/${ticketId}`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
@@ -84,9 +88,9 @@ export default function TicketDetailPage() {
   };
 
   /**
-   * Listen for new comments
+   * Listen for new comments (server emits 'support:newComment' to ticket room)
    */
-  useSocketEvent(socket, `ticket:${ticketId}:comment`, (newComment: any) => {
+  useSocketEvent(socket, 'support:newComment', (newComment: any) => {
     setTicket((prev) => {
       if (!prev) return prev;
       return {
@@ -94,12 +98,19 @@ export default function TicketDetailPage() {
         comments: [newComment, ...prev.comments],
       };
     });
+    // Show incoming comment notification
+    const authorName = newComment.author?.email?.split('@')[0] || 'Valaki';
+    setNotification({ message: `Új hozzászólás: ${authorName}`, type: 'info' });
+    if (notificationTimeoutRef.current) clearTimeout(notificationTimeoutRef.current);
+    notificationTimeoutRef.current = setTimeout(() => {
+      setNotification(null);
+    }, 3000);
   });
 
   /**
-   * Listen for status changes
+   * Listen for status changes (server emits 'support:statusChanged')
    */
-  useSocketEvent(socket, `ticket:${ticketId}:statusChange`, (data: any) => {
+  useSocketEvent(socket, 'support:statusChanged', (data: any) => {
     setTicket((prev) => {
       if (!prev) return prev;
       return {
@@ -119,8 +130,8 @@ export default function TicketDetailPage() {
     setIsTyping(false);
 
     try {
-      const token = localStorage.getItem('accessToken');
-      const res = await fetch(`/api/support/tickets/${ticketId}/comments`, {
+      const token = getAccessToken();
+      let res = await fetch(`/api/support/tickets/${ticketId}/comments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -129,10 +140,66 @@ export default function TicketDetailPage() {
         body: JSON.stringify({ message: comment }),
       });
 
+      // If unauthorized, try to refresh token once
+      if (res.status === 401) {
+        const refreshToken = getRefreshToken();
+        if (refreshToken) {
+          const refreshRes = await fetch(`/api/auth/refresh`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ refreshToken }),
+          });
+
+          if (refreshRes.ok) {
+            const refreshData = await refreshRes.json();
+            const newAccessToken = refreshData?.accessToken as string | undefined;
+            if (newAccessToken) {
+              // Update Zustand tokens
+              useAuthStore.getState().updateTokens(newAccessToken, refreshToken);
+              res = await fetch(`/api/support/tickets/${ticketId}/comments`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${newAccessToken}`,
+                },
+                body: JSON.stringify({ message: comment }),
+              });
+            }
+          }
+        }
+      }
+
       if (!res.ok) throw new Error('Hozzászólás küldése sikertelen');
 
+      // Optimistically append returned comment
+      const createdComment = await res.json().catch(() => null);
+      if (createdComment) {
+        setTicket((prev) => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            comments: [
+              {
+                id: createdComment.id,
+                message: createdComment.message,
+                author: createdComment.author || { id: createdComment.authorId, email: createdComment.authorName },
+                createdAt: createdComment.createdAt || new Date().toISOString(),
+              },
+              ...prev.comments,
+            ],
+          };
+        });
+      }
+
       setComment('');
-      // Note: Comment will be added via WebSocket event, no need to refetch
+      // Show success notification
+      setNotification({ message: 'Hozzászólás sikeresen elküldve', type: 'success' });
+      if (notificationTimeoutRef.current) clearTimeout(notificationTimeoutRef.current);
+      notificationTimeoutRef.current = setTimeout(() => {
+        setNotification(null);
+      }, 3000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Hozzászólás küldése sikertelen');
     } finally {
@@ -162,6 +229,12 @@ export default function TicketDetailPage() {
 
   return (
     <div className={styles.container}>
+      {notification && (
+        <div className={`${styles.notification} ${styles[notification.type]}`}>
+          {notification.message}
+        </div>
+      )}
+
       <button onClick={() => router.back()} className={styles.backButton}>
         ← Vissza
       </button>

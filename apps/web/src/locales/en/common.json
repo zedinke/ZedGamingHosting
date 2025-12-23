@@ -249,6 +249,12 @@
         "verifyEmail": "After sign up, please verify your email to log in."
       }
     },
+    "social": {
+      "processing": "Processing social login...",
+      "success": "Login successful, redirecting...",
+      "missingTokens": "Could not process login tokens. Please try again.",
+      "backToLogin": "Back to login"
+    },
     "logout": "Logout"
   },
   "terminal": {

@@ -54,6 +54,7 @@ export default function LoginPage({ params }: { params: { locale?: string } }) {
     // Always point to the API server to avoid hitting the Next.js dev instance.
     const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
     const callbackUrl = `${window.location.origin}/${locale}/auth/callback`;
+    // Use redirect param for custom callback URL
     const redirectUrl = `${apiBase}/api/auth/${provider}?redirect=${encodeURIComponent(callbackUrl)}`;
     window.location.href = redirectUrl;
   };

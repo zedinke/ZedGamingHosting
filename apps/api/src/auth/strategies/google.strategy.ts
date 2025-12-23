@@ -15,6 +15,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         configService.get<string>('OAUTH_REDIRECT_URI_GOOGLE') ||
         'http://localhost:3000/api/auth/google/callback',
       scope: ['profile', 'email'],
+      // state: true removed - breaks custom redirect param
       passReqToCallback: false,
     };
 

@@ -14,27 +14,30 @@ import { Navigation } from '../../../components/navigation';
 import { ToastContainer } from '../../../components/toast-container';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNotificationContext } from '../../../context/notification-context';
+import { useHydrated } from '../../../hooks/use-hydrated';
 
 export default function DashboardPage() {
   const t = useTranslations();
   const router = useRouter();
-  const { isAuthenticated, accessToken } = useAuthStore();
+  const { isAuthenticated, accessToken, isHydrated } = useAuthStore();
+  const hydrated = useHydrated();
   const queryClient = useQueryClient();
   const notifications = useNotificationContext();
-  const [isHydrated, setIsHydrated] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Wait for hydration to avoid hydration mismatch
+  // Redirect if not authenticated after hydration
   useEffect(() => {
-    setIsHydrated(true);
-  }, []);
+    if (hydrated && !isAuthenticated) {
+      router.push('/hu/login');
+    }
+  }, [hydrated, isAuthenticated, router]);
 
   // Set API client token from auth store
   useEffect(() => {
-    if (accessToken) {
+    if (hydrated && accessToken) {
       apiClient.setAccessToken(accessToken);
     }
-  }, [accessToken]);
+  }, [hydrated, accessToken]);
 
   // Server actions mutations
   const startServerMutation = useMutation({

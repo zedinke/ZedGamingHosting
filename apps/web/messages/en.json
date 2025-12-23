@@ -177,7 +177,13 @@
       "confirmPassword": "Confirm new password",
       "submit": "Save Password"
     },
-    "logout": "Logout"
+    "logout": "Logout",
+    "social": {
+      "processing": "Processing social login...",
+      "success": "Login successful, redirecting...",
+      "missingTokens": "Could not process login tokens. Please try again.",
+      "backToLogin": "Back to login"
+    }
   },
   "errors": {
     "required": "This field is required",

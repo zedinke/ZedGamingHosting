@@ -196,13 +196,13 @@ export function useTicketSocket(socket: Socket | null, ticketId: string) {
     };
   }, [socket, ticketId, emit]);
 
-  // Listen for comment events
-  useSocketEvent(socket, `ticket:${ticketId}:comment`, (comment) => {
+  // Listen for comment events (server emits 'support:newComment' to ticket room)
+  useSocketEvent(socket, 'support:newComment', (comment) => {
     console.log('[useTicketSocket] New comment:', comment);
   });
 
-  // Listen for typing events
-  useSocketEvent(socket, `ticket:${ticketId}:typing`, (data: { userId: string; username: string }) => {
+  // Listen for typing events (server emits 'support:userTyping')
+  useSocketEvent(socket, 'support:userTyping', (data: { userId: string; username: string }) => {
     setTypingUsers((prev) => {
       const newSet = new Set(prev);
       newSet.add(data.username);
@@ -219,8 +219,8 @@ export function useTicketSocket(socket: Socket | null, ticketId: string) {
     }, 3000);
   });
 
-  // Listen for status changes
-  useSocketEvent(socket, `ticket:${ticketId}:statusChange`, (data) => {
+  // Listen for status changes (server emits 'support:statusChanged')
+  useSocketEvent(socket, 'support:statusChanged', (data) => {
     console.log('[useTicketSocket] Status changed:', data);
   });
 

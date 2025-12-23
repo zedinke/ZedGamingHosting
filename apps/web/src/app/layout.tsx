@@ -1,7 +1,8 @@
 import './global.css';
 import { geistSans, jetbrainsMono } from '../lib/fonts';
-import { WebSocketProvider } from '../contexts/WebSocketContext';
-import { NotificationCenter } from '../components/NotificationCenter';
+
+// Tell Next.js these are dynamic to avoid prerendering
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'ZedGamingHosting',
@@ -16,11 +17,10 @@ export default function RootLayout({
   return (
     <html lang="hu" className="dark" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${jetbrainsMono.variable} font-sans`}>
-        <WebSocketProvider autoConnect={true}>
-          <NotificationCenter />
-          {children}
-        </WebSocketProvider>
+        {children}
       </body>
     </html>
   );
 }
+
+

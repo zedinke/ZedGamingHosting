@@ -51,7 +51,8 @@ export default function CreateSupportTicketPage() {
     setError('');
 
     try {
-      const token = localStorage.getItem('accessToken');
+      const authStorage = localStorage.getItem('auth-storage');
+      const token = authStorage ? JSON.parse(authStorage).state.accessToken : null;
       const res = await fetch('/api/support/tickets', {
         method: 'POST',
         headers: {

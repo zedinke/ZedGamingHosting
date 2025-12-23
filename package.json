@@ -99,7 +99,8 @@
     "tslib": "^2.3.0",
     "winston": "^3.19.0",
     "zod": "^3.22.4",
-    "zustand": "^5.0.9"
+    "zustand": "^5.0.9",
+    "helmet": "^7.0.0"
   },
   "devDependencies": {
     "@nx/eslint": "18.3.5",

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useCallback, useState } from 'react';
+import { getAccessToken } from '@/lib/get-access-token';
 import { io, Socket } from 'socket.io-client';
 
 const DEFAULT_WS_PATH = '/ws';
@@ -70,7 +71,7 @@ export function useSocket({
 
       // Get token from localStorage
       const token = typeof window !== 'undefined' 
-        ? localStorage.getItem('accessToken') 
+        ? getAccessToken() 
         : null;
 
       if (!token) {
