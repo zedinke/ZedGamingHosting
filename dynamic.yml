@@ -16,6 +16,7 @@ http:
       service: web
       middlewares:
         - security-headers
+        - add-charset-header
       tls:
         certResolver: letsencrypt
       priority: 1
@@ -124,6 +125,11 @@ http:
         average: 100
         burst: 200
         period: 1m
+
+    add-charset-header:
+      headers:
+        customResponseHeaders:
+          Content-Type: "text/html; charset=utf-8"
 
   services:
     web:
