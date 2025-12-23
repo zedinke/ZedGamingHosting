@@ -21,19 +21,6 @@ const nextConfig = {
         return process.env.BUILD_ID || `build-${Date.now()}`;
     },
     skipTrailingSlashRedirect: true,
-    async headers() {
-        return [
-            {
-                source: '/:path*',
-                headers: [
-                    {
-                        key: 'Content-Type',
-                        value: 'text/html; charset=utf-8',
-                    },
-                ],
-            },
-        ];
-    },
     experimental: {
         optimizePackageImports: ['lucide-react'],
         // Skip prerendering for error pages  
