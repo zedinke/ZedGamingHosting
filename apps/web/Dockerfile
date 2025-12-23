@@ -29,6 +29,11 @@ RUN npx next build --no-lint || true
 FROM node:20-slim AS runner
 WORKDIR /app
 
+# Set UTF-8 locale
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+ENV LANGUAGE=C.UTF-8
+
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 ENV PORT 3000

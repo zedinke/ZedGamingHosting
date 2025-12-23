@@ -7,7 +7,6 @@ export const dynamic = 'force-dynamic';
 export const metadata = {
   title: 'ZedGamingHosting',
   description: 'Premium Game Server Hosting Platform',
-  charset: 'utf-8',
 };
 
 export default function RootLayout({
