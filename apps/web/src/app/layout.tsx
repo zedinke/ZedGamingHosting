@@ -7,6 +7,7 @@ export const dynamic = 'force-dynamic';
 export const metadata = {
   title: 'ZedGamingHosting',
   description: 'Premium Game Server Hosting Platform',
+  charset: 'utf-8',
 };
 
 export default function RootLayout({
@@ -16,6 +17,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="hu" className="dark" suppressHydrationWarning>
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
       <body className={`${geistSans.variable} ${jetbrainsMono.variable} font-sans`}>
         {children}
       </body>
