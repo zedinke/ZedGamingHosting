@@ -6,9 +6,7 @@ export function middleware(request: NextRequest) {
   // Skip middleware for Next internals and static assets
   const skipPrefixes = ['/api', '/_next', '/_vercel'];
   if (skipPrefixes.some((prefix) => pathname.startsWith(prefix)) || /\.[\w]+$/.test(pathname)) {
-    const response = NextResponse.next();
-    response.headers.set('Content-Type', 'text/html; charset=utf-8');
-    return response;
+    return NextResponse.next();
   }
 
   const locales = ['hu', 'en'];
@@ -21,9 +19,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(target, request.url));
   }
 
-  const response = NextResponse.next();
-  response.headers.set('Content-Type', 'text/html; charset=utf-8');
-  return response;
+  return NextResponse.next();
 }
 
 export const config = {
