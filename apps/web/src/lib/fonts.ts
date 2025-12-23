@@ -3,7 +3,7 @@ import { JetBrains_Mono, Inter } from 'next/font/google';
 // Inter - Primary sans-serif font (Google Fonts)
 // This is the main font, Geist can be added later if needed
 export const inter = Inter({
-  subsets: ['latin'],
+  subsets: ['latin', 'latin-ext'],
   variable: '--font-geist-sans', // Using same variable name for compatibility
   display: 'swap',
   preload: true,
@@ -16,7 +16,7 @@ export const geistSans = inter; // Use Inter as Geist for now
 
 // JetBrains Mono - Modern monospace font (Variable Font)
 export const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
+  subsets: ['latin', 'latin-ext'],
   variable: '--font-jetbrains-mono',
   display: 'swap',
   fallback: ['Monaco', 'Courier New', 'monospace'],
